@@ -1,0 +1,7 @@
+# iOS
+app_identifier("app.mainline.chess")
+team_id("NNFD7CKGLG")
+itc_team_id("NNFD7CKGLG")
+
+# Android
+package_name("app.mainline.chess")

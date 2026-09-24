@@ -15,7 +15,7 @@ import { MoveTree } from '../panels/MoveTree';
 import { useEngineEval } from '../panels/useEngineEval';
 import { usePrefs } from '../lib/prefs';
 import { Segmented } from '../ui/primitives';
-import { useMediaQuery } from '../ui/useMediaQuery';
+import { SPLIT_LAYOUT, useMediaQuery } from '../ui/useMediaQuery';
 
 const exploreStore = createAnalysisStore();
 
@@ -30,7 +30,7 @@ export function ExploreScreen({ store = exploreStore }: { store?: AnalysisStore 
   const [hoverUci, setHoverUci] = useState<string | null>(null);
   const [drawMode, setDrawMode] = useState(false);
   const [pane, setPane] = useState<Pane>('explorer');
-  const wide = useMediaQuery('(min-width: 1024px)');
+  const wide = useMediaQuery(SPLIT_LAYOUT);
 
   const [params] = useSearchParams();
   useEffect(() => {

@@ -22,7 +22,7 @@ import { MoveStatsPanel } from '../panels/MoveStatsPanel';
 import { CoachPanel } from '../panels/CoachPanel';
 import { InsightsPanel } from '../panels/InsightsPanel';
 import { toast, undoToast } from '../ui/toast';
-import { useMediaQuery } from '../ui/useMediaQuery';
+import { SPLIT_LAYOUT, useMediaQuery } from '../ui/useMediaQuery';
 import { AutoBuildSheet } from './builder/AutoBuildSheet';
 import { SuggestPanel } from './builder/SuggestPanel';
 import { NotesPanel } from './builder/NotesPanel';
@@ -78,7 +78,7 @@ export function RepertoireScreen() {
   const [drawMode, setDrawMode] = useState(false);
   const [pane, setPane] = useState<Pane>('tree');
   const [autoOpen, setAutoOpen] = useState(false);
-  const wide = useMediaQuery('(min-width: 1024px)');
+  const wide = useMediaQuery(SPLIT_LAYOUT);
 
   const moves = useMemo(() => (rep ? repMoves(lib.moves, rep.id) : []), [lib.version, rep?.id]); // eslint-disable-line react-hooks/exhaustive-deps
   const graph = useMemo(() => buildGraph(moves), [moves]);

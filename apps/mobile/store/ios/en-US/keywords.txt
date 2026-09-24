@@ -1,0 +1,1 @@
+chess,opening,repertoire,trainer,lichess,spaced repetition,flashcards,pgn,drill,prep,stockfish

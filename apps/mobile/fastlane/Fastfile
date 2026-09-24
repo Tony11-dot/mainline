@@ -1,0 +1,292 @@
+# MainLine — store releases for iOS (TestFlight) and Android (Google Play).
+#
+#   fastlane ios beta          build → sign → upload to TestFlight
+#   fastlane ios build         build + sign the .ipa only (no upload)
+#   fastlane android internal  build → sign → upload the .aab to the Play internal testing track
+#   fastlane android build     build + sign the .aab only (no upload)
+#   fastlane ios metadata / fastlane android metadata   push the store listing + screenshots (apps/mobile/store)
+#
+# Run from apps/mobile (locally `fastlane …`, on CI `bundle exec fastlane …`).
+# Every credential comes from the environment — see apps/mobile/store/RELEASING.md.
+#
+#   VERSION              marketing version, e.g. 1.2.0 (default: newest git tag, else package.json)
+#   BUILD_NUMBER         build number / versionCode (default: latest in the store + 1)
+#   MAINLINE_API_URL     production API origin baked into the app, e.g. https://api.mainline.app
+#   ASC_KEY_ID           App Store Connect API key id (default 28AUQ58BDS)
+#   ASC_ISSUER_ID        App Store Connect issuer id (required for iOS)
+#   ASC_KEY_PATH         path to the .p8 (default ~/.appstoreconnect/private_keys/AuthKey_<id>.p8)
+#   ASC_KEY_CONTENT      …or the .p8 contents (CI)
+#   PLAY_JSON_KEY_PATH   Google Play service-account JSON path (default ../../secrets/play-service-account.json)
+#   PLAY_JSON_KEY_DATA   …or its contents (CI)
+#   MATCH_GIT_URL        iOS signing repo for `match` (CI); MATCH_PASSWORD decrypts it
+#   ANDROID_KEYSTORE_*   upload-key signing (CI); locally secrets/android-upload.properties is used
+
+require "json"
+require "tmpdir"
+
+MOBILE = File.expand_path("..", FastlaneCore::FastlaneFolder.path)
+ROOT = File.expand_path("../..", MOBILE)
+BUNDLE_ID = "app.mainline.chess"
+TEAM_ID = "NNFD7CKGLG"
+IPA = File.join(MOBILE, "build/ios/MainLine.ipa")
+
+# ── Shared ─────────────────────────────────────────────────────────────────────
+
+def version_name
+  v = ENV["VERSION"].to_s.strip
+  if v.empty?
+    tag = sh("git -C #{ROOT} describe --tags --abbrev=0 --match 'v*' 2>/dev/null || true", log: false).strip
+    v = tag.empty? ? JSON.parse(File.read(File.join(MOBILE, "package.json")))["version"] : tag
+  end
+  v = v.sub(/^v/, "")
+  UI.user_error!("VERSION must look like 1.2.3 (got #{v})") unless v.match?(/\A\d+\.\d+\.\d+\z/)
+  v
+end
+
+def api_url
+  url = ENV["MAINLINE_API_URL"].to_s.strip.chomp("/")
+  if url.empty?
+    UI.important "MAINLINE_API_URL isn't set: this build works offline, but the explorer, engine cloud, coach, sync and games need it."
+  elsif !url.start_with?("https://")
+    UI.user_error!("MAINLINE_API_URL must be https:// (got #{url})")
+  end
+  url
+end
+
+# Web build with the production API baked in, then copied into the native project.
+def web_build(platform)
+  sh("cd #{ROOT} && VITE_API_URL=#{api_url.shellescape} pnpm --filter @mainline/web build")
+  sh("cd #{MOBILE} && pnpm exec cap sync #{platform}")
+end
+
+# "What's new": the newest PROGRESS.md entry, as plain text.
+def changelog(limit)
+  text = File.read(File.join(ROOT, "PROGRESS.md"))
+  section = text.split(/^## /).last.to_s
+  title, *body = section.lines
+  plain = body.join
+    .gsub(/\*\*(.+?)\*\*/, '\1').gsub(/`([^`]+)`/, '\1').gsub(/\[([^\]]+)\]\([^)]+\)/, '\1')
+    .gsub(/^\s*[-*] /, "• ").gsub(/\n{3,}/, "\n\n").strip
+  out = "#{title.to_s.strip}\n\n#{plain}"
+  out.length > limit ? "#{out[0, limit - 1].rstrip}…" : out
+end
+
+# ── iOS ────────────────────────────────────────────────────────────────────────
+
+def asc_key_path
+  key_id = ENV["ASC_KEY_ID"] || "28AUQ58BDS"
+  if (content = ENV["ASC_KEY_CONTENT"].to_s).strip != ""
+    path = File.join(Dir.tmpdir, "AuthKey_#{key_id}.p8")
+    File.write(path, content.include?("BEGIN PRIVATE KEY") ? content : content.unpack1("m"))
+    File.chmod(0o600, path)
+    return path
+  end
+  File.expand_path(ENV["ASC_KEY_PATH"] || "~/.appstoreconnect/private_keys/AuthKey_#{key_id}.p8")
+end
+
+def asc
+  issuer = ENV["ASC_ISSUER_ID"].to_s.strip
+  UI.user_error!("ASC_ISSUER_ID is missing (App Store Connect → Users and Access → Integrations → Issuer ID)") if issuer.empty?
+  path = asc_key_path
+  UI.user_error!("App Store Connect API key not found at #{path}") unless File.exist?(path)
+  id = ENV["ASC_KEY_ID"] || "28AUQ58BDS"
+  {
+    id: id,
+    issuer: issuer,
+    path: path,
+    key: app_store_connect_api_key(key_id: id, issuer_id: issuer, key_filepath: path, in_house: false),
+  }
+end
+
+# Signing: on CI, `match` (encrypted cert + profile in MATCH_GIT_URL, unlocked by MATCH_PASSWORD).
+# Locally without MATCH_GIT_URL: the Apple Distribution certificate already in the keychain,
+# with an App Store profile created/refreshed through the API key.
+def ios_profile(key)
+  if ENV["MATCH_GIT_URL"].to_s.strip != ""
+    setup_ci if is_ci
+    match(type: "appstore", app_identifier: BUNDLE_ID, team_id: TEAM_ID, api_key: key[:key], readonly: is_ci, git_url: ENV["MATCH_GIT_URL"])
+    return lane_context[SharedValues::MATCH_PROVISIONING_PROFILE_MAPPING][BUNDLE_ID]
+  end
+  get_provisioning_profile(api_key: key[:key], app_identifier: BUNDLE_ID, team_id: TEAM_ID, provisioning_name: "MainLine App Store", output_path: File.join(MOBILE, "build/ios"))
+  lane_context[SharedValues::SIGH_NAME]
+end
+
+platform :ios do
+  desc "Build and sign the App Store .ipa"
+  lane :build do |options|
+    key = options[:asc] || asc
+    build = (ENV["BUILD_NUMBER"] || latest_testflight_build_number(api_key: key[:key], app_identifier: BUNDLE_ID, initial_build_number: 0) + 1).to_s
+    version = version_name
+    UI.message "MainLine #{version} (#{build})"
+    web_build("ios")
+    profile = ios_profile(key)
+    project = File.join(MOBILE, "ios/App/App.xcodeproj")
+    pbxproj = File.join(project, "project.pbxproj")
+    original = File.read(pbxproj)
+    begin
+      # The repo keeps automatic signing for development; releases sign manually with the App Store profile.
+      update_code_signing_settings(
+        path: project,
+        targets: ["App"],
+        build_configurations: ["Release"],
+        use_automatic_signing: false,
+        team_id: TEAM_ID,
+        code_sign_identity: "Apple Distribution",
+        profile_name: profile,
+      )
+      build_app(
+        project: project,
+        scheme: "App",
+        configuration: "Release",
+        export_method: "app-store",
+        export_team_id: TEAM_ID,
+        export_options: { signingStyle: "manual", teamID: TEAM_ID, provisioningProfiles: { BUNDLE_ID => profile }, manageAppVersionAndBuildNumber: false },
+        xcargs: "MARKETING_VERSION=#{version} CURRENT_PROJECT_VERSION=#{build}",
+        output_directory: File.dirname(IPA),
+        output_name: File.basename(IPA),
+        clean: true,
+      )
+    ensure
+      File.write(pbxproj, original)
+    end
+  end
+
+  desc "One-time: create the App Store certificate + profile for CI in the match repo (MATCH_GIT_URL, MATCH_PASSWORD)"
+  lane :certificates do
+    UI.user_error!("Set MATCH_GIT_URL (a private repo) and MATCH_PASSWORD first") if ENV["MATCH_GIT_URL"].to_s.empty? || ENV["MATCH_PASSWORD"].to_s.empty?
+    match(type: "appstore", app_identifier: BUNDLE_ID, team_id: TEAM_ID, api_key: asc[:key], readonly: false, git_url: ENV["MATCH_GIT_URL"])
+  end
+
+  desc "Build, sign and upload to TestFlight"
+  lane :beta do
+    key = asc
+    build(asc: key)
+    upload_to_testflight(
+      api_key: key[:key],
+      ipa: IPA,
+      changelog: changelog(3900),
+      skip_waiting_for_build_processing: true,
+      distribute_external: false,
+    )
+    UI.success "Uploaded to TestFlight. Internal testers get it once Apple finishes processing (5–30 min)."
+  end
+
+  desc "Upload the App Store listing (store/ios) and screenshots (store/screenshots) — no binary, no review"
+  lane :metadata do
+    key = asc
+    url = api_url
+    UI.user_error!("MAINLINE_API_URL is needed for the privacy policy URL") if url.empty?
+    dir = Dir.mktmpdir("asc")
+    FileUtils.mkdir_p(File.join(dir, "metadata"))
+    FileUtils.cp_r(File.join(MOBILE, "store/ios/en-US"), File.join(dir, "metadata/en-US"))
+    File.write(File.join(dir, "metadata/en-US/privacy_url.txt"), "#{url}/privacy")
+    shots = File.join(dir, "screenshots/en-US")
+    FileUtils.mkdir_p(shots)
+    %w[iphone ipad].each do |d|
+      Dir[File.join(MOBILE, "store/screenshots/#{d}/*.png")].sort.each { |f| FileUtils.cp(f, File.join(shots, "#{d}-#{File.basename(f)}")) }
+    end
+    deliver(
+      api_key: key[:key],
+      app_identifier: BUNDLE_ID,
+      app_version: version_name,
+      metadata_path: File.join(dir, "metadata"),
+      screenshots_path: File.join(dir, "screenshots"),
+      overwrite_screenshots: true,
+      skip_binary_upload: true,
+      submit_for_review: false,
+      force: true,
+      run_precheck_before_submit: false,
+    )
+  end
+end
+
+# ── Android ────────────────────────────────────────────────────────────────────
+
+def play_key
+  data = ENV["PLAY_JSON_KEY_DATA"].to_s
+  return { json_key_data: data } unless data.strip.empty?
+  path = File.expand_path(ENV["PLAY_JSON_KEY_PATH"] || File.join(ROOT, "secrets/play-service-account.json"))
+  UI.user_error!("Google Play service-account JSON not found at #{path} (see store/RELEASING.md)") unless File.exist?(path)
+  { json_key: path }
+end
+
+platform :android do
+  desc "Build and sign the release .aab"
+  lane :build do |options|
+    code = (ENV["BUILD_NUMBER"] || options[:version_code] || 1).to_s
+    version = version_name
+    UI.message "MainLine #{version} (#{code})"
+    web_build("android")
+    gradle(
+      project_dir: File.join(MOBILE, "android"),
+      task: "bundle",
+      build_type: "Release",
+      properties: { "versionName" => version, "versionCode" => code },
+    )
+    aab = lane_context[SharedValues::GRADLE_AAB_OUTPUT_PATH]
+    jarsigner = ENV["JAVA_HOME"] ? File.join(ENV["JAVA_HOME"], "bin/jarsigner") : "jarsigner"
+    signed = sh("#{jarsigner.shellescape} -verify #{aab.shellescape} 2>&1 || true", log: false).include?("jar verified")
+    UI.user_error!("The .aab isn't signed: set ANDROID_KEYSTORE_* or create secrets/android-upload.properties") unless signed
+    UI.success "Signed bundle: #{aab}"
+    aab
+  end
+
+  desc "Build, sign and upload to the Play internal testing track"
+  lane :internal do
+    key = play_key
+    codes = begin
+      %w[internal alpha beta production].flat_map { |t| google_play_track_version_codes(track: t, **key) }
+    rescue StandardError => e
+      UI.important "Couldn't read existing version codes (#{e.message.lines.first&.strip}); starting at 1."
+      []
+    end
+    code = (ENV["BUILD_NUMBER"] || (codes.max || 0) + 1).to_s
+    aab = build(version_code: code)
+
+    metadata = Dir.mktmpdir("play-metadata")
+    FileUtils.mkdir_p(File.join(metadata, "en-US/changelogs"))
+    File.write(File.join(metadata, "en-US/changelogs/#{code}.txt"), changelog(490))
+
+    upload = lambda do |status|
+      upload_to_play_store(
+        track: "internal",
+        aab: aab,
+        release_status: status,
+        metadata_path: metadata,
+        skip_upload_apk: true,
+        skip_upload_metadata: true,
+        skip_upload_images: true,
+        skip_upload_screenshots: true,
+        **key,
+      )
+    end
+    begin
+      upload.call(ENV["PLAY_RELEASE_STATUS"] || "completed")
+    rescue StandardError => e
+      raise unless e.message.include?("draft app")
+      # Until the app's first release is rolled out in Play Console, Google only accepts drafts.
+      UI.important "Play still treats MainLine as a draft app — uploading as a draft release. Roll it out once in Play Console."
+      upload.call("draft")
+    end
+    UI.success "Uploaded to Google Play internal testing."
+  end
+
+  desc "Upload the Play listing (store/android) and phone screenshots — no binary"
+  lane :metadata do
+    dir = Dir.mktmpdir("play")
+    FileUtils.cp_r(File.join(MOBILE, "store/android/en-US"), File.join(dir, "en-US"))
+    images = File.join(dir, "en-US/images")
+    FileUtils.mkdir_p(File.join(images, "phoneScreenshots"))
+    FileUtils.cp(File.join(MOBILE, "store/android/images/icon.png"), images)
+    FileUtils.cp(File.join(MOBILE, "store/android/images/featureGraphic.png"), images)
+    Dir[File.join(MOBILE, "store/screenshots/android/*.png")].sort.each { |f| FileUtils.cp(f, File.join(images, "phoneScreenshots")) }
+    upload_to_play_store(
+      metadata_path: dir,
+      skip_upload_apk: true,
+      skip_upload_aab: true,
+      skip_upload_changelogs: true,
+      sync_image_upload: true,
+      **play_key,
+    )
+  end
+end

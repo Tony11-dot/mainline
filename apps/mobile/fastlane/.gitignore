@@ -1,0 +1,5 @@
+report.xml
+README.md
+*.p8
+*.json
+!Pluginfile

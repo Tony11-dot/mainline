@@ -1,0 +1,28 @@
+MainLine helps you build a chess opening repertoire and actually remember it.
+
+BUILD YOUR REPERTOIRE
+• Play moves on the board, or import PGN from anywhere.
+• See how often each move is played at your rating, and how it scores, from millions of Lichess games and master games.
+• Stockfish runs on your device to check every move.
+• Coverage shows how much of what opponents really play you've prepared, and where the gaps are.
+• Start fast with starter repertoires: Italian, London, Caro-Kann, Queen's Gambit Declined.
+
+REMEMBER IT
+• Spaced repetition (FSRS) schedules each position right before you'd forget it.
+• Learn new moves, review what's due, drill whole lines against realistic replies, or quiz your weakest positions.
+• Short daily sessions, a streak and a daily goal keep you consistent.
+• Reminders when positions are due.
+
+LEARN FROM YOUR GAMES
+• Import your Lichess or Chess.com games and see exactly where each one left your prep.
+• Forgotten moves go straight back into review.
+• Prepare for an opponent: see what they usually play and where it meets your repertoire.
+
+UNDERSTAND THE IDEAS
+• Ask the coach why a move is played. Explanations are checked against the position so they stay accurate.
+
+MADE TO FEEL RIGHT
+• A smooth board with drag, tap-tap moves, sounds and haptics.
+• 20 themes, board colours, piece sets and fonts.
+• Works fully offline. No account needed. Sign in with Lichess to sync across devices.
+• No ads, no tracking. Free and open source (GPL-3.0).

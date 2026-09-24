@@ -109,16 +109,19 @@ export const useLibrary = create<LibraryState>((set, get) => {
     moves: [],
     version: 0,
 
-    load: async () => {
-      if (get().loaded) return;
-      try {
-        const d = await db();
-        const [folders, reps, moves] = await Promise.all([d.getAll('folders'), d.getAll('repertoires'), d.getAll('moves')]);
-        set((s) => ({ folders, reps, moves, loaded: true, version: s.version + 1 }));
-        await ensureRoots();
-      } catch {
-        set({ loaded: true });
-      }
+    load: () => {
+      if (get().loaded) return Promise.resolve();
+      // Single flight: concurrent callers share one load (otherwise each would create root folders).
+      return (loading ??= (async () => {
+        try {
+          const d = await db();
+          const [folders, reps, moves] = await Promise.all([d.getAll('folders'), d.getAll('repertoires'), d.getAll('moves')]);
+          set((s) => ({ folders, reps, moves, loaded: true, version: s.version + 1 }));
+          await ensureRoots();
+        } catch {
+          set({ loaded: true });
+        }
+      })().finally(() => (loading = undefined)));
     },
 
     createFolder: async (name, color, parentId) => {
@@ -243,16 +246,36 @@ export const useLibrary = create<LibraryState>((set, get) => {
         moves: upsert(st.moves, m, moveKey),
         version: st.version + 1,
       }));
+      if (f.length) await ensureRoots();
     },
   };
 
+  /**
+   * The White and Black root folders. Every device creates its own on first run, so after syncing there
+   * can be several: default-named duplicates are merged into the one with the smallest id (the same choice
+   * on every device, so they converge), moving their repertoires and sub-folders across.
+   */
   async function ensureRoots() {
-    const live = get().folders.filter((f) => !f.deleted && f.parentId === null);
-    const need: Folder[] = [];
+    const { folders, reps } = get();
+    const live = folders.filter((f) => !f.deleted && f.parentId === null);
+    const folderChanges: Folder[] = [];
+    const repChanges: Repertoire[] = [];
     for (const [color, name, idx] of [['white', 'White', 0], ['black', 'Black', 1]] as const) {
-      if (!live.some((f) => f.color === color)) need.push({ id: uid(), parentId: null, name, color, sortIndex: idx, updatedAt: now() });
+      const mine = live.filter((f) => f.color === color);
+      if (!mine.length) {
+        folderChanges.push({ id: uid(), parentId: null, name, color, sortIndex: idx, updatedAt: now() });
+        continue;
+      }
+      const [keep, ...dupes] = mine.filter((f) => f.name === name).sort((x, y) => (x.id < y.id ? -1 : 1));
+      if (!keep) continue;
+      for (const d of dupes) {
+        for (const r of reps) if (!r.deleted && r.folderId === d.id) repChanges.push({ ...r, folderId: keep.id, updatedAt: now() });
+        for (const c of folders) if (!c.deleted && c.parentId === d.id) folderChanges.push({ ...c, parentId: keep.id, updatedAt: now() });
+        folderChanges.push({ ...d, deleted: true, updatedAt: now() });
+      }
     }
-    if (need.length) await saveFolders(need);
+    if (folderChanges.length) await saveFolders(folderChanges);
+    if (repChanges.length) await saveReps(repChanges);
   }
 });
 
@@ -262,6 +285,8 @@ function upsert<T>(list: T[], rows: T[], key: (x: T) => string): T[] {
   for (const r of rows) map.set(key(r), r);
   return [...map.values()];
 }
+
+let loading: Promise<void> | undefined;
 
 const nextIndex = (siblings: { sortIndex: number }[]) => (siblings.length ? Math.max(...siblings.map((s) => s.sortIndex)) + 1 : 0);
 

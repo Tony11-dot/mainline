@@ -11,3 +11,6 @@ export function useMediaQuery(query: string): boolean {
     () => false,
   );
 }
+
+/** Board beside the panels: wide *and* landscape. Portrait tablets stack instead, so the board stays large. */
+export const SPLIT_LAYOUT = '(min-width: 1024px) and (min-aspect-ratio: 6/5)';

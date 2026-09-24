@@ -21,6 +21,8 @@ const schema = z.object({
   AI_DAILY_BUDGET: z.coerce.number().default(400),
   WEB_DIST: z.string().optional(),
   EXTRA_CORS_ORIGINS: z.string().default(''),
+  /** Shown on /privacy and /terms: an email address or a URL. */
+  LEGAL_CONTACT: z.string().default('https://github.com/Tony11-dot/mainline/issues'),
 });
 
 export type Env = z.infer<typeof schema>;

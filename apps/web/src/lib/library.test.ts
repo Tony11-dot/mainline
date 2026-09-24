@@ -6,9 +6,34 @@ import { db } from './idb';
 
 beforeEach(async () => {
   useLibrary.setState({ loaded: false, folders: [], reps: [], moves: [], version: 0 });
+  const d = await db();
+  await Promise.all((['folders', 'repertoires', 'moves'] as const).map((s) => d.clear(s)));
 });
 
 describe('library store', () => {
+  it('concurrent loads create one White and one Black root', async () => {
+    const L = useLibrary.getState();
+    await Promise.all([L.load(), L.load(), L.load()]);
+    const roots = useLibrary.getState().folders.filter((f) => !f.deleted && f.parentId === null);
+    expect(roots.map((f) => f.name).sort()).toEqual(['Black', 'White']);
+  });
+
+  it('merges default roots that arrive from another device, keeping every repertoire', async () => {
+    const L = useLibrary.getState();
+    await L.load();
+    const localWhite = useLibrary.getState().folders.find((f) => !f.deleted && f.parentId === null && f.color === 'white')!;
+    const mine = await L.createRepertoire({ name: 'Mine', color: 'white', folderId: localWhite.id });
+    const remoteWhite = { id: '00000000-0000-4000-8000-000000000001', parentId: null, name: 'White', color: 'white' as const, sortIndex: 0, updatedAt: Date.now() };
+    const theirs = { ...mine, id: '00000000-0000-4000-8000-0000000000aa', name: 'Theirs', folderId: remoteWhite.id, updatedAt: Date.now() };
+    await L.applyRemote({ folders: [remoteWhite], reps: [theirs], moves: [] });
+
+    const s = useLibrary.getState();
+    const whites = s.folders.filter((f) => !f.deleted && f.parentId === null && f.color === 'white');
+    expect(whites).toHaveLength(1);
+    expect(whites[0]!.id).toBe(remoteWhite.id); // smallest id wins on every device
+    expect(s.reps.filter((r) => !r.deleted && r.folderId === remoteWhite.id).map((r) => r.name).sort()).toEqual(['Mine', 'Theirs']);
+  });
+
   it('creates White/Black roots, repertoires, moves, alternates; delete + undo; persists', async () => {
     const L = useLibrary.getState();
     await L.load();

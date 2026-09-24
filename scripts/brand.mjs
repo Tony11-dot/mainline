@@ -124,4 +124,29 @@ export function stripJitterWatermark(doc) {
   return d;
 }
 
+// Store listing graphics (Google Play): 512 icon + 1024×500 feature graphic.
+const storeDir = `${root}apps/mobile/store/android/images/`;
+mkdirSync(storeDir, { recursive: true });
+await png(icon, 512, `${storeDir}icon.png`);
+{
+  const whiteWordmark = async (h) => {
+    const m = await sharp(B('wordmark.png')).trim().resize({ height: h }).ensureAlpha().raw().toBuffer({ resolveWithObject: true });
+    const d = m.data;
+    for (let i = 0; i < d.length; i += 4) d[i] = d[i + 1] = d[i + 2] = 255;
+    return sharp(d, { raw: m.info }).png().toBuffer();
+  };
+  const bg = `<svg xmlns="http://www.w3.org/2000/svg" width="1024" height="500"><defs><linearGradient id="g" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#2962F4"/><stop offset="0.5" stop-color="${BRAND}"/><stop offset="1" stop-color="#0423A2"/></linearGradient></defs><rect width="1024" height="500" fill="url(#g)"/></svg>`;
+  // The wordmark already carries the knight.
+  const word = await whiteWordmark(190);
+  const wMeta = await sharp(word).metadata();
+  writeFileSync(
+    `${storeDir}featureGraphic.png`,
+    await sharp(Buffer.from(bg))
+      .composite([{ input: word, left: Math.round((1024 - wMeta.width) / 2), top: Math.round((500 - wMeta.height) / 2) }])
+      .flatten({ background: BRAND })
+      .png()
+      .toBuffer(),
+  );
+}
+
 console.log('brand assets generated');

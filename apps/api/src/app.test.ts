@@ -11,4 +11,16 @@ describe('app', () => {
     expect(res.headers['cross-origin-embedder-policy']).toBe('require-corp');
     await app.close();
   });
+
+  it('serves the privacy policy and terms as standalone pages', async () => {
+    const app = await buildApp({ logger: false });
+    for (const [url, title] of [['/privacy', 'Privacy policy'], ['/terms', 'Terms of use']] as const) {
+      const res = await app.inject({ method: 'GET', url });
+      expect(res.statusCode).toBe(200);
+      expect(res.headers['content-type']).toContain('text/html');
+      expect(res.body).toContain(`<h1>${title}</h1>`);
+      expect(res.body).not.toContain('<script');
+    }
+    await app.close();
+  });
 });

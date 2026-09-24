@@ -1,5 +1,5 @@
-import type { ReactNode } from 'react';
-import { LogOut } from 'lucide-react';
+import { useState, type ReactNode } from 'react';
+import { LogOut, Trash2 } from 'lucide-react';
 import { SPEEDS, type Speed } from '@mainline/shared';
 import { usePrefs } from '../lib/prefs';
 import { AppearanceSettings } from './settings/AppearanceSettings';
@@ -9,6 +9,7 @@ import { syncNow, useSync } from '../lib/sync';
 import { playSound } from '../lib/sound';
 import { startLichessLogin, useAuth } from '../lib/auth';
 import { Button, Segmented } from '../ui/primitives';
+import { Sheet } from '../ui/Sheet';
 
 export function SettingsScreen() {
   const p = usePrefs();
@@ -164,12 +165,87 @@ export function SettingsScreen() {
         <Toggle label="Haptics" hint="Vibration feedback on supported devices." checked={p.haptics} onChange={(haptics) => p.set({ haptics })} />
       </Group>
 
-      <p className="mt-10 text-center text-xs text-ink-3">
-        Mainline is free software (GPL-3.0). Board by chessground, rules by chessops, engine Stockfish 19 — all GPL-3.0.
+      <DeleteData signedIn={!!me} />
+
+      <p className="mt-6 text-center text-xs text-ink-3">
+        <a href={legalUrl('/privacy')} target="_blank" rel="noreferrer" className="underline-offset-2 hover:underline">
+          Privacy
+        </a>
+        {' · '}
+        <a href={legalUrl('/terms')} target="_blank" rel="noreferrer" className="underline-offset-2 hover:underline">
+          Terms
+        </a>
+      </p>
+
+      <p className="mt-3 text-center text-xs text-ink-3">
+        MainLine is free software (GPL-3.0). Board by chessground, rules by chessops, engine Stockfish 19 — all GPL-3.0.
         Opening names from lichess-org/chess-openings (CC0).
       </p>
     </div>
   );
+}
+
+/** App Store 5.1.1(v): account deletion inside the app. Guests can erase this device. */
+function DeleteData({ signedIn }: { signedIn: boolean }) {
+  const [open, setOpen] = useState(false);
+  const [busy, setBusy] = useState(false);
+  const [error, setError] = useState('');
+  const deleteEverything = useAuth((s) => s.deleteEverything);
+  const label = signedIn ? 'Delete my account & data' : 'Erase all data on this device';
+  return (
+    <Group title="Your data">
+      <Row
+        label={label}
+        hint={signedIn ? 'Removes your MainLine account, synced repertoires and training history, and disconnects Lichess.' : 'Removes your repertoires, training history and settings from this device.'}
+        stack
+      >
+        <Button size="sm" variant="danger" icon={Trash2} onClick={() => setOpen(true)}>
+          {signedIn ? 'Delete account' : 'Erase data'}
+        </Button>
+      </Row>
+      <Sheet
+        open={open}
+        onClose={() => !busy && setOpen(false)}
+        title={label}
+        footer={
+          <div className="flex justify-end gap-2">
+            <Button variant="ghost" disabled={busy} onClick={() => setOpen(false)}>
+              Cancel
+            </Button>
+            <Button
+              variant="danger"
+              loading={busy}
+              onClick={async () => {
+                setBusy(true);
+                setError('');
+                try {
+                  await deleteEverything();
+                  location.replace('/');
+                } catch {
+                  setBusy(false);
+                  setError("Couldn't reach the server. Check your connection and try again — nothing was deleted.");
+                }
+              }}
+            >
+              Delete permanently
+            </Button>
+          </div>
+        }
+      >
+        <p className="text-ink-2">This can't be undone. {signedIn ? 'Everything on the server and on this device is deleted; other devices keep their local copy until you erase them too.' : 'Export your repertoires as PGN first if you want to keep them.'}</p>
+        {error && (
+          <p role="alert" className="mt-3 text-sm font-medium text-bad">
+            {error}
+          </p>
+        )}
+      </Sheet>
+    </Group>
+  );
+}
+
+function legalUrl(path: string) {
+  const base = (import.meta.env.VITE_API_URL as string | undefined)?.replace(/\/$/, '') ?? '';
+  return base + path;
 }
 
 function Group({ title, children }: { title: string; children: ReactNode }) {
