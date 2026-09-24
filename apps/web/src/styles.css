@@ -9,7 +9,8 @@
  * so swapping the owner's brand hex is a one-line change.
  */
 :root {
-  --brand: #1e5eff;
+  --brand: #072eb8;
+  --on-brand: #fff;
 
   /* Cool neutrals, tinted a hair toward the brand hue. */
   --bg: oklch(0.985 0.004 262);
@@ -96,6 +97,14 @@
   color-scheme: dark;
 }
 
+:root[data-board='match'] {
+  --sq-light: color-mix(in oklab, var(--brand) 13%, #f6f7f9);
+  --sq-dark: color-mix(in oklab, var(--brand) 52%, #9aa0aa);
+}
+:root[data-board='blue'] {
+  --sq-light: oklch(0.93 0.018 250);
+  --sq-dark: oklch(0.66 0.055 250);
+}
 :root[data-board='brown'] {
   --sq-light: #f0d9b5;
   --sq-dark: #b58863;
@@ -120,6 +129,7 @@
   --color-line: var(--line);
   --color-line-strong: var(--line-strong);
   --color-brand: var(--brand);
+  --color-on-brand: var(--on-brand);
   --color-brand-ink: var(--brand-ink);
   --color-brand-soft: var(--brand-soft);
   --color-brand-softer: var(--brand-softer);
@@ -129,8 +139,8 @@
   --color-bad-soft: var(--bad-soft);
   --color-warn: var(--warn);
   --color-warn-soft: var(--warn-soft);
-  --font-sans: -apple-system, BlinkMacSystemFont, 'SF Pro Text', 'Inter Variable', 'Segoe UI Variable Text', 'Segoe UI',
-    Roboto, system-ui, sans-serif;
+  --font-sans: var(--font-sans-live, -apple-system, BlinkMacSystemFont, 'SF Pro Text', 'Inter Variable', 'Segoe UI Variable Text', 'Segoe UI',
+    Roboto, system-ui, sans-serif);
   --radius-s: var(--radius-s);
   --radius-m: var(--radius-m);
   --radius-l: var(--radius-l);
@@ -257,4 +267,9 @@ dialog.sheet[open] {
 @keyframes indeterminate {
   0% { transform: translateX(-100%); }
   100% { transform: translateX(300%); }
+}
+
+@keyframes ml-drift {
+  from { transform: translate(-50%, -50%) rotate(var(--rot)); }
+  to { transform: translate(calc(-50% + var(--dx)), calc(-50% + var(--dy))) rotate(calc(var(--rot) + 12deg)); }
 }

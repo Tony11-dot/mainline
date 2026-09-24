@@ -1,5 +1,8 @@
+import { useState } from 'react';
 import { createBrowserRouter, RouterProvider } from 'react-router';
 import { AppShell } from './ui/AppShell';
+import { LaunchScreen, shouldShowLaunch } from './launch/LaunchScreen';
+import { platform } from './platform';
 import { HomeScreen } from './screens/HomeScreen';
 import { PlaceholderScreen } from './screens/PlaceholderScreen';
 import { ExploreScreen } from './screens/ExploreScreen';
@@ -24,5 +27,11 @@ const router = createBrowserRouter([
 ]);
 
 export function App() {
-  return <RouterProvider router={router} />;
+  const [launching, setLaunching] = useState(() => shouldShowLaunch(platform().isNative));
+  return (
+    <>
+      <RouterProvider router={router} />
+      {launching && <LaunchScreen onDone={() => setLaunching(false)} />}
+    </>
+  );
 }

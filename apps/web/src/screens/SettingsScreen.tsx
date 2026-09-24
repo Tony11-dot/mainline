@@ -1,17 +1,11 @@
 import type { ReactNode } from 'react';
 import { LogOut } from 'lucide-react';
 import { SPEEDS, type Speed } from '@mainline/shared';
-import { usePrefs, type BoardTheme, type Theme } from '../lib/prefs';
+import { usePrefs } from '../lib/prefs';
+import { AppearanceSettings } from './settings/AppearanceSettings';
 import { playSound } from '../lib/sound';
 import { startLichessLogin, useAuth } from '../lib/auth';
 import { Button, Segmented } from '../ui/primitives';
-
-const BOARD_THEMES: { value: BoardTheme; label: string; light: string; dark: string }[] = [
-  { value: 'blue', label: 'Blue', light: 'oklch(0.93 0.018 250)', dark: 'oklch(0.66 0.055 250)' },
-  { value: 'slate', label: 'Slate', light: 'oklch(0.9 0.006 262)', dark: 'oklch(0.6 0.02 262)' },
-  { value: 'brown', label: 'Wood', light: '#f0d9b5', dark: '#b58863' },
-  { value: 'green', label: 'Green', light: '#eeeed2', dark: '#769656' },
-];
 
 export function SettingsScreen() {
   const p = usePrefs();
@@ -63,7 +57,7 @@ export function SettingsScreen() {
                     const next = on ? p.speeds.filter((x) => x !== s) : [...p.speeds, s];
                     if (next.length) p.set({ speeds: next as Speed[] });
                   }}
-                  className={`h-9 rounded-full px-3.5 text-sm font-semibold capitalize transition-colors ${on ? 'bg-brand text-white' : 'bg-surface-3 text-ink-2 hover:text-ink'}`}
+                  className={`h-9 rounded-full px-3.5 text-sm font-semibold capitalize transition-colors ${on ? 'bg-brand text-on-brand' : 'bg-surface-3 text-ink-2 hover:text-ink'}`}
                 >
                   {s}
                 </button>
@@ -73,37 +67,9 @@ export function SettingsScreen() {
         </Row>
       </Group>
 
-      <Group title="Appearance">
-        <Row label="Theme">
-          <Segmented<Theme>
-            label="Theme"
-            value={p.theme}
-            onChange={(theme) => p.set({ theme })}
-            options={[
-              { value: 'system', label: 'Auto' },
-              { value: 'light', label: 'Light' },
-              { value: 'dark', label: 'Dark' },
-            ]}
-            className="w-56"
-          />
-        </Row>
-        <Row label="Board">
-          <div className="flex gap-2" role="radiogroup" aria-label="Board theme">
-            {BOARD_THEMES.map((t) => (
-              <button
-                key={t.value}
-                type="button"
-                role="radio"
-                aria-checked={p.boardTheme === t.value}
-                aria-label={t.label}
-                title={t.label}
-                onClick={() => p.set({ boardTheme: t.value })}
-                className={`size-11 overflow-hidden rounded-[10px] transition-shadow ${p.boardTheme === t.value ? 'ring-2 ring-brand ring-offset-2 ring-offset-bg' : 'ring-1 ring-line'}`}
-                style={{ backgroundImage: `repeating-conic-gradient(${t.dark} 0 25%, ${t.light} 0 50%)`, backgroundSize: '50% 50%' }}
-              />
-            ))}
-          </div>
-        </Row>
+      <AppearanceSettings />
+
+      <Group title="Board & motion">
         <Toggle label="Coordinates" checked={p.coordinates} onChange={(coordinates) => p.set({ coordinates })} />
         <Toggle label="Show legal moves" checked={p.showDests} onChange={(showDests) => p.set({ showDests })} />
         <Toggle label="Reduce transparency" hint="Solid backgrounds instead of glass." checked={p.reduceTransparency} onChange={(reduceTransparency) => p.set({ reduceTransparency })} />

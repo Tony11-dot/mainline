@@ -1,6 +1,6 @@
 import { NavLink, Outlet } from 'react-router';
 import { NAV } from './nav';
-import { LogoMark } from './Logo';
+import { Wordmark } from './Logo';
 import { Toaster } from './toast';
 
 export function AppShell() {
@@ -22,9 +22,8 @@ export function AppShell() {
 function Sidebar() {
   return (
     <aside className="sticky top-0 hidden h-dvh flex-col gap-1 border-r border-line bg-surface-2/60 px-3 py-5 md:flex">
-      <div className="mb-5 flex items-center gap-2.5 px-2">
-        <LogoMark size={28} />
-        <span className="text-md font-semibold tracking-tight">Mainline</span>
+      <div className="mb-6 flex items-center px-2 pt-1">
+        <Wordmark height={30} />
       </div>
       <nav className="flex flex-col gap-0.5" aria-label="Main">
         {NAV.map(({ to, label, icon: Icon }) => (

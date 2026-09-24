@@ -2,7 +2,7 @@ import type { CapacitorConfig } from '@capacitor/cli';
 
 const config: CapacitorConfig = {
   appId: 'app.mainline.chess',
-  appName: 'Mainline',
+  appName: 'MainLine',
   webDir: '../web/dist',
   backgroundColor: '#F9FAFDFF',
   ios: {
@@ -15,7 +15,7 @@ const config: CapacitorConfig = {
   },
   plugins: {
     SplashScreen: { launchShowDuration: 600, launchAutoHide: true, backgroundColor: '#F9FAFDFF', showSpinner: false },
-    LocalNotifications: { smallIcon: 'ic_stat_mainline', iconColor: '#1E5EFF' },
+    LocalNotifications: { smallIcon: 'ic_stat_mainline', iconColor: '#072EB8' },
   },
 };
 

@@ -3,7 +3,7 @@ import type { LucideIcon } from 'lucide-react';
 
 type Variant = 'primary' | 'secondary' | 'ghost' | 'danger';
 const VARIANTS: Record<Variant, string> = {
-  primary: 'bg-brand text-white shadow-[0_1px_0_0_rgb(255_255_255/0.2)_inset,0_1px_2px_rgb(0_0_0/0.12)] hover:brightness-110 active:brightness-95',
+  primary: 'bg-brand text-on-brand shadow-[0_1px_0_0_rgb(255_255_255/0.2)_inset,0_1px_2px_rgb(0_0_0/0.12)] hover:brightness-110 active:brightness-95',
   secondary: 'bg-surface text-ink border border-line hover:bg-surface-2 active:bg-surface-3 shadow-1',
   ghost: 'text-ink-2 hover:bg-surface-3 hover:text-ink active:bg-surface-3',
   danger: 'bg-bad text-white hover:brightness-110',

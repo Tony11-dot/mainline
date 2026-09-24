@@ -87,3 +87,21 @@ iOS simulator smoke build (Xcode 26.6): ✔ `BUILD SUCCEEDED`.
 **Known issues**
 - "Add popular replies" and "Suggest my move" need explorer access (Lichess token / sign-in).
 - Drag-and-drop reordering *within* a folder isn't implemented (move-into-folder is); order is creation order.
+
+---
+
+## Brand, launch animation & appearance (2026-09-24, owner request)
+
+**Built**
+- **Brand assets** from the owner's files, kept as originals in `brand/` and derived by `node scripts/brand.mjs`: app icon (`MainLine.png`) for PWA / iOS / Android / desktop; Android adaptive icon = white knight on the brand gradient; native splash; in-app knight (`MainLine_transparent.png`, chosen over the wordmark for small square sizes) and the wordmark lockup for the desktop sidebar. Both are rendered as **CSS masks filled with the theme accent**, so the logo follows the active theme. Display name is now **MainLine** (web title, iOS, Android, desktop).
+- **Brand blue `#072EB8`** (sampled from the icon's field) replaces the `#1E5EFF` placeholder.
+- **Launch animation** (`apps/web/src/launch/`), ported from ClassMate's splash: the Jitter scene with the **`jitter.video` watermark stripped at build time** (a static null at the bottom-right parenting a precomp of outlined letterforms — same pattern and fix as ClassNotes commit 8d97b61 / ClassMusic 20ab136; `stripJitterWatermark` verifies nothing else references it), **recoloured to the active theme** (wordmark fill → accent, white → surface, embedded knight PNG tinted with alpha preserved), aspect-fit (zoomed into the empty margins on portrait phones), over an ambient background of drifting chess glyphs, rings, dots, blobs and branch curves fading in over 1.1 s. Tap/Esc skips, safety timeout, reduced-motion shows the final frame. Plays on every native / installed-PWA launch and once per browser session.
+- **Themes & fonts — the same collection as ClassMate / ClassNotes / ClassMusic**: *System default* (MainLine blue & white, follows OS dark mode) + 9 light (Light, Coffee, Matcha, Rosé, Sand, Sky, Lavender, Peach, Mint) + 10 dark (Dark, Midnight, Nord, Forest, Dracula, Obsidian, Wine, Solarized, Plum, Ocean) with identical tokens and ClassMate's swatch rows; the font pack (Default, Noteworthy, Bradley Hand, Marker Felt, Chalkboard, Snell Roundhand, Savoye, Rounded, New York, Georgia, Menlo) as "Aa" rows. On Apple devices the real system faces are used; elsewhere open-licensed look-alikes load on demand (Patrick Hand, Caveat, Permanent Marker, Short Stack, Great Vibes, Pinyon Script, Nunito, Source Serif 4, Gelasio, JetBrains Mono — OFL/Apache).
+- **Board & pieces follow the theme**: board "Match theme" (default) derives both square colours from the theme accent; presets Blue / Slate / Wood / Green remain. **8 piece sets** (Classic/cburnett, Merida, Chessnut, Fantasy, Spatial, Celtic, Rhos, MP Chess) — only GPL/MIT/Apache/CC0 sets from Lichess; licences in `apps/web/public/pieces/LICENSES.md`.
+- The theme is painted before React loads (cached vars in `index.html`'s boot script) — no flash.
+
+**Try it**: Settings → Light themes / Dark themes / Font / Board / Pieces. See the launch: http://localhost:5173/?launch=1
+
+**Known issues / pending**
+- **Cabinet Grotesk** (ClassMate's default font) is not included yet: its ITF Free Font License is outside the MIT/BSD/Apache/ISC/GPL set — waiting for the owner's OK. The code already knows about it (`pendingLicence` in `lib/appearance.ts`).
+- One rare e2e flake (≈1/30) in the WebKit phone builder test at superhuman tap speed.
