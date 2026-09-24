@@ -3,6 +3,7 @@ import { LogOut } from 'lucide-react';
 import { SPEEDS, type Speed } from '@mainline/shared';
 import { usePrefs } from '../lib/prefs';
 import { AppearanceSettings } from './settings/AppearanceSettings';
+import { syncNow, useSync } from '../lib/sync';
 import { playSound } from '../lib/sound';
 import { startLichessLogin, useAuth } from '../lib/auth';
 import { Button, Segmented } from '../ui/primitives';
@@ -10,13 +11,17 @@ import { Button, Segmented } from '../ui/primitives';
 export function SettingsScreen() {
   const p = usePrefs();
   const { me, logout } = useAuth();
+  const sync = useSync();
   return (
     <div className="mx-auto max-w-2xl px-4 py-6 md:px-8 md:py-10">
       <h1 className="text-2xl font-bold">Settings</h1>
 
       <Group title="Account">
         {me ? (
-          <Row label={`Signed in as ${me.lichessUsername}`} hint="Your repertoire syncs across devices.">
+          <Row label={`Signed in as ${me.lichessUsername}`} hint={syncHint(sync)}>
+            <Button size="sm" variant="ghost" onClick={() => void syncNow()} className="mr-1">
+              Sync now
+            </Button>
             <Button size="sm" icon={LogOut} onClick={() => void logout()}>
               Sign out
             </Button>
@@ -42,6 +47,18 @@ export function SettingsScreen() {
             onChange={(e) => p.set({ rating: Math.max(400, Math.min(3200, Number(e.target.value) || 1500)) })}
             className="tnum h-10 w-24 rounded-[10px] border border-line bg-surface px-3 text-right text-base font-semibold"
             aria-label="Rating"
+          />
+        </Row>
+        <Row label="New moves per day" hint="How many new positions Learn introduces each day.">
+          <input
+            type="number"
+            inputMode="numeric"
+            min={0}
+            max={100}
+            value={p.dailyNewLimit}
+            onChange={(e) => p.set({ dailyNewLimit: Math.max(0, Math.min(100, Number(e.target.value) || 0)) })}
+            className="tnum h-10 w-20 rounded-[10px] border border-line bg-surface px-3 text-right text-base font-semibold"
+            aria-label="New moves per day"
           />
         </Row>
         <Row label="Time controls" stack>
@@ -154,4 +171,12 @@ export function Toggle({ label, hint, checked, onChange }: { label: string; hint
       </label>
     </Row>
   );
+}
+
+function syncHint(s: ReturnType<typeof useSync.getState>): string {
+  if (s.status === 'syncing') return 'Syncing…';
+  if (s.status === 'offline') return 'Offline — changes are saved here and will sync when you’re back online.';
+  if (s.status === 'error') return `Sync problem: ${s.error ?? 'unknown'} — retrying automatically.`;
+  if (s.lastSyncedAt) return `Synced ${new Date(s.lastSyncedAt).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })} · repertoire and training follow you across devices.`;
+  return 'Your repertoire and training sync across devices.';
 }

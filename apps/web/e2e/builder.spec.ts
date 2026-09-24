@@ -23,11 +23,13 @@ test('create a repertoire, add a line, alternates, delete + undo, PGN import', a
   await expect(page.getByText('2 repl').or(page.getByText('Their move — no replies yet'))).toBeVisible();
   await move(page, 'f8', 'c5');
   await move(page, 'c2', 'c3');
+  await expect(page.getByRole('tree', { name: 'Moves' }).getByRole('treeitem', { name: 'c3' })).toHaveAttribute('aria-selected', 'true');
   await page.keyboard.press('ArrowLeft');
   await page.keyboard.press('ArrowLeft');
+  const tree = page.getByRole('tree', { name: 'Moves' });
+  await expect(tree.getByRole('treeitem', { name: 'Bc4' })).toHaveAttribute('aria-selected', 'true');
   await move(page, 'g8', 'f6'); // second opponent reply
   await move(page, 'd2', 'd3');
-  const tree = page.getByRole('tree', { name: 'Moves' });
   await expect(tree.getByRole('treeitem', { name: 'Nf6' })).toBeVisible();
   await expect(tree.getByRole('treeitem', { name: 'c3' })).toBeVisible();
 

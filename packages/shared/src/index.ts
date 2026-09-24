@@ -5,3 +5,4 @@ export * from './api';
 export * from './eval';
 export * from './repertoire';
 export * from './suggest';
+export * from './training';

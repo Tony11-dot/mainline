@@ -114,7 +114,7 @@ export const useLibrary = create<LibraryState>((set, get) => {
       try {
         const d = await db();
         const [folders, reps, moves] = await Promise.all([d.getAll('folders'), d.getAll('repertoires'), d.getAll('moves')]);
-        set({ folders, reps, moves, loaded: true });
+        set((s) => ({ folders, reps, moves, loaded: true, version: s.version + 1 }));
         await ensureRoots();
       } catch {
         set({ loaded: true });

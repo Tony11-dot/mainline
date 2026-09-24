@@ -135,7 +135,7 @@ function BoardPicker() {
     <div className="flex flex-wrap gap-3 p-3.5" role="radiogroup" aria-label="Board">
       {BOARD_THEMES.map((b) => {
         const [light, dark] =
-          b.id === 'match' ? ['color-mix(in oklab, var(--brand) 13%, #f6f7f9)', 'color-mix(in oklab, var(--brand) 52%, #9aa0aa)'] : BOARD_PREVIEW[b.id];
+          b.id === 'match' ? ['color-mix(in oklab, var(--brand) 9%, #f3f5f8)', 'color-mix(in oklab, var(--brand) 34%, #9ea6b3)'] : BOARD_PREVIEW[b.id];
         const on = boardTheme === b.id;
         return (
           <button key={b.id} type="button" role="radio" aria-checked={on} onClick={() => set({ boardTheme: b.id })} className="flex flex-col items-center gap-1.5">

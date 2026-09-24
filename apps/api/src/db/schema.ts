@@ -57,6 +57,7 @@ export const folders = pgTable(
     sortIndex: real('sort_index').default(0).notNull(),
     updatedAt: ts('updated_at').notNull(),
     deleted: boolean('deleted').default(false).notNull(),
+    syncedAt: ts('synced_at').defaultNow().notNull(),
   },
   (t) => [index('folders_user_upd_idx').on(t.userId, t.updatedAt)],
 );
@@ -77,6 +78,7 @@ export const repertoires = pgTable(
     createdAt: ts('created_at').defaultNow().notNull(),
     updatedAt: ts('updated_at').notNull(),
     deleted: boolean('deleted').default(false).notNull(),
+    syncedAt: ts('synced_at').defaultNow().notNull(),
   },
   (t) => [index('repertoires_user_upd_idx').on(t.userId, t.updatedAt)],
 );
@@ -98,6 +100,7 @@ export const repertoireMoves = pgTable(
     addedAt: ts('added_at').defaultNow().notNull(),
     updatedAt: ts('updated_at').notNull(),
     deleted: boolean('deleted').default(false).notNull(),
+    syncedAt: ts('synced_at').defaultNow().notNull(),
   },
   (t) => [
     primaryKey({ columns: [t.repertoireId, t.fromEpd, t.uci] }),
@@ -119,6 +122,7 @@ export const cards = pgTable(
     lastReview: ts('last_review'),
     updatedAt: ts('updated_at').notNull(),
     deleted: boolean('deleted').default(false).notNull(),
+    syncedAt: ts('synced_at').defaultNow().notNull(),
   },
   (t) => [
     primaryKey({ columns: [t.userId, t.color, t.epd, t.kind] }),
@@ -144,6 +148,7 @@ export const reviewLog = pgTable(
     reviewedAt: ts('reviewed_at').notNull(),
     updatedAt: ts('updated_at').notNull(),
     deleted: boolean('deleted').default(false).notNull(),
+    syncedAt: ts('synced_at').defaultNow().notNull(),
   },
   (t) => [index('review_log_user_idx').on(t.userId, t.reviewedAt), index('review_log_upd_idx').on(t.userId, t.updatedAt)],
 );

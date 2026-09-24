@@ -98,8 +98,8 @@
 }
 
 :root[data-board='match'] {
-  --sq-light: color-mix(in oklab, var(--brand) 13%, #f6f7f9);
-  --sq-dark: color-mix(in oklab, var(--brand) 52%, #9aa0aa);
+  --sq-light: color-mix(in oklab, var(--brand) 9%, #f3f5f8);
+  --sq-dark: color-mix(in oklab, var(--brand) 34%, #9ea6b3);
 }
 :root[data-board='blue'] {
   --sq-light: oklch(0.93 0.018 250);

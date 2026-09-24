@@ -39,3 +39,14 @@ export async function cachedExplorer(source: ExplorerSource, fen: string, rating
   const key = explorerKey(source, fen, rating, speeds);
   return mem.get(key) ?? (await db().then((d) => d.get('explorer', key)).catch(() => undefined))?.value;
 }
+
+/** Game counts per reply from explorer data already in memory (no network) — used to weight drills. */
+export function peekReplyWeights(epd: string): Map<string, number> | undefined {
+  for (const [key, data] of mem) {
+    if (key.startsWith('l|') && data.epd === epd) return new Map(data.moves.map((m) => [m.uci, m.total]));
+  }
+  for (const [key, data] of mem) {
+    if (key.startsWith('m|') && data.epd === epd) return new Map(data.moves.map((m) => [m.uci, m.total]));
+  }
+  return undefined;
+}

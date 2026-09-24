@@ -10,6 +10,7 @@ import { SettingsScreen } from './screens/SettingsScreen';
 import { LibraryScreen } from './screens/LibraryScreen';
 import { RepertoireScreen } from './screens/RepertoireScreen';
 import { OpeningsScreen } from './screens/OpeningsScreen';
+import { TrainScreen } from './screens/TrainScreen';
 
 const router = createBrowserRouter([
   {
@@ -19,6 +20,7 @@ const router = createBrowserRouter([
       { path: 'library', element: <LibraryScreen /> },
       { path: 'library/openings', element: <OpeningsScreen /> },
       { path: 'rep/:id', element: <RepertoireScreen /> },
+      { path: 'train', element: <TrainScreen /> },
       { path: 'explore', element: <ExploreScreen /> },
       { path: 'games', element: <PlaceholderScreen title="Games" /> },
       { path: 'settings', element: <SettingsScreen /> },

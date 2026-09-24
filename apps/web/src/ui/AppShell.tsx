@@ -1,4 +1,4 @@
-import { NavLink, Outlet } from 'react-router';
+import { NavLink, Outlet, useLocation } from 'react-router';
 import { NAV } from './nav';
 import { Wordmark } from './Logo';
 import { Toaster } from './toast';
@@ -47,6 +47,8 @@ function Sidebar() {
 }
 
 function TabBar() {
+  // Training is immersive on phones: no tab bar competing with the board.
+  if (useLocation().pathname.startsWith('/train')) return null;
   return (
     <nav
       aria-label="Main"

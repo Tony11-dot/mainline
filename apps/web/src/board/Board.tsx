@@ -35,6 +35,8 @@ export interface BoardProps {
   flash?: { kind: 'wrong' | 'right'; key: number };
   className?: string;
   ariaLabel?: string;
+  /** Change to force the board back to `fen` (e.g. to take back a wrong move in training). */
+  syncKey?: number;
 }
 
 const LONG_PRESS_MS = 380;
@@ -100,7 +102,7 @@ export function Board(props: BoardProps) {
       api.setAutoShapes(props.autoShapes ?? []);
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [props.fen, props.orientation, props.turnColor, props.movable, props.dests, props.lastMove, props.check, props.shapes, props.autoShapes, props.drawMode, prefs.showDests, prefs.coordinates, prefs.animationMs]);
+  }, [props.fen, props.orientation, props.turnColor, props.movable, props.dests, props.lastMove, props.check, props.shapes, props.autoShapes, props.drawMode, props.syncKey, prefs.showDests, prefs.coordinates, prefs.animationMs]);
 
   function onUserMove(from: Key, to: Key) {
     const api = cg.current!;
@@ -184,8 +186,8 @@ export function Board(props: BoardProps) {
   );
 }
 
-function configKey(p: Pick<BoardProps, 'fen' | 'orientation' | 'turnColor' | 'movable' | 'lastMove' | 'check' | 'drawMode'>, prefs: { showDests: boolean; coordinates: boolean; animationMs: number }) {
-  return [p.fen, p.orientation, p.turnColor, p.movable ?? '', p.lastMove?.join('') ?? '', p.check ? 1 : 0, p.drawMode ? 1 : 0, prefs.showDests ? 1 : 0, prefs.coordinates ? 1 : 0, prefs.animationMs].join('|');
+function configKey(p: Pick<BoardProps, 'fen' | 'orientation' | 'turnColor' | 'movable' | 'lastMove' | 'check' | 'drawMode' | 'syncKey'>, prefs: { showDests: boolean; coordinates: boolean; animationMs: number }) {
+  return [p.syncKey ?? 0, p.fen, p.orientation, p.turnColor, p.movable ?? '', p.lastMove?.join('') ?? '', p.check ? 1 : 0, p.drawMode ? 1 : 0, prefs.showDests ? 1 : 0, prefs.coordinates ? 1 : 0, prefs.animationMs].join('|');
 }
 
 function hapticIf(kind: Parameters<ReturnType<typeof platform>['haptic']>[0]) {

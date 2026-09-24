@@ -105,3 +105,24 @@ iOS simulator smoke build (Xcode 26.6): ✔ `BUILD SUCCEEDED`.
 **Known issues / pending**
 - **Cabinet Grotesk** (ClassMate's default font) is not included yet: its ITF Free Font License is outside the MIT/BSD/Apache/ISC/GPL set — waiting for the owner's OK. The code already knows about it (`pendingLicence` in `lib/appearance.ts`).
 - One rare e2e flake (≈1/30) in the WebKit phone builder test at superhuman tap speed.
+
+---
+
+## Phase 3 — Training (2026-09-24)
+
+**Built**
+- **FSRS** via ts-fsrs (retention 0.9, max interval 365 d, fuzz) behind a small JSON-safe wrapper (`packages/shared/src/training.ts`). Cards are per colour + position, so transpositions and positions shared by several repertoires are learned once.
+- **Automatic grading** (no self-rating buttons): wrong first try → Again; correct but > 15 s → Hard; correct → Good; instant on a well-known card → Easy. "Show move" counts as Again.
+- **Session planner** (pure, tested): **Learn** (new positions in context from the repertoire root, daily new limit, configurable in Settings), **Review** (lines through due positions; opponent moves and not-due own moves auto-played; trimmed after the last due position), **Drill** (random walks, opponent replies weighted by real explorer frequencies when cached), **Position quiz** (single positions, due first then weakest retrievability).
+- **Trainer** (`lib/trainer.ts`): opponent replies land after the previous animation (420 ms); a wrong move shakes the board, plays the error sound and haptic, snaps back and shows the correct move as an arrow — you then play it to continue. Playing an *alternate* gets a specific message; another repertoire's main move (conflict) is accepted. Move notes appear when learning / after a mistake.
+- **Train screen**: board-first and immersive (no tab bar on phones), progress bar, one clear prompt, Show move (H), Skip line, Esc to leave; **session summary** with count, accuracy, time, streak and the positions to look at again (link to explore each).
+- **Today screen**: one big **Train now** button with due count and estimated minutes (falls back to "Learn new moves"), positions learned / retention / reviewed today, streak, and Learn / Drill / Quiz entry points.
+- **Sync** (signed-in users; guests stay local): `POST /api/sync` pushes the dirty set with last-write-wins per row (tombstones included, user-isolated, validated) and pulls rows changed since a **server-time** cursor (30 s overlap). The client syncs on sign-in, after edits (debounced 2 s), on reconnect, when the app returns to the foreground and every 5 min; a guest's library uploads on first sign-in. Sync status + "Sync now" in Settings.
+- Fixed: stores bumped no version on first load, so screens memoised on it showed empty data after a reload.
+
+**Try it**: import or build a repertoire → Today → Learn new moves → come back later for Review; Drill and Quiz from Today.
+
+**Tests**: shared 43 (FSRS, grading, all four planners, summary, streak), API 10 (incl. sync against Postgres: LWW, tombstones, user isolation, validation), e2e **54/54 over 3 repeats** incl. learn → quiz-with-mistake → summary on desktop + iPhone WebKit, and **two-device sync** through the real API + DB.
+
+**Known issues**
+- Drill weights use explorer data already fetched in this session (uniform otherwise); Phase 4's nightly prefetch will make them always available.
