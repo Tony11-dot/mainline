@@ -205,14 +205,20 @@ export const aiUsage = pgTable('ai_usage', {
 
 export const pushSubs = pgTable('push_subs', {
   id: bigserial('id', { mode: 'number' }).primaryKey(),
-  userId: uuid('user_id')
-    .notNull()
-    .references(() => users.id, { onDelete: 'cascade' }),
+  // Guests can get reminders too; linked to the user when signed in.
+  userId: uuid('user_id').references(() => users.id, { onDelete: 'cascade' }),
   endpoint: text('endpoint').notNull().unique(),
   keysJson: jsonb('keys_json').$type<{ p256dh: string; auth: string }>().notNull(),
+  timezone: text('timezone').default('UTC').notNull(),
+  reminderTime: text('reminder_time').default('19:00').notNull(),
   dueCount: integer('due_count').default(0).notNull(),
+  streak: integer('streak').default(0).notNull(),
+  lastReviewDay: text('last_review_day'),
   lastNotifiedOn: text('last_notified_on'),
+  lastNudgeOn: text('last_nudge_on'),
+  lastWeeklyOn: text('last_weekly_on'),
   createdAt: ts('created_at').defaultNow().notNull(),
+  updatedAt: ts('updated_at').defaultNow().notNull(),
 });
 
 export const games = pgTable(

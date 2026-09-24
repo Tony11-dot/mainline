@@ -42,6 +42,41 @@
     ],
     "category": "Education",
     "shortDescription": "Chess opening trainer",
-    "licenseFile": "../../../LICENSE"
+    "licenseFile": "../../../LICENSE",
+    "createUpdaterArtifacts": true,
+    "fileAssociations": [
+      {
+        "ext": [
+          "pgn"
+        ],
+        "name": "Chess PGN",
+        "description": "Chess game / repertoire",
+        "role": "Viewer",
+        "mimeType": "application/x-chess-pgn"
+      }
+    ],
+    "publisher": "MainLine",
+    "copyright": "GPL-3.0-or-later",
+    "macOS": {
+      "minimumSystemVersion": "11.0"
+    }
+  },
+  "plugins": {
+    "updater": {
+      "pubkey": "dW50cnVzdGVkIGNvbW1lbnQ6IG1pbmlzaWduIHB1YmxpYyBrZXk6IEZGQTA0M0Q5RjhEMDU5OUUKUldTZVdkRDQyVU9nLzJ3UU1sK1Q3OHRJSjNLeUUzNjdyT3p2c0VWWVBRWnBpSmhraGhpbE10SjUK",
+      "endpoints": [
+        "https://github.com/Tony11-dot/mainline/releases/latest/download/latest.json"
+      ],
+      "windows": {
+        "installMode": "passive"
+      }
+    },
+    "deep-link": {
+      "desktop": {
+        "schemes": [
+          "mainline"
+        ]
+      }
+    }
   }
 }

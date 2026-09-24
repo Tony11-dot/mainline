@@ -3,6 +3,7 @@ import { LogOut } from 'lucide-react';
 import { SPEEDS, type Speed } from '@mainline/shared';
 import { usePrefs } from '../lib/prefs';
 import { AppearanceSettings } from './settings/AppearanceSettings';
+import { RemindersSettings } from './settings/RemindersSettings';
 import { syncNow, useSync } from '../lib/sync';
 import { playSound } from '../lib/sound';
 import { startLichessLogin, useAuth } from '../lib/auth';
@@ -95,6 +96,8 @@ export function SettingsScreen() {
           </div>
         </Row>
       </Group>
+
+      <RemindersSettings />
 
       <AppearanceSettings />
 

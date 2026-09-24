@@ -61,10 +61,11 @@
   --ease-out: cubic-bezier(0.22, 1, 0.36, 1);
   --ease-spring: cubic-bezier(0.34, 1.25, 0.64, 1);
 
-  --safe-top: env(safe-area-inset-top, 0px);
-  --safe-bottom: env(safe-area-inset-bottom, 0px);
-  --safe-left: env(safe-area-inset-left, 0px);
-  --safe-right: env(safe-area-inset-right, 0px);
+  /* env() covers iOS / modern WebViews; Capacitor's SystemBars injects --safe-area-inset-* on Android edge-to-edge. */
+  --safe-top: max(env(safe-area-inset-top, 0px), var(--safe-area-inset-top, 0px));
+  --safe-bottom: max(env(safe-area-inset-bottom, 0px), var(--safe-area-inset-bottom, 0px));
+  --safe-left: max(env(safe-area-inset-left, 0px), var(--safe-area-inset-left, 0px));
+  --safe-right: max(env(safe-area-inset-right, 0px), var(--safe-area-inset-right, 0px));
   --tabbar-h: 64px;
 
   color-scheme: light;
@@ -166,6 +167,11 @@
     -webkit-text-size-adjust: 100%;
     -webkit-tap-highlight-color: transparent;
     background: var(--bg);
+  }
+  html,
+  body {
+    /* Never scroll sideways: stray overflow makes WebViews mis-composite fixed chrome. */
+    overflow-x: clip;
   }
   body {
     margin: 0;
@@ -272,4 +278,22 @@ dialog.sheet[open] {
 @keyframes ml-drift {
   from { transform: translate(-50%, -50%) rotate(var(--rot)); }
   to { transform: translate(calc(-50% + var(--dx)), calc(-50% + var(--dy))) rotate(calc(var(--rot) + 12deg)); }
+}
+
+/* iOS: the native Liquid Glass tab bar replaces the web one. */
+:root[data-native-chrome] [data-web-tabbar] {
+  display: none;
+}
+
+/* Android WebView mis-samples backdrop-filter on fixed elements (ghost copies); Material surfaces there. */
+:root[data-platform='android'] .glass {
+  -webkit-backdrop-filter: none;
+  backdrop-filter: none;
+  background: color-mix(in oklab, var(--surface) 97%, transparent);
+  box-shadow: var(--shadow-2);
+}
+
+/* macOS desktop: the window uses an overlay title bar — keep the sidebar clear of the traffic lights. */
+:root[data-macos] aside {
+  padding-top: 44px;
 }

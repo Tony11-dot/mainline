@@ -74,6 +74,19 @@ const splash = async (bg, knight) =>
 writeFileSync(`${root}apps/mobile/assets/splash.png`, await splash(BG_LIGHT, await tinted(420, BRAND)));
 writeFileSync(`${root}apps/mobile/assets/splash-dark.png`, await splash(BG_DARK, await tinted(420, '#8FA8FF')));
 
+// Android notification small icon: white knight silhouette (Android tints it), per density.
+for (const [dpi, size] of [['mdpi', 24], ['hdpi', 36], ['xhdpi', 48], ['xxhdpi', 72], ['xxxhdpi', 96]]) {
+  const dir = `${root}apps/mobile/android/app/src/main/res/drawable-${dpi}`;
+  mkdirSync(dir, { recursive: true });
+  writeFileSync(
+    `${dir}/ic_stat_mainline.png`,
+    await sharp({ create: { width: size, height: size, channels: 4, background: { r: 0, g: 0, b: 0, alpha: 0 } } })
+      .composite([{ input: await whiteKnight(Math.round(size * 0.9)), gravity: 'center' }])
+      .png()
+      .toBuffer(),
+  );
+}
+
 // --- Launch animation: strip the Jitter free-tier watermark --------------------------
 const anim = JSON.parse(readFileSync(B('launch-animation.source.json'), 'utf8'));
 writeFileSync(`${pub}launch.json`, JSON.stringify(stripJitterWatermark(anim)));

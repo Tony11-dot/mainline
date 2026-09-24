@@ -11,13 +11,14 @@ import { Lru } from '../lib/lru';
 
 const OAUTH_COOKIE = 'ml_oauth';
 export const NATIVE_SCHEME = 'app.mainline.chess';
+export const DESKTOP_SCHEME = 'mainline';
 const nativeCodes = new Lru<string>(1000, 120_000);
 
 interface OAuthCookie {
   v: string; // PKCE verifier
   s: string; // state
   r: string; // return path
-  n: 0 | 1; // native app flow
+  n: 0 | 1 | 2; // 0 web, 1 mobile app (app.mainline.chess://), 2 desktop app (mainline://)
 }
 
 export function toMe(u: User): Me {
@@ -36,10 +37,10 @@ export async function authRoutes(app: FastifyInstance) {
   app.get('/api/auth/lichess/start', async (req, reply) => {
     if (!getDb()) throw new MissingConfigError('DATABASE_URL', 'Accounts');
     requireEnv('TOKEN_ENC_KEY', 'Token encryption');
-    const q = z.object({ return: z.string().startsWith('/').max(200).default('/'), native: z.coerce.number().default(0) }).parse(req.query);
+    const q = z.object({ return: z.string().startsWith('/').max(200).default('/'), native: z.enum(['0', '1', 'desktop']).default('0') }).parse(req.query);
     const verifier = randomToken(48);
     const state = randomToken(16);
-    const cookie: OAuthCookie = { v: verifier, s: state, r: q.return.startsWith('//') ? '/' : q.return, n: q.native ? 1 : 0 };
+    const cookie: OAuthCookie = { v: verifier, s: state, r: q.return.startsWith('//') ? '/' : q.return, n: q.native === 'desktop' ? 2 : q.native === '1' ? 1 : 0 };
     reply.setCookie(OAUTH_COOKIE, sign(cookie, 600), {
       path: '/api/auth',
       httpOnly: true,
@@ -89,7 +90,7 @@ export async function authRoutes(app: FastifyInstance) {
     if (c.n) {
       const oneTime = randomToken(24);
       nativeCodes.set(oneTime, session);
-      return reply.redirect(`${NATIVE_SCHEME}://auth?code=${oneTime}`);
+      return reply.redirect(`${c.n === 2 ? DESKTOP_SCHEME : NATIVE_SCHEME}://auth?code=${oneTime}`);
     }
     setSessionCookie(reply, session);
     return reply.redirect(c.r);

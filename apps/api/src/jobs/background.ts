@@ -8,6 +8,7 @@ import { getEval } from '../services/evals';
 import { getExplorer } from '../services/explorer';
 import { sleep } from '../lib/queue';
 import { LichessRateLimited } from '../lib/lichess';
+import { sendDueNotifications } from '../services/push';
 
 const NIGHTLY_CAP = 2000;
 
@@ -50,5 +51,7 @@ export async function prefetchRepertoirePositions(log: FastifyBaseLogger, cap = 
 export function startBackground(log: FastifyBaseLogger) {
   // 03:17 UTC — off-peak for Lichess.
   cron.schedule('17 3 * * *', () => void prefetchRepertoirePositions(log).catch((err) => log.error({ err }, 'prefetch failed')));
-  log.info('background jobs: nightly prefetch scheduled (03:17 UTC)');
+  // Reminders: every 5 minutes, each device gets its own local-time schedule.
+  cron.schedule('*/5 * * * *', () => void sendDueNotifications(log).catch((err) => log.error({ err }, 'push job failed')));
+  log.info('background jobs: nightly prefetch (03:17 UTC), reminders (every 5 min)');
 }

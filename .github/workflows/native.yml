@@ -1,0 +1,81 @@
+name: Native builds
+# Tag v1.2.3 → Android APK + desktop bundles (macOS / Windows / Linux) attached to a GitHub release,
+# plus the Tauri updater manifest (latest.json). Store uploads live in release.yml (Phase 8).
+on:
+  push:
+    tags: ['v*']
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+env:
+  VITE_API_URL: ${{ vars.PUBLIC_API_URL }}
+
+jobs:
+  android-apk:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: pnpm/action-setup@v4
+      - uses: actions/setup-node@v4
+        with: { node-version: 22, cache: pnpm }
+      - uses: actions/setup-java@v4
+        with: { distribution: temurin, java-version: 21 }
+      - run: pnpm install --frozen-lockfile
+      - run: pnpm --filter @mainline/web build
+      - run: pnpm --filter @mainline/mobile exec cap sync android
+      - name: Build APK
+        working-directory: apps/mobile/android
+        run: ./gradlew assembleRelease --no-daemon
+      - name: Rename
+        run: cp apps/mobile/android/app/build/outputs/apk/release/app-release-unsigned.apk MainLine-${{ github.ref_name }}-android-unsigned.apk
+      - uses: softprops/action-gh-release@v2
+        if: startsWith(github.ref, 'refs/tags/')
+        with:
+          draft: true
+          files: MainLine-*.apk
+      - uses: actions/upload-artifact@v4
+        with: { name: android-apk, path: MainLine-*.apk }
+
+  desktop:
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - platform: macos-latest
+            args: --target universal-apple-darwin
+          - platform: windows-latest
+            args: ''
+          - platform: ubuntu-22.04
+            args: ''
+    runs-on: ${{ matrix.platform }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: pnpm/action-setup@v4
+      - uses: actions/setup-node@v4
+        with: { node-version: 22, cache: pnpm }
+      - uses: dtolnay/rust-toolchain@stable
+        with:
+          targets: ${{ matrix.platform == 'macos-latest' && 'aarch64-apple-darwin,x86_64-apple-darwin' || '' }}
+      - uses: swatinem/rust-cache@v2
+        with: { workspaces: apps/desktop/src-tauri -> target }
+      - name: Linux dependencies
+        if: matrix.platform == 'ubuntu-22.04'
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y libwebkit2gtk-4.1-dev libappindicator3-dev librsvg2-dev patchelf
+      - run: pnpm install --frozen-lockfile
+      - uses: tauri-apps/tauri-action@v0
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          TAURI_SIGNING_PRIVATE_KEY: ${{ secrets.TAURI_SIGNING_PRIVATE_KEY }}
+          TAURI_SIGNING_PRIVATE_KEY_PASSWORD: ${{ secrets.TAURI_SIGNING_PRIVATE_KEY_PASSWORD }}
+        with:
+          projectPath: apps/desktop
+          tagName: ${{ github.ref_type == 'tag' && github.ref_name || '' }}
+          releaseName: MainLine ${{ github.ref_name }}
+          releaseBody: 'Desktop builds are unsigned: macOS → right-click › Open the first time; Windows → More info › Run anyway.'
+          releaseDraft: true
+          includeUpdaterJson: true
+          args: ${{ matrix.args }}

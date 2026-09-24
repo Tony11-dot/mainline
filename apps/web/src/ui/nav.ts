@@ -12,6 +12,6 @@ export const NAV: NavItem[] = [
   { to: '/', label: 'Today', icon: Home, sfSymbol: 'house' },
   { to: '/library', label: 'Repertoire', icon: BookOpen, sfSymbol: 'books.vertical' },
   { to: '/explore', label: 'Explore', icon: Compass, sfSymbol: 'safari' },
-  { to: '/games', label: 'Games', icon: Swords, sfSymbol: 'figure.fencing' },
+  { to: '/games', label: 'Games', icon: Swords, sfSymbol: 'trophy' },
   { to: '/settings', label: 'Settings', icon: Settings, sfSymbol: 'gearshape' },
 ];

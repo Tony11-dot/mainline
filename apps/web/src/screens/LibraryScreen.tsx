@@ -1,5 +1,5 @@
 import { useEffect, useMemo, useState } from 'react';
-import { Link, useNavigate } from 'react-router';
+import { Link, useNavigate, useSearchParams } from 'react-router';
 import {
   BookMarked,
   ChevronRight,
@@ -28,6 +28,7 @@ import { MoveToSheet } from './library/MoveToSheet';
 import { PromptSheet } from './library/PromptSheet';
 import { ImportPgnSheet } from './library/ImportPgnSheet';
 import { ConflictsSheet } from './library/ConflictsSheet';
+import { onPendingImport, readSharedFromServiceWorker, takePendingImport } from '../lib/incoming';
 
 type SheetState =
   | { kind: 'new-rep'; folderId: string | null; color: Color }
@@ -35,7 +36,7 @@ type SheetState =
   | { kind: 'rename-folder'; folder: Folder }
   | { kind: 'rename-rep'; rep: Repertoire }
   | { kind: 'move'; item: { type: 'folder'; folder: Folder } | { type: 'rep'; rep: Repertoire } }
-  | { kind: 'import'; repId?: string }
+  | { kind: 'import'; repId?: string; text?: string }
   | { kind: 'conflicts' }
   | null;
 
@@ -45,6 +46,18 @@ export function LibraryScreen() {
   const [open, setOpen] = useState<Set<string>>(() => new Set(JSON.parse(sessionStorage.getItem('ml.open') ?? '[]') as string[]));
   useEffect(() => void lib.load(), [lib]);
   useEffect(() => sessionStorage.setItem('ml.open', JSON.stringify([...open])), [open]);
+
+  // PGNs shared/opened from other apps land in the import sheet.
+  const [params, setParams] = useSearchParams();
+  useEffect(() => {
+    const show = (text: string | null) => text && setSheet({ kind: 'import', text });
+    if (params.get('import') === 'shared') {
+      void readSharedFromServiceWorker().then(show);
+      setParams({}, { replace: true });
+    }
+    show(takePendingImport());
+    return onPendingImport(() => show(takePendingImport()));
+  }, [params, setParams]);
 
   const folders = lib.folders.filter((f) => !f.deleted);
   const reps = lib.reps.filter((r) => !r.deleted);
@@ -170,7 +183,7 @@ export function LibraryScreen() {
         }}
       />
       <MoveToSheet open={sheet?.kind === 'move'} item={sheet?.kind === 'move' ? sheet.item : undefined} onClose={() => setSheet(null)} />
-      <ImportPgnSheet open={sheet?.kind === 'import'} repId={sheet?.kind === 'import' ? sheet.repId : undefined} onClose={() => setSheet(null)} />
+      <ImportPgnSheet open={sheet?.kind === 'import'} repId={sheet?.kind === 'import' ? sheet.repId : undefined} initialText={sheet?.kind === 'import' ? sheet.text : undefined} onClose={() => setSheet(null)} />
       <ConflictsSheet open={sheet?.kind === 'conflicts'} conflicts={conflicts} onClose={() => setSheet(null)} />
     </div>
   );

@@ -6,10 +6,15 @@ export type PlatformKind = 'web' | 'ios' | 'android' | 'desktop';
 export type HapticKind = 'selection' | 'light' | 'medium' | 'success' | 'warning' | 'error';
 
 export interface ReminderPlan {
+  enabled: boolean;
   /** Local time "HH:MM" */
   time: string;
   dueCount: number;
   streakDays: number;
+  /** YYYY-MM-DD (local) of the last review, if any. */
+  lastReviewDay: string | null;
+  /** Due count per upcoming day (index 0 = tomorrow) so native apps can pre-schedule accurate texts. */
+  dueByDay: number[];
 }
 
 export interface Platform {
@@ -44,6 +49,7 @@ function detect(): PlatformKind {
 }
 
 export const platformKind: PlatformKind = detect();
+if (typeof document !== 'undefined') document.documentElement.dataset.platform = platformKind;
 
 let impl: Platform | undefined;
 

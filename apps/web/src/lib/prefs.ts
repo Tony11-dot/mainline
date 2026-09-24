@@ -22,6 +22,9 @@ export interface Prefs {
   engineOn: boolean;
   dailyNewLimit: number;
   dailyGoal: number;
+  remindersOn: boolean;
+  remindersEverEnabled: boolean;
+  reminderTime: string;
   engineLines: number;
   reduceTransparency: boolean;
   set: (p: Partial<Omit<Prefs, 'set'>>) => void;
@@ -71,6 +74,9 @@ export const usePrefs = create<Prefs>()(
       engineOn: true,
       dailyNewLimit: 10,
       dailyGoal: 20,
+      remindersOn: false,
+      remindersEverEnabled: false,
+      reminderTime: '19:00',
       engineLines: 3,
       reduceTransparency: false,
       set: (p) => set(p),

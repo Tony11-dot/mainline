@@ -148,3 +148,30 @@ iOS simulator smoke build (Xcode 26.6): ✔ `BUILD SUCCEEDED`.
 **Known issues**
 - The coach and the explorer-driven features need `GEMINI_API_KEY` / `LICHESS_FALLBACK_TOKEN` (or sign-in) to show real data; without them they degrade gracefully.
 - Radar only checks positions that have a Lichess cloud eval (by design — no invented evals); the nightly prefetch fills more of them over time.
+
+---
+
+## Phase 5 — Everywhere: notifications, PWA, native apps (2026-09-24)
+
+**Built**
+- **PWA**: installable manifest (MainLine icons incl. maskable, shortcuts, **share target** and **file handler** for PGNs), custom Workbox service worker (`src/sw.ts`): precached app shell, runtime caches for the engine, pieces, fonts and evals. **Verified offline**: the app reloads, stays cross-origin isolated and the board plays moves. Shared/opened PGNs land in the import sheet.
+- **Web Push**: VAPID, guest or signed-in subscriptions carrying the device's timezone / reminder time / due count / streak; a 5-minute cron sends the **daily reminder only when something is due**, an **evening streak nudge** (20:30 local, only if the streak is at risk) and a **Sunday summary**; dead subscriptions are pruned. Scheduling logic is pure and tested. **iOS "Add to Home Screen" hint** when needed. Settings → Reminders (toggle + time).
+- **Capacitor iOS + Android** (`platform/capacitor.ts`): Haptics, **local notifications scheduled on-device** (today + the next 7 days with accurate due counts, streak nudge; no server), share sheet (PGN files), "Open in MainLine" for `.pgn` files, **deep links** (`app.mainline.chess://…`) incl. the **Lichess OAuth return** (system browser → one-time code → session), status bar following the theme, splash handed to the web launch animation, Android back button, edge-to-edge safe areas.
+- **iOS Liquid Glass tab bar**: in-app Capacitor plugin `NativeChrome` (SwiftUI, `.glassEffect()` on iOS 26+, `.ultraThinMaterial` before) over the web view, with SF Symbols and the theme accent; routing stays in React; hidden during training. Verified in the iPhone 17 simulator.
+- **Tauri desktop** (Windows / macOS / Linux): notifications, window-state, `mainline://` deep links (desktop OAuth return), `.pgn` file association + open-file events, native save dialog, external links, **auto-updater** (signed with a free minisign key; OS builds remain unsigned).
+- **CI** (`.github/workflows/native.yml`): on `v*` tags → Android APK + desktop bundles for all 3 OSes attached to a draft GitHub release, with the updater's `latest.json`.
+- Fixed: platform hooks ran at import time (before `initPlatform`), which silently stopped the app from booting in native shells — caught by testing in the simulator.
+
+**Verified on devices/simulators**: iPhone 17 (iOS 26.5) simulator — launch, Today, native glass tab bar; Android emulator (API 36) — launch animation, deep link into Explore, **real touch drag**, local Stockfish; macOS `.app` builds and launches.
+
+**Try it**: `pnpm --filter @mainline/mobile build` then `pnpm --filter @mainline/mobile ios|android`; `pnpm --filter @mainline/desktop dev`.
+
+**Secrets / setup needed**
+- `TAURI_SIGNING_PRIVATE_KEY` (+ empty `…_PASSWORD`) GitHub secrets: contents of `secrets/tauri-updater.key` (generated locally, git-ignored). The public key is already in `tauri.conf.json`.
+- GitHub **variable** `PUBLIC_API_URL` = your Railway URL, used by native builds to reach the API.
+- VAPID keys: already generated in `.env` (see the final summary for where to put them on Railway).
+
+**Known issues**
+- The Android emulator (software GPU) showed a faint ghost of the active tab at the screen edges; the DOM has nothing there — likely an emulator compositing artifact. Please check on a real Android phone.
+- Desktop reminders fire only while the app is open (desktop notifications can't be pre-scheduled).
+- In local dev, native apps can't reach the plain-http API (they run on https/capacitor origins) — production uses https.
