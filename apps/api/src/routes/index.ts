@@ -2,9 +2,11 @@ import type { FastifyInstance } from 'fastify';
 import { authRoutes } from './auth';
 import { chessRoutes } from './chess';
 import { syncRoutes } from './sync';
+import { coachRoutes } from './coach';
 
 export async function registerRoutes(app: FastifyInstance) {
   await app.register(authRoutes);
   await app.register(chessRoutes);
   await app.register(syncRoutes);
+  await app.register(coachRoutes);
 }

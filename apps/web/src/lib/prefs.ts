@@ -21,6 +21,7 @@ export interface Prefs {
   speeds: Speed[];
   engineOn: boolean;
   dailyNewLimit: number;
+  dailyGoal: number;
   engineLines: number;
   reduceTransparency: boolean;
   set: (p: Partial<Omit<Prefs, 'set'>>) => void;
@@ -69,6 +70,7 @@ export const usePrefs = create<Prefs>()(
       speeds: ['blitz', 'rapid'],
       engineOn: true,
       dailyNewLimit: 10,
+      dailyGoal: 20,
       engineLines: 3,
       reduceTransparency: false,
       set: (p) => set(p),

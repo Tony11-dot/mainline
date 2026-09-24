@@ -61,6 +61,18 @@ export function SettingsScreen() {
             aria-label="New moves per day"
           />
         </Row>
+        <Row label="Daily goal" hint="Reviews per day for the goal ring on Today.">
+          <input
+            type="number"
+            inputMode="numeric"
+            min={1}
+            max={500}
+            value={p.dailyGoal}
+            onChange={(e) => p.set({ dailyGoal: Math.max(1, Math.min(500, Number(e.target.value) || 20)) })}
+            className="tnum h-10 w-20 rounded-[10px] border border-line bg-surface px-3 text-right text-base font-semibold"
+            aria-label="Daily goal"
+          />
+        </Row>
         <Row label="Time controls" stack>
           <div className="flex flex-wrap gap-1.5">
             {SPEEDS.filter((s) => s !== 'correspondence').map((s) => {

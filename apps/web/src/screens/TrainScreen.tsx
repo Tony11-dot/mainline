@@ -13,6 +13,7 @@ import { useTraining } from '../lib/training';
 import { usePrefs } from '../lib/prefs';
 import { peekReplyWeights } from '../lib/explorer';
 import { Button, IconButton, PanelNote } from '../ui/primitives';
+import { CoachAnswer } from '../panels/CoachPanel';
 import type { StoreApi } from 'zustand';
 
 const MODE_NAMES: Record<TrainMode, string> = { learn: 'Learn', review: 'Review', drill: 'Drill', quiz: 'Position quiz' };
@@ -176,6 +177,7 @@ function Prompt({ phase, expectedSan, message, color }: { phase: TrainerState['p
 }
 
 function Summary({ s, mode, onAgain }: { s: TrainerState; mode: TrainMode; onAgain: () => void }) {
+  const [why, setWhy] = useState<number | null>(null);
   const reviews = useTraining((t) => t.reviews);
   const streak = streakDays(reviews.map((r) => r.reviewedAt), Date.now(), new Date().getTimezoneOffset());
   const secs = Math.round(((s.stats.endedAt ?? Date.now()) - s.stats.startedAt) / 1000);
@@ -201,7 +203,7 @@ function Summary({ s, mode, onAgain }: { s: TrainerState; mode: TrainMode; onAga
             {s.mistakes.map((m, i) => {
               const pos = positionFromFen(m.fen);
               return (
-                <li key={i} className="flex items-center justify-between gap-3 px-4 py-3 text-sm">
+                <li key={i} className="flex flex-wrap items-center justify-between gap-3 px-4 py-3 text-sm">
                   <span>
                     {m.played ? (
                       <>
@@ -210,9 +212,19 @@ function Summary({ s, mode, onAgain }: { s: TrainerState; mode: TrainMode; onAga
                     ) : null}
                     the move is <b className="text-good">{m.expected.map((u) => uciToSan(pos, u)).join(' / ')}</b>
                   </span>
-                  <Link to={`/explore?fen=${encodeURIComponent(m.fen)}&color=${m.color}`} className="shrink-0 font-semibold text-brand hover:underline">
-                    Explore
-                  </Link>
+                  <span className="flex shrink-0 gap-3">
+                    <button type="button" className="font-semibold text-brand hover:underline" onClick={() => setWhy(why === i ? null : i)} aria-expanded={why === i}>
+                      Why?
+                    </button>
+                    <Link to={`/explore?fen=${encodeURIComponent(m.fen)}&color=${m.color}`} className="font-semibold text-brand hover:underline">
+                      Explore
+                    </Link>
+                  </span>
+                  {why === i && (
+                    <div className="basis-full border-t border-line pt-3">
+                      <CoachAnswer req={{ kind: 'mistake', fen: m.fen, moveUci: m.expected[0], playedUci: m.played || undefined }} />
+                    </div>
+                  )}
                 </li>
               );
             })}

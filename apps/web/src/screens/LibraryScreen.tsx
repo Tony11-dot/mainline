@@ -16,7 +16,9 @@ import {
   TriangleAlert,
 } from 'lucide-react';
 import { findConflicts, type Color, type Folder, type Repertoire } from '@mainline/shared';
-import { repStats, useLibrary } from '../lib/library';
+import { repMoves, repStats, useLibrary } from '../lib/library';
+import { useTraining } from '../lib/training';
+import { MasteryStrip } from '../ui/MasteryStrip';
 import { platform } from '../platform';
 import { Button, IconButton, PanelNote } from '../ui/primitives';
 import { Menu, type MenuItem } from '../ui/Menu';
@@ -289,6 +291,7 @@ function RepRow({ rep, depth, ctx }: { rep: Repertoire; depth: number; ctx: Tree
   const lib = useLibrary();
   const nav = useNavigate();
   const stats = useMemo(() => repStats(ctx.moves, rep), [ctx.moves, rep]);
+  const cards = useTraining((t) => t.cards);
   return (
     <li role="treeitem" aria-selected={false}>
       <div {...dragProps('rep', rep.id)} className="flex min-h-[60px] items-center gap-2 pr-2 hover:bg-surface-2" style={{ paddingLeft: 12 + depth * 20 }}>
@@ -301,6 +304,7 @@ function RepRow({ rep, depth, ctx }: { rep: Repertoire; depth: number; ctx: Tree
             <span className="tnum block text-sm text-ink-2">
               {stats.positions} position{stats.positions === 1 ? '' : 's'} to know · {stats.moves} moves
             </span>
+            <MasteryStrip rep={rep} moves={repMoves(ctx.moves, rep.id)} cards={cards} now={Date.now()} />
           </span>
         </Link>
         <Menu

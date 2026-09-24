@@ -11,6 +11,7 @@ export function HomeScreen() {
   const lib = useLibrary();
   const tr = useTraining();
   const newLimit = usePrefs((s) => s.dailyNewLimit);
+  const goal = usePrefs((s) => s.dailyGoal);
   useEffect(() => {
     void lib.load();
     void tr.load();
@@ -78,7 +79,7 @@ export function HomeScreen() {
           <dl className="tnum mt-4 grid grid-cols-3 gap-2">
             <Tile label="Positions learned" value={`${sum.learned}/${sum.positions}`} />
             <Tile label="Retention" value={sum.learned ? `${Math.round(sum.retention * 100)}%` : '—'} />
-            <Tile label="Reviewed today" value={String(today.length)} />
+            <GoalTile done={today.length} goal={goal} />
           </dl>
 
           <h2 className="mt-8 mb-2 text-sm font-semibold text-ink-2">Practice</h2>
@@ -111,5 +112,25 @@ function ModeLink({ to, icon: Icon, title, sub }: { to: string; icon: typeof Pla
         <span className="block text-sm text-ink-2">{sub}</span>
       </span>
     </Link>
+  );
+}
+
+function GoalTile({ done, goal }: { done: number; goal: number }) {
+  const pct = goal ? Math.min(1, done / goal) : 0;
+  const r = 15;
+  const c = 2 * Math.PI * r;
+  return (
+    <div className="flex items-center gap-2.5 rounded-[var(--radius-m)] border border-line bg-surface px-3 py-2.5 shadow-1">
+      <svg width="38" height="38" viewBox="0 0 38 38" className="-rotate-90 shrink-0" aria-hidden>
+        <circle cx="19" cy="19" r={r} fill="none" stroke="var(--surface-3)" strokeWidth="4" />
+        <circle cx="19" cy="19" r={r} fill="none" stroke={pct >= 1 ? 'var(--good)' : 'var(--brand)'} strokeWidth="4" strokeLinecap="round" strokeDasharray={c} strokeDashoffset={c * (1 - pct)} className="transition-[stroke-dashoffset] duration-500" />
+      </svg>
+      <div>
+        <dt className="text-xs text-ink-3">Daily goal</dt>
+        <dd className="text-lg font-bold">
+          {done}/{goal}
+        </dd>
+      </div>
+    </div>
   );
 }

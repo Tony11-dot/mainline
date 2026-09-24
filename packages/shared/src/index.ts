@@ -6,3 +6,5 @@ export * from './eval';
 export * from './repertoire';
 export * from './suggest';
 export * from './training';
+export * from './coverage';
+export * from './facts';

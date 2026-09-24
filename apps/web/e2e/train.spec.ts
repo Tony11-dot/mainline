@@ -50,8 +50,9 @@ test('learn, then quiz with a mistake, summary', async ({ page }, info) => {
   const phaseEl = page.locator('[data-phase]');
   for (let i = 0; i < 30; i++) {
     if (!(await phaseEl.count())) break;
-    const phase = await phaseEl.getAttribute('data-phase');
-    const uci = await phaseEl.getAttribute('data-expected');
+    const phase = await phaseEl.getAttribute('data-phase', { timeout: 500 }).catch(() => null);
+    if (phase === null) break;
+    const uci = await phaseEl.getAttribute('data-expected', { timeout: 500 }).catch(() => null);
     if ((phase === 'await' || phase === 'wrong') && uci) {
       await move(page, uci.slice(0, 2), uci.slice(2, 4));
     }

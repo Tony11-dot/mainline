@@ -17,14 +17,17 @@ import { useEngineEval } from '../panels/useEngineEval';
 import { folderPath, repMoves, useLibrary } from '../lib/library';
 import { pathToEpd, repertoireTree, validPrefix } from '../lib/repTree';
 import { usePrefs } from '../lib/prefs';
-import { Button, PanelNote, Segmented } from '../ui/primitives';
+import { Button, PanelNote } from '../ui/primitives';
+import { MoveStatsPanel } from '../panels/MoveStatsPanel';
+import { CoachPanel } from '../panels/CoachPanel';
+import { InsightsPanel } from '../panels/InsightsPanel';
 import { toast, undoToast } from '../ui/toast';
 import { useMediaQuery } from '../ui/useMediaQuery';
 import { AutoBuildSheet } from './builder/AutoBuildSheet';
 import { SuggestPanel } from './builder/SuggestPanel';
 import { NotesPanel } from './builder/NotesPanel';
 
-type Pane = 'tree' | 'explorer' | 'engine' | 'notes' | 'suggest';
+type Pane = 'tree' | 'explorer' | 'engine' | 'stats' | 'coach' | 'notes' | 'suggest' | 'insights';
 
 export function RepertoireScreen() {
   const { id = '' } = useParams();
@@ -217,19 +220,36 @@ export function RepertoireScreen() {
   );
 
   const repUcis = new Set(here.map((m) => m.uci));
+  const parentNode = view.path ? nodeAt(view.root, parentPath(view.path)) : undefined;
   const panes: Record<Pane, React.ReactNode> = {
     tree: <MoveTree store={store} emptyHint={own ? 'Play your first move on the board.' : 'Play the moves you expect from your opponent.'} />,
     explorer: <ExplorerPanel fen={view.node.fen} onPlay={(u) => void addMove(u)} onHoverMove={setHoverUci} highlightUcis={repUcis} />,
     engine: <EnginePanel fen={view.node.fen} view={ev} onPlayLine={(ucis) => ucis[0] && void addMove(ucis[0])} onHoverMove={setHoverUci} />,
     notes: <NotesPanel key={currentMove ? `${currentMove.fromEpd}${currentMove.uci}` : 'root'} move={currentMove} onSave={(note) => currentMove && lib.setNote(rep.id, currentMove.fromEpd, currentMove.uci, note)} />,
+    stats: <MoveStatsPanel parentFen={parentNode?.fen} uci={view.node.uci || undefined} color={rep.color} />,
+    coach: (
+      <CoachPanel
+        fen={view.node.fen}
+        parentFen={parentNode?.fen}
+        moveUci={view.node.uci || undefined}
+        lineUcis={pathToUcis(view.path)}
+        lineStartFen={view.root.fen}
+        onMove={(u) => void addMove(u)}
+        onHover={setHoverUci}
+      />
+    ),
+    insights: <InsightsPanel rep={rep} onOpen={(epd) => { const p = pathToEpd(view.root, epd); if (p !== undefined) store.getState().goto(p); }} />,
     suggest: own ? <SuggestPanel fen={view.node.fen} color={rep.color} engineLines={ev.lines} onPick={(u) => void addMove(u)} onHover={setHoverUci} /> : <PanelNote title="Suggestions are for your moves">Step to a position where it's your turn.</PanelNote>,
   };
   const paneOptions = [
     { value: 'tree' as const, label: 'Moves' },
     { value: 'explorer' as const, label: 'Explorer' },
     { value: 'engine' as const, label: 'Engine' },
-    { value: 'notes' as const, label: 'Notes' },
+    { value: 'stats' as const, label: 'Stats' },
+    { value: 'coach' as const, label: 'Coach' },
     ...(own ? [{ value: 'suggest' as const, label: 'Suggest' }] : []),
+    { value: 'notes' as const, label: 'Notes' },
+    { value: 'insights' as const, label: 'Coverage' },
   ];
   const activePane = pane === 'suggest' && !own ? 'tree' : pane;
 
@@ -266,7 +286,7 @@ export function RepertoireScreen() {
             {status}
             {actions}
           </div>
-          <Segmented label="Panel" value={activePane} onChange={setPane} options={paneOptions} />
+          <PaneTabs value={activePane} onChange={setPane} options={paneOptions} />
           <div className="min-h-0 flex-1 overflow-auto rounded-[var(--radius-l)] border border-line bg-surface shadow-1">{panes[activePane]}</div>
         </aside>
         {sheet}
@@ -287,7 +307,7 @@ export function RepertoireScreen() {
         <div className="-mx-3 overflow-x-auto px-3 [scrollbar-width:none]">{actions}</div>
       </div>
       <div className="px-3">
-        <Segmented label="Panel" value={activePane} onChange={setPane} options={paneOptions} />
+        <PaneTabs value={activePane} onChange={setPane} options={paneOptions} />
       </div>
       <div className="mt-2 min-h-[240px]">{panes[activePane]}</div>
       {sheet}
@@ -302,5 +322,25 @@ function Chip({ tone, icon: Icon, children }: { tone: 'brand' | 'warn' | 'neutra
       {Icon && <Icon size={14} aria-hidden />}
       {children}
     </span>
+  );
+}
+
+/** Scrollable pill tabs — the builder has more panels than fit a segmented control on phones. */
+function PaneTabs<T extends string>({ value, onChange, options }: { value: T; onChange: (v: T) => void; options: { value: T; label: string }[] }) {
+  return (
+    <div role="tablist" aria-label="Panel" className="-mx-3 flex gap-1.5 overflow-x-auto px-3 pb-0.5 [scrollbar-width:none] lg:mx-0 lg:flex-wrap lg:px-0">
+      {options.map((o) => (
+        <button
+          key={o.value}
+          role="tab"
+          type="button"
+          aria-selected={o.value === value}
+          onClick={() => onChange(o.value)}
+          className={`h-9 shrink-0 rounded-full px-3.5 text-sm font-semibold transition-colors ${o.value === value ? 'bg-brand text-on-brand' : 'bg-surface-3 text-ink-2 hover:text-ink'}`}
+        >
+          {o.label}
+        </button>
+      ))}
+    </div>
   );
 }

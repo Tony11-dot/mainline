@@ -312,7 +312,7 @@ The bar: it should feel like an app Apple would feature. **Premium, clean, clear
 - [x] Phase 1 — Board & explorer
 - [x] Phase 2 — Repertoires & folders
 - [x] Phase 3 — Training
-- [ ] Phase 4 — Stats, coverage & AI coach
+- [x] Phase 4 — Stats, coverage & AI coach
 - [ ] Phase 5 — Everywhere: notifications, PWA, native apps
 - [ ] Phase 6 — Your games vs your prep
 - [ ] Phase 7 — Polish

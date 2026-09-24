@@ -126,3 +126,25 @@ iOS simulator smoke build (Xcode 26.6): ✔ `BUILD SUCCEEDED`.
 
 **Known issues**
 - Drill weights use explorer data already fetched in this session (uniform otherwise); Phase 4's nightly prefetch will make them always available.
+
+---
+
+## Phase 4 — Stats, coverage & AI coach (2026-09-24)
+
+**Built**
+- **Move stats** (builder → Stats): eval after the move and the engine's best, **eval swing** (flagged ≥ 0.7), share / games / your score / W-D-L at your rating and among masters, the masters who chose it, and your own training accuracy on that position.
+- **Coverage + gaps** (builder → Coverage): walks the repertoire with real-game frequencies at your rating → "Handles 50% of games at 1600 blitz/rapid through move 10", biggest gaps ranked by how often you'll actually meet them, one-tap **Add** / **Open**, and positions where it's your move but nothing is prepared. Pure math in `packages/shared/src/coverage.ts` (tested).
+- **Mistake radar**: opponent replies played in ≥ 5% of games at your level that lose ≥ 1.0 pawn (cloud evals before/after — nothing guessed), with the engine's punishment; **Add** puts the mistake + refutation into the repertoire so it comes up in training; **Why?** asks the coach ("Punish this").
+- **AI coach** (grounded, per PLAN §8): server builds a **facts packet** (FEN, side to move, move/prep move, opening, engine MultiPV in SAN + evals + depth, eval swing, explorer stats at your rating and masters, top players, pawn structure: islands / isolated / doubled / passed pawns, open & half-open files, castling, material). System prompt forbids anything outside the packet; every `[[move]]` in the answer is **validated with chessops** (legal now or in the packet's lines) → one regeneration → otherwise a deterministic **template explanation** built from the same facts. Kinds: **Why this move**, **Line story**, **Why was I wrong?** (session summary), **Punish this** (radar), **Ask the coach** (chat per position). Answers render as short markdown with **clickable move chips** (hover = arrow, click = play). Always labelled "AI coach" vs "From the engine and game statistics".
+- Provider layer: `GeminiProvider` (model names from `AI_MODEL_FAST` / `AI_MODEL_LONG`, default `gemini-flash-lite-latest`) with `GroqProvider` fallback; **concurrency 1**, jittered exponential back-off on 429, **daily budget** counted per Pacific day (when Gemini's free quota resets) → "coach is resting, back tomorrow" + template. Explanations cached forever and shared across users (`ai_explanations`), so the free quota is spent once per position. `/api/coach` is rate-limited (30/min/IP).
+- **Mastery heatmap** on every repertoire row (one cell per position you must know, coloured by FSRS retrievability, grey = not learned, plus mean %), **daily goal** ring on Today (configurable), streak (Phase 3).
+- **Nightly prefetch** (03:17 UTC): explorer (masters + each user's rating band) and cloud evals for every repertoire position, one request at a time, 2,000/night cap.
+- Builder panels are now scrollable pill tabs: Moves · Explorer · Engine · Stats · Coach · Suggest · Notes · Coverage.
+
+**Try it**: open a repertoire → Coach / Stats / Coverage. Without `GEMINI_API_KEY` the coach answers from the engine + stats template (clearly labelled); add the key to get AI prose.
+
+**Tests**: shared 51 (coverage, structure, facts, move validation, template), API 14 (coach: AI accepted + cached, invented moves → regenerate → template, budget → resting, validation), e2e 40/40 over 2 repeats (coach chips play moves, stats, coverage + add gap, why-was-I-wrong).
+
+**Known issues**
+- The coach and the explorer-driven features need `GEMINI_API_KEY` / `LICHESS_FALLBACK_TOKEN` (or sign-in) to show real data; without them they degrade gracefully.
+- Radar only checks positions that have a Lichess cloud eval (by design — no invented evals); the nightly prefetch fills more of them over time.
