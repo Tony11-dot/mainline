@@ -5,6 +5,7 @@ import { env } from '../env';
 export async function legalRoutes(app: FastifyInstance) {
   app.get('/privacy', async (_req, reply) => reply.type('text/html').header('Cache-Control', 'public, max-age=3600').send(page('Privacy policy', PRIVACY())));
   app.get('/terms', async (_req, reply) => reply.type('text/html').header('Cache-Control', 'public, max-age=3600').send(page('Terms of use', TERMS())));
+  app.get('/cookies', async (_req, reply) => reply.type('text/html').header('Cache-Control', 'public, max-age=3600').send(page('Cookies and local storage', COOKIES())));
 }
 
 export const LEGAL_UPDATED = '25 September 2026';
@@ -36,6 +37,9 @@ const PRIVACY = () => `
   <li><strong>If you turn on reminders on the web</strong>: a push subscription (an address your browser gives us for notifications), your reminder time and time zone, and how many positions you have due. On iPhone, iPad, Android and desktop, reminders are scheduled on the device and nothing is sent.</li>
   <li><strong>Technical logs</strong>: our hosting provider processes IP addresses and request logs to run and protect the service. Logs are kept for a short time and not used to identify you.</li>
 </ul>
+
+<h2>Cookies</h2>
+<p>MainLine uses no advertising, analytics or tracking cookies, so there's nothing to consent to. The only cookies are the two needed to sign in with Lichess, plus on-device storage for your own data. The full list is on the <a href="${esc(env.PUBLIC_URL)}/cookies">cookies page</a>.</p>
 
 <h2>AI explanations</h2>
 <p>When you ask the coach to explain a move, the position and moves (never your name or account) are sent to an AI provider, Google Gemini or, as a fallback, Groq, to write the explanation. Explanations are cached by position and shared between users.</p>
@@ -84,6 +88,28 @@ const TERMS = () => `
 <p>${contact()}</p>
 `;
 
+const COOKIES = () => `
+<p>MainLine doesn't use advertising, analytics or tracking cookies, and it doesn't let third parties set cookies. Everything below is strictly necessary for a feature you choose to use, which is why the app doesn't show a consent banner.</p>
+
+<h2>Cookies</h2>
+<table>
+  <thead><tr><th>Name</th><th>Purpose</th><th>Lifetime</th></tr></thead>
+  <tbody>
+    <tr><td><code>ml_session</code></td><td>Keeps you signed in after you choose <em>Sign in with Lichess</em>. HttpOnly, first-party, only set if you sign in. Removed when you sign out or delete your account.</td><td>1 year</td></tr>
+    <tr><td><code>ml_oauth</code></td><td>Protects the Lichess sign-in step against forgery (a one-time code). Only set while signing in.</td><td>10 minutes</td></tr>
+  </tbody>
+</table>
+
+<h2>On-device storage</h2>
+<p>Your repertoires, training history, cached opening statistics and settings (theme, board, font) are kept in your browser's or app's local storage and IndexedDB, so MainLine works offline and without an account. They never leave your device unless you sign in to sync. The web app also stores its own files for offline use (a service worker cache).</p>
+
+<h2>Removing them</h2>
+<p>Settings → Your data → <em>Erase all data on this device</em> clears all of it. You can also clear site data in your browser settings. Blocking cookies only stops sign-in from working; everything else keeps working.</p>
+
+<h2>More</h2>
+<p>See the <a href="${esc(env.PUBLIC_URL)}/privacy">privacy policy</a> and the <a href="${esc(env.PUBLIC_URL)}/terms">terms of use</a>. Questions: ${contact()}.</p>
+`;
+
 function page(title: string, body: string) {
   return `<!doctype html>
 <html lang="en">
@@ -102,12 +128,18 @@ function page(title: string, body: string) {
   a { color: var(--brand); }
   ul { padding-left: 22px; }
   li { margin: 6px 0; }
+  table { width: 100%; border-collapse: collapse; font-size: 15px; }
+  th, td { text-align: left; vertical-align: top; padding: 8px 8px 8px 0; border-bottom: 1px solid color-mix(in srgb, var(--ink2) 30%, transparent); }
+  td:last-child, th:last-child { white-space: nowrap; padding-right: 0; }
+  code { font-size: 14px; }
+  nav { margin-top: 48px; font-size: 15px; color: var(--ink2); }
 </style>
 </head>
 <body><main>
 <h1>${title}</h1>
 <p class="updated">MainLine · last updated ${LEGAL_UPDATED}</p>
 ${body}
+<nav><a href="${esc(env.PUBLIC_URL)}/privacy">Privacy policy</a> · <a href="${esc(env.PUBLIC_URL)}/terms">Terms of use</a> · <a href="${esc(env.PUBLIC_URL)}/cookies">Cookies</a></nav>
 </main></body>
 </html>`;
 }

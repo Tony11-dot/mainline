@@ -8,6 +8,7 @@ import { TEMPLATES } from '../lib/templates';
 import { Button } from '../ui/primitives';
 import { LogoMark, Wordmark } from '../ui/Logo';
 import { MiniBoard } from '../ui/MiniBoard';
+import { legalUrl } from '../lib/legal';
 import { parseSanLine } from './library/sanLine';
 
 const LEVELS = [
@@ -169,6 +170,21 @@ export function WelcomeScreen() {
               I'll build my own
             </Button>
           </div>
+          <p className="mt-6 text-xs text-ink-3">
+            By continuing you agree to the{' '}
+            <a href={legalUrl('/terms')} target="_blank" rel="noreferrer" className="underline underline-offset-2">
+              Terms of use
+            </a>
+            . See the{' '}
+            <a href={legalUrl('/privacy')} target="_blank" rel="noreferrer" className="underline underline-offset-2">
+              Privacy policy
+            </a>{' '}
+            and{' '}
+            <a href={legalUrl('/cookies')} target="_blank" rel="noreferrer" className="underline underline-offset-2">
+              Cookies
+            </a>
+            . No ads, no tracking.
+          </p>
           <div className="mt-6 flex justify-center opacity-60">
             <Wordmark height={18} />
           </div>

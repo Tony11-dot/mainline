@@ -253,3 +253,6 @@ Visual checks: `VISUAL=1 pnpm e2e visual` (add `--update-snapshots` after an int
 - **Android:** the `.aab` was rebuilt against the live API.
 - **Font:** Cabinet Grotesk is bundled (licence approved).
 - **Docs:** the README states the GPL licence and reserves the name and artwork.
+- **Keys:** the Lichess and Gemini keys are live on Railway (explorer and coach checked against production). Backups are in the macOS Keychain.
+- **Legal pages:** `/cookies` lists the two sign-in cookies and on-device storage. There's no consent banner because nothing is non-essential. Privacy, Terms and Cookies are linked from Settings, onboarding and each other.
+- **Move list:** it now keeps the current move in view inside its own panel and never scrolls the page. This fixes the board sliding under your finger on phones and a CI-only test failure. On phones, the page's scroll padding also keeps content clear of the tab bar.

@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 # Puts pasted API keys where they belong without them ever passing through a chat:
-#   secrets/paste-here.env  →  local .env  +  Railway (service "api")  +  GitHub Actions secrets.
+#   secrets/paste-here.env  →  local .env  +  Railway (service "api")  +  macOS Keychain.
 # Also copies ClassMate's Google Play service account for MainLine uploads.
 # Usage: bash scripts/apply-secrets.sh   (the paste file is emptied afterwards)
 set -euo pipefail
@@ -42,7 +42,9 @@ while IFS= read -r line || [[ -n "$line" ]]; do
     s = re.test(s) ? s.replace(re, () => `${KEY}=${VAL}`) : s + (s.endsWith("\n") || !s ? "" : "\n") + `${KEY}=${VAL}\n`;
     fs.writeFileSync(".env", s, { mode: 0o600 });'
   railway variables --service api --skip-deploys --set "$key=$val" >/dev/null
-  echo "✓ $key → .env + Railway"
+  # Backup copy in the macOS login Keychain (Keychain Access → search "MainLine").
+  security add-generic-password -U -a mainline -s "MainLine $key" -l "MainLine – $key" -w "$val" 2>/dev/null || true
+  echo "✓ $key → .env + Railway + Keychain"
   applied=$((applied + 1))
 done < "$PASTE"
 

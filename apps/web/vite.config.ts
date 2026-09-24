@@ -62,9 +62,9 @@ export default defineConfig({
   server: {
     port: 5173,
     headers: isolation,
-    proxy: { '/api': { target: 'http://localhost:8787', changeOrigin: false }, '^/(privacy|terms)$': 'http://localhost:8787' },
+    proxy: { '/api': { target: 'http://localhost:8787', changeOrigin: false }, '^/(privacy|terms|cookies)$': 'http://localhost:8787' },
   },
-  preview: { port: 4173, headers: isolation, proxy: { '/api': 'http://localhost:8787', '^/(privacy|terms)$': 'http://localhost:8787' } },
+  preview: { port: 4173, headers: isolation, proxy: { '/api': 'http://localhost:8787', '^/(privacy|terms|cookies)$': 'http://localhost:8787' } },
   build: { target: 'es2022', sourcemap: true, chunkSizeWarningLimit: 900 },
   worker: { format: 'es' },
   test: { environment: 'jsdom', include: ['src/**/*.test.{ts,tsx}'] },

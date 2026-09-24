@@ -18,7 +18,7 @@ cleanupOutdatedCaches();
 precacheAndRoute(self.__WB_MANIFEST);
 
 // SPA navigations → cached index.html (except API and the share-target POST).
-registerRoute(new NavigationRoute(createHandlerBoundToURL('/index.html'), { denylist: [/^\/api\//, /^\/import/, /^\/privacy/, /^\/terms/] }));
+registerRoute(new NavigationRoute(createHandlerBoundToURL('/index.html'), { denylist: [/^\/api\//, /^\/import/, /^\/privacy/, /^\/terms/, /^\/cookies/] }));
 
 registerRoute(({ url }) => url.pathname.startsWith('/engine/'), new CacheFirst({ cacheName: 'engine', plugins: [new ExpirationPlugin({ maxEntries: 8 })] }));
 registerRoute(({ url }) => url.pathname.startsWith('/pieces/'), new CacheFirst({ cacheName: 'pieces', plugins: [new ExpirationPlugin({ maxEntries: 200 })] }));

@@ -8,6 +8,7 @@ import { LOCALES, useT } from '../lib/i18n';
 import { syncNow, useSync } from '../lib/sync';
 import { playSound } from '../lib/sound';
 import { startLichessLogin, useAuth } from '../lib/auth';
+import { legalUrl } from '../lib/legal';
 import { Button, Segmented } from '../ui/primitives';
 import { Sheet } from '../ui/Sheet';
 
@@ -168,13 +169,20 @@ export function SettingsScreen() {
       <DeleteData signedIn={!!me} />
 
       <p className="mt-6 text-center text-xs text-ink-3">
-        <a href={legalUrl('/privacy')} target="_blank" rel="noreferrer" className="underline-offset-2 hover:underline">
-          Privacy
-        </a>
-        {' · '}
-        <a href={legalUrl('/terms')} target="_blank" rel="noreferrer" className="underline-offset-2 hover:underline">
-          Terms
-        </a>
+        {(
+          [
+            ['/privacy', 'Privacy policy'],
+            ['/terms', 'Terms of use'],
+            ['/cookies', 'Cookies'],
+          ] as const
+        ).map(([path, label], i) => (
+          <span key={path}>
+            {i > 0 && ' · '}
+            <a href={legalUrl(path)} target="_blank" rel="noreferrer" className="underline-offset-2 hover:underline">
+              {label}
+            </a>
+          </span>
+        ))}
       </p>
 
       <p className="mt-3 text-center text-xs text-ink-3">
@@ -242,11 +250,6 @@ function DeleteData({ signedIn }: { signedIn: boolean }) {
       </Sheet>
     </Group>
   );
-}
-
-function legalUrl(path: string) {
-  const base = (import.meta.env.VITE_API_URL as string | undefined)?.replace(/\/$/, '') ?? '';
-  return base + path;
 }
 
 function Group({ title, children }: { title: string; children: ReactNode }) {

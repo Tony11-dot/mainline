@@ -14,7 +14,7 @@ describe('app', () => {
 
   it('serves the privacy policy and terms as standalone pages', async () => {
     const app = await buildApp({ logger: false });
-    for (const [url, title] of [['/privacy', 'Privacy policy'], ['/terms', 'Terms of use']] as const) {
+    for (const [url, title] of [['/privacy', 'Privacy policy'], ['/terms', 'Terms of use'], ['/cookies', 'Cookies and local storage']] as const) {
       const res = await app.inject({ method: 'GET', url });
       expect(res.statusCode).toBe(200);
       expect(res.headers['content-type']).toContain('text/html');

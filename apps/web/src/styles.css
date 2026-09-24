@@ -168,6 +168,12 @@
     -webkit-tap-highlight-color: transparent;
     background: var(--bg);
   }
+  /* Phones: scrollIntoView / keyboard focus stop above the floating tab bar instead of under it. */
+  @media (width < 48rem) {
+    html {
+      scroll-padding-bottom: calc(var(--tabbar-h) + var(--safe-bottom) + 16px);
+    }
+  }
   html,
   body {
     /* Never scroll sideways: stray overflow makes WebViews mis-composite fixed chrome. */

@@ -15,9 +15,16 @@ export function MoveTree({ store, emptyHint }: { store: AnalysisStore; emptyHint
   const collapsed = useStore(store, (s) => s.collapsed);
   const ref = useRef<HTMLDivElement>(null);
 
+  // Keep the current move visible inside the panel's own scroller only: never scroll the page, or the board
+  // would slide away under the player's finger on phones.
   useEffect(() => {
-    const el = ref.current?.querySelector('[data-active="true"]');
-    el?.scrollIntoView({ block: 'nearest', behavior: 'smooth' });
+    const el = ref.current?.querySelector<HTMLElement>('[data-active="true"]');
+    const box = el && scrollParent(el);
+    if (!el || !box) return;
+    const e = el.getBoundingClientRect();
+    const b = box.getBoundingClientRect();
+    const delta = e.top < b.top ? e.top - b.top - 8 : e.bottom > b.bottom ? e.bottom - b.bottom + 8 : 0;
+    if (delta) box.scrollBy({ top: delta, behavior: 'smooth' });
   }, [path]);
 
   if (!root.children.length)
@@ -118,4 +125,13 @@ function Move({ node, path, ctx, showNumber }: { node: TreeNode; path: string; c
       </button>
     </>
   );
+}
+
+/** Nearest ancestor that scrolls vertically on its own (not the page itself). */
+function scrollParent(el: HTMLElement): HTMLElement | null {
+  for (let n = el.parentElement; n && n !== document.body && n !== document.documentElement; n = n.parentElement) {
+    const { overflowY } = getComputedStyle(n);
+    if ((overflowY === 'auto' || overflowY === 'scroll') && n.scrollHeight > n.clientHeight) return n;
+  }
+  return null;
 }
