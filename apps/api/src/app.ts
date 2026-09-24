@@ -47,6 +47,11 @@ export async function buildApp(opts: { logger?: boolean } = {}): Promise<Fastify
     reply.header('Cross-Origin-Resource-Policy', req.url.startsWith('/api/') ? 'cross-origin' : 'same-origin');
     reply.header('X-Content-Type-Options', 'nosniff');
     reply.header('Referrer-Policy', 'strict-origin-when-cross-origin');
+    // No framing (clickjacking), no plugins, no <base> hijacking. Scripts stay governed by same-origin + COEP.
+    reply.header('Content-Security-Policy', "frame-ancestors 'none'; object-src 'none'; base-uri 'self'");
+    reply.header('X-Frame-Options', 'DENY');
+    reply.header('Permissions-Policy', 'camera=(), microphone=(), geolocation=(), payment=()');
+    if (env.PUBLIC_URL.startsWith('https://')) reply.header('Strict-Transport-Security', 'max-age=31536000; includeSubDomains');
   });
 
   app.setErrorHandler((err, _req, reply) => {
