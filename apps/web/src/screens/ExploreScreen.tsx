@@ -72,7 +72,7 @@ export function ExploreScreen({ store = exploreStore }: { store?: AnalysisStore 
       shapes={view.node.shapes as DrawShape[] | undefined}
       autoShapes={autoShapes}
       onShapesChange={(sh) => s.setShapes(sh)}
-      onMove={(uci) => s.play(uci)}
+      onMove={(uci, fromFen) => s.play(uci, fromFen)}
       drawMode={drawMode}
       ariaLabel={`Board. ${view.turn} to move.`}
     />

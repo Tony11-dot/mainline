@@ -11,6 +11,7 @@ import {
   nodeAt,
   nodesOnPath,
   parentPath,
+  pathToUcis,
   positionFromFen,
   promoteAt,
   siblingPath,
@@ -28,7 +29,8 @@ export interface AnalysisState {
   version: number;
   collapsed: Set<string>;
   reset: (fen?: string, ucis?: string[]) => void;
-  play: (uci: string) => void;
+  /** Plays `uci`; with `fromFen`, from the node showing that position (the board's view when moved). */
+  play: (uci: string, fromFen?: string) => void;
   goto: (path: string, opts?: { sound?: boolean }) => void;
   next: () => void;
   prev: () => void;
@@ -63,9 +65,16 @@ export function createAnalysisStore(fen = INITIAL_FEN): AnalysisStore {
         for (const u of ucis) p = addMove(root, p, u).path;
         set((s) => ({ root, path: p, version: s.version + 1, collapsed: new Set() }));
       },
-      play: (uci) => {
-        const { root, path } = get();
-        const { path: p, node } = addMove(root, path, uci);
+      play: (uci, fromFen) => {
+        const { root, path: current } = get();
+        const path = fromFen ? locate(root, current, fromFen) : current;
+        let added;
+        try {
+          added = addMove(root, path, uci);
+        } catch {
+          return;
+        }
+        const { path: p, node } = added;
         soundFor(node);
         set((s) => ({ path: p, version: s.version + 1 }));
       },
@@ -123,6 +132,23 @@ export function createAnalysisStore(fen = INITIAL_FEN): AnalysisStore {
         }),
     };
   });
+}
+
+/** Path of the node showing `fen`: the current path, one of its ancestors, or anywhere in the tree. */
+export function locate(root: TreeNode, path: string, fen: string): string {
+  const epd = fen.split(' ').slice(0, 4).join(' ');
+  const ucis = pathToUcis(path);
+  for (let i = ucis.length; i >= 0; i--) {
+    const p = ucis.slice(0, i).join(' ');
+    if (nodeAt(root, p)?.epd === epd) return p;
+  }
+  const q: [TreeNode, string][] = [[root, '']];
+  while (q.length) {
+    const [n, p] = q.shift()!;
+    if (n.epd === epd) return p;
+    for (const c of n.children) q.push([c, childPath(p, c.uci)]);
+  }
+  return path;
 }
 
 /** Derived board view of the current node. */

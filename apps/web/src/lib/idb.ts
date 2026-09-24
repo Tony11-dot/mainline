@@ -1,5 +1,7 @@
 import { openDB, type DBSchema, type IDBPDatabase } from 'idb';
-import type { EvalData, ExplorerData } from '@mainline/shared';
+import type { EvalData, ExplorerData, Folder, RepMove, Repertoire } from '@mainline/shared';
+
+export type SyncTable = 'folders' | 'repertoires' | 'moves' | 'cards' | 'reviews';
 
 export interface CacheEntry<T> {
   key: string;
@@ -11,16 +13,14 @@ export interface MainlineDB extends DBSchema {
   explorer: { key: string; value: CacheEntry<ExplorerData> };
   evals: { key: string; value: CacheEntry<EvalData> };
   kv: { key: string; value: { key: string; value: unknown } };
+  folders: { key: string; value: Folder };
+  repertoires: { key: string; value: Repertoire };
+  moves: { key: [string, string, string]; value: RepMove; indexes: { byRep: string } };
+  dirty: { key: string; value: { key: string; table: SyncTable; at: number } };
 }
 
 let dbp: Promise<IDBPDatabase<MainlineDB>> | undefined;
-const upgraders: ((db: IDBPDatabase<MainlineDB>, oldVersion: number) => void)[] = [];
-export const DB_VERSION = 3;
-
-/** Later modules register their stores here (schema lives with the feature). */
-export function registerUpgrade(fn: (db: IDBPDatabase<MainlineDB>, oldVersion: number) => void) {
-  upgraders.push(fn);
-}
+export const DB_VERSION = 2;
 
 export function db(): Promise<IDBPDatabase<MainlineDB>> {
   dbp ??= openDB<MainlineDB>('mainline', DB_VERSION, {
@@ -30,7 +30,13 @@ export function db(): Promise<IDBPDatabase<MainlineDB>> {
         d.createObjectStore('evals', { keyPath: 'key' });
         d.createObjectStore('kv', { keyPath: 'key' });
       }
-      for (const u of upgraders) u(d, oldVersion);
+      if (oldVersion < 2) {
+        d.createObjectStore('folders', { keyPath: 'id' });
+        d.createObjectStore('repertoires', { keyPath: 'id' });
+        const moves = d.createObjectStore('moves', { keyPath: ['repertoireId', 'fromEpd', 'uci'] });
+        moves.createIndex('byRep', 'repertoireId');
+        d.createObjectStore('dirty', { keyPath: 'key' });
+      }
     },
   });
   return dbp;

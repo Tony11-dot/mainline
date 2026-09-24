@@ -17,6 +17,8 @@ export interface TreeNode {
   castle: boolean;
   comment?: string;
   shapes?: DrawShape[];
+  /** UI hints, e.g. 'alt' (alternate own move), 'tr' (transposition), 'note'. */
+  tags?: string[];
   children: TreeNode[];
 }
 

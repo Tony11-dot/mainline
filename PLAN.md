@@ -310,7 +310,7 @@ The bar: it should feel like an app Apple would feature. **Premium, clean, clear
 ### Checklist
 - [x] Phase 0 — Scaffold
 - [x] Phase 1 — Board & explorer
-- [ ] Phase 2 — Repertoires & folders
+- [x] Phase 2 — Repertoires & folders
 - [ ] Phase 3 — Training
 - [ ] Phase 4 — Stats, coverage & AI coach
 - [ ] Phase 5 — Everywhere: notifications, PWA, native apps

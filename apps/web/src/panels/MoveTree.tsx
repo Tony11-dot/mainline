@@ -107,11 +107,14 @@ function Move({ node, path, ctx, showNumber }: { node: TreeNode; path: string; c
         aria-selected={active}
         data-active={active}
         onClick={() => ctx.goto(path)}
+        title={node.tags?.includes('alt') ? 'Alternate move (not trained)' : node.tags?.includes('tr') ? 'Transposition: this position is reached by another move order too' : undefined}
         className={`mr-1 rounded-[6px] px-1 font-semibold transition-colors duration-100 ${
-          active ? 'bg-brand text-white' : 'text-ink hover:bg-brand-soft'
+          active ? 'bg-brand text-white' : node.tags?.includes('alt') ? 'italic text-ink-3 hover:bg-brand-soft' : 'text-ink hover:bg-brand-soft'
         }`}
       >
         {node.san}
+        {node.tags?.includes('tr') && <span className={`ml-0.5 text-[0.7em] ${active ? 'text-white/80' : 'text-brand'}`} aria-label="transposition">⇄</span>}
+        {node.tags?.includes('note') && <span className={`ml-0.5 inline-block size-1.5 rounded-full align-super ${active ? 'bg-white' : 'bg-warn'}`} aria-label="has a note" />}
       </button>
     </>
   );

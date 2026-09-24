@@ -7,6 +7,7 @@ import type { Key } from 'chessground/types';
 import 'chessground/assets/chessground.base.css';
 import 'chessground/assets/chessground.cburnett.css';
 import './board.css';
+import { legalDests, playUci, positionFromFen } from '@mainline/shared';
 import { usePrefs } from '../lib/prefs';
 import { platform } from '../platform';
 import { PromotionPicker, type PromotionRole } from './PromotionPicker';
@@ -26,8 +27,8 @@ export interface BoardProps {
   shapes?: DrawShape[];
   autoShapes?: DrawShape[];
   onShapesChange?: (shapes: DrawShape[]) => void;
-  /** Called with a full UCI move (promotion piece included). */
-  onMove?: (uci: string) => void;
+  /** Called with a full UCI move (promotion piece included) and the FEN the board showed when it was made. */
+  onMove?: (uci: string, fromFen: string) => void;
   /** Draw mode for touch: taps/drags draw shapes instead of moving. */
   drawMode?: boolean;
   /** Visual feedback, e.g. a shake on a wrong move. */
@@ -81,13 +82,25 @@ export function Board(props: BoardProps) {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  // Sync props → chessground.
-  useEffect(() => {
+  // Sync props → chessground. Only reconfigure when the position/interaction actually changed:
+  // calling set() cancels an in-progress drag, and parents re-render often (new Map for dests, etc.).
+  const applied = useRef<string>('');
+  /** The position chessground is actually displaying (moves are made on this, not on later props). */
+  const shownFen = useRef(props.fen);
+  useLayoutEffect(() => {
     const api = cg.current;
     if (!api) return;
-    api.set(configFor(props, prefs, (from, to) => onUserMove(from, to)));
+    const key = configKey(props, prefs);
+    if (key !== applied.current) {
+      applied.current = key;
+      shownFen.current = props.fen;
+      api.set(configFor(props, prefs, (from, to) => onUserMove(from, to)));
+    } else {
+      api.setShapes(props.shapes ?? []);
+      api.setAutoShapes(props.autoShapes ?? []);
+    }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [props.fen, props.orientation, props.turnColor, props.movable, props.dests, props.lastMove, props.check, props.shapes, props.autoShapes, prefs.showDests, prefs.coordinates, prefs.animationMs]);
+  }, [props.fen, props.orientation, props.turnColor, props.movable, props.dests, props.lastMove, props.check, props.shapes, props.autoShapes, props.drawMode, prefs.showDests, prefs.coordinates, prefs.animationMs]);
 
   function onUserMove(from: Key, to: Key) {
     const api = cg.current!;
@@ -97,7 +110,28 @@ export function Board(props: BoardProps) {
       return;
     }
     hapticIf('light');
-    propsRef.current.onMove?.(from + to);
+    const fromFen = shownFen.current;
+    advanceLocally(from, to);
+    propsRef.current.onMove?.(from + to, fromFen);
+  }
+
+  /**
+   * In free-play boards, immediately give chessground the next position's legal moves so a quick
+   * follow-up move isn't dropped while React re-renders (slow phones). The parent's matching update
+   * is then recognised as already applied and doesn't interrupt a drag in progress.
+   */
+  function advanceLocally(from: Key, to: Key, promo = '') {
+    const p = propsRef.current;
+    if (p.movable !== 'both' || !cg.current) return;
+    try {
+      const played = playUci(positionFromFen(shownFen.current), from + to + promo);
+      const turn = played.pos.turn;
+      shownFen.current = played.fen;
+      cg.current.set({ fen: played.fen, lastMove: [played.uci.slice(0, 2), played.uci.slice(2, 4)] as Key[], turnColor: turn, check: played.check ? turn : false, movable: { color: 'both', dests: legalDests(played.pos) as Map<Key, Key[]> } });
+      applied.current = configKey({ ...p, fen: played.fen, turnColor: turn, check: played.check, lastMove: [played.uci.slice(0, 2), played.uci.slice(2, 4)] as [Key, Key] }, prefs);
+    } catch {
+      /* illegal per chessops: let the parent decide */
+    }
   }
 
   function onPromote(role: PromotionRole | null) {
@@ -110,7 +144,10 @@ export function Board(props: BoardProps) {
       return;
     }
     hapticIf('light');
-    propsRef.current.onMove?.(p.from + p.to + ({ queen: 'q', rook: 'r', bishop: 'b', knight: 'n' } as const)[role]);
+    const promo = ({ queen: 'q', rook: 'r', bishop: 'b', knight: 'n' } as const)[role];
+    const fromFen = shownFen.current;
+    advanceLocally(p.from, p.to, promo);
+    propsRef.current.onMove?.(p.from + p.to + promo, fromFen);
   }
 
   // Wrong/right move feedback.
@@ -145,6 +182,10 @@ export function Board(props: BoardProps) {
       )}
     </div>
   );
+}
+
+function configKey(p: Pick<BoardProps, 'fen' | 'orientation' | 'turnColor' | 'movable' | 'lastMove' | 'check' | 'drawMode'>, prefs: { showDests: boolean; coordinates: boolean; animationMs: number }) {
+  return [p.fen, p.orientation, p.turnColor, p.movable ?? '', p.lastMove?.join('') ?? '', p.check ? 1 : 0, p.drawMode ? 1 : 0, prefs.showDests ? 1 : 0, prefs.coordinates ? 1 : 0, prefs.animationMs].join('|');
 }
 
 function hapticIf(kind: Parameters<ReturnType<typeof platform>['haptic']>[0]) {

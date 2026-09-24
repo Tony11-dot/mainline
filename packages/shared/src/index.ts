@@ -3,3 +3,5 @@ export * from './chess';
 export * from './tree';
 export * from './api';
 export * from './eval';
+export * from './repertoire';
+export * from './suggest';

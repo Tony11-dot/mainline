@@ -62,3 +62,28 @@ iOS simulator smoke build (Xcode 26.6): ✔ `BUILD SUCCEEDED`.
 - Explorer shows "needs a Lichess link" until you set `LICHESS_FALLBACK_TOKEN` in `.env` or sign in (by design — Lichess requires a token).
 - Sign-in round trip not exercised end-to-end yet (needs a real Lichess login in a browser; the PKCE code is standard and unit-level pieces are in place).
 - Sound quality was verified numerically (percussive envelope, no clipping); a human ear should confirm it's pleasant — tweak in `lib/sound.ts`.
+
+---
+
+## Phase 2 — Repertoires & folders (2026-09-24)
+
+**Built**
+- **Local-first library** (`apps/web/src/lib/library.ts`): folders, repertoires and moves in IndexedDB with tombstones + a dirty set (ready for Phase 3 sync). Memory is updated first, then persisted, so rapid edits never race. Default **White** and **Black** roots.
+- **Shared repertoire logic** (`packages/shared/src/repertoire.ts`): EPD-keyed move graph (transpositions shared), alternates (one trained move per own position), card positions, lines with transposition cut-offs, cross-repertoire **conflict detection**, orphan pruning, **PGN import** (all games + variations + comments → notes, idempotent, respects a repertoire's starting moves) and **export** (one game with variations, SetUp/FEN when needed).
+- **Library screen**: nested folder tree (create / rename / move / delete with Undo), drag a repertoire or folder onto a folder (desktop) or "Move to…" (touch), per-repertoire stats, export PGN via share sheet / download, conflict banner → conflict sheet.
+- **Builder** (`/rep/:id`): play moves to add them; own-side second moves become **alternates** (toast offers "Make main"); status chip (you play X / not decided / N replies prepared) and conflict chip; delete-from-here with Undo; make main; **Add popular replies** (≥ 5–25% at your rating, 2–8 moves deep, cancellable, one explorer request at a time); **Suggest my move** (engine 45% · club results at your rating 35% · master popularity 20%, all numbers shown); notes per move (autosave); arrows saved per move; transposition ⇄ and note markers in the tree; explorer rows highlight moves already in the repertoire.
+- **Opening library** (`/library/openings`): search 3,815 named openings by name or ECO, preview board, "Play as White/Black" creates a repertoire starting there, or explore it.
+- New UI primitives: bottom-sheet/dialog (native `<dialog>`), popover menu, toasts with Undo, lightweight MiniBoard.
+
+**Board robustness fixes found while testing the builder** (these were real bugs, not just test issues)
+- chessground reports moves asynchronously; a move is now applied to **the position the board showed when it was made**, even if the user navigated in between.
+- After a user move the board immediately gets the next position's legal moves (chessops), so a quick follow-up move isn't dropped while React re-renders on a slow phone; unchanged re-renders never call `set()` (which cancels drags).
+- Promotion / en passant now render correctly after local advance.
+
+**Try it**: http://localhost:5173/library → New → New repertoire, or Openings → search "najdorf".
+
+**Tests**: shared 35, web unit 9 (incl. library store on fake IndexedDB), e2e 11 × 3 devices, **44/44 over 4 repeats** (create, add line, alternates, delete + undo, reload persistence, PGN import, opening library).
+
+**Known issues**
+- "Add popular replies" and "Suggest my move" need explorer access (Lichess token / sign-in).
+- Drag-and-drop reordering *within* a folder isn't implemented (move-into-folder is); order is creation order.

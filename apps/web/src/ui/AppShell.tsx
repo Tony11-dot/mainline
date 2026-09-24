@@ -1,6 +1,7 @@
 import { NavLink, Outlet } from 'react-router';
 import { NAV } from './nav';
 import { LogoMark } from './Logo';
+import { Toaster } from './toast';
 
 export function AppShell() {
   return (
@@ -13,6 +14,7 @@ export function AppShell() {
         <Outlet />
       </main>
       <TabBar />
+      <Toaster />
     </div>
   );
 }
