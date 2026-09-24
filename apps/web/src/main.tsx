@@ -10,6 +10,7 @@ import { useLibrary } from './lib/library';
 import { useTraining } from './lib/training';
 import { startSync } from './lib/sync';
 import { startReminderSync } from './lib/reminders';
+import { autoImportGames } from './lib/games';
 
 await initPlatform();
 bindPrefsToDocument();
@@ -20,6 +21,7 @@ void useTraining.getState().load();
 startSync();
 startReminderSync();
 startPlatformHooks();
+setTimeout(() => void autoImportGames(), 5000);
 
 // Offline app shell + push (web / PWA only — native shells serve local files).
 if (!platform().isNative && 'serviceWorker' in navigator && import.meta.env.PROD) {

@@ -25,6 +25,8 @@ export interface Prefs {
   remindersOn: boolean;
   remindersEverEnabled: boolean;
   reminderTime: string;
+  lichessUser: string;
+  chesscomUser: string;
   engineLines: number;
   reduceTransparency: boolean;
   set: (p: Partial<Omit<Prefs, 'set'>>) => void;
@@ -77,6 +79,8 @@ export const usePrefs = create<Prefs>()(
       remindersOn: false,
       remindersEverEnabled: false,
       reminderTime: '19:00',
+      lichessUser: '',
+      chesscomUser: '',
       engineLines: 3,
       reduceTransparency: false,
       set: (p) => set(p),

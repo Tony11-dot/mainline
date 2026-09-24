@@ -175,3 +175,22 @@ iOS simulator smoke build (Xcode 26.6): ✔ `BUILD SUCCEEDED`.
 - The Android emulator (software GPU) showed a faint ghost of the active tab at the screen edges; the DOM has nothing there — likely an emulator compositing artifact. Please check on a real Android phone.
 - Desktop reminders fire only while the app is open (desktop notifications can't be pre-scheduled).
 - In local dev, native apps can't reach the plain-http API (they run on https/capacitor origins) — production uses https.
+
+---
+
+## Phase 6 — Your games vs your prep (2026-09-24)
+
+**Built**
+- **Import** from **Lichess** (NDJSON, standard games only; uses your Lichess token when signed in) and **Chess.com** (public monthly archives, descriptive User-Agent, one request at a time) through `/api/games`, normalised to the first 40 plies. **Incremental** per account (only games newer than the last import); auto-refresh in the background on app start (at most every 6 h). Works for guests (just type usernames); your Lichess username is prefilled when signed in.
+- **First deviation per game** (pure, tested, runs on the device against your local repertoire): *you left book* (your move ≠ your trained move → **that position is made due for review now**), *opponent left book*, *end of prep*, *not in your repertoire*. Moves before a repertoire's starting position (e.g. 1.e4 c5 for a Sicilian repertoire) count as book.
+- **"Where your prep breaks"** dashboard: Surprises / Forgotten / Prep ended, grouped by position with counts and the moves actually played; **Add \<move\>** puts an opponent surprise into the right repertoire, **Open** jumps to it in the builder.
+- **Your results per line** (win/draw/loss and score for each book line you actually reached), **recent games** with their deviation chip and link to the game.
+- **Opponent prep**: enter a username (Lichess or Chess.com) → their recent games become an opening tree, walked together with your repertoire: where their common choices meet your prep, how often, and which ones you haven't prepared.
+
+**Try it**: Games tab → enter a Lichess or Chess.com username → Import games. Try Opponent prep with any username.
+
+**Tests**: shared 58 (deviation kinds incl. root-path book, aggregation, results per line, opponent meets), API 22 (Lichess NDJSON + Chess.com archive normalisation, validation), e2e: import → summary → add surprise → forgotten move becomes due on Today → opponent prep.
+
+**Known issues**
+- Games stay on the device (they're re-downloadable, so they aren't synced); the nightly server-side import in PLAN §9 wasn't needed because analysis must use the local-first repertoire.
+- Chess.com's public API only offers monthly archives; the first import reads the last 3 months.

@@ -5,13 +5,13 @@ import { LaunchScreen, shouldShowLaunch } from './launch/LaunchScreen';
 import { platform } from './platform';
 import { handleIncoming } from './lib/incomingHandler';
 import { HomeScreen } from './screens/HomeScreen';
-import { PlaceholderScreen } from './screens/PlaceholderScreen';
 import { ExploreScreen } from './screens/ExploreScreen';
 import { SettingsScreen } from './screens/SettingsScreen';
 import { LibraryScreen } from './screens/LibraryScreen';
 import { RepertoireScreen } from './screens/RepertoireScreen';
 import { OpeningsScreen } from './screens/OpeningsScreen';
 import { TrainScreen } from './screens/TrainScreen';
+import { GamesScreen } from './screens/GamesScreen';
 
 export const router = createBrowserRouter([
   {
@@ -23,7 +23,7 @@ export const router = createBrowserRouter([
       { path: 'rep/:id', element: <RepertoireScreen /> },
       { path: 'train', element: <TrainScreen /> },
       { path: 'explore', element: <ExploreScreen /> },
-      { path: 'games', element: <PlaceholderScreen title="Games" /> },
+      { path: 'games', element: <GamesScreen /> },
       { path: 'settings', element: <SettingsScreen /> },
     ],
   },

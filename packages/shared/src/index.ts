@@ -8,3 +8,4 @@ export * from './suggest';
 export * from './training';
 export * from './coverage';
 export * from './facts';
+export * from './games';

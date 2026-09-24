@@ -1,5 +1,5 @@
 import { openDB, type DBSchema, type IDBPDatabase } from 'idb';
-import type { EvalData, ExplorerData, Folder, RepMove, Repertoire, ReviewEntry, TrainCard } from '@mainline/shared';
+import type { EvalData, ExplorerData, Folder, PlayedGame, RepMove, Repertoire, ReviewEntry, TrainCard } from '@mainline/shared';
 
 export type SyncTable = 'folders' | 'repertoires' | 'moves' | 'cards' | 'reviews';
 
@@ -19,10 +19,11 @@ export interface MainlineDB extends DBSchema {
   dirty: { key: string; value: { key: string; table: SyncTable; at: number } };
   cards: { key: [string, string, string]; value: TrainCard };
   reviews: { key: string; value: ReviewEntry; indexes: { byTime: number } };
+  games: { key: string; value: PlayedGame };
 }
 
 let dbp: Promise<IDBPDatabase<MainlineDB>> | undefined;
-export const DB_VERSION = 3;
+export const DB_VERSION = 4;
 
 export function db(): Promise<IDBPDatabase<MainlineDB>> {
   dbp ??= openDB<MainlineDB>('mainline', DB_VERSION, {
@@ -43,6 +44,7 @@ export function db(): Promise<IDBPDatabase<MainlineDB>> {
         d.createObjectStore('cards', { keyPath: ['color', 'epd', 'kind'] });
         d.createObjectStore('reviews', { keyPath: 'id' }).createIndex('byTime', 'reviewedAt');
       }
+      if (oldVersion < 4) d.createObjectStore('games', { keyPath: 'id' });
     },
   });
   return dbp;
