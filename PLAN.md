@@ -43,7 +43,7 @@ One React + TypeScript app, wrapped per platform:
 
 Rules for cross-platform code:
 - All platform differences go through a small `platform` adapter in `packages/shared` / `apps/web/src/platform/` (storage, notifications, haptics, sharing, deep links, file import).
-- Stockfish: use the multi-threaded **lite** WASM build (`stockfish-19-lite.js`, ~1.6 MB NNUE) when `crossOriginIsolated && typeof SharedArrayBuffer !== 'undefined'`, otherwise `stockfish-19-lite-single.js`. Never crash if threads are unavailable. Reality check (verified 2026-09): threads work on the Railway web build (COOP/COEP) and in Tauri on Windows (WebView2, via `app.security.headers`); they do **not** work in Capacitor (Android WebView has no site isolation; iOS WKURLSchemeHandler responses never become cross-origin-isolated) and are unreliable in Tauri on macOS/Linux (custom scheme / WebKitGTK). So mobile + most desktop builds run single-threaded lite — which is plenty for opening positions, and Lichess cloud eval covers deep evals. The full 99 MB NNUE build is **not** bundled anywhere.
+- Stockfish: use the multi-threaded **lite** WASM build (`stockfish-19-lite.js`, ~1.6 MB NNUE) when `crossOriginIsolated && typeof SharedArrayBuffer !== 'undefined'`, otherwise `stockfish-19-lite-single.js`. Never crash if threads are unavailable. Reality check (verified 2026-09): threads work on the Railway web build (COOP/COEP) and in Tauri on Windows (WebView2, via `app.security.headers`); they do **not** work in Capacitor (Android WebView has no site isolation; iOS WKURLSchemeHandler responses never become cross-origin-isolated) and are unreliable in Tauri on macOS/Linux (custom scheme / WebKitGTK). **Safari/WebKit (incl. every iOS browser and WKWebView) blocks the threaded build's nested pthread workers even when isolated** (verified in Playwright WebKit), so WebKit always gets the single-threaded build; a watchdog also falls back if the threaded engine isn't ready in 8 s. So mobile + most desktop builds run single-threaded lite — which is plenty for opening positions, and Lichess cloud eval covers deep evals. The full 99 MB NNUE build is **not** bundled anywhere.
 - Reminders: native apps schedule **local notifications** on-device (Capacitor Local Notifications / Tauri notification plugin) from the locally known due count — no push server needed. Web/PWA uses Web Push from the server. Android native may additionally use FCM (free) later.
 - **Local-first**: the device is the source of truth for folders, repertoires, moves and cards (IndexedDB on every platform — Capacitor and Tauri webviews persist it). The app is fully usable **without an account** (guest mode; also needed for Apple review). Signing in with Lichess adds sync: each row carries `updated_at` + `deleted`, the client pushes changed rows and pulls rows newer than its last sync cursor, last-write-wins per row. Explorer/engine/AI data always comes from the server (cached locally for offline use).
 - Responsive layouts: phone (portrait board-first), tablet, desktop (board + side panels). Safe-area insets on iOS.
@@ -60,7 +60,7 @@ Rules for cross-platform code:
 | Deep evals for common positions | **Lichess cloud eval** `GET https://lichess.org/api/cloud-eval?fen=…&multiPv=3` | Try first; fall back to local Stockfish |
 | Game stats by rating/speed | **Lichess explorer** `https://explorer.lichess.org/lichess` | **Requires a Lichess token** (verified: HTTP 401 without one). Server uses the signed-in user's token, else the owner's `LICHESS_FALLBACK_TOKEN`; guests get cached data + fallback token |
 | Master games, GM usage, top players | **Masters explorer** `https://explorer.lichess.org/masters` | Same token rule. `topGames` gives names/ratings/years |
-| Opening names & ECO | **lichess-org/chess-openings** TSV (CC0) | Seed into Postgres |
+| Opening names & ECO | **lichess-org/chess-openings** TSV (CC0) | Precomputed to EPD (`packages/shared/scripts/build-openings.ts`), committed as JSON; served from memory by the API and lazy-loaded by the client (works offline). No DB seeding needed |
 | User's Lichess games | Lichess API `/api/games/user/{username}` (NDJSON) | User's OAuth token |
 | User's Chess.com games | Chess.com public API `https://api.chess.com/pub/player/{user}/games/archives` | No auth; descriptive User-Agent |
 | Spaced repetition | **ts-fsrs** (MIT) | FSRS scheduler |
@@ -72,7 +72,7 @@ Rules for cross-platform code:
 
 **Licensing:** chessground, chessops and Stockfish are GPL-3.0 → Mainline is released as **GPL-3.0 open source**. A future closed-source edition would need swaps (react-chessboard, chess.js) and real legal advice.
 - App Store + GPL: the FSF considers Apple's store terms incompatible with GPL for *third-party* GPL code (VLC 2011). Lichess, and many Stockfish apps ship GPL/AGPL code on the App Store without issue today, but it is a known gray area — flagged, not a blocker.
-- Assets: pieces = **cburnett** (GPLv2+, Colin M.L. Burnett — the Lichess default, bundled with chessground's CSS). Sounds are **generated by our own script** (`scripts/gen-sounds.mjs`) so we own them outright; Lichess's sound packs are AGPL and are not bundled. Fonts: system stack + Inter (OFL) self-hosted — COEP `require-corp` forbids third-party font CDNs.
+- Assets: pieces = **cburnett** (GPLv2+, Colin M.L. Burnett — the Lichess default, bundled with chessground's CSS). Sounds are **synthesized at runtime** with WebAudio (`apps/web/src/lib/sound.ts`, pre-rendered once into buffers) so we own them outright and ship no audio assets; Lichess's sound packs are AGPL and are not bundled. Fonts: system stack + Inter (OFL) self-hosted — COEP `require-corp` forbids third-party font CDNs.
 
 **Lichess API etiquette (enforce in code):** one explorer request at a time per token; on HTTP 429 wait a full 60 s; always go through the server proxy + cache, never call the explorer from clients directly.
 
@@ -309,7 +309,7 @@ The bar: it should feel like an app Apple would feature. **Premium, clean, clear
 
 ### Checklist
 - [x] Phase 0 — Scaffold
-- [ ] Phase 1 — Board & explorer
+- [x] Phase 1 — Board & explorer
 - [ ] Phase 2 — Repertoires & folders
 - [ ] Phase 3 — Training
 - [ ] Phase 4 — Stats, coverage & AI coach

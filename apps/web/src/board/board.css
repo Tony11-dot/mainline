@@ -1,0 +1,155 @@
+/* Board theme: squares drawn with one conic gradient (no image assets); colors from tokens. */
+.ml-board cg-board {
+  background-color: var(--sq-light);
+  background-image: repeating-conic-gradient(var(--sq-dark) 0 25%, var(--sq-light) 0 50%);
+  background-size: 25% 25%;
+  border-radius: var(--board-radius, 6px);
+  box-shadow: var(--shadow-2);
+}
+
+/* Coordinates inside the board edges, coloured against the square beneath them. */
+.ml-board .cg-wrap coords {
+  font-family: var(--font-sans);
+  font-weight: 600;
+  font-size: clamp(8px, calc(var(---cg-width, 400px) / 40), 12px);
+  opacity: 1;
+  z-index: 3;
+}
+.ml-board .cg-wrap coords.ranks {
+  left: 3px;
+  top: 2px;
+  height: 100%;
+  width: auto;
+}
+.ml-board .cg-wrap coords.files {
+  left: 0;
+  right: 0;
+  top: auto;
+  bottom: 0;
+  width: 100%;
+  height: auto;
+  text-transform: lowercase;
+  text-align: right;
+}
+.ml-board .cg-wrap coords.files coord {
+  flex: 1 1 0;
+  padding: 0 3px 1px 0;
+}
+.ml-board .cg-wrap coords coord {
+  color: var(--sq-dark);
+}
+/* White at the bottom: the first rank label (1) and first file label (a) sit on dark a1 → light text. */
+.ml-board .cg-wrap coords coord:nth-child(odd) {
+  color: var(--sq-light);
+}
+/* Black at the bottom: labels sit on h8 / a8-side squares → parity flips. */
+.ml-board .cg-wrap coords.black coord {
+  color: var(--sq-light);
+}
+.ml-board .cg-wrap coords.black coord:nth-child(odd) {
+  color: var(--sq-dark);
+}
+
+/* Highlights */
+.ml-board cg-board square.last-move {
+  background-color: var(--sq-last);
+}
+.ml-board cg-board square.selected {
+  background-color: var(--sq-selected);
+}
+.ml-board cg-board square.move-dest {
+  background: radial-gradient(var(--sq-dest) 21%, transparent 22%);
+}
+.ml-board cg-board square.move-dest:hover {
+  background: color-mix(in oklab, var(--brand) 24%, transparent);
+}
+.ml-board cg-board square.oc.move-dest {
+  background: radial-gradient(transparent 0%, transparent 79%, var(--sq-dest) 80%);
+}
+.ml-board cg-board square.oc.move-dest:hover {
+  background: color-mix(in oklab, var(--brand) 24%, transparent);
+}
+.ml-board cg-board square.check {
+  background: radial-gradient(ellipse at center, var(--sq-check) 0%, color-mix(in oklab, var(--sq-check) 60%, transparent) 30%, transparent 72%);
+}
+.ml-board cg-board square.current-premove {
+  background-color: color-mix(in oklab, var(--brand) 30%, transparent);
+}
+
+/* Pieces: lift while dragging, never blurry. */
+.ml-board .cg-wrap piece {
+  image-rendering: auto;
+}
+.ml-board cg-board piece.dragging {
+  filter: drop-shadow(0 6px 10px oklch(0.2 0.03 262 / 0.35));
+  transform-origin: center;
+}
+.ml-board cg-board piece.dragging {
+  scale: 1.12;
+}
+@media (pointer: coarse) {
+  /* On touch the finger covers the piece: lift it above the finger. */
+  .ml-board cg-board piece.dragging {
+    scale: 1.5;
+    translate: 0 -30%;
+  }
+}
+.ml-board cg-board square.hover {
+  background-color: color-mix(in oklab, var(--brand) 18%, transparent);
+}
+.ml-board .cg-wrap .cg-shapes {
+  opacity: 0.75;
+}
+
+.ml-board.draw-mode cg-board,
+.ml-board.drawing cg-board {
+  cursor: crosshair;
+}
+.ml-board.draw-mode {
+  outline: 2px solid color-mix(in oklab, var(--brand) 60%, transparent);
+  outline-offset: 3px;
+  border-radius: 8px;
+}
+
+/* Promotion picker pieces reuse chessground's piece sprites. */
+.promo-choice {
+  background: var(--surface);
+  border-radius: 50%;
+  transition: background-color 120ms var(--ease-out), transform 120ms var(--ease-out);
+  box-shadow: var(--shadow-2);
+}
+.promo-choice:hover,
+.promo-choice:focus-visible {
+  background: var(--brand-soft);
+  transform: scale(1.04);
+}
+.cg-wrap .promo-choice piece {
+  position: static;
+  display: block;
+  pointer-events: none;
+  width: 88%;
+  height: 88%;
+  background-size: cover;
+}
+
+/* Feedback */
+@keyframes board-shake {
+  0%, 100% { translate: 0; }
+  20% { translate: -7px; }
+  40% { translate: 6px; }
+  60% { translate: -4px; }
+  80% { translate: 2px; }
+}
+.board-shake { animation: board-shake 380ms var(--ease-out); }
+@keyframes board-glow {
+  0% { box-shadow: 0 0 0 0 color-mix(in oklab, var(--good) 60%, transparent); }
+  100% { box-shadow: 0 0 0 14px transparent; }
+}
+.board-glow cg-board { animation: board-glow 500ms var(--ease-out); }
+@media (prefers-reduced-motion: reduce) {
+  .board-shake { animation: none; outline: 3px solid var(--bad); }
+}
+@keyframes fade-in {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}

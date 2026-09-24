@@ -1,5 +1,8 @@
 import type { FastifyInstance } from 'fastify';
+import { authRoutes } from './auth';
+import { chessRoutes } from './chess';
 
-export async function registerRoutes(_app: FastifyInstance) {
-  // Feature routes are added here phase by phase.
+export async function registerRoutes(app: FastifyInstance) {
+  await app.register(authRoutes);
+  await app.register(chessRoutes);
 }

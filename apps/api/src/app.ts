@@ -6,6 +6,7 @@ import fastifyCompress from '@fastify/compress';
 import { existsSync, readFileSync } from 'node:fs';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
+import { ZodError } from 'zod';
 import { env, MissingConfigError } from './env';
 import { getDb } from './db/client';
 
@@ -49,11 +50,16 @@ export async function buildApp(opts: { logger?: boolean } = {}): Promise<Fastify
   });
 
   app.setErrorHandler((err, _req, reply) => {
+    if (err instanceof ZodError) {
+      return reply.status(400).send({ error: 'bad_request', message: err.issues.map((i) => `${i.path.join('.')}: ${i.message}`).join('; ') });
+    }
     if (err instanceof MissingConfigError) {
       return reply.status(503).send({ error: 'not_configured', message: err.message });
     }
     const status = (err as { statusCode?: number }).statusCode ?? 500;
     if (status >= 500) app.log.error(err);
+    const retry = (err as { retryAfterSec?: number }).retryAfterSec;
+    if (retry) reply.header('Retry-After', String(retry));
     return reply.status(status).send({ error: (err as Error).name, message: (err as Error).message });
   });
 

@@ -26,3 +26,4 @@ apps/mobile/ios/DerivedData/
 play-service-account.json
 secrets/
 apps/web/public/engine/
+apps/web/.*.mjs

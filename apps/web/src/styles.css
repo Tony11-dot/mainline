@@ -20,9 +20,9 @@
   --line: oklch(0.9 0.01 262);
   --line-strong: oklch(0.82 0.012 262);
 
-  --brand-ink: color-mix(in oklch, var(--brand) 88%, black);
-  --brand-soft: color-mix(in oklch, var(--brand) 11%, var(--surface));
-  --brand-softer: color-mix(in oklch, var(--brand) 6%, var(--surface));
+  --brand-ink: color-mix(in oklab, var(--brand) 88%, black);
+  --brand-soft: color-mix(in oklab, var(--brand) 11%, var(--surface));
+  --brand-softer: color-mix(in oklab, var(--brand) 6%, var(--surface));
   --on-brand: #fff;
 
   --good: oklch(0.6 0.15 150);
@@ -33,9 +33,9 @@
   --warn-soft: oklch(0.96 0.05 80);
 
   /* Glass chrome */
-  --glass: color-mix(in oklch, var(--surface) 72%, transparent);
-  --glass-border: color-mix(in oklch, white 70%, transparent);
-  --glass-shadow: 0 1px 0 0 color-mix(in oklch, white 60%, transparent) inset, 0 8px 32px -12px oklch(0.3 0.03 262 / 0.18),
+  --glass: color-mix(in oklab, var(--surface) 82%, transparent);
+  --glass-border: color-mix(in oklab, white 70%, transparent);
+  --glass-shadow: 0 1px 0 0 color-mix(in oklab, white 60%, transparent) inset, 0 8px 32px -12px oklch(0.3 0.03 262 / 0.18),
     0 1px 3px oklch(0.3 0.03 262 / 0.08);
 
   --shadow-1: 0 1px 2px oklch(0.3 0.03 262 / 0.06), 0 1px 1px oklch(0.3 0.03 262 / 0.04);
@@ -45,9 +45,9 @@
   /* Board theme (cool blue-grey by default). */
   --sq-light: oklch(0.93 0.018 250);
   --sq-dark: oklch(0.66 0.055 250);
-  --sq-last: color-mix(in oklch, var(--brand) 32%, transparent);
-  --sq-selected: color-mix(in oklch, var(--brand) 42%, transparent);
-  --sq-dest: color-mix(in oklch, oklch(0.25 0.05 262) 26%, transparent);
+  --sq-last: color-mix(in oklab, var(--brand) 32%, transparent);
+  --sq-selected: color-mix(in oklab, var(--brand) 42%, transparent);
+  --sq-dest: color-mix(in oklab, oklch(0.25 0.05 262) 26%, transparent);
   --sq-check: oklch(0.62 0.22 25);
 
   --radius-s: 10px;
@@ -77,15 +77,15 @@
   --ink-3: oklch(0.66 0.014 262);
   --line: oklch(0.3 0.015 262);
   --line-strong: oklch(0.38 0.016 262);
-  --brand-ink: color-mix(in oklch, var(--brand) 70%, white);
-  --brand-soft: color-mix(in oklch, var(--brand) 22%, var(--surface));
-  --brand-softer: color-mix(in oklch, var(--brand) 12%, var(--surface));
+  --brand-ink: color-mix(in oklab, var(--brand) 70%, white);
+  --brand-soft: color-mix(in oklab, var(--brand) 22%, var(--surface));
+  --brand-softer: color-mix(in oklab, var(--brand) 12%, var(--surface));
   --good-soft: oklch(0.3 0.06 150);
   --bad-soft: oklch(0.3 0.07 25);
   --warn-soft: oklch(0.32 0.06 75);
-  --glass: color-mix(in oklch, var(--surface) 70%, transparent);
-  --glass-border: color-mix(in oklch, white 10%, transparent);
-  --glass-shadow: 0 1px 0 0 color-mix(in oklch, white 8%, transparent) inset, 0 8px 32px -12px oklch(0 0 0 / 0.5);
+  --glass: color-mix(in oklab, var(--surface) 80%, transparent);
+  --glass-border: color-mix(in oklab, white 10%, transparent);
+  --glass-shadow: 0 1px 0 0 color-mix(in oklab, white 8%, transparent) inset, 0 8px 32px -12px oklch(0 0 0 / 0.5);
   --shadow-1: 0 1px 2px oklch(0 0 0 / 0.3);
   --shadow-2: 0 4px 16px -4px oklch(0 0 0 / 0.45);
   --shadow-3: 0 24px 64px -16px oklch(0 0 0 / 0.6);
@@ -191,7 +191,7 @@
 .glass {
   background: var(--glass);
   -webkit-backdrop-filter: blur(22px) saturate(180%);
-  backdrop-filter: blur(22px) saturate(180%);
+  backdrop-filter: blur(24px) saturate(180%);
   box-shadow: var(--glass-shadow);
   border: 1px solid var(--glass-border);
 }
