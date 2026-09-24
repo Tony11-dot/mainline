@@ -34,7 +34,7 @@ export function AppearanceSettings() {
         ))}
       </Section>
       <Section title="Font">
-        {FONTS.filter((f) => !f.pendingLicence).map((f) => (
+        {FONTS.map((f) => (
           <FontRow key={f.id} id={f.id} name={f.name} stack={f.stack} load={f.load} />
         ))}
       </Section>

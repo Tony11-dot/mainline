@@ -103,7 +103,7 @@ iOS simulator smoke build (Xcode 26.6): ✔ `BUILD SUCCEEDED`.
 **Try it**: Settings → Light themes / Dark themes / Font / Board / Pieces. See the launch: http://localhost:5173/?launch=1
 
 **Known issues / pending**
-- **Cabinet Grotesk** (ClassMate's default font) is not included yet: its ITF Free Font License is outside the MIT/BSD/Apache/ISC/GPL set — waiting for the owner's OK. The code already knows about it (`pendingLicence` in `lib/appearance.ts`).
+- **Cabinet Grotesk** (ClassMate's default font) is bundled with the owner's approval (ITF Free Font License; credited in Settings → About; licence note in `apps/web/src/assets/fonts/cabinet-grotesk`).
 - One rare e2e flake (≈1/30) in the WebKit phone builder test at superhuman tap speed.
 
 ---

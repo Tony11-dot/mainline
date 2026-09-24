@@ -136,13 +136,11 @@ export interface FontDef {
   stack: string;
   /** Lazy-loads the open-licensed fallback face for non-Apple platforms. */
   load?: () => Promise<unknown>;
-  /** Not selectable until its licence is approved by the owner. */
-  pendingLicence?: boolean;
 }
 
 /** Same ids, names and order as ClassMate-Notes' FontLibrary / ClassMusic's AppFont. */
 export const FONTS: FontDef[] = [
-  { id: 'cabinet', name: 'Cabinet Grotesk', stack: `'Cabinet Grotesk', ${SYSTEM_STACK}`, pendingLicence: true },
+  { id: 'cabinet', name: 'Cabinet Grotesk', stack: `'Cabinet Grotesk', ${SYSTEM_STACK}`, load: () => import('../assets/fonts/cabinet-grotesk/index.css') },
   { id: 'system', name: 'Default', stack: SYSTEM_STACK },
   { id: 'noteworthy', name: 'Noteworthy', stack: `'Noteworthy', 'Patrick Hand', ${SYSTEM_STACK}`, load: () => import('@fontsource/patrick-hand') },
   { id: 'bradley', name: 'Bradley Hand', stack: `'Bradley Hand', 'Caveat', ${SYSTEM_STACK}`, load: () => import('@fontsource/caveat') },

@@ -180,6 +180,7 @@ export function SettingsScreen() {
       <p className="mt-3 text-center text-xs text-ink-3">
         MainLine is free software (GPL-3.0). Board by chessground, rules by chessops, engine Stockfish 19 — all GPL-3.0.
         Opening names from lichess-org/chess-openings (CC0).
+        Cabinet Grotesk © Indian Type Foundry, used under the ITF Free Font License.
       </p>
     </div>
   );
