@@ -245,7 +245,11 @@ Visual checks: `VISUAL=1 pnpm e2e visual` (add `--update-snapshots` after an int
 
 **Waiting on you** (store/RELEASING.md):
 - Create the App Store Connect app record and the Play Console app, then upload the first `.aab` by hand. Google requires the first upload to be manual.
-- Create the GitHub repo and the match repo, and add the secrets.
+- Paste the Lichess and Gemini keys into `secrets/paste-here.env`, then run `bash scripts/apply-secrets.sh`.
 
-**Known issues**
-- The production API (Railway) isn't deployed yet, so native builds made now work offline. Explorer, cloud evals, coach, sync and games need `MAINLINE_API_URL`.
+**Done since (2026-09-25):**
+- **Server:** the Railway project `mainline` (`api` + Postgres) is live at https://api-production-8afb.up.railway.app. Production secrets were generated straight into Railway.
+- **GitHub:** the private repos `mainline` and `mainline-certificates` exist. Match holds the CI signing certificate, reached through a deploy key. Every Actions secret is set except the Play service account, which `apply-secrets.sh` adds.
+- **Android:** the `.aab` was rebuilt against the live API.
+- **Font:** Cabinet Grotesk is bundled (licence approved).
+- **Docs:** the README states the GPL licence and reserves the name and artwork.

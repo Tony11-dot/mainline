@@ -27,7 +27,7 @@ Everything else is **Not collected**, including contact info, location, health, 
 
 - For each collected type, Apple asks whether it's used for tracking: **No**.
 - These three types are collected only when the user signs in. Apple has no "optional" flag, so declare them as collected.
-- **Privacy Policy URL:** `https://<your API host>/privacy`
+- **Privacy Policy URL:** `https://api-production-8afb.up.railway.app/privacy`
 
 ### Other App Store Connect answers
 - **Age rating:** answer **None** to every content question → **4+**. Unrestricted web access: **No**. The only web view is the Lichess sign-in page, in the system browser. Gambling or contests: **No**.
@@ -54,7 +54,7 @@ Native features: local notifications, haptics, share-sheet PGN import ("Open in 
 
 | Declaration | Answer |
 |---|---|
-| **Privacy policy** | `https://<your API host>/privacy` |
+| **Privacy policy** | `https://api-production-8afb.up.railway.app/privacy` |
 | **App access** | *All functionality is available without special access.* (Sign-in is optional; no credentials needed for review.) |
 | **Ads** | No, my app does not contain ads. |
 | **Content rating** (IARC questionnaire) | Category: **Reference, News, or Educational**. Answer **No** to violence, sexuality, language, controlled substances, gambling, user interaction/chat, sharing location, and digital purchases. Expected result: **Everyone / PEGI 3**. |
@@ -73,7 +73,7 @@ Native features: local notifications, haptics, share-sheet PGN import ("Open in 
 - Does your app collect or share any of the required user data types? **Yes**
 - Is all user data collected by your app encrypted in transit? **Yes**
 - Which account creation methods does your app support? **OAuth** ("Sign in with Lichess")
-- **Delete account URL:** `https://<your API host>/privacy#delete`
+- **Delete account URL:** `https://api-production-8afb.up.railway.app/privacy#delete`
 - Do you provide a way for users to request that some or all of their data is deleted? **Yes**
 
 **Data types**

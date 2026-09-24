@@ -48,7 +48,7 @@ Everything below is one-time setup, in order. Steps marked **(you)** need your a
    - Content Rights: **Yes, it contains third-party content, and I have the necessary rights**. That content is Lichess's CC0 opening statistics.
    - Age Rating → **Edit** → answer as in `compliance.md` → **4+**.
 3. **App Privacy:**
-   - Privacy Policy URL: `https://<your API host>/privacy`.
+   - Privacy Policy URL: `https://api-production-8afb.up.railway.app/privacy`.
    - **Get Started** → answer the data types from `compliance.md` → **Publish**.
 4. **TestFlight → Internal Testing → "+"**:
    - Create a group named **Team**.
@@ -56,7 +56,7 @@ Everything below is one-time setup, in order. Steps marked **(you)** need your a
    - Add yourself as a tester.
 5. Tell me it's done. I'll then run `fastlane ios beta` from this Mac, which uploads the first build. You can also run it yourself:
    ```sh
-   cd apps/mobile && MAINLINE_API_URL=https://<your API host> fastlane ios beta
+   cd apps/mobile && MAINLINE_API_URL=https://api-production-8afb.up.railway.app fastlane ios beta
    ```
    Apple processes the build in 5–30 minutes. It then appears in the TestFlight app on your iPhone.
 
@@ -100,37 +100,37 @@ Everything below is one-time setup, in order. Steps marked **(you)** need your a
       - *Manage testing tracks and edit tester lists*
 
       Then choose **Invite user**.
-   5. Copy the JSON so local uploads work:
-      ```sh
-      cp ~/Dev/classmate/apps/classmate_mobile/fastlane/play-service-account.json ~/Dev/mainline/secrets/play-service-account.json
-      ```
+   5. On this Mac, run `bash scripts/apply-secrets.sh`. It copies the account's key into `secrets/` and into GitHub, then prints the email address to invite.
 
 Later: Play needs **12 testers for 14 days on a closed track** before you can apply for production. Internal testing isn't affected.
 
-## 3. GitHub (you, ~10 min)
+## 3. GitHub (done)
 
-1. **Create the repo** `Tony11-dot/mainline`.
-   - **Public** gets free macOS minutes for iOS builds.
-   - **Private** gets 2,000 free minutes a month at a 10× macOS rate, about 12 iOS builds.
-   - Push `main`. I can do the push once the repo exists.
-2. **Signing storage for CI** (iOS):
-   1. Create an **empty private repo**, e.g. `Tony11-dot/mainline-certificates`.
-   2. Create a fine-grained **personal access token** with *Contents: read/write* on that repo only.
-   3. Run once on this Mac:
-      ```sh
-      cd apps/mobile
-      export MATCH_GIT_URL=https://github.com/Tony11-dot/mainline-certificates.git
-      export MATCH_PASSWORD='<choose a long passphrase>'
-      fastlane ios certificates
-      ```
-      This creates a CI-only Apple Distribution certificate and profile, encrypts them with the passphrase and pushes them to that repo. Your account allows several distribution certificates, and your existing one isn't touched.
-3. **Settings → Secrets and variables → Actions:**
+- **Repos:**
+  - `Tony11-dot/mainline` holds the code.
+  - `Tony11-dot/mainline-certificates` is private and holds the iOS signing files, encrypted.
+- **iOS signing for CI:**
+  - `fastlane ios certificates` has been run. The certificate and profile are stored, encrypted with `secrets/match-password.txt`.
+  - CI reaches the certificates repo through a deploy key, `secrets/match-deploy-key`, so no personal access token is needed.
+- **Actions variable:** `PUBLIC_API_URL` is `https://api-production-8afb.up.railway.app`.
+- **Actions secrets set:**
+  - `ASC_KEY_ID`, `ASC_ISSUER_ID`, `ASC_KEY_P8`
+  - `MATCH_PASSWORD`, `MATCH_SSH_KEY`
+  - `ANDROID_KEYSTORE_BASE64`, `ANDROID_KEYSTORE_PASSWORD`, `ANDROID_KEY_PASSWORD`, `ANDROID_KEY_ALIAS`
+  - `TAURI_SIGNING_PRIVATE_KEY`
+  - `PLAY_SERVICE_ACCOUNT_JSON`, set by `bash scripts/apply-secrets.sh`
+- **To re-create a secret,** take it from the matching file in `secrets/`. For example:
+  ```sh
+  gh secret set MATCH_PASSWORD -R Tony11-dot/mainline < secrets/match-password.txt
+  ```
 
-   **Variables:**
+**Server:** Railway project **mainline** (services `api` and `Postgres`), at https://api-production-8afb.up.railway.app.
+- Production secrets were generated straight into Railway. They're separate from the local `.env`.
+- API keys go in through `secrets/paste-here.env`, then `bash scripts/apply-secrets.sh`.
+- To redeploy by hand: `railway up --service api`.
 
-   | Name | Value |
-   |---|---|
-   | `PUBLIC_API_URL` | `https://<your API host>` (no trailing slash) |
+---|---|
+   | `PUBLIC_API_URL` | `https://api-production-8afb.up.railway.app` (no trailing slash) |
 
    **Secrets:**
 

@@ -36,15 +36,17 @@ jobs:
       - uses: ruby/setup-ruby@v1
         with: { ruby-version: '3.4', bundler-cache: true, working-directory: apps/mobile }
       - run: pnpm install --frozen-lockfile
+      # Deploy key with write access to the private match repo (signing certs, encrypted with MATCH_PASSWORD).
+      - uses: webfactory/ssh-agent@v0.9.1
+        with: { ssh-private-key: '${{ secrets.MATCH_SSH_KEY }}' }
       - name: fastlane ios beta
         working-directory: apps/mobile
         env:
           ASC_KEY_ID: ${{ secrets.ASC_KEY_ID }}
           ASC_ISSUER_ID: ${{ secrets.ASC_ISSUER_ID }}
           ASC_KEY_CONTENT: ${{ secrets.ASC_KEY_P8 }}
-          MATCH_GIT_URL: ${{ secrets.MATCH_GIT_URL }}
+          MATCH_GIT_URL: git@github.com:Tony11-dot/mainline-certificates.git
           MATCH_PASSWORD: ${{ secrets.MATCH_PASSWORD }}
-          MATCH_GIT_BASIC_AUTHORIZATION: ${{ secrets.MATCH_GIT_BASIC_AUTHORIZATION }}
         run: bundle exec fastlane ios beta
       - uses: actions/upload-artifact@v4
         if: always()
