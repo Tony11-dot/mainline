@@ -1,0 +1,6 @@
+pnpm-lock.yaml
+dist
+apps/mobile/ios
+apps/mobile/android
+apps/desktop/src-tauri
+apps/api/drizzle

@@ -1,0 +1,7 @@
+<?xml version='1.0' encoding='utf-8'?>
+<resources>
+    <string name="app_name">Mainline</string>
+    <string name="title_activity_main">Mainline</string>
+    <string name="package_name">app.mainline.chess</string>
+    <string name="custom_url_scheme">app.mainline.chess</string>
+</resources>
