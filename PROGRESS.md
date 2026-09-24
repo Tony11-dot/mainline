@@ -194,3 +194,21 @@ iOS simulator smoke build (Xcode 26.6): ✔ `BUILD SUCCEEDED`.
 **Known issues**
 - Games stay on the device (they're re-downloadable, so they aren't synced); the nightly server-side import in PLAN §9 wasn't needed because analysis must use the local-first repertoire.
 - Chess.com's public API only offers monthly archives; the first import reads the last 3 months.
+
+## Phase 7 — Polish (2026-09-25)
+
+**Built**
+- **Onboarding** at `/welcome` (first run with no repertoires): your level (sets the explorer rating band) and time controls → pick starter repertoires (Italian, London, Caro-Kann, QGD; every move verified legal by a unit test) → straight into Learn. Skippable; never shown again once finished or skipped.
+- **Accessibility**: screen-reader move announcements (polite live region: "Knight f3", "Bishop takes c6, check"); **type a move** field on every board (`/` focuses it; SAN or UCI; works in the builder, the trainer and Explore); colour-blind-safe mastery strip (shape + position cue, not colour alone); focus rings, labelled controls, tree navigation by arrow keys.
+- **Performance budgets**: every screen except Today is lazy-loaded; `scripts/check-budgets.mjs` fails CI if first-load JS > 180 KB gz or CSS > 24 KB gz (now 173 KB / 11 KB).
+- **i18n scaffolding**: `useT()` with English complete and Hebrew/Arabic stubs; Settings → Language; RTL flips the whole layout while boards stay LTR (a chessboard never mirrors).
+- **Visual regression**: `e2e/visual.spec.ts`, Today / Repertoire / builder / Settings at phone, tablet and desktop in light and dark (24 baselines, opt-in because pixels differ per OS).
+
+**Try it**: clear site data → open the app → onboarding. In the builder press `/` and type `Nf3`. Settings → Language → עברית (preview) to see RTL.
+Visual checks: `VISUAL=1 pnpm e2e visual` (add `--update-snapshots` after an intended UI change).
+
+**Tests**: shared 58, web 21 (announcements, templates, …), API 22; e2e 23 across desktop / iPhone (WebKit) / Android (Chromium), including the onboarding flow.
+
+**Known issues**
+- Hebrew and Arabic have only the navigation and core strings translated; everything else falls back to English.
+- Lighthouse isn't wired into CI (budgets are enforced by the bundle check instead).

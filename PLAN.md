@@ -315,5 +315,5 @@ The bar: it should feel like an app Apple would feature. **Premium, clean, clear
 - [x] Phase 4 — Stats, coverage & AI coach
 - [x] Phase 5 — Everywhere: notifications, PWA, native apps
 - [x] Phase 6 — Your games vs your prep
-- [ ] Phase 7 — Polish
+- [x] Phase 7 — Polish
 - [ ] Phase 8 — Store release: TestFlight & Google Play

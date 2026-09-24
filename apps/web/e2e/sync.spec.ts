@@ -24,7 +24,7 @@ test('repertoire and training progress sync between devices', async ({ browser }
     const ctx = await browser.newContext({ viewport: { width: 1280, height: 800 } });
     await ctx.addInitScript((t) => {
       localStorage.setItem('mainline.session', t);
-      if (!localStorage.getItem('mainline.prefs')) localStorage.setItem('mainline.prefs', JSON.stringify({ engineOn: false }));
+      if (!localStorage.getItem('mainline.prefs')) localStorage.setItem('mainline.prefs', JSON.stringify({ engineOn: false, onboarded: true }));
     }, token);
     await ctx.route('**/api/explorer**', (r) => r.fulfill({ json: { source: 'masters', epd: '', white: 0, draws: 0, black: 0, total: 0, moves: [], topGames: [], opening: null, fetchedAt: '', cached: true } }));
     await ctx.route('**/api/eval**', (r) => r.fulfill({ json: { eval: null } }));

@@ -4,6 +4,7 @@ import { SPEEDS, type Speed } from '@mainline/shared';
 import { usePrefs } from '../lib/prefs';
 import { AppearanceSettings } from './settings/AppearanceSettings';
 import { RemindersSettings } from './settings/RemindersSettings';
+import { LOCALES, useT } from '../lib/i18n';
 import { syncNow, useSync } from '../lib/sync';
 import { playSound } from '../lib/sound';
 import { startLichessLogin, useAuth } from '../lib/auth';
@@ -13,9 +14,10 @@ export function SettingsScreen() {
   const p = usePrefs();
   const { me, logout } = useAuth();
   const sync = useSync();
+  const t = useT();
   return (
     <div className="mx-auto max-w-2xl px-4 py-6 md:px-8 md:py-10">
-      <h1 className="text-2xl font-bold">Settings</h1>
+      <h1 className="text-2xl font-bold">{t('settings.title')}</h1>
 
       <Group title="Account">
         {me ? (
@@ -96,6 +98,21 @@ export function SettingsScreen() {
           </div>
         </Row>
       </Group>
+
+      <section className="mt-8">
+        <h2 className="mb-2 px-1 text-sm font-semibold text-ink-2">{t('settings.language')}</h2>
+        <div className="overflow-hidden rounded-[var(--radius-l)] border border-line bg-surface shadow-1">
+          <Row label={t('settings.language')} hint="Hebrew and Arabic are previews of the right-to-left layout.">
+            <select value={p.locale} onChange={(e) => p.set({ locale: e.target.value as typeof p.locale })} className="h-10 rounded-[10px] border border-line bg-surface px-3 text-base" aria-label={t('settings.language')}>
+              {LOCALES.map((l) => (
+                <option key={l.id} value={l.id}>
+                  {l.name}
+                </option>
+              ))}
+            </select>
+          </Row>
+        </div>
+      </section>
 
       <RemindersSettings />
 

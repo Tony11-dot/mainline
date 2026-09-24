@@ -20,6 +20,7 @@ import {
 } from '@mainline/shared';
 import type { Key } from 'chessground/types';
 import { playSound, soundForMove } from '../lib/sound';
+import { announceMove } from '../lib/announce';
 
 export interface AnalysisState {
   root: TreeNode;
@@ -51,7 +52,9 @@ export function createAnalysisStore(fen = INITIAL_FEN): AnalysisStore {
   return createStore<AnalysisState>((set, get) => {
     const bump = () => set((s) => ({ version: s.version + 1 }));
     const soundFor = (n: TreeNode | undefined) => {
-      if (n?.uci) playSound(soundForMove({ ...n, promotion: n.uci.length === 5 }));
+      if (!n?.uci) return;
+      playSound(soundForMove({ ...n, promotion: n.uci.length === 5 }));
+      announceMove(n.ply % 2 === 1 ? 'white' : 'black', n.san);
     };
     return {
       root: createRoot(fen),

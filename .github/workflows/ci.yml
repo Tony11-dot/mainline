@@ -34,6 +34,8 @@ jobs:
       - run: pnpm lint
       - run: pnpm test
       - run: pnpm --filter @mainline/web build
+      - name: Performance budget
+        run: node scripts/check-budgets.mjs
       - run: pnpm --filter @mainline/api build
       - name: Playwright
         run: |

@@ -1,13 +1,15 @@
 import { useEffect, useMemo } from 'react';
-import { Link } from 'react-router';
+import { Link, Navigate } from 'react-router';
 import { BookOpen, Dumbbell, Flame, GraduationCap, Play, Shuffle } from 'lucide-react';
 import { streakDays, trainingSummary } from '@mainline/shared';
 import { useLibrary } from '../lib/library';
 import { useTraining, reviewsToday } from '../lib/training';
 import { usePrefs } from '../lib/prefs';
 import { LogoMark } from '../ui/Logo';
+import { useT } from '../lib/i18n';
 
 export function HomeScreen() {
+  const t = useT();
   const lib = useLibrary();
   const tr = useTraining();
   const newLimit = usePrefs((s) => s.dailyNewLimit);
@@ -27,15 +29,17 @@ export function HomeScreen() {
   );
   const streak = streakDays(tr.reviews.map((r) => r.reviewedAt), now, new Date().getTimezoneOffset());
   const hasReps = lib.reps.some((r) => !r.deleted);
-  const primary = sum.due > 0 ? { to: '/train?mode=review', label: 'Train now', sub: `${sum.due} due · ~${sum.minutes} min` } : sum.newToday > 0 ? { to: '/train?mode=learn', label: 'Learn new moves', sub: `${sum.newToday} new today · ~${sum.minutes} min` } : null;
+  const onboarded = usePrefs((s) => s.onboarded);
+  if (lib.loaded && !hasReps && !onboarded) return <Navigate to="/welcome" replace />;
+  const primary = sum.due > 0 ? { to: '/train?mode=review', label: t('today.trainNow'), sub: `${sum.due} due · ~${sum.minutes} min` } : sum.newToday > 0 ? { to: '/train?mode=learn', label: t('today.learnNew'), sub: `${sum.newToday} new today · ~${sum.minutes} min` } : null;
 
   return (
     <div className="mx-auto max-w-3xl px-4 py-6 md:px-8 md:py-10">
       <div className="flex items-center gap-3">
         <LogoMark size={34} className="md:hidden" />
-        <h1 className="text-3xl font-bold">Today</h1>
+        <h1 className="text-3xl font-bold">{t('today.title')}</h1>
         {streak > 0 && (
-          <span className="ml-auto inline-flex items-center gap-1 rounded-full bg-warn-soft px-3 py-1 text-sm font-semibold text-[oklch(0.45_0.1_70)] dark:text-warn" title="Days in a row with training">
+          <span className="ms-auto inline-flex items-center gap-1 rounded-full bg-warn-soft px-3 py-1 text-sm font-semibold text-[oklch(0.45_0.1_70)] dark:text-warn" title="Days in a row with training">
             <Flame size={15} aria-hidden /> {streak}
           </span>
         )}

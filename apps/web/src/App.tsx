@@ -5,26 +5,23 @@ import { LaunchScreen, shouldShowLaunch } from './launch/LaunchScreen';
 import { platform } from './platform';
 import { handleIncoming } from './lib/incomingHandler';
 import { HomeScreen } from './screens/HomeScreen';
-import { ExploreScreen } from './screens/ExploreScreen';
-import { SettingsScreen } from './screens/SettingsScreen';
-import { LibraryScreen } from './screens/LibraryScreen';
-import { RepertoireScreen } from './screens/RepertoireScreen';
-import { OpeningsScreen } from './screens/OpeningsScreen';
-import { TrainScreen } from './screens/TrainScreen';
-import { GamesScreen } from './screens/GamesScreen';
+
+// Screens load on demand: the first paint only needs the shell and Today.
+const lazy = <K extends string>(load: () => Promise<Record<K, React.ComponentType>>, name: K) => async () => ({ Component: (await load())[name] });
 
 export const router = createBrowserRouter([
   {
     element: <AppShell />,
     children: [
       { index: true, element: <HomeScreen /> },
-      { path: 'library', element: <LibraryScreen /> },
-      { path: 'library/openings', element: <OpeningsScreen /> },
-      { path: 'rep/:id', element: <RepertoireScreen /> },
-      { path: 'train', element: <TrainScreen /> },
-      { path: 'explore', element: <ExploreScreen /> },
-      { path: 'games', element: <GamesScreen /> },
-      { path: 'settings', element: <SettingsScreen /> },
+      { path: 'library', lazy: lazy(() => import('./screens/LibraryScreen'), 'LibraryScreen') },
+      { path: 'library/openings', lazy: lazy(() => import('./screens/OpeningsScreen'), 'OpeningsScreen') },
+      { path: 'rep/:id', lazy: lazy(() => import('./screens/RepertoireScreen'), 'RepertoireScreen') },
+      { path: 'train', lazy: lazy(() => import('./screens/TrainScreen'), 'TrainScreen') },
+      { path: 'explore', lazy: lazy(() => import('./screens/ExploreScreen'), 'ExploreScreen') },
+      { path: 'games', lazy: lazy(() => import('./screens/GamesScreen'), 'GamesScreen') },
+      { path: 'welcome', lazy: lazy(() => import('./screens/WelcomeScreen'), 'WelcomeScreen') },
+      { path: 'settings', lazy: lazy(() => import('./screens/SettingsScreen'), 'SettingsScreen') },
     ],
   },
 ]);

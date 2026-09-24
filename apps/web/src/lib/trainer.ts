@@ -12,6 +12,7 @@ import {
   type TrainMode,
 } from '@mainline/shared';
 import { playSound, soundForMove } from './sound';
+import { announce, announceMove, sanToSpeech } from './announce';
 import { useTraining } from './training';
 import { usePrefs } from './prefs';
 import { platform } from '../platform';
@@ -65,8 +66,10 @@ export function createTrainer(mode: TrainMode, lines: SessionLine[], data: RepDa
     const haptic = (k: 'success' | 'error' | 'light') => usePrefs.getState().haptics && platform().haptic(k);
 
     const play = (uci: string) => {
-      const played = playUci(positionFromFen(get().fen), uci);
+      const before = positionFromFen(get().fen);
+      const played = playUci(before, uci);
       playSound(soundForMove(played));
+      announceMove(before.turn, played.san);
       set({ fen: played.fen, lastMove: played.uci, hint: undefined });
     };
 
@@ -185,6 +188,10 @@ export function createTrainer(mode: TrainMode, lines: SessionLine[], data: RepDa
         }
         playSound('error');
         haptic('error');
+        {
+          const correct = s.expected[0] ? playUci(positionFromFen(s.fen), s.expected[0]).san : '';
+          announce(`Not quite. The move is ${sanToSpeech(correct)}.`);
+        }
         set({
           phase: s.phase === 'learn' ? 'learn' : 'wrong',
           failedHere: true,

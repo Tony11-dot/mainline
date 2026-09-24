@@ -6,6 +6,7 @@ import type { Key } from 'chessground/types';
 import { CheckCircle2, Eye, Flame, RotateCcw, SkipForward, X } from 'lucide-react';
 import { legalDests, planSession, positionFromFen, streakDays, uciToSan, type TrainMode } from '@mainline/shared';
 import { Board } from '../board/Board';
+import { MoveInput } from '../board/MoveInput';
 import { useOpeningName } from '../board/useOpeningName';
 import { createTrainer, type TrainerState } from '../lib/trainer';
 import { useLibrary } from '../lib/library';
@@ -134,7 +135,10 @@ function Session({ store, mode, onAgain }: { store: StoreApi<TrainerState>; mode
           <Prompt phase={s.phase} expectedSan={expectedSan} message={s.message} color={color} />
         </div>
         {note && <p className="rounded-[12px] bg-surface-2 px-3.5 py-2.5 text-sm text-ink-2">{note}</p>}
-        <div className="flex gap-2">
+        <div className="flex flex-wrap gap-2">
+          <span className="hidden md:inline-flex">
+            <MoveInput fen={s.fen} onMove={(u) => store.getState().userMove(u)} disabled={!yourTurn} />
+          </span>
           {s.phase === 'await' && (
             <Button size="sm" icon={Eye} onClick={() => store.getState().revealMove()}>
               Show move

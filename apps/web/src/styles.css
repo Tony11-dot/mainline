@@ -297,3 +297,9 @@ dialog.sheet[open] {
 :root[data-macos] aside {
   padding-top: 44px;
 }
+
+/* A chessboard never mirrors in right-to-left layouts. */
+.ml-board,
+.ml-mini {
+  direction: ltr;
+}

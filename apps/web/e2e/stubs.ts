@@ -11,6 +11,6 @@ export async function stubApi(page: Page, opts: { explorer?: (url: URL) => unkno
   await page.route('**/api/me', (r) => r.fulfill({ json: { me: null } }));
   await page.addInitScript(() => {
     (window as unknown as { __mlSoundLog: string[] }).__mlSoundLog = [];
-    if (!localStorage.getItem('mainline.prefs')) localStorage.setItem('mainline.prefs', JSON.stringify({ engineOn: false }));
+    if (!localStorage.getItem('mainline.prefs')) localStorage.setItem('mainline.prefs', JSON.stringify({ engineOn: false, onboarded: true }));
   });
 }

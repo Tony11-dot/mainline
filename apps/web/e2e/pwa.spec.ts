@@ -5,6 +5,7 @@ test.use({ serviceWorkers: 'allow' });
 
 test('installable, works offline, stays cross-origin isolated', async ({ page, context }, info) => {
   test.skip(info.project.name !== 'desktop');
+  await page.addInitScript(() => localStorage.setItem('mainline.prefs', JSON.stringify({ onboarded: true })));
   await page.goto('/');
   const manifest = await (await page.request.get('/manifest.webmanifest')).json();
   expect(manifest.name).toBe('MainLine');

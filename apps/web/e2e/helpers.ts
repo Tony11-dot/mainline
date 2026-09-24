@@ -66,6 +66,8 @@ async function tapMoveRaw(page: Page, from: string, to: string) {
   const a = await squareCenter(page, from);
   const b = await squareCenter(page, to);
   await page.touchscreen.tap(a.x, a.y);
+  // A person can't tap twice within one frame; let the selection render first.
+  await page.evaluate(() => new Promise((r) => requestAnimationFrame(() => requestAnimationFrame(() => r(null)))));
   await page.touchscreen.tap(b.x, b.y);
 }
 

@@ -3,7 +3,8 @@ import { buildGraph, isOwnTurn, lines, retrievability, type RepMove, type Repert
 
 /**
  * Mastery heatmap: one cell per position you must know, in line order, coloured by how likely you are
- * to remember it right now (FSRS retrievability). Grey = not learned yet.
+ * to remember it right now (FSRS retrievability) — one hue, light → deep, so it reads without colour vision.
+ * Grey = not learned yet.
  */
 export const MasteryStrip = memo(function MasteryStrip({ rep, moves, cards, now }: { rep: Repertoire; moves: RepMove[]; cards: TrainCard[]; now: number }) {
   const g = buildGraph(moves);
@@ -30,7 +31,7 @@ export const MasteryStrip = memo(function MasteryStrip({ rep, moves, cards, now 
           <span
             key={i}
             className="size-[7px] rounded-[2px]"
-            style={{ background: v < 0 ? 'var(--surface-3)' : `color-mix(in oklab, var(--good) ${Math.round(v * 100)}%, var(--bad))` }}
+            style={{ background: v < 0 ? 'var(--surface-3)' : `color-mix(in oklab, var(--brand) ${Math.round(25 + v * 75)}%, var(--surface))` }}
           />
         ))}
         {values.length > 60 && <span className="text-[10px] leading-[7px] text-ink-3">+{values.length - 60}</span>}

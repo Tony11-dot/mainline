@@ -279,7 +279,7 @@ export function RepertoireScreen() {
             {engineOn && <EvalBar line={ev.lines[0]} orientation={orientation} className="self-stretch" />}
             <div className="min-w-0 flex-1">{board}</div>
           </div>
-          <BoardControls store={store} />
+          <BoardControls store={store} onTypedMove={(u) => void addMove(u)} />
         </div>
         <aside className="flex max-h-[calc(100dvh-2.5rem)] min-w-[360px] max-w-[480px] flex-1 flex-col gap-3">
           <div className="flex flex-col gap-3 rounded-[var(--radius-l)] border border-line bg-surface p-3.5 shadow-1">
@@ -301,7 +301,7 @@ export function RepertoireScreen() {
       <div className="mx-auto w-full" style={{ maxWidth: 'calc(100dvh - 15rem)' }}>
         {board}
       </div>
-      <BoardControls store={store} drawMode={drawMode} onToggleDraw={() => setDrawMode((d) => !d)} />
+      <BoardControls store={store} drawMode={drawMode} onToggleDraw={() => setDrawMode((d) => !d)} onTypedMove={(u) => void addMove(u)} />
       <div className="flex flex-col gap-2.5 px-3 pb-3">
         {status}
         <div className="-mx-3 overflow-x-auto px-3 [scrollbar-width:none]">{actions}</div>
