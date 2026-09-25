@@ -234,10 +234,11 @@ platform :android do
   desc "Build, sign and upload to the Play internal testing track"
   lane :internal do
     key = play_key
-    codes = begin
-      %w[internal alpha beta production].flat_map { |t| google_play_track_version_codes(track: t, **key) }
+    # Tracks that have never had a release return nothing (or raise); read each one on its own.
+    codes = %w[internal alpha beta production].flat_map do |t|
+      Array(google_play_track_version_codes(track: t, **key))
     rescue StandardError => e
-      UI.important "Couldn't read existing version codes (#{e.message.lines.first&.strip}); starting at 1."
+      UI.message "No version codes on #{t} (#{e.message.lines.first&.strip})"
       []
     end
     code = (ENV["BUILD_NUMBER"] || (codes.max || 0) + 1).to_s

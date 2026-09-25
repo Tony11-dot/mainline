@@ -213,7 +213,7 @@ Visual checks: `VISUAL=1 pnpm e2e visual` (add `--update-snapshots` after an int
 - Hebrew and Arabic have only the navigation and core strings translated; everything else falls back to English.
 - Lighthouse isn't wired into CI (budgets are enforced by the bundle check instead).
 
-## Phase 8 — Store release (2026-09-25, in progress)
+## Phase 8 — Store release (2026-09-25, done)
 
 **Built**
 - **fastlane** in `apps/mobile/fastlane`:
@@ -257,3 +257,4 @@ Visual checks: `VISUAL=1 pnpm e2e visual` (add `--update-snapshots` after an int
 - **Legal pages:** `/cookies` lists the two sign-in cookies and on-device storage. There's no consent banner because nothing is non-essential. Privacy, Terms and Cookies are linked from Settings, onboarding and each other.
 - **Move list:** it now keeps the current move in view inside its own panel and never scrolls the page. This fixes the board sliding under your finger on phones and a CI-only test failure. On phones, the page's scroll padding also keeps content clear of the tab bar.
 - **Duolingo-style streaks:** streaks are worked out from the review log, so they sync with your reviews. Every 7 days in a row earns a streak freeze (you can hold 2), and a freeze covers a missed day automatically. Home has a flame that is grey until you practise, a banner when the streak is at risk, and a streak sheet (week strip, next milestone, best streak, freezes). The first session of each day ends on a full-screen celebration with its own synthesized fanfare and a haptic. Reminders now escalate while a streak is alive: your chosen time, a 20:30 nudge, and a 22:30 last call for streaks of 3+ days. The wording rotates daily. Lapsed players get comeback notes on days 2, 3, 5, 7, 14 and 30, then silence. The rules live in `nudgesForDay` in `packages/shared/src/streak.ts`, and both the push server and the on-device schedulers (iOS, Android, desktop) use them. Migration `0003_streaks` adds `freezes` and `last_late_on` to `push_subs`. The privacy policy now lists the streak fields.
+- **First store builds:** MainLine 1.0.0 (1) is on TestFlight. Apple processed it and it went out to internal testers; the App Store Connect record is called "MainLine Chess". On Google Play, 1.0.0 (1) was uploaded by hand and 1.0.0 (2) through `fastlane android internal` to internal testing, using the service account shared with ClassMate. Fix: the internal lane now reads each track's version codes on its own. Tracks that have never had a release used to throw everything away and restart at code 1.

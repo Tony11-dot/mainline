@@ -316,4 +316,4 @@ The bar: it should feel like an app Apple would feature. **Premium, clean, clear
 - [x] Phase 5 — Everywhere: notifications, PWA, native apps
 - [x] Phase 6 — Your games vs your prep
 - [x] Phase 7 — Polish
-- [ ] Phase 8 — Store release: TestFlight & Google Play (automation built; first uploads wait on the store records — apps/mobile/store/RELEASING.md)
+- [x] Phase 8 — Store release: TestFlight & Google Play (first builds live 2026-09-25; releases via apps/mobile/store/RELEASING.md)
