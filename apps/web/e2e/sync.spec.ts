@@ -43,6 +43,7 @@ test('repertoire and training progress sync between devices', async ({ browser }
   await dragMove(a, 'd2', 'd4');
   await expect(a.getByRole('heading', { name: 'New move: Bf4' })).toBeVisible();
   await dragMove(a, 'c1', 'f4');
+  await a.getByRole('button', { name: 'Continue' }).click();
   await expect(a.getByRole('heading', { name: 'Learn complete' })).toBeVisible();
   // Let the debounced sync push.
   await expect.poll(async () => a.evaluate(async () => (await (await indexedDB.databases()).length) >= 1), { timeout: 2000 }).toBe(true);

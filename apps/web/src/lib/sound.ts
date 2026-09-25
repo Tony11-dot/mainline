@@ -6,7 +6,7 @@
  */
 import { usePrefs } from './prefs';
 
-export type SoundKind = 'move' | 'capture' | 'check' | 'castle' | 'promote' | 'error' | 'correct' | 'complete';
+export type SoundKind = 'move' | 'capture' | 'check' | 'castle' | 'promote' | 'error' | 'correct' | 'complete' | 'streak';
 
 const SR = 44100;
 let ctx: AudioContext | undefined;
@@ -95,11 +95,16 @@ export function renderSound(kind: SoundKind): Float32Array {
     case 'complete':
       chime(out, 0, [659.3, 880, 1318.5], { gain: 0.11, dur: 0.5, gap: 0.09 });
       break;
+    case 'streak':
+      // A rising major arpeggio that lands on a bright octave: the "streak extended" fanfare.
+      chime(out, 0, [523.3, 659.3, 784, 1046.5], { gain: 0.1, dur: 0.42, gap: 0.075 });
+      chime(out, 0.3, [1568], { gain: 0.06, dur: 0.2 });
+      break;
   }
   // Normalize to a safe peak and fade the tail to avoid clicks.
   let peak = 0;
   for (const v of out) peak = Math.max(peak, Math.abs(v));
-  const target = kind === 'correct' || kind === 'complete' ? 0.5 : 0.7;
+  const target = kind === 'correct' || kind === 'complete' || kind === 'streak' ? 0.5 : 0.7;
   const k = peak > 0 ? target / peak : 1;
   const fade = Math.floor(0.02 * SR);
   for (let i = 0; i < out.length; i++) {
@@ -121,7 +126,7 @@ function prepare() {
   rendering = (async () => {
     const c = ensureContext();
     if (!c) return;
-    const kinds: SoundKind[] = ['move', 'capture', 'check', 'castle', 'promote', 'error', 'correct', 'complete'];
+    const kinds: SoundKind[] = ['move', 'capture', 'check', 'castle', 'promote', 'error', 'correct', 'complete', 'streak'];
     const next: typeof buffers = {};
     for (const k of kinds) {
       const data = renderSound(k);

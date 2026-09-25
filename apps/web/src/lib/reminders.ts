@@ -2,7 +2,7 @@
  * Keeps reminders in step with local training data: Web Push on the web (the server needs the due
  * count), local notifications scheduled on-device in the native apps (no server involved).
  */
-import { streakDays, trainingSummary } from '@mainline/shared';
+import { nudgesForDay, streakInfo, trainingSummary, type DayNudge } from '@mainline/shared';
 import { platform, type ReminderPlan } from '../platform';
 import { useLibrary } from './library';
 import { useTraining } from './training';
@@ -29,14 +29,44 @@ export function currentPlan(now = Date.now()): ReminderPlan {
     at.setHours(h ?? 19, m ?? 0, 0, 0);
     return tr.cards.filter((c) => !c.deleted && c.due <= at.getTime()).length;
   });
+  const streak = streakInfo(times, now, new Date().getTimezoneOffset());
   return {
     enabled: remindersOn,
     time: reminderTime,
     dueCount: sum.due,
-    streakDays: streakDays(times, now, new Date().getTimezoneOffset()),
+    streakDays: streak.current,
+    freezesAtLast: streak.freezesAtLast,
     lastReviewDay: last ? localDay(last) : null,
     dueByDay,
   };
+}
+
+/**
+ * Every reminder for today and the next 7 days, as local times — for platforms that schedule on the
+ * device. Re-planned whenever training changes or the app opens, so practising cancels the rest.
+ */
+export function plannedNotifications(plan: ReminderPlan, now = new Date()): (DayNudge & { id: number; at: Date })[] {
+  const [h, m] = plan.time.split(':').map(Number);
+  const out: (DayNudge & { id: number; at: Date })[] = [];
+  for (let k = 0; k <= 7; k++) {
+    const day = new Date(now);
+    day.setDate(day.getDate() + k);
+    day.setHours(0, 0, 0, 0);
+    const nudges = nudgesForDay({
+      streak: plan.streakDays,
+      freezesAtLast: plan.freezesAtLast,
+      lastReviewDay: plan.lastReviewDay,
+      date: localDay(day.getTime()),
+      due: k === 0 ? plan.dueCount : (plan.dueByDay[k - 1] ?? plan.dueCount),
+      reminderMinutes: (h ?? 19) * 60 + (m ?? 0),
+    });
+    nudges.forEach((n, slot) => {
+      const at = new Date(day);
+      at.setHours(Math.floor(n.minutes / 60), n.minutes % 60, 0, 0);
+      if (at > now) out.push({ ...n, id: 1000 + k * 10 + slot, at });
+    });
+  }
+  return out;
 }
 
 let timer: ReturnType<typeof setTimeout> | undefined;

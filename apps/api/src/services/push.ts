@@ -3,11 +3,12 @@ import { eq } from 'drizzle-orm';
 import type { FastifyBaseLogger } from 'fastify';
 import { env, requireEnv } from '../env';
 import { getDb, schema } from '../db/client';
+import { nudgesForDay, type NudgeKind } from '@mainline/shared';
 
 export type Sub = typeof schema.pushSubs.$inferSelect;
 
 export interface PushMessage {
-  kind: 'due' | 'nudge' | 'weekly';
+  kind: NudgeKind;
   title: string;
   body: string;
   url: string;
@@ -31,26 +32,15 @@ const toMinutes = (hhmm: string) => {
   return (h ?? 19) * 60 + (m ?? 0);
 };
 
-/** Which notification (if any) a subscription should get now. Runs every 5 minutes. */
-export function decide(sub: Pick<Sub, 'timezone' | 'reminderTime' | 'dueCount' | 'streak' | 'lastReviewDay' | 'lastNotifiedOn' | 'lastNudgeOn' | 'lastWeeklyOn'>, now: Date, windowMin = 5): PushMessage | null {
-  const { date, minutes, weekday } = localParts(now, sub.timezone);
-  const inWindow = (target: number) => minutes >= target && minutes < target + windowMin;
-  const reviewedToday = sub.lastReviewDay === date;
+type DecideSub = Pick<Sub, 'timezone' | 'reminderTime' | 'dueCount' | 'streak' | 'lastReviewDay' | 'lastNotifiedOn' | 'lastNudgeOn' | 'lastWeeklyOn'> & Partial<Pick<Sub, 'freezes' | 'lastLateOn'>>;
 
-  // Daily reminder at the chosen time — only when something is due.
-  if (inWindow(toMinutes(sub.reminderTime)) && sub.dueCount > 0 && sub.lastNotifiedOn !== date && !reviewedToday) {
-    const mins = Math.max(1, Math.round((sub.dueCount * 8) / 60));
-    return { kind: 'due', title: `${sub.dueCount} position${sub.dueCount === 1 ? '' : 's'} due`, body: `About ${mins} min to keep your openings sharp.`, url: '/train?mode=review', tag: 'due' };
-  }
-  // Evening streak nudge (20:30), only if a streak is at risk.
-  if (inWindow(20 * 60 + 30) && sub.streak > 0 && !reviewedToday && sub.lastNudgeOn !== date) {
-    return { kind: 'nudge', title: `Keep your ${sub.streak}-day streak`, body: 'A two-minute review keeps it alive.', url: '/train?mode=review', tag: 'streak' };
-  }
-  // Weekly summary, Sunday 18:00.
-  if (weekday === 'Sun' && inWindow(18 * 60) && sub.lastWeeklyOn !== date) {
-    return { kind: 'weekly', title: 'Your week in openings', body: sub.streak > 0 ? `${sub.streak}-day streak · ${sub.dueCount} due now.` : `${sub.dueCount} positions are waiting for you.`, url: '/', tag: 'weekly' };
-  }
-  return null;
+/** Which notification (if any) a subscription should get now. Runs every 5 minutes; the rules live in nudgesForDay. */
+export function decide(sub: DecideSub, now: Date, windowMin = 5): PushMessage | null {
+  const { date, minutes, weekday } = localParts(now, sub.timezone);
+  const sent = { daily: sub.lastNotifiedOn, comeback: sub.lastNotifiedOn, nudge: sub.lastNudgeOn, late: sub.lastLateOn, weekly: sub.lastWeeklyOn };
+  const all = nudgesForDay({ streak: sub.streak, freezesAtLast: sub.freezes ?? 0, lastReviewDay: sub.lastReviewDay, date, due: sub.dueCount, reminderMinutes: toMinutes(sub.reminderTime), sunday: weekday === 'Sun' });
+  const n = all.find((x) => minutes >= x.minutes && minutes < x.minutes + windowMin && sent[x.kind] !== date);
+  return n ? { kind: n.kind, title: n.title, body: n.body, url: n.url, tag: n.tag } : null;
 }
 
 let configured = false;
@@ -73,7 +63,7 @@ export async function sendDueNotifications(log: FastifyBaseLogger, now = new Dat
     try {
       await webpush.sendNotification({ endpoint: sub.endpoint, keys: sub.keysJson }, JSON.stringify(msg), { TTL: 3600, urgency: 'normal', topic: msg.tag });
       sent++;
-      const field = msg.kind === 'due' ? { lastNotifiedOn: date } : msg.kind === 'nudge' ? { lastNudgeOn: date } : { lastWeeklyOn: date };
+      const field = { daily: { lastNotifiedOn: date }, comeback: { lastNotifiedOn: date }, nudge: { lastNudgeOn: date }, late: { lastLateOn: date }, weekly: { lastWeeklyOn: date } }[msg.kind];
       await db.update(schema.pushSubs).set(field).where(eq(schema.pushSubs.id, sub.id));
     } catch (err) {
       const code = (err as { statusCode?: number }).statusCode;

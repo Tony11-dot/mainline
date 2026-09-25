@@ -11,6 +11,8 @@ export interface ReminderPlan {
   time: string;
   dueCount: number;
   streakDays: number;
+  /** Streak freezes held at the end of the last practised day (projection input for reminders). */
+  freezesAtLast: number;
   /** YYYY-MM-DD (local) of the last review, if any. */
   lastReviewDay: string | null;
   /** Due count per upcoming day (index 0 = tomorrow) so native apps can pre-schedule accurate texts. */

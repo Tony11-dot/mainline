@@ -1,7 +1,8 @@
 import { useEffect, useMemo } from 'react';
 import { Link, Navigate } from 'react-router';
-import { BookOpen, Dumbbell, Flame, GraduationCap, Play, Shuffle } from 'lucide-react';
-import { streakDays, trainingSummary } from '@mainline/shared';
+import { BookOpen, Dumbbell, Flame, GraduationCap, Play, Shuffle, Snowflake } from 'lucide-react';
+import { trainingSummary } from '@mainline/shared';
+import { StreakBadge, useStreak } from '../ui/streak';
 import { useLibrary } from '../lib/library';
 import { useTraining, reviewsToday } from '../lib/training';
 import { usePrefs } from '../lib/prefs';
@@ -27,7 +28,7 @@ export function HomeScreen() {
     // eslint-disable-next-line react-hooks/exhaustive-deps
     [lib.version, tr.version, newLimit, learnedToday],
   );
-  const streak = streakDays(tr.reviews.map((r) => r.reviewedAt), now, new Date().getTimezoneOffset());
+  const streak = useStreak();
   const hasReps = lib.reps.some((r) => !r.deleted);
   const onboarded = usePrefs((s) => s.onboarded);
   if (lib.loaded && !hasReps && !onboarded) return <Navigate to="/welcome" replace />;
@@ -38,12 +39,18 @@ export function HomeScreen() {
       <div className="flex items-center gap-3">
         <LogoMark size={34} className="md:hidden" />
         <h1 className="text-3xl font-bold">{t('today.title')}</h1>
-        {streak > 0 && (
-          <span className="ms-auto inline-flex items-center gap-1 rounded-full bg-warn-soft px-3 py-1 text-sm font-semibold text-[oklch(0.45_0.1_70)] dark:text-warn" title="Days in a row with training">
-            <Flame size={15} aria-hidden /> {streak}
+        {hasReps && (
+          <span className="ms-auto">
+            <StreakBadge />
           </span>
         )}
       </div>
+      {hasReps && streak.atRisk && (
+        <p className="mt-3 flex items-center gap-2 rounded-[var(--radius-m)] bg-flame-soft px-4 py-2.5 text-sm font-semibold text-flame-ink" data-testid="streak-at-risk">
+          {streak.freezeUsed ? <Snowflake size={16} className="shrink-0 text-freeze" aria-hidden /> : <Flame size={16} className="shrink-0 text-flame" aria-hidden />}
+          {streak.freezeUsed ? `A streak freeze saved your ${streak.current}-day streak. Practise today to keep it.` : `Practise today to keep your ${streak.current}-day streak.`}
+        </p>
+      )}
 
       {!lib.loaded ? null : !hasReps ? (
         <div className="mt-8 rounded-[var(--radius-xl)] border border-line bg-surface p-6 shadow-1">

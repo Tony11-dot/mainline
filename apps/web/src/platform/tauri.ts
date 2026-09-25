@@ -22,18 +22,22 @@ export function createTauriPlatform(): Platform {
 
   if (/Mac/.test(navigator.userAgent)) document.documentElement.dataset.macos = '';
 
+  // Fires the same reminders the phones schedule, while the app is running.
   let plan: ReminderPlan | null = null;
-  let firedOn = '';
+  const fired = new Set<number>();
+  let firedDay = '';
   setInterval(async () => {
     if (!plan?.enabled) return;
     const now = new Date();
-    const day = now.toDateString();
-    const [h, m] = plan.time.split(':').map(Number);
-    if (firedOn === day || now.getHours() !== h || now.getMinutes() < (m ?? 0)) return;
-    firedOn = day;
-    if (plan.dueCount > 0 && (await isPermissionGranted())) {
-      sendNotification({ title: `${plan.dueCount} position${plan.dueCount === 1 ? '' : 's'} due`, body: `About ${Math.max(1, Math.round((plan.dueCount * 8) / 60))} min to keep your openings sharp.` });
+    if (firedDay !== now.toDateString()) {
+      firedDay = now.toDateString();
+      fired.clear();
     }
+    const { plannedNotifications } = await import('../lib/reminders');
+    const due = plannedNotifications(plan, new Date(now.getTime() - 60_000)).filter((n) => n.at <= now && !fired.has(n.id));
+    const n = due.at(-1);
+    due.forEach((d) => fired.add(d.id));
+    if (n && (await isPermissionGranted())) sendNotification({ title: n.title, body: n.body });
   }, 30_000);
 
   // Quietly check for updates (signed with the updater key; unsigned OS builds still update).

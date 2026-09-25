@@ -35,7 +35,7 @@ export function RemindersSettings() {
   };
 
   return (
-    <section className="mt-8">
+    <section id="reminders" className="mt-8 scroll-mt-6">
       <h2 className="mb-2 px-1 text-sm font-semibold text-ink-2">Reminders</h2>
       <div className="divide-y divide-line overflow-hidden rounded-[var(--radius-l)] border border-line bg-surface shadow-1">
         {homeScreenHint ? (
@@ -50,7 +50,7 @@ export function RemindersSettings() {
         ) : (
           <>
             <div aria-busy={busy}>
-              <Toggle label="Daily reminder" hint="Only when positions are due. Plus a gentle nudge if your streak is at risk." checked={p.remindersOn} onChange={(v) => void toggle(v)} />
+              <Toggle label="Streak reminders" hint="Daily at this time, plus an evening nudge and a last call if your streak is at risk. Stops once you’ve practised." checked={p.remindersOn} onChange={(v) => void toggle(v)} />
             </div>
             <div className="flex min-h-[56px] items-center justify-between gap-4 px-4 py-2.5">
               <span className="text-base font-medium">Time</span>

@@ -4,7 +4,8 @@ import { useStore } from 'zustand';
 import type { DrawShape } from 'chessground/draw';
 import type { Key } from 'chessground/types';
 import { CheckCircle2, Eye, Flame, RotateCcw, SkipForward, X } from 'lucide-react';
-import { legalDests, planSession, positionFromFen, streakDays, uciToSan, type TrainMode } from '@mainline/shared';
+import { StreakCelebration, useStreak } from '../ui/streak';
+import { legalDests, planSession, positionFromFen, uciToSan, type TrainMode } from '@mainline/shared';
 import { Board } from '../board/Board';
 import { MoveInput } from '../board/MoveInput';
 import { useOpeningName } from '../board/useOpeningName';
@@ -183,7 +184,16 @@ function Prompt({ phase, expectedSan, message, color }: { phase: TrainerState['p
 function Summary({ s, mode, onAgain }: { s: TrainerState; mode: TrainMode; onAgain: () => void }) {
   const [why, setWhy] = useState<number | null>(null);
   const reviews = useTraining((t) => t.reviews);
-  const streak = streakDays(reviews.map((r) => r.reviewedAt), Date.now(), new Date().getTimezoneOffset());
+  const goal = usePrefs((p) => p.dailyGoal);
+  const before = useStreak(s.stats.startedAt);
+  const after = useStreak();
+  const streak = after.current;
+  // Duolingo moment: the first session that makes today count gets the full-screen celebration.
+  const [celebrate, setCelebrate] = useState(() => !before.doneToday && after.doneToday);
+  const todayCount = reviews.filter((r) => r.reviewedAt >= startOfDay()).length;
+  const beforeCount = reviews.filter((r) => r.reviewedAt >= startOfDay() && r.reviewedAt < s.stats.startedAt).length;
+  const goalHit = beforeCount < goal && todayCount >= goal;
+  if (celebrate) return <StreakCelebration before={before} after={after} goalHit={goalHit} onDone={() => setCelebrate(false)} />;
   const secs = Math.round(((s.stats.endedAt ?? Date.now()) - s.stats.startedAt) / 1000);
   const acc = s.stats.graded ? Math.round((s.stats.correct / s.stats.graded) * 100) : 100;
   return (
@@ -195,9 +205,14 @@ function Summary({ s, mode, onAgain }: { s: TrainerState; mode: TrainMode; onAga
         <Stat label="Accuracy" value={`${acc}%`} />
         <Stat label="Time" value={secs >= 60 ? `${Math.floor(secs / 60)}m ${secs % 60}s` : `${secs}s`} />
       </dl>
-      {streak > 0 && (
-        <p className="mt-4 inline-flex items-center gap-1.5 text-sm font-semibold text-warn">
-          <Flame size={16} aria-hidden /> {streak}-day streak
+      {(streak > 0 || goalHit) && (
+        <p className="mt-4 flex flex-wrap justify-center gap-2 text-sm font-semibold">
+          {streak > 0 && (
+            <span className="inline-flex items-center gap-1.5 rounded-full bg-flame-soft px-3 py-1 text-flame-ink">
+              <Flame size={15} fill="currentColor" aria-hidden /> {streak}-day streak
+            </span>
+          )}
+          {goalHit && <span className="rounded-full bg-good-soft px-3 py-1 text-good">🎯 Daily goal complete</span>}
         </p>
       )}
       {s.mistakes.length > 0 && (

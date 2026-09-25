@@ -34,6 +34,12 @@
   --bad-soft: oklch(0.95 0.035 25);
   --warn: oklch(0.72 0.15 70);
   --warn-soft: oklch(0.96 0.05 80);
+  /* Streaks: a warm flame and an icy freeze. */
+  --flame: oklch(0.7 0.19 48);
+  --flame-ink: oklch(0.52 0.16 45);
+  --flame-soft: oklch(0.95 0.05 60);
+  --freeze: oklch(0.7 0.12 230);
+  --freeze-soft: oklch(0.95 0.035 230);
 
   /* Glass chrome */
   --glass: color-mix(in oklab, var(--surface) 82%, transparent);
@@ -87,6 +93,9 @@
   --good-soft: oklch(0.3 0.06 150);
   --bad-soft: oklch(0.3 0.07 25);
   --warn-soft: oklch(0.32 0.06 75);
+  --flame-ink: oklch(0.8 0.15 55);
+  --flame-soft: oklch(0.3 0.07 50);
+  --freeze-soft: oklch(0.3 0.05 230);
   --glass: color-mix(in oklab, var(--surface) 80%, transparent);
   --glass-border: color-mix(in oklab, white 10%, transparent);
   --glass-shadow: 0 1px 0 0 color-mix(in oklab, white 8%, transparent) inset, 0 8px 32px -12px oklch(0 0 0 / 0.5);
@@ -140,6 +149,11 @@
   --color-bad-soft: var(--bad-soft);
   --color-warn: var(--warn);
   --color-warn-soft: var(--warn-soft);
+  --color-flame: var(--flame);
+  --color-flame-ink: var(--flame-ink);
+  --color-flame-soft: var(--flame-soft);
+  --color-freeze: var(--freeze);
+  --color-freeze-soft: var(--freeze-soft);
   --font-sans: var(--font-sans-live, -apple-system, BlinkMacSystemFont, 'SF Pro Text', 'Inter Variable', 'Segoe UI Variable Text', 'Segoe UI',
     Roboto, system-ui, sans-serif);
   --radius-s: var(--radius-s);
@@ -279,6 +293,32 @@ dialog.sheet[open] {
 @keyframes indeterminate {
   0% { transform: translateX(-100%); }
   100% { transform: translateX(300%); }
+}
+
+/* Streak celebration */
+@keyframes ml-pop {
+  0% { transform: scale(0.4); opacity: 0; }
+  60% { transform: scale(1.12); opacity: 1; }
+  100% { transform: scale(1); }
+}
+@keyframes ml-flicker {
+  0%, 100% { transform: scale(1) rotate(-2deg); }
+  50% { transform: scale(1.06) rotate(2deg); }
+}
+@keyframes ml-count-out {
+  to { transform: translateY(-70%); opacity: 0; }
+}
+@keyframes ml-count-in {
+  from { transform: translateY(70%); opacity: 0; }
+  to { transform: none; opacity: 1; }
+}
+@keyframes ml-spark {
+  0% { transform: translate(-50%, -50%) rotate(var(--a)) translateY(0) scale(1); opacity: 1; }
+  100% { transform: translate(-50%, -50%) rotate(var(--a)) translateY(-120px) scale(0.2); opacity: 0; }
+}
+@keyframes ml-rise {
+  from { transform: translateY(16px); opacity: 0; }
+  to { transform: none; opacity: 1; }
 }
 
 @keyframes ml-drift {

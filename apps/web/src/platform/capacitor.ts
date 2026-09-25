@@ -9,9 +9,8 @@ import { StatusBar, Style } from '@capacitor/status-bar';
 import type { HapticKind, Platform, ReminderPlan } from './index';
 import { apiBaseFromEnv } from './web';
 
-/** Reminder notification ids: 100 = today, 101…107 = the next 7 days, 200 = streak nudge. */
-const DAILY_IDS = [100, 101, 102, 103, 104, 105, 106, 107];
-const NUDGE_ID = 200;
+/** Reminder notification ids: 1000 + day × 10 + slot (see plannedNotifications); 100–107 and 200 are from older builds. */
+const REMINDER_IDS = [...Array.from({ length: 80 }, (_, i) => 1000 + i), 100, 101, 102, 103, 104, 105, 106, 107, 200];
 
 /** iOS + Android (Capacitor). Reminders are local notifications scheduled on the device — no server. */
 export function createCapacitorPlatform(kind: 'ios' | 'android'): Platform {
@@ -76,34 +75,23 @@ export function createCapacitorPlatform(kind: 'ios' | 'android'): Platform {
     },
 
     async scheduleReminders(plan: ReminderPlan) {
-      await LocalNotifications.cancel({ notifications: [...DAILY_IDS, NUDGE_ID].map((id) => ({ id })) }).catch(() => undefined);
+      await LocalNotifications.cancel({ notifications: REMINDER_IDS.map((id) => ({ id })) }).catch(() => undefined);
       if (!plan.enabled) return 'scheduled';
       let perm = await LocalNotifications.checkPermissions();
       if (perm.display === 'prompt' || perm.display === 'prompt-with-rationale') perm = await LocalNotifications.requestPermissions();
       if (perm.display !== 'granted') return 'denied';
-      const [h, m] = plan.time.split(':').map(Number);
-      const now = new Date();
-      const today = `${now.getFullYear()}-${String(now.getMonth() + 1).padStart(2, '0')}-${String(now.getDate()).padStart(2, '0')}`;
-      const at = (dayOffset: number, hh = h ?? 19, mm = m ?? 0) => {
-        const d = new Date();
-        d.setDate(d.getDate() + dayOffset);
-        d.setHours(hh, mm, 0, 0);
-        return d;
-      };
-      const body = (n: number) => ({ title: `${n} position${n === 1 ? '' : 's'} due`, body: `About ${Math.max(1, Math.round((n * 8) / 60))} min to keep your openings sharp.` });
-      const notifications = [];
-      if (at(0) > now && plan.dueCount > 0 && plan.lastReviewDay !== today) notifications.push({ id: DAILY_IDS[0]!, ...body(plan.dueCount), schedule: { at: at(0), allowWhileIdle: true } });
-      plan.dueByDay.forEach((n, i) => {
-        if (n > 0) notifications.push({ id: DAILY_IDS[i + 1]!, ...body(n), schedule: { at: at(i + 1), allowWhileIdle: true } });
-      });
-      if (plan.streakDays > 0 && plan.lastReviewDay !== today && at(0, 20, 30) > now) {
-        notifications.push({ id: NUDGE_ID, title: `Keep your ${plan.streakDays}-day streak`, body: 'A two-minute review keeps it alive.', schedule: { at: at(0, 20, 30), allowWhileIdle: true } });
-      }
-      if (notifications.length) {
-        await LocalNotifications.schedule({
-          notifications: notifications.map((n) => ({ ...n, smallIcon: 'ic_stat_mainline', extra: { url: '/train?mode=review' } })),
-        });
-      }
+      const { plannedNotifications } = await import('../lib/reminders');
+      const notifications = plannedNotifications(plan).map((n) => ({
+        id: n.id,
+        title: n.title,
+        body: n.body,
+        schedule: { at: n.at, allowWhileIdle: true },
+        smallIcon: 'ic_stat_mainline',
+        threadIdentifier: n.tag,
+        group: n.tag,
+        extra: { url: n.url },
+      }));
+      if (notifications.length) await LocalNotifications.schedule({ notifications });
       return 'scheduled';
     },
 

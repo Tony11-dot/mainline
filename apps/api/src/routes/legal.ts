@@ -34,7 +34,7 @@ const PRIVACY = () => `
   <li><strong>Chess positions</strong> you look up, to fetch opening statistics and engine evaluations from Lichess on your behalf. Positions aren't linked to you.</li>
   <li><strong>Usernames you type</strong> into Games (yours or an opponent's), to download public games from Lichess or Chess.com. We pass them to those sites and don't keep them.</li>
   <li><strong>If you sign in with Lichess</strong>: your Lichess username, your ratings, and an access token (encrypted at rest) that only allows reading public account information. We store your repertoires, training cards, review history and settings so they sync. The token is revoked when you delete your account.</li>
-  <li><strong>If you turn on reminders on the web</strong>: a push subscription (an address your browser gives us for notifications), your reminder time and time zone, and how many positions you have due. On iPhone, iPad, Android and desktop, reminders are scheduled on the device and nothing is sent.</li>
+  <li><strong>If you turn on reminders on the web</strong>: a push subscription (an address your browser gives us for notifications), your reminder time and time zone, how many positions you have due, your streak length and streak freezes, and the date you last practised (so reminders stop once you have practised and say the right thing). On iPhone, iPad, Android and desktop, reminders are scheduled on the device and nothing is sent.</li>
   <li><strong>Technical logs</strong>: our hosting provider processes IP addresses and request logs to run and protect the service. Logs are kept for a short time and not used to identify you.</li>
 </ul>
 

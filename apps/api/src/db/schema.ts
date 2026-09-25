@@ -213,10 +213,13 @@ export const pushSubs = pgTable('push_subs', {
   reminderTime: text('reminder_time').default('19:00').notNull(),
   dueCount: integer('due_count').default(0).notNull(),
   streak: integer('streak').default(0).notNull(),
+  // Streak freezes held at the end of the last practised day (see packages/shared/src/streak.ts).
+  freezes: integer('freezes').default(0).notNull(),
   lastReviewDay: text('last_review_day'),
   lastNotifiedOn: text('last_notified_on'),
   lastNudgeOn: text('last_nudge_on'),
   lastWeeklyOn: text('last_weekly_on'),
+  lastLateOn: text('last_late_on'),
   createdAt: ts('created_at').defaultNow().notNull(),
   updatedAt: ts('updated_at').defaultNow().notNull(),
 });

@@ -19,6 +19,7 @@ const state = (plan: ReminderPlan) => ({
   reminderTime: plan.time,
   dueCount: plan.dueCount,
   streak: plan.streakDays,
+  freezes: plan.freezesAtLast,
   lastReviewDay: plan.lastReviewDay,
 });
 
