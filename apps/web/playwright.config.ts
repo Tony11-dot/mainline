@@ -4,7 +4,8 @@ export default defineConfig({
   testDir: './e2e',
   timeout: 30_000,
   fullyParallel: true,
-  workers: process.env.CI ? 2 : 3,
+  // GitHub's Linux WebKit starves animation frames when two browsers share the runner; one at a time is reliable.
+  workers: process.env.CI ? 1 : 3,
   retries: process.env.CI ? 1 : 0,
   reporter: process.env.CI ? [['html', { open: 'never' }], ['list']] : 'list',
   use: { baseURL: 'http://localhost:4173', trace: 'retain-on-failure', screenshot: 'only-on-failure', serviceWorkers: 'block' },
