@@ -1,0 +1,5 @@
+MainLine is a chess opening trainer. No account is needed: every feature works as a guest.
+Optional "Sign in with Lichess" (Settings) only syncs data between devices; no demo account is required.
+Try it: Today → "Learn new moves" after picking a starter repertoire on first launch, or Repertoire → New → Import PGN.
+Reminders use local notifications (Settings → Reminders). Daily streaks are kept on the device.
+Native features: local notifications, haptics, share-sheet PGN import ("Open in MainLine"), offline training with an on-device Stockfish engine.

@@ -157,10 +157,14 @@ Later: Play needs **12 testers for 14 days on a closed track** before you can ap
 - **TestFlight → external testers:**
   1. TestFlight → **External Testing → "+"** → create a group.
   2. Add the build. The first external build gets a short Beta App Review.
-- **App Store:**
-  1. Open the version page → **Build → "+"** → pick the TestFlight build.
-  2. Add screenshots (`fastlane ios metadata` uploads the listing and screenshots).
-  3. Paste the review notes from `compliance.md` → **Submit for Review**.
+- **App Store:** `fastlane ios release` (with `VERSION` and `MAINLINE_API_URL`):
+  - uploads the listing, screenshots, category, age rating (`store/ios/age_rating.json`) and review notes (`store/ios/review/notes.txt`);
+  - attaches the newest TestFlight build and submits it for review, releasing automatically once approved.
+  - It needs `secrets/app-review-contact.json` (git-ignored; Apple shows it only to reviewers):
+    ```json
+    { "first_name": "…", "last_name": "…", "phone_number": "+44 …", "email_address": "…" }
+    ```
+  - App Privacy can't be set through the API: answer it once in App Store Connect from `compliance.md`.
 - **Play:**
   1. Internal testing → the release → **Promote release → Closed testing**.
   2. Once 12 testers have been opted in for 14 days, apply for production access on the Dashboard.

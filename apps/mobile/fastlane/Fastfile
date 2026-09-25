@@ -5,6 +5,7 @@
 #   fastlane android internal  build → sign → upload the .aab to the Play internal testing track
 #   fastlane android build     build + sign the .aab only (no upload)
 #   fastlane ios metadata / fastlane android metadata   push the store listing + screenshots (apps/mobile/store)
+#   fastlane ios release       submit the newest TestFlight build for App Store review
 #
 # Run from apps/mobile (locally `fastlane …`, on CI `bundle exec fastlane …`).
 # Every credential comes from the environment — see apps/mobile/store/RELEASING.md.
@@ -172,31 +173,60 @@ platform :ios do
   end
 
   desc "Upload the App Store listing (store/ios) and screenshots (store/screenshots) — no binary, no review"
-  lane :metadata do
+  lane :metadata do |options|
     key = asc
     url = api_url
     UI.user_error!("MAINLINE_API_URL is needed for the privacy policy URL") if url.empty?
     dir = Dir.mktmpdir("asc")
-    FileUtils.mkdir_p(File.join(dir, "metadata"))
-    FileUtils.cp_r(File.join(MOBILE, "store/ios/en-US"), File.join(dir, "metadata/en-US"))
-    File.write(File.join(dir, "metadata/en-US/privacy_url.txt"), "#{url}/privacy")
+    meta = File.join(dir, "metadata")
+    FileUtils.mkdir_p(meta)
+    FileUtils.cp_r(File.join(MOBILE, "store/ios/en-US"), File.join(meta, "en-US"))
+    File.write(File.join(meta, "en-US/privacy_url.txt"), "#{url}/privacy")
+    File.write(File.join(meta, "copyright.txt"), "#{Time.now.year} MainLine")
+    File.write(File.join(meta, "primary_category.txt"), "EDUCATION")
+    File.write(File.join(meta, "secondary_category.txt"), "GAMES")
+    File.write(File.join(meta, "secondary_first_sub_category.txt"), "GAMES_BOARD")
+    # App Review contact details are private to Apple but personal, so they live in secrets/.
+    # Apple rejects review notes without a contact, so both wait for that file.
+    contact = File.join(ROOT, "secrets/app-review-contact.json")
+    if File.exist?(contact)
+      review = File.join(meta, "review_information")
+      FileUtils.mkdir_p(review)
+      FileUtils.cp(File.join(MOBILE, "store/ios/review/notes.txt"), review)
+      JSON.parse(File.read(contact)).each { |k, v| File.write(File.join(review, "#{k}.txt"), v.to_s) }
+    elsif options[:submit]
+      UI.user_error!("App Review needs a contact: create secrets/app-review-contact.json (see store/RELEASING.md)")
+    end
     shots = File.join(dir, "screenshots/en-US")
     FileUtils.mkdir_p(shots)
     %w[iphone ipad].each do |d|
       Dir[File.join(MOBILE, "store/screenshots/#{d}/*.png")].sort.each { |f| FileUtils.cp(f, File.join(shots, "#{d}-#{File.basename(f)}")) }
     end
+    submit = options[:submit] ? true : false
     deliver(
       api_key: key[:key],
       app_identifier: BUNDLE_ID,
       app_version: version_name,
-      metadata_path: File.join(dir, "metadata"),
+      metadata_path: meta,
       screenshots_path: File.join(dir, "screenshots"),
+      app_rating_config_path: File.join(MOBILE, "store/ios/age_rating.json"),
       overwrite_screenshots: true,
       skip_binary_upload: true,
-      submit_for_review: false,
+      build_number: submit ? options[:build].to_s : nil,
+      submit_for_review: submit,
+      automatic_release: true,
+      submission_information: { add_id_info_uses_idfa: false, export_compliance_uses_encryption: false },
       force: true,
       run_precheck_before_submit: false,
     )
+  end
+
+  desc "Submit a TestFlight build for App Store review with the current listing (BUILD_NUMBER, default: newest)"
+  lane :release do
+    key = asc
+    build = ENV["BUILD_NUMBER"] || latest_testflight_build_number(api_key: key[:key], app_identifier: BUNDLE_ID, version: version_name)
+    metadata(submit: true, build: build)
+    UI.success "#{version_name} (#{build}) is waiting for App Review. It goes live automatically once approved."
   end
 end
 
@@ -281,7 +311,11 @@ platform :android do
     FileUtils.cp(File.join(MOBILE, "store/android/images/icon.png"), images)
     FileUtils.cp(File.join(MOBILE, "store/android/images/featureGraphic.png"), images)
     Dir[File.join(MOBILE, "store/screenshots/android/*.png")].sort.each { |f| FileUtils.cp(f, File.join(images, "phoneScreenshots")) }
+    # The Play app's default language is en-GB; the same listing serves both.
+    FileUtils.cp_r(File.join(dir, "en-US"), File.join(dir, "en-GB"))
     upload_to_play_store(
+      # supply reads a track's releases even for listing-only uploads; production has none until launch.
+      track: "internal",
       metadata_path: dir,
       skip_upload_apk: true,
       skip_upload_aab: true,

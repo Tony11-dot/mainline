@@ -60,6 +60,20 @@ async function seed(page: Page) {
     const p = JSON.parse(localStorage.getItem('mainline.prefs') ?? '{}');
     localStorage.setItem('mainline.prefs', JSON.stringify({ ...p, rating: 1600, engineOn: false }));
   });
+  // A lit 12-day streak for the header flame.
+  await page.goto('/');
+  await page.evaluate(async () => {
+    const day = 86_400_000;
+    const req = indexedDB.open('mainline');
+    const db: IDBDatabase = await new Promise((r) => (req.onsuccess = () => r(req.result)));
+    const tx = db.transaction('reviews', 'readwrite');
+    for (let i = 0; i < 12; i++) {
+      const at = Date.now() - 60_000 - i * day;
+      tx.objectStore('reviews').put({ id: `s${i}`, cardEpd: 'x', color: 'white', rating: 3, playedUci: 'e2e4', expectedUci: ['e2e4'], mode: 'review', msTaken: 1000, reviewedAt: at, updatedAt: at });
+    }
+    await new Promise((r) => (tx.oncomplete = r));
+    db.close();
+  });
   await importPgn(page, '[Event "Italian Game"]\n\n1. e4 e5 2. Nf3 Nc6 3. Bc4 Bc5 (3... Nf6 4. d3 Be7 5. O-O) (3... Be7 4. d4) 4. c3 Nf6 5. d3 d6 6. O-O O-O 7. Re1 a6 8. a4 *');
   await importPgn(page, '[Event "Caro-Kann"]\n\n1. e4 c6 2. d4 d5 3. e5 (3. Nc3 dxe4 4. Nxe4 Bf5 5. Ng3 Bg6) (3. exd5 cxd5 4. Bd3 Nc6) 3... Bf5 4. Nf3 e6 5. Be2 Nd7 6. O-O Ne7 *', 'Black');
   await importPgn(page, '[Event "Queen\'s Gambit Declined"]\n\n1. d4 d5 2. c4 e6 3. Nc3 Nf6 4. Bg5 (4. cxd5 exd5 5. Bg5 c6) 4... Be7 5. e3 O-O 6. Nf3 h6 7. Bh4 b6 *', 'Black');
