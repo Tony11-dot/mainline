@@ -261,9 +261,10 @@ platform :android do
     aab
   end
 
-  desc "Build, sign and upload to the Play internal testing track"
+  desc "Build, sign and upload to the Play internal testing track (PLAY_TRACK=alpha for closed testing)"
   lane :internal do
     key = play_key
+    track = ENV["PLAY_TRACK"] || "internal"
     # Tracks that have never had a release return nothing (or raise); read each one on its own.
     codes = %w[internal alpha beta production].flat_map do |t|
       Array(google_play_track_version_codes(track: t, **key))
@@ -280,7 +281,7 @@ platform :android do
 
     upload = lambda do |status|
       upload_to_play_store(
-        track: "internal",
+        track: track,
         aab: aab,
         release_status: status,
         metadata_path: metadata,
@@ -299,7 +300,7 @@ platform :android do
       UI.important "Play still treats MainLine as a draft app — uploading as a draft release. Roll it out once in Play Console."
       upload.call("draft")
     end
-    UI.success "Uploaded to Google Play internal testing."
+    UI.success "Uploaded to the Google Play #{track} track."
   end
 
   desc "Upload the Play listing (store/android) and phone screenshots — no binary"
