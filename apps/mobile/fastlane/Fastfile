@@ -44,11 +44,12 @@ def version_name
   v
 end
 
+PRODUCTION_API = "https://api-production-8afb.up.railway.app"
+
 def api_url
-  url = ENV["MAINLINE_API_URL"].to_s.strip.chomp("/")
-  if url.empty?
-    UI.important "MAINLINE_API_URL isn't set: this build works offline, but the explorer, engine cloud, coach, sync and games need it."
-  elsif !url.start_with?("https://")
+  # The production API is public; MAINLINE_API_URL overrides it (e.g. a staging deploy).
+  url = (ENV["MAINLINE_API_URL"].to_s.strip.empty? ? PRODUCTION_API : ENV["MAINLINE_API_URL"].strip).chomp("/")
+  if !url.start_with?("https://")
     UI.user_error!("MAINLINE_API_URL must be https:// (got #{url})")
   end
   url

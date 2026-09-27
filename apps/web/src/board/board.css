@@ -153,3 +153,28 @@
   from { opacity: 0; }
   to { opacity: 1; }
 }
+
+/* Fingers on the board move pieces, never scroll or zoom the page (iOS would steal the drag). */
+.ml-board cg-container,
+.ml-board .cg-wrap {
+  touch-action: none;
+  -webkit-user-select: none;
+  user-select: none;
+  -webkit-touch-callout: none;
+}
+
+/* Board editor palette: chessground's sprites (and the chosen piece set) in plain buttons. */
+.cg-wrap.setup-palette {
+  display: flex;
+  justify-content: center;
+  gap: 4px;
+  padding: 6px 8px;
+}
+.cg-wrap .setup-piece piece {
+  position: static;
+  display: block;
+  pointer-events: none;
+  width: 86%;
+  height: 86%;
+  background-size: cover;
+}

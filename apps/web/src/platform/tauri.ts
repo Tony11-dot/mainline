@@ -58,7 +58,7 @@ export function createTauriPlatform(): Platform {
   return {
     kind: 'desktop',
     isNative: true,
-    apiBase: apiBaseFromEnv(),
+    apiBase: apiBaseFromEnv(true),
     haptic() {
       /* no haptics on desktop */
     },

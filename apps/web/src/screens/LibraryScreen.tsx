@@ -1,6 +1,7 @@
 import { useEffect, useMemo, useState } from 'react';
 import { Link, useNavigate, useSearchParams } from 'react-router';
 import {
+  BarChart3,
   BookMarked,
   ChevronRight,
   Download,
@@ -86,6 +87,9 @@ export function LibraryScreen() {
       <div className="flex items-center justify-between gap-3">
         <h1 className="text-2xl font-bold">Repertoire</h1>
         <div className="flex items-center gap-1">
+          <Link to="/stats" aria-label="Statistics" className="inline-flex h-11 items-center gap-2 rounded-[12px] px-3 text-base font-semibold text-ink-2 hover:bg-surface-3 hover:text-ink">
+            <BarChart3 size={18} aria-hidden /> <span className="hidden sm:inline">Statistics</span>
+          </Link>
           <Link to="/library/openings" className="inline-flex h-11 items-center gap-2 rounded-[12px] px-3 text-base font-semibold text-ink-2 hover:bg-surface-3 hover:text-ink">
             <Search size={18} aria-hidden /> <span className="hidden sm:inline">Openings</span>
           </Link>

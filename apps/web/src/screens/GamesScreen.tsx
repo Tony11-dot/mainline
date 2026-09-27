@@ -1,6 +1,6 @@
 import { useEffect, useMemo, useState } from 'react';
-import { useNavigate } from 'react-router';
-import { Download, ExternalLink, Plus, Search, Swords, Target } from 'lucide-react';
+import { Link, useNavigate } from 'react-router';
+import { BarChart3, Download, ExternalLink, Plus, Search, Swords, Target } from 'lucide-react';
 import {
   INITIAL_FEN,
   breakPoints,
@@ -55,7 +55,12 @@ export function GamesScreen() {
 
   return (
     <div className="mx-auto max-w-3xl px-4 py-6 md:px-8 md:py-10">
-      <h1 className="text-2xl font-bold">Games</h1>
+      <div className="flex items-center justify-between gap-3">
+        <h1 className="text-2xl font-bold">Games</h1>
+        <Link to="/stats" className="inline-flex h-11 items-center gap-2 rounded-[12px] px-3 text-base font-semibold text-ink-2 hover:bg-surface-3 hover:text-ink">
+          <BarChart3 size={18} aria-hidden /> Statistics
+        </Link>
+      </div>
       <p className="mt-1 text-ink-2">See exactly where your real games leave your prep.</p>
       <Accounts />
 

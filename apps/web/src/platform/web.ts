@@ -9,8 +9,12 @@ const VIBRATE: Record<HapticKind, number | number[]> = {
   error: [20, 50, 20, 50, 20],
 };
 
-export function apiBaseFromEnv(): string {
-  return (import.meta.env.VITE_API_URL as string | undefined)?.replace(/\/$/, '') ?? '';
+/** Native shells have no same-origin API, so they fall back to production if the build didn't set one. */
+const PRODUCTION_API = 'https://api-production-8afb.up.railway.app';
+
+export function apiBaseFromEnv(native = false): string {
+  const env = (import.meta.env.VITE_API_URL as string | undefined)?.replace(/\/$/, '');
+  return env || (native ? PRODUCTION_API : '');
 }
 
 export function createWebPlatform(): Platform {

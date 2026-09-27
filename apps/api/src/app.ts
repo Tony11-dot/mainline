@@ -12,6 +12,7 @@ import { getDb } from './db/client';
 
 export const NATIVE_ORIGINS = [
   'capacitor://localhost',
+  'mainline://localhost', // iOS: capacitor.config ios.scheme
   'https://localhost',
   'http://localhost',
   'tauri://localhost',
@@ -36,6 +37,7 @@ export async function buildApp(opts: { logger?: boolean } = {}): Promise<Fastify
   await app.register(fastifyCors, {
     origin: (origin, cb) => cb(null, !origin || allowed.has(origin) || env.NODE_ENV !== 'production'),
     credentials: true,
+    methods: ['GET', 'HEAD', 'POST', 'PUT', 'PATCH', 'DELETE'],
   });
   await app.register(fastifyCookie);
   await app.register(fastifyCompress, { global: true, encodings: ['br', 'gzip'] });

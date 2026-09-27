@@ -46,13 +46,17 @@ export function createCapacitorPlatform(kind: 'ios' | 'android'): Platform {
   };
   new MutationObserver(syncStatusBar).observe(document.documentElement, { attributes: true, attributeFilter: ['data-theme'] });
   syncStatusBar();
+  // An app, not a page: no pinch zoom (WKWebView and Android WebView honour user-scalable=no).
+  document
+    .querySelector('meta[name=viewport]')
+    ?.setAttribute('content', 'width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, viewport-fit=cover');
   // The web launch animation takes over from the native splash seamlessly.
   requestAnimationFrame(() => void SplashScreen.hide({ fadeOutDuration: 180 }).catch(() => undefined));
 
   return {
     kind,
     isNative: true,
-    apiBase: apiBaseFromEnv(),
+    apiBase: apiBaseFromEnv(true),
 
     haptic(k: HapticKind) {
       const run = () => {

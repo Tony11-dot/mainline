@@ -1,7 +1,6 @@
-import { useState } from 'react';
 import { createBrowserRouter, RouterProvider } from 'react-router';
 import { AppShell } from './ui/AppShell';
-import { LaunchScreen, shouldShowLaunch } from './launch/LaunchScreen';
+import { LaunchScreen, shouldShowLaunch, useLaunch } from './launch/LaunchScreen';
 import { platform } from './platform';
 import { handleIncoming } from './lib/incomingHandler';
 import { HomeScreen } from './screens/HomeScreen';
@@ -19,6 +18,8 @@ export const router = createBrowserRouter([
       { path: 'rep/:id', lazy: lazy(() => import('./screens/RepertoireScreen'), 'RepertoireScreen') },
       { path: 'train', lazy: lazy(() => import('./screens/TrainScreen'), 'TrainScreen') },
       { path: 'explore', lazy: lazy(() => import('./screens/ExploreScreen'), 'ExploreScreen') },
+      { path: 'stats', lazy: lazy(() => import('./screens/StatsScreen'), 'StatsScreen') },
+      { path: 'setup', lazy: lazy(() => import('./screens/SetupScreen'), 'SetupScreen') },
       { path: 'games', lazy: lazy(() => import('./screens/GamesScreen'), 'GamesScreen') },
       { path: 'welcome', lazy: lazy(() => import('./screens/WelcomeScreen'), 'WelcomeScreen') },
       { path: 'settings', lazy: lazy(() => import('./screens/SettingsScreen'), 'SettingsScreen') },
@@ -28,6 +29,7 @@ export const router = createBrowserRouter([
 
 /** OS integrations that need the router. Called by main.tsx after initPlatform() (never at import time). */
 export function startPlatformHooks() {
+  useLaunch.setState({ active: shouldShowLaunch(platform().isNative) });
   // Deep links, OAuth returns, files and notification taps from the OS.
   platform().onIncoming((i) => void handleIncoming((to) => void router.navigate(to))(i));
   if (platform().kind === 'ios' || platform().kind === 'android') {
@@ -37,11 +39,11 @@ export function startPlatformHooks() {
 }
 
 export function App() {
-  const [launching, setLaunching] = useState(() => shouldShowLaunch(platform().isNative));
+  const launching = useLaunch((s) => s.active);
   return (
     <>
       <RouterProvider router={router} />
-      {launching && <LaunchScreen onDone={() => setLaunching(false)} />}
+      {launching && <LaunchScreen onDone={() => useLaunch.setState({ active: false })} />}
     </>
   );
 }

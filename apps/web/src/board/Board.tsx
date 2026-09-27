@@ -259,6 +259,11 @@ function useTouchDrawing(
         beginDraw(orig, e.pointerId);
         return;
       }
+      // A finger resting on a movable piece is about to drag it, however slowly: never hijack that
+      // into an arrow. Long-press arrows start from any other square (or anywhere in pen mode).
+      const st = cg.current?.state;
+      const piece = st?.pieces.get(orig);
+      if (piece && st?.movable.color && (st.movable.color === 'both' || st.movable.color === piece.color) && st.movable.dests?.get(orig)?.length) return;
       clearTimeout(timer);
       timer = setTimeout(() => beginDraw(orig, e.pointerId), LONG_PRESS_MS);
     };

@@ -96,37 +96,77 @@ final class TabBarModel: ObservableObject {
 
 struct GlassTabBar: View {
     @ObservedObject var model: TabBarModel
+    /// The tab under the finger while it slides along the bar (nil when not touching).
+    @State private var hover: String?
+    @Namespace private var pill
 
     var body: some View {
-        HStack(spacing: 0) {
-            ForEach(model.tabs) { tab in
-                let on = tab.id == model.selected
-                Button {
-                    model.selected = tab.id
-                    model.onSelect(tab.id)
-                } label: {
+        GeometryReader { geo in
+            let inner = geo.size.width - 16
+            HStack(spacing: 0) {
+                ForEach(model.tabs) { tab in
+                    let lit = tab.id == (hover ?? model.selected)
                     VStack(spacing: 3) {
-                        Image(systemName: on ? filled(tab.symbol) : tab.symbol)
+                        Image(systemName: lit ? filled(tab.symbol) : tab.symbol)
                             .font(.system(size: 20, weight: .semibold))
                             .symbolRenderingMode(.hierarchical)
                         Text(tab.label).font(.system(size: 10.5, weight: .semibold))
                     }
-                    .foregroundStyle(on ? model.accent : Color.secondary)
+                    .foregroundStyle(lit ? model.accent : Color.secondary)
                     .frame(maxWidth: .infinity, minHeight: 50)
-                    .contentShape(Rectangle())
+                    .scaleEffect(hover == tab.id ? 1.08 : 1)
+                    .background {
+                        if lit {
+                            Capsule()
+                                .fill(model.accent.opacity(0.14))
+                                .padding(.horizontal, 2)
+                                .matchedGeometryEffect(id: "pill", in: pill)
+                        }
+                    }
+                    .accessibilityElement(children: .ignore)
+                    .accessibilityLabel(tab.label)
+                    .accessibilityAddTraits(tab.id == model.selected ? [.isButton, .isSelected] : .isButton)
+                    .accessibilityAction { choose(tab.id) }
                 }
-                .buttonStyle(.plain)
-                .accessibilityLabel(tab.label)
-                .accessibilityAddTraits(on ? .isSelected : [])
             }
+            .padding(.horizontal, 8)
+            .padding(.vertical, 6)
+            .contentShape(Rectangle())
+            // One gesture for tap and slide: the highlight follows the finger across the tabs
+            // (a selection tick per tab) and lifting the finger opens the tab under it.
+            .gesture(
+                DragGesture(minimumDistance: 0)
+                    .onChanged { g in
+                        let id = tabAt(g.location.x - 8, width: inner)
+                        if id != hover {
+                            if hover != nil { UISelectionFeedbackGenerator().selectionChanged() }
+                            withAnimation(.spring(response: 0.28, dampingFraction: 0.82)) { hover = id }
+                        }
+                    }
+                    .onEnded { g in
+                        let id = tabAt(g.location.x - 8, width: inner)
+                        withAnimation(.spring(response: 0.32, dampingFraction: 0.86)) { hover = nil }
+                        if let id { choose(id) }
+                    }
+            )
+            .modifier(GlassBackground())
         }
-        .padding(.horizontal, 8)
-        .padding(.vertical, 6)
-        .modifier(GlassBackground())
+        .frame(height: 62)
         .padding(.horizontal, 14)
         .padding(.bottom, 6)
         .offset(y: model.visible ? 0 : 140)
         .opacity(model.visible ? 1 : 0)
+    }
+
+    private func tabAt(_ x: CGFloat, width: CGFloat) -> String? {
+        guard !model.tabs.isEmpty, width > 0 else { return nil }
+        let i = Int((x / width) * CGFloat(model.tabs.count))
+        return model.tabs[max(0, min(model.tabs.count - 1, i))].id
+    }
+
+    private func choose(_ id: String) {
+        withAnimation(.spring(response: 0.32, dampingFraction: 0.86)) { model.selected = id }
+        model.onSelect(id)
     }
 
     private func filled(_ s: String) -> String {

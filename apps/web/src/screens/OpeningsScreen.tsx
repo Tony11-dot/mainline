@@ -1,9 +1,15 @@
 import { useEffect, useMemo, useState } from 'react';
 import { Link, useNavigate } from 'react-router';
 import { ArrowLeft, Search } from 'lucide-react';
-import { playLine, INITIAL_FEN, type Color } from '@mainline/shared';
+import { epdToFen, playLine, INITIAL_FEN, type Color, type ExplorerData } from '@mainline/shared';
 import { openingIndex, searchOpenings, type OpeningInfo } from '../lib/openings';
 import { useLibrary } from '../lib/library';
+import { useGames } from '../lib/games';
+import { usePrefs } from '../lib/prefs';
+import { fetchExplorer } from '../lib/explorer';
+import { gamesThrough } from '../lib/stats';
+import { WdlBar } from '../panels/ExplorerPanel';
+import { RecordBar } from '../ui/stats';
 import { MiniBoard } from '../ui/MiniBoard';
 import { Button, Skeleton } from '../ui/primitives';
 import { inputCls } from '../ui/Sheet';
@@ -133,6 +139,7 @@ function OpeningPreview({ o, onStart }: { o: OpeningInfo | null; onStart: (o: Op
           </p>
         </div>
       </div>
+      <OpeningNumbers o={o} />
       <div className="mt-3 grid grid-cols-2 gap-2">
         <Button onClick={() => onStart(o, 'white')}>Play as White</Button>
         <Button onClick={() => onStart(o, 'black')}>Play as Black</Button>
@@ -141,5 +148,52 @@ function OpeningPreview({ o, onStart }: { o: OpeningInfo | null; onStart: (o: Op
         Explore this position
       </Link>
     </aside>
+  );
+}
+
+/** Database results for the opening's position, and your own record in games that reached it. */
+function OpeningNumbers({ o }: { o: OpeningInfo }) {
+  const { rating, speeds } = usePrefs();
+  const games = useGames((s) => s.games);
+  const loadGames = useGames((s) => s.load);
+  const [db, setDb] = useState<{ lichess?: ExplorerData; masters?: ExplorerData } | null>(null);
+  useEffect(() => void loadGames(), [loadGames]);
+  useEffect(() => {
+    const ctrl = new AbortController();
+    setDb(null);
+    const fen = epdToFen(o.epd);
+    void Promise.allSettled([fetchExplorer('lichess', fen, rating, speeds, ctrl.signal), fetchExplorer('masters', fen, rating, speeds, ctrl.signal)]).then(([l, m]) => {
+      if (!ctrl.signal.aborted) setDb({ lichess: l.status === 'fulfilled' ? l.value : undefined, masters: m.status === 'fulfilled' ? m.value : undefined });
+    });
+    return () => ctrl.abort();
+  }, [o.epd, rating, speeds]);
+  const mine = useMemo(() => gamesThrough(games, o.epd), [games, o.epd]);
+  const total = (d?: ExplorerData) => (d ? d.white + d.draws + d.black : 0);
+  return (
+    <div className="mt-3 flex flex-col gap-2.5 border-t border-line pt-3 text-sm">
+      <div>
+        <div className="mb-1 flex text-xs text-ink-3">
+          <span>Lichess · your rating band</span>
+          <span className="tnum ms-auto">{db ? (db.lichess ? `${total(db.lichess).toLocaleString()} games` : 'unavailable') : '…'}</span>
+        </div>
+        {db?.lichess && total(db.lichess) > 0 ? <WdlBar white={db.lichess.white} draws={db.lichess.draws} black={db.lichess.black} /> : <Skeleton className="h-[18px]" />}
+        {db?.masters && total(db.masters) > 0 && <p className="tnum mt-1 text-xs text-ink-3">Masters: {total(db.masters).toLocaleString()} games</p>}
+      </div>
+      {mine.all.length > 0 && (
+        <div className="flex flex-col gap-1.5">
+          <span className="text-xs text-ink-3">Your games through this position</span>
+          {mine.white.games > 0 && (
+            <div className="grid grid-cols-[4.5rem_1fr] items-center gap-2 text-xs">
+              As White <RecordBar rec={mine.white} />
+            </div>
+          )}
+          {mine.black.games > 0 && (
+            <div className="grid grid-cols-[4.5rem_1fr] items-center gap-2 text-xs">
+              As Black <RecordBar rec={mine.black} />
+            </div>
+          )}
+        </div>
+      )}
+    </div>
   );
 }

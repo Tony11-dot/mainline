@@ -1,5 +1,6 @@
 import { Capacitor, registerPlugin, type PluginListenerHandle } from '@capacitor/core';
 import { NAV } from '../ui/nav';
+import { useLaunch } from '../launch/LaunchScreen';
 
 interface NativeChromePlugin {
   setTabs(o: { tabs: { id: string; label: string; sfSymbol: string }[]; selected?: string }): Promise<void>;
@@ -20,8 +21,12 @@ export const hasNativeChrome = () => Capacitor.getPlatform() === 'ios';
  */
 export async function startNativeChrome(router: { navigate: (to: string) => unknown; subscribe: (cb: (s: { location: { pathname: string } }) => void) => unknown; state: { location: { pathname: string } } }) {
   if (!hasNativeChrome()) return;
-  const idFor = (path: string) => NAV.slice(1).find((n) => path.startsWith(n.to))?.to ?? '/';
+  // Sub-screens light up their parent tab.
+  const ALIAS: [string, string][] = [['/setup', '/explore'], ['/rep/', '/library']];
+  const idFor = (path: string) => ALIAS.find(([p]) => path.startsWith(p))?.[1] ?? NAV.slice(1).find((n) => path.startsWith(n.to))?.to ?? '/';
   try {
+    // Just the animation while it plays: hide the bar before it's first installed.
+    if (useLaunch.getState().active) await NativeChrome.setVisible({ visible: false });
     await NativeChrome.setTabs({ tabs: NAV.map((n) => ({ id: n.to, label: n.label, sfSymbol: n.sfSymbol })), selected: idFor(router.state.location.pathname) });
   } catch (e) {
     console.warn('NativeChrome unavailable, keeping the web tab bar:', (e as Error).message);
@@ -31,9 +36,10 @@ export async function startNativeChrome(router: { navigate: (to: string) => unkn
   await NativeChrome.addListener('tabSelected', ({ id }) => void router.navigate(id));
   const sync = (path: string) => {
     void NativeChrome.select({ id: idFor(path) });
-    void NativeChrome.setVisible({ visible: !path.startsWith('/train') });
+    void NativeChrome.setVisible({ visible: !useLaunch.getState().active && !path.startsWith('/train') });
   };
   router.subscribe((s) => sync(s.location.pathname));
+  useLaunch.subscribe(() => sync(router.state.location.pathname));
   sync(router.state.location.pathname);
   const theme = () => {
     const css = getComputedStyle(document.documentElement);

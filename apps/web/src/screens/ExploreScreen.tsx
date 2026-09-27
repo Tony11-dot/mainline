@@ -1,6 +1,7 @@
 import { useEffect, useMemo, useState } from 'react';
 import { useStore } from 'zustand';
-import { useSearchParams } from 'react-router';
+import { Link, useSearchParams } from 'react-router';
+import { LayoutGrid } from 'lucide-react';
 import { INITIAL_FEN } from '@mainline/shared';
 import type { Key } from 'chessground/types';
 import type { DrawShape } from 'chessground/draw';
@@ -41,6 +42,10 @@ export function ExploreScreen({ store = exploreStore }: { store?: AnalysisStore 
       store.getState().reset(fen ?? INITIAL_FEN, moves ? moves.split(/[ ,]+/).filter(Boolean) : []);
       const color = params.get('color');
       if (color === 'white' || color === 'black') store.getState().setOrientation(color);
+      if (params.get('engine') === '1') {
+        usePrefs.getState().set({ engineOn: true });
+        setPane('engine');
+      }
     } catch {
       /* ignore malformed links */
     }
@@ -88,6 +93,12 @@ export function ExploreScreen({ store = exploreStore }: { store?: AnalysisStore 
       ) : (
         <h1 className="text-md font-semibold text-ink-2">{view.path ? 'Unnamed position' : 'Starting position'}</h1>
       )}
+      <Link
+        to={`/setup?${new URLSearchParams({ fen: view.node.fen })}`}
+        className="ml-auto flex h-9 shrink-0 items-center gap-1.5 rounded-[10px] px-2.5 text-sm font-medium text-ink-2 hover:bg-surface-3"
+      >
+        <LayoutGrid size={16} aria-hidden /> Set up position
+      </Link>
     </div>
   );
 

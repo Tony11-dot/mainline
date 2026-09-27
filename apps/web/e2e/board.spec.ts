@@ -102,7 +102,7 @@ test('tap-tap moves on iPhone (WebKit)', async ({ page }, info) => {
   await page.screenshot({ path: `test-results/shots/iphone-explore.png` });
 });
 
-test('touch drag and long-press arrows on Android (Chromium)', async ({ page }, info) => {
+test('touch drag (fast and slow) and long-press arrows on Android (Chromium)', async ({ page }, info) => {
   test.skip(info.project.name !== 'android');
   await page.goto('/explore');
   await expect(page.locator('.ml-board piece').first()).toBeVisible();
@@ -110,9 +110,11 @@ test('touch drag and long-press arrows on Android (Chromium)', async ({ page }, 
   await expectPiece(page, 'e4', 'white pawn');
   await touchDrag(page, 'c7', 'c5');
   await expectPiece(page, 'c5', 'black pawn');
-  // Long-press then drag draws an arrow instead of moving.
+  // A slow drag (finger rests on the piece first) still moves it.
   await touchDrag(page, 'g1', 'f3', 520);
-  await expectPiece(page, 'g1', 'white knight');
+  await expectPiece(page, 'f3', 'white knight');
+  // Long-press on an empty square, then drag, draws an arrow.
+  await touchDrag(page, 'e5', 'd4', 520);
   await expect(page.locator('.ml-board .cg-shapes g, .ml-board .cg-shapes line')).not.toHaveCount(0);
   await page.screenshot({ path: `test-results/shots/android-explore.png` });
 });

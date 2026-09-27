@@ -1,6 +1,6 @@
 import { useEffect, useMemo } from 'react';
 import { Link, Navigate } from 'react-router';
-import { BookOpen, Dumbbell, Flame, GraduationCap, Play, Shuffle, Snowflake } from 'lucide-react';
+import { BarChart3, BookOpen, Cpu, Dumbbell, Flame, GraduationCap, Play, Shuffle, Snowflake } from 'lucide-react';
 import { trainingSummary } from '@mainline/shared';
 import { StreakBadge, useStreak } from '../ui/streak';
 import { useLibrary } from '../lib/library';
@@ -101,6 +101,11 @@ export function HomeScreen() {
           </div>
         </>
       )}
+      <h2 className="mt-8 mb-2 text-sm font-semibold text-ink-2">Tools</h2>
+      <div className="grid gap-2 sm:grid-cols-2">
+        <ModeLink to="/stats" icon={BarChart3} title="Statistics" sub="Accuracy, repertoires, openings, games" />
+        <ModeLink to="/setup" icon={Cpu} title="Analysis board" sub="Set up any position, run Stockfish" />
+      </div>
     </div>
   );
 }

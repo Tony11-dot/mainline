@@ -1,6 +1,10 @@
 import { useEffect, useRef, useState } from 'react';
+import { create } from 'zustand';
 import { BAKED, hexToRgb, recolor, tintEmbeddedImages } from './recolor';
 import { AmbientBackground } from './AmbientBackground';
+
+/** Whether the launch animation is on screen — native chrome (the iOS tab bar) stays hidden meanwhile. */
+export const useLaunch = create<{ active: boolean }>(() => ({ active: false }));
 
 type LottiePlayer = typeof import('lottie-web').default;
 

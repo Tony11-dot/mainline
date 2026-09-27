@@ -349,3 +349,17 @@ dialog.sheet[open] {
 .ml-mini {
   direction: ltr;
 }
+
+/* iOS zooms into any focused field under 16px and leaves the page zoomed (and sideways-scrollable).
+   Touch screens get 16px fields; unlayered + !important so it beats text-size utilities. */
+@media (pointer: coarse) {
+  input:not([type='checkbox'], [type='radio'], [type='range'], [type='color']),
+  textarea,
+  select {
+    font-size: 16px !important;
+  }
+}
+html {
+  /* No double-tap zoom; taps fire immediately. */
+  touch-action: manipulation;
+}

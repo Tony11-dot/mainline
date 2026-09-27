@@ -19,6 +19,7 @@ import { pathToEpd, repertoireTree, validPrefix } from '../lib/repTree';
 import { usePrefs } from '../lib/prefs';
 import { Button, PanelNote } from '../ui/primitives';
 import { MoveStatsPanel } from '../panels/MoveStatsPanel';
+import { RepertoireStats } from '../panels/RepertoireStats';
 import { CoachPanel } from '../panels/CoachPanel';
 import { InsightsPanel } from '../panels/InsightsPanel';
 import { toast, undoToast } from '../ui/toast';
@@ -226,7 +227,12 @@ export function RepertoireScreen() {
     explorer: <ExplorerPanel fen={view.node.fen} onPlay={(u) => void addMove(u)} onHoverMove={setHoverUci} highlightUcis={repUcis} />,
     engine: <EnginePanel fen={view.node.fen} view={ev} onPlayLine={(ucis) => ucis[0] && void addMove(ucis[0])} onHoverMove={setHoverUci} />,
     notes: <NotesPanel key={currentMove ? `${currentMove.fromEpd}${currentMove.uci}` : 'root'} move={currentMove} onSave={(note) => currentMove && lib.setNote(rep.id, currentMove.fromEpd, currentMove.uci, note)} />,
-    stats: <MoveStatsPanel parentFen={parentNode?.fen} uci={view.node.uci || undefined} color={rep.color} />,
+    stats: (
+      <>
+        <RepertoireStats rep={rep} />
+        <MoveStatsPanel parentFen={parentNode?.fen} uci={view.node.uci || undefined} color={rep.color} />
+      </>
+    ),
     coach: (
       <CoachPanel
         fen={view.node.fen}
