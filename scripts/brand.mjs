@@ -23,7 +23,11 @@ const png = async (img, size, file) => writeFileSync(file, await img.clone().res
 // --- App icons -----------------------------------------------------------------
 await png(icon, 192, `${pub}icon-192.png`);
 await png(icon, 512, `${pub}icon-512.png`);
-await png(icon, 512, `${pub}icon-maskable-512.png`); // artwork already sits inside the 80% safe zone
+// Maskable: shrink the art onto its own field so the tails stay inside the 80% safe circle.
+writeFileSync(
+  `${pub}icon-maskable-512.png`,
+  await icon.clone().resize(448, 448).extend({ top: 32, bottom: 32, left: 32, right: 32, background: '#002299' }).png().toBuffer(),
+);
 await png(icon, 180, `${pub}apple-touch-icon.png`);
 await png(icon, 32, `${pub}favicon-32.png`);
 await png(icon, 1024, `${root}apps/mobile/assets/icon-only.png`);
@@ -53,17 +57,22 @@ const tinted = async (h, hex) => {
   return sharp(d, { raw: m.info }).png().toBuffer();
 };
 
-// Android adaptive icon: white knight inside the 66% safe zone over the brand gradient.
-const fg = await whiteKnight(560);
-writeFileSync(
-  `${root}apps/mobile/assets/icon-foreground.png`,
-  await sharp({ create: { width: 1024, height: 1024, channels: 4, background: { r: 0, g: 0, b: 0, alpha: 0 } } })
-    .composite([{ input: fg, gravity: 'center' }])
-    .png()
-    .toBuffer(),
-);
-const gradient = `<svg xmlns="http://www.w3.org/2000/svg" width="1024" height="1024"><defs><linearGradient id="g" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#2962F4"/><stop offset="0.45" stop-color="${BRAND}"/><stop offset="1" stop-color="#0423A2"/></linearGradient></defs><rect width="1024" height="1024" fill="url(#g)"/></svg>`;
-writeFileSync(`${root}apps/mobile/assets/icon-background.png`, await sharp(Buffer.from(gradient)).png().toBuffer());
+// Android adaptive icon: the app icon's own artwork split into layers — its white knight (luminance
+// as alpha) over its flat blue field — so the launcher shows exactly the iOS/store icon.
+const ICON_FIELD = '#002299'; // the app icon's background
+{
+  const g = await icon.clone().resize(1024, 1024).greyscale().raw().toBuffer({ resolveWithObject: true });
+  const fgPx = Buffer.alloc(1024 * 1024 * 4);
+  for (let i = 0; i < 1024 * 1024; i++) {
+    fgPx.fill(255, i * 4, i * 4 + 3);
+    fgPx[i * 4 + 3] = Math.max(0, Math.min(255, Math.round(((g.data[i] - 40) / (255 - 40)) * 255)));
+  }
+  writeFileSync(`${root}apps/mobile/assets/icon-foreground.png`, await sharp(fgPx, { raw: { width: 1024, height: 1024, channels: 4 } }).png().toBuffer());
+  writeFileSync(
+    `${root}apps/mobile/assets/icon-background.png`,
+    await sharp({ create: { width: 1024, height: 1024, channels: 4, background: ICON_FIELD } }).png().toBuffer(),
+  );
+}
 
 // Native splash (shown before the web view paints; the web launch animation continues seamlessly).
 const splash = async (bg, knight) =>
