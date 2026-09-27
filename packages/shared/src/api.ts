@@ -101,8 +101,14 @@ export const evalSubmitSchema = z.object({
 
 export interface Me {
   id: string;
-  lichessUsername: string;
+  /** Null for accounts created with Chess.com. */
+  lichessUsername: string | null;
   rating: number;
   ratingSpeed: Speed;
   chesscomUsername: string | null;
+  /** True once the Chess.com account was confirmed through Chess.com sign-in (not just typed in). */
+  chesscomVerified: boolean;
 }
+
+/** Display name for an account: its Lichess name, else its Chess.com name. */
+export const accountName = (me: Pick<Me, 'lichessUsername' | 'chesscomUsername'>) => me.lichessUsername ?? me.chesscomUsername ?? 'your account';

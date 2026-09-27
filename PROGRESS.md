@@ -274,3 +274,15 @@ Visual checks: `VISUAL=1 pnpm e2e visual` (add `--update-snapshots` after an int
   - The opening library shows database and personal results.
 - The launch animation plays on its own, with no tab bar on top.
 - New flat app icon.
+
+## Sign in with Chess.com (2026-09-27)
+
+- **Sign in with Chess.com**, alongside Lichess. Signed-in players can also link Chess.com to their account from Settings, and their games then import automatically.
+- Chess.com only gives sign-in to apps it has approved, so the button stays hidden until the server has `CHESSCOM_CLIENT_ID` (and optionally `CHESSCOM_CLIENT_SECRET`). No app update is needed to turn it on. The redirect URI to register is `<PUBLIC_URL>/api/auth/chesscom/callback`.
+- Server:
+  - Lichess and Chess.com share one OAuth flow (PKCE, signed state cookie).
+  - Chess.com identity comes from the ID token returned by the token endpoint.
+  - Linking uses the web session, or a one-use ticket from the apps.
+  - Migration `0004_chesscom`: `lichess_username` is optional, and `chesscom_id` is unique.
+- Fixed: a cancelled or failed sign-in in the iOS/Android app now returns to the app with a clear message, instead of landing on a web page. The web shows these messages too.
+- The privacy policy and cookie page now cover Chess.com sign-in.

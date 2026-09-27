@@ -17,9 +17,12 @@ const ts = (name: string) => timestamp(name, { withTimezone: true, mode: 'date' 
 
 export const users = pgTable('users', {
   id: uuid('id').primaryKey().defaultRandom(),
-  lichessUsername: text('lichess_username').notNull().unique(),
+  /** Null for accounts created with Chess.com. */
+  lichessUsername: text('lichess_username').unique(),
   lichessTokenEnc: text('lichess_token_enc'),
   chesscomUsername: text('chesscom_username'),
+  /** Chess.com's stable account id (the OAuth `sub`), set once the account is verified through Chess.com. */
+  chesscomId: text('chesscom_id').unique(),
   rating: integer('rating').default(1500).notNull(),
   ratingSpeed: text('rating_speed').default('blitz').notNull(),
   timezone: text('timezone').default('UTC').notNull(),

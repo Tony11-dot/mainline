@@ -22,7 +22,7 @@ const PRIVACY = () => `
 <ul>
   <li>No ads, no analytics, no tracking, no data sold or shared for marketing.</li>
   <li>Without signing in, your repertoires, training history and settings stay on your device.</li>
-  <li>If you sign in with Lichess, your repertoires and training progress are stored on our server so they sync between your devices.</li>
+  <li>If you sign in (with Lichess or Chess.com), your repertoires and training progress are stored on our server so they sync between your devices.</li>
   <li>You can delete everything from inside the app: Settings → Your data.</li>
 </ul>
 
@@ -34,24 +34,25 @@ const PRIVACY = () => `
   <li><strong>Chess positions</strong> you look up, to fetch opening statistics and engine evaluations from Lichess on your behalf. Positions aren't linked to you.</li>
   <li><strong>Usernames you type</strong> into Games (yours or an opponent's), to download public games from Lichess or Chess.com. We pass them to those sites and don't keep them.</li>
   <li><strong>If you sign in with Lichess</strong>: your Lichess username, your ratings, and an access token (encrypted at rest) that only allows reading public account information. We store your repertoires, training cards, review history and settings so they sync. The token is revoked when you delete your account.</li>
+  <li><strong>If you sign in with or connect Chess.com</strong>: your Chess.com username and Chess.com's account ID for you, which Chess.com confirms when you approve the sign-in. We don't keep a Chess.com access token.</li>
   <li><strong>If you turn on reminders on the web</strong>: a push subscription (an address your browser gives us for notifications), your reminder time and time zone, how many positions you have due, your streak length and streak freezes, and the date you last practised (so reminders stop once you have practised and say the right thing). On iPhone, iPad, Android and desktop, reminders are scheduled on the device and nothing is sent.</li>
   <li><strong>Technical logs</strong>: our hosting provider processes IP addresses and request logs to run and protect the service. Logs are kept for a short time and not used to identify you.</li>
 </ul>
 
 <h2>Cookies</h2>
-<p>MainLine uses no advertising, analytics or tracking cookies, so there's nothing to consent to. The only cookies are the two needed to sign in with Lichess, plus on-device storage for your own data. The full list is on the <a href="${esc(env.PUBLIC_URL)}/cookies">cookies page</a>.</p>
+<p>MainLine uses no advertising, analytics or tracking cookies, so there's nothing to consent to. The only cookies are the two needed to sign in with Lichess or Chess.com, plus on-device storage for your own data. The full list is on the <a href="${esc(env.PUBLIC_URL)}/cookies">cookies page</a>.</p>
 
 <h2>AI explanations</h2>
 <p>When you ask the coach to explain a move, the position and moves (never your name or account) are sent to an AI provider, Google Gemini or, as a fallback, Groq, to write the explanation. Explanations are cached by position and shared between users.</p>
 
 <h2>Third parties</h2>
-<p>Lichess (opening explorer, cloud evaluations, sign-in, games), Chess.com (public games), Google and Groq (AI explanations), and our hosting provider. Each handles data under its own privacy policy. We don't use any advertising or analytics SDKs.</p>
+<p>Lichess (opening explorer, cloud evaluations, sign-in, games), Chess.com (public games, sign-in), Google and Groq (AI explanations), and our hosting provider. Each handles data under its own privacy policy. We don't use any advertising or analytics SDKs.</p>
 
 <h2 id="delete">Keeping and deleting data</h2>
-<p>Synced data is kept while your account exists. Settings → Your data → <em>Delete my account &amp; data</em> removes your account and everything linked to it from our server immediately, and clears this device, including any reminder subscription. On the web, open ${esc(env.PUBLIC_URL)}/settings, sign in with Lichess and use the same option. Without an account, <em>Erase all data on this device</em> does the same locally. If you can't access the app, contact us (below) with your Lichess username; we'll confirm it's you through Lichess and delete the account within 30 days.</p>
+<p>Synced data is kept while your account exists. Settings → Your data → <em>Delete my account &amp; data</em> removes your account and everything linked to it from our server immediately, and clears this device, including any reminder subscription. On the web, open ${esc(env.PUBLIC_URL)}/settings, sign in and use the same option. Without an account, <em>Erase all data on this device</em> does the same locally. If you can't access the app, contact us (below) with your Lichess or Chess.com username; we'll confirm it's you through that site and delete the account within 30 days.</p>
 
 <h2>Children</h2>
-<p>MainLine is suitable for all ages and collects no more data from children than from anyone else. It doesn't knowingly collect personal information from children under 13 beyond the optional Lichess sign-in described above.</p>
+<p>MainLine is suitable for all ages and collects no more data from children than from anyone else. It doesn't knowingly collect personal information from children under 13 beyond the optional Lichess or Chess.com sign-in described above.</p>
 
 <h2>Your rights</h2>
 <p>You can access, export (PGN export in the app), correct or delete your data at any time. For any other request, contact ${contact()}.</p>
@@ -95,8 +96,8 @@ const COOKIES = () => `
 <table>
   <thead><tr><th>Name</th><th>Purpose</th><th>Lifetime</th></tr></thead>
   <tbody>
-    <tr><td><code>ml_session</code></td><td>Keeps you signed in after you choose <em>Sign in with Lichess</em>. HttpOnly, first-party, only set if you sign in. Removed when you sign out or delete your account.</td><td>1 year</td></tr>
-    <tr><td><code>ml_oauth</code></td><td>Protects the Lichess sign-in step against forgery (a one-time code). Only set while signing in.</td><td>10 minutes</td></tr>
+    <tr><td><code>ml_session</code></td><td>Keeps you signed in after you choose <em>Sign in with Lichess</em> or <em>Sign in with Chess.com</em>. HttpOnly, first-party, only set if you sign in. Removed when you sign out or delete your account.</td><td>1 year</td></tr>
+    <tr><td><code>ml_oauth</code></td><td>Protects the Lichess and Chess.com sign-in step against forgery (a one-time code). Only set while signing in.</td><td>10 minutes</td></tr>
   </tbody>
 </table>
 

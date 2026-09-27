@@ -24,8 +24,9 @@ interface GamesState {
 
 export const accounts = () => {
   const p = usePrefs.getState();
-  const lichess = p.lichessUser || useAuth.getState().me?.lichessUsername || '';
-  return { lichess, chesscom: p.chesscomUser };
+  const me = useAuth.getState().me;
+  const lichess = p.lichessUser || me?.lichessUsername || '';
+  return { lichess, chesscom: p.chesscomUser || me?.chesscomUsername || '' };
 };
 
 export const useGames = create<GamesState>((set, get) => ({

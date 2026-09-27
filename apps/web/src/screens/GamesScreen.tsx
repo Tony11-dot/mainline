@@ -147,7 +147,7 @@ function Accounts() {
       </label>
       <label className="block">
         <span className="mb-1 block text-sm font-semibold text-ink-2">Chess.com</span>
-        <input className={inputCls} value={p.chesscomUser} placeholder="username" onChange={(e) => p.set({ chesscomUser: e.target.value.trim() })} autoCapitalize="off" autoCorrect="off" spellCheck={false} aria-label="Chess.com username" />
+        <input className={inputCls} value={p.chesscomUser} placeholder={me?.chesscomUsername ?? 'username'} onChange={(e) => p.set({ chesscomUser: e.target.value.trim() })} autoCapitalize="off" autoCorrect="off" spellCheck={false} aria-label="Chess.com username" />
       </label>
       <Button variant="primary" icon={Download} loading={g.importing} disabled={!acc.lichess && !acc.chesscom} onClick={() => void run()}>
         Import games

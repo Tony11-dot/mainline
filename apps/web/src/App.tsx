@@ -29,6 +29,14 @@ export const router = createBrowserRouter([
 
 /** OS integrations that need the router. Called by main.tsx after initPlatform() (never at import time). */
 export function startPlatformHooks() {
+  // Web OAuth returns land on ?auth_error=… when sign-in didn't complete.
+  const authError = new URLSearchParams(location.search).get('auth_error');
+  if (authError) {
+    void import('./lib/auth').then(({ authErrorText }) => void import('./ui/toast').then(({ toast }) => toast(authErrorText(authError), { kind: 'error' })));
+    const u = new URL(location.href);
+    u.searchParams.delete('auth_error');
+    history.replaceState(history.state, '', u.pathname + u.search + u.hash);
+  }
   useLaunch.setState({ active: shouldShowLaunch(platform().isNative) });
   // Deep links, OAuth returns, files and notification taps from the OS.
   platform().onIncoming((i) => void handleIncoming((to) => void router.navigate(to))(i));

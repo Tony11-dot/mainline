@@ -1,20 +1,20 @@
 import { useState, type ReactNode } from 'react';
-import { LogOut, Trash2 } from 'lucide-react';
-import { SPEEDS, type Speed } from '@mainline/shared';
+import { BadgeCheck, LogOut, Trash2 } from 'lucide-react';
+import { accountName, SPEEDS, type Speed } from '@mainline/shared';
 import { usePrefs } from '../lib/prefs';
 import { AppearanceSettings } from './settings/AppearanceSettings';
 import { RemindersSettings } from './settings/RemindersSettings';
 import { LOCALES, useT } from '../lib/i18n';
 import { syncNow, useSync } from '../lib/sync';
 import { playSound } from '../lib/sound';
-import { startLichessLogin, useAuth } from '../lib/auth';
+import { startLogin, useAuth } from '../lib/auth';
 import { legalUrl } from '../lib/legal';
 import { Button, Segmented } from '../ui/primitives';
 import { Sheet } from '../ui/Sheet';
 
 export function SettingsScreen() {
   const p = usePrefs();
-  const { me, logout } = useAuth();
+  const { me, logout, providers } = useAuth();
   const sync = useSync();
   const t = useT();
   return (
@@ -23,19 +23,43 @@ export function SettingsScreen() {
 
       <Group title="Account">
         {me ? (
-          <Row label={`Signed in as ${me.lichessUsername}`} hint={syncHint(sync)}>
-            <Button size="sm" variant="ghost" onClick={() => void syncNow()} className="mr-1">
-              Sync now
-            </Button>
-            <Button size="sm" icon={LogOut} onClick={() => void logout()}>
-              Sign out
-            </Button>
-          </Row>
+          <>
+            <Row label={`Signed in as ${accountName(me)}`} hint={syncHint(sync)}>
+              <Button size="sm" variant="ghost" onClick={() => void syncNow()} className="mr-1">
+                Sync now
+              </Button>
+              <Button size="sm" icon={LogOut} onClick={() => void logout()}>
+                Sign out
+              </Button>
+            </Row>
+            {me.chesscomVerified ? (
+              <Row label="Chess.com" hint="Your games import from this account.">
+                <span className="inline-flex items-center gap-1.5 text-sm font-semibold text-good">
+                  <BadgeCheck size={16} aria-hidden /> {me.chesscomUsername}
+                </span>
+              </Row>
+            ) : (
+              providers.chesscom && (
+                <Row label="Chess.com" hint="Link your Chess.com account to import your games from it.">
+                  <Button size="sm" onClick={() => void startLogin('chesscom')}>
+                    <ChessComMark /> Connect Chess.com
+                  </Button>
+                </Row>
+              )
+            )}
+          </>
         ) : (
-          <Row label="Lichess account" hint="Optional. Syncs your repertoire and unlocks explorer stats at your rating.">
-            <Button size="sm" variant="primary" onClick={() => startLichessLogin()}>
-              Sign in with Lichess
-            </Button>
+          <Row label="Account" hint="Optional. Syncs your repertoire across devices and imports your games.">
+            <div className="flex flex-wrap justify-end gap-2">
+              <Button size="sm" variant="primary" onClick={() => void startLogin('lichess')}>
+                Sign in with Lichess
+              </Button>
+              {providers.chesscom && (
+                <Button size="sm" onClick={() => void startLogin('chesscom')}>
+                  <ChessComMark /> Sign in with Chess.com
+                </Button>
+              )}
+            </div>
           </Row>
         )}
       </Group>
@@ -291,4 +315,13 @@ function syncHint(s: ReturnType<typeof useSync.getState>): string {
   if (s.status === 'error') return `Sync problem: ${s.error ?? 'unknown'} — retrying automatically.`;
   if (s.lastSyncedAt) return `Synced ${new Date(s.lastSyncedAt).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })} · repertoire and training follow you across devices.`;
   return 'Your repertoire and training sync across devices.';
+}
+
+/** A neutral pawn glyph for Chess.com buttons (their logo is trademarked, so no brand artwork). */
+function ChessComMark() {
+  return (
+    <svg viewBox="0 0 24 24" className="me-1.5 size-4" aria-hidden>
+      <path fill="currentColor" d="M12 2a3.5 3.5 0 0 0-2.2 6.2C8.6 9 8 10.2 8 11.5c0 .9.3 1.7.8 2.3L7 19h10l-1.8-5.2c.5-.6.8-1.4.8-2.3 0-1.3-.6-2.5-1.8-3.3A3.5 3.5 0 0 0 12 2Zm-6 18.5A1.5 1.5 0 0 0 7.5 22h9a1.5 1.5 0 0 0 1.5-1.5V20H6v.5Z" />
+    </svg>
+  );
 }

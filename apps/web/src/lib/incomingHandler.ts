@@ -1,5 +1,6 @@
 import { api, sessionToken } from './api';
-import { useAuth } from './auth';
+import { authErrorText, useAuth } from './auth';
+import { accountName } from '@mainline/shared';
 import { setPendingImport } from './incoming';
 import { platform } from '../platform';
 import { toast } from '../ui/toast';
@@ -25,7 +26,7 @@ export function handleIncoming(navigate: (to: string) => void) {
       const err = url.searchParams.get('auth_error');
       if (platform().kind !== 'desktop') void (await import('../platform/capacitor')).closeInAppBrowser();
       if (!code) {
-        if (err) toast(err === 'cancelled' ? 'Sign-in cancelled' : `Sign-in failed (${err})`, { kind: 'error' });
+        if (err) toast(authErrorText(err), { kind: 'error' });
         return;
       }
       try {
@@ -33,7 +34,7 @@ export function handleIncoming(navigate: (to: string) => void) {
         sessionToken.set(token);
         await useAuth.getState().refresh();
         const me = useAuth.getState().me;
-        toast(me ? `Signed in as ${me.lichessUsername}` : 'Signed in', { kind: 'success' });
+        toast(me ? `Signed in as ${accountName(me)}` : 'Signed in', { kind: 'success' });
       } catch (e) {
         toast((e as Error).message, { kind: 'error' });
       }

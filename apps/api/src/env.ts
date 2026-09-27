@@ -10,6 +10,9 @@ const schema = z.object({
   SESSION_SECRET: z.string().optional(),
   LICHESS_CLIENT_ID: z.string().default('mainline'),
   LICHESS_FALLBACK_TOKEN: z.string().optional(),
+  /** Sign in with Chess.com: credentials from Chess.com's OAuth application (PKCE; the secret is optional). */
+  CHESSCOM_CLIENT_ID: z.string().optional(),
+  CHESSCOM_CLIENT_SECRET: z.string().optional(),
   VAPID_PUBLIC_KEY: z.string().optional(),
   VAPID_PRIVATE_KEY: z.string().optional(),
   VAPID_SUBJECT: z.string().optional(),

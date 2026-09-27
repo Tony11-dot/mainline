@@ -29,6 +29,13 @@
       "when": 1790297929180,
       "tag": "0003_streaks",
       "breakpoints": true
+    },
+    {
+      "idx": 4,
+      "version": "7",
+      "when": 1790521820170,
+      "tag": "0004_chesscom",
+      "breakpoints": true
     }
   ]
 }
