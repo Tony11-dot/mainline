@@ -1,4 +1,5 @@
-import { createPublicKey, verify as verifySig, type webcrypto } from 'node:crypto';
+import { createPrivateKey, createPublicKey, sign as signData, verify as verifySig, type webcrypto } from 'node:crypto';
+import { env } from '../env';
 import { sha256 } from './crypto';
 
 /** Sign in with Apple: the identity token's audience is the iOS app's bundle id. */
@@ -53,4 +54,39 @@ export async function verifyAppleIdentityToken(token: string, rawNonce?: string,
   if (rawNonce !== undefined && payload.nonce !== sha256(rawNonce)) return undefined;
   if (typeof payload.sub !== 'string' || !payload.sub) return undefined;
   return { sub: payload.sub, email: typeof payload.email === 'string' ? payload.email : undefined };
+}
+
+/* ---------------- Token revocation (account deletion) ---------------- */
+
+export const appleRevokeEnabled = () => !!(env.APPLE_SIWA_KEY_ID && env.APPLE_SIWA_PRIVATE_KEY);
+
+/** The client secret Apple's token endpoints want: an ES256 JWT signed with the Sign in with Apple key. */
+export function appleClientSecret(now = Date.now(), keyId = env.APPLE_SIWA_KEY_ID!, pem = env.APPLE_SIWA_PRIVATE_KEY!, teamId = env.APPLE_TEAM_ID): string {
+  const b64 = (o: object) => Buffer.from(JSON.stringify(o)).toString('base64url');
+  const iat = Math.floor(now / 1000);
+  const body = `${b64({ alg: 'ES256', kid: keyId })}.${b64({ iss: teamId, iat, exp: iat + 300, aud: ISSUER, sub: APPLE_AUDIENCE })}`;
+  // Railway variables can't hold newlines everywhere, so a key pasted with literal \n works too.
+  const key = createPrivateKey(pem.includes('\\n') ? pem.replace(/\\n/g, '\n') : pem);
+  return `${body}.${signData('sha256', Buffer.from(body), { key, dsaEncoding: 'ieee-p1363' }).toString('base64url')}`;
+}
+
+const form = (o: Record<string, string>) => ({
+  method: 'POST',
+  headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+  body: new URLSearchParams({ client_id: APPLE_AUDIENCE, client_secret: appleClientSecret(), ...o }),
+});
+
+/** Trades the app's one-time authorization code for a refresh token (kept only so deletion can revoke it). */
+export async function appleRefreshToken(authorizationCode: string): Promise<string | undefined> {
+  if (!appleRevokeEnabled()) return undefined;
+  const res = await fetch(`${ISSUER}/auth/token`, form({ grant_type: 'authorization_code', code: authorizationCode }));
+  if (!res.ok) return undefined;
+  return ((await res.json()) as { refresh_token?: string }).refresh_token;
+}
+
+/** Account deletion: tells Apple to drop MainLine's access (App Store guideline 5.1.1(v)). */
+export async function revokeAppleToken(refreshToken: string): Promise<boolean> {
+  if (!appleRevokeEnabled()) return false;
+  const res = await fetch(`${ISSUER}/auth/revoke`, form({ token: refreshToken, token_type_hint: 'refresh_token' }));
+  return res.ok;
 }

@@ -29,3 +29,17 @@ describe('verifyAppleIdentityToken', () => {
     expect(await verifyAppleIdentityToken('not.a.jwt', 'raw-nonce-123456', NOW, keys)).toBeUndefined();
   });
 });
+
+describe('appleClientSecret', () => {
+  it('is an ES256 JWT for this app, signed with the Sign in with Apple key (newlines may arrive escaped)', async () => {
+    const { generateKeyPairSync: gen, verify } = await import('node:crypto');
+    const { appleClientSecret } = await import('./apple');
+    const ec = gen('ec', { namedCurve: 'P-256' });
+    const pem = (ec.privateKey.export({ format: 'pem', type: 'pkcs8' }) as string).replace(/\n/g, '\\n');
+    const jwt = appleClientSecret(NOW, 'KEY123', pem, 'TEAM1');
+    const [h, p, s] = jwt.split('.') as [string, string, string];
+    expect(JSON.parse(Buffer.from(h, 'base64url').toString())).toEqual({ alg: 'ES256', kid: 'KEY123' });
+    expect(JSON.parse(Buffer.from(p, 'base64url').toString())).toMatchObject({ iss: 'TEAM1', sub: APPLE_AUDIENCE, aud: 'https://appleid.apple.com', iat: NOW / 1000 });
+    expect(verify('sha256', Buffer.from(`${h}.${p}`), { key: ec.publicKey, dsaEncoding: 'ieee-p1363' }, Buffer.from(s, 'base64url'))).toBe(true);
+  });
+});

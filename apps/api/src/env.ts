@@ -13,6 +13,11 @@ const schema = z.object({
   /** Sign in with Chess.com: credentials from Chess.com's OAuth application (PKCE; the secret is optional). */
   CHESSCOM_CLIENT_ID: z.string().optional(),
   CHESSCOM_CLIENT_SECRET: z.string().optional(),
+  /** Sign in with Apple key (Certificates, IDs & Profiles → Keys): lets account deletion revoke Apple access. */
+  APPLE_SIWA_KEY_ID: z.string().optional(),
+  /** Its .p8 contents (PEM). */
+  APPLE_SIWA_PRIVATE_KEY: z.string().optional(),
+  APPLE_TEAM_ID: z.string().default('NNFD7CKGLG'),
   VAPID_PUBLIC_KEY: z.string().optional(),
   VAPID_PRIVATE_KEY: z.string().optional(),
   VAPID_SUBJECT: z.string().optional(),

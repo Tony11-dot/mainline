@@ -25,6 +25,8 @@ export const users = pgTable('users', {
   chesscomId: text('chesscom_id').unique(),
   /** Sign in with Apple's stable user id (the identity token's `sub`). */
   appleSub: text('apple_sub').unique(),
+  /** Apple refresh token (encrypted), kept only so account deletion can revoke MainLine's access. */
+  appleRefreshEnc: text('apple_refresh_enc'),
   /** Name shared through Sign in with Apple (only sent on the first sign-in), shown when there's no chess username. */
   displayName: text('display_name'),
   rating: integer('rating').default(1500).notNull(),

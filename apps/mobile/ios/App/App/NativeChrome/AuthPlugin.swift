@@ -83,7 +83,8 @@ public class AuthPlugin: CAPPlugin, CAPBridgedPlugin, ASWebAuthenticationPresent
             return
         }
         let name = [cred.fullName?.givenName, cred.fullName?.familyName].compactMap { $0 }.joined(separator: " ")
-        call.resolve(["identityToken": token, "name": name])
+        let code = cred.authorizationCode.flatMap { String(data: $0, encoding: .utf8) } ?? ""
+        call.resolve(["identityToken": token, "name": name, "authorizationCode": code])
     }
 
     public func authorizationController(controller: ASAuthorizationController, didCompleteWithError error: Error) {

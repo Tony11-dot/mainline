@@ -143,8 +143,11 @@ export async function signInWithApple() {
   const raw = Array.from(crypto.getRandomValues(new Uint8Array(24)), (b) => b.toString(16).padStart(2, '0')).join('');
   const hashed = Array.from(new Uint8Array(await crypto.subtle.digest('SHA-256', new TextEncoder().encode(raw))), (b) => b.toString(16).padStart(2, '0')).join('');
   try {
-    const { identityToken, name } = await native.nativeAppleSignIn(hashed);
-    const { token } = await api<{ token: string }>('/api/auth/apple', { method: 'POST', json: { identityToken, nonce: raw, name: name || undefined } });
+    const { identityToken, name, authorizationCode } = await native.nativeAppleSignIn(hashed);
+    const { token } = await api<{ token: string }>('/api/auth/apple', {
+      method: 'POST',
+      json: { identityToken, nonce: raw, name: name || undefined, authorizationCode: authorizationCode || undefined },
+    });
     await signedIn(token);
   } catch (e) {
     if (!native.isCancelled(e)) toast(`Sign in with Apple failed: ${(e as Error).message}`, { kind: 'error' });

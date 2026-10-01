@@ -295,3 +295,7 @@ Visual checks: `VISUAL=1 pnpm e2e visual` (add `--update-snapshots` after an int
   - Migration `0005_apple` adds `apple_sub` and `display_name`.
 - iPad: the sidebar is the only navigation, with no bottom tab bar under it.
 - The privacy policy now covers Sign in with Apple.
+- Deleting an account made with Sign in with Apple now revokes MainLine's access at Apple too (App Store 5.1.1(v)).
+  - The app sends Apple's one-time authorization code at sign-in. The server trades it for a refresh token, stores it encrypted, and revokes it when the account is deleted.
+  - This needs `APPLE_SIWA_KEY_ID` and `APPLE_SIWA_PRIVATE_KEY`, the Sign in with Apple key from Certificates, IDs & Profiles → Keys. Both are set on Railway.
+  - Migration `0006_apple_revoke`. The app half ships in the next iOS build.

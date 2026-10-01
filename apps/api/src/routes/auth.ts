@@ -8,7 +8,7 @@ import { decryptSecret, encryptSecret, randomToken, sha256b64url, sign, verify }
 import { createSession, currentUser, destroySession, requireUser, setSessionCookie, type User } from '../lib/session';
 import { USER_AGENT } from '../lib/lichess';
 import { Lru } from '../lib/lru';
-import { verifyAppleIdentityToken } from '../lib/apple';
+import { appleRefreshToken, revokeAppleToken, verifyAppleIdentityToken } from '../lib/apple';
 
 const OAUTH_COOKIE = 'ml_oauth';
 export const NATIVE_SCHEME = 'app.mainline.chess';
@@ -168,10 +168,14 @@ export async function authRoutes(app: FastifyInstance) {
    */
   app.post('/api/auth/apple', async (req) => {
     if (!getDb()) throw new MissingConfigError('DATABASE_URL', 'Accounts');
-    const body = z.object({ identityToken: z.string().min(20).max(8000), nonce: z.string().min(16).max(200), name: z.string().max(80).optional() }).parse(req.body);
+    const body = z
+      .object({ identityToken: z.string().min(20).max(8000), nonce: z.string().min(16).max(200), name: z.string().max(80).optional(), authorizationCode: z.string().max(500).optional() })
+      .parse(req.body);
     const claims = await verifyAppleIdentityToken(body.identityToken, body.nonce);
     if (!claims) throw Object.assign(new Error('Apple sign-in could not be verified'), { statusCode: 401 });
-    const user = await upsertAppleUser(claims.sub, body.name?.trim() || undefined);
+    // The refresh token only exists so deleting the account can revoke Apple access; sign-in works without it.
+    const refresh = body.authorizationCode ? await appleRefreshToken(body.authorizationCode).catch(() => undefined) : undefined;
+    const user = await upsertAppleUser(claims.sub, body.name?.trim() || undefined, refresh ? encryptSecret(refresh) : undefined);
     return { token: await createSession(user.id) };
   });
 
@@ -210,7 +214,7 @@ export async function authRoutes(app: FastifyInstance) {
     return { me: toMe(updated!) };
   });
 
-  /** App Store 5.1.1(v): in-app account deletion. Revokes the Lichess token and deletes every row. */
+  /** App Store 5.1.1(v): in-app account deletion. Revokes the Lichess and Apple tokens and deletes every row. */
   app.delete('/api/me', async (req, reply) => {
     const u = await requireUser(req);
     if (u.lichessTokenEnc) {
@@ -223,6 +227,13 @@ export async function authRoutes(app: FastifyInstance) {
         /* best effort */
       }
     }
+    if (u.appleRefreshEnc) {
+      try {
+        if (!(await revokeAppleToken(decryptSecret(u.appleRefreshEnc)))) req.log.warn('apple token revoke failed');
+      } catch (e) {
+        req.log.warn({ err: e }, 'apple token revoke failed');
+      }
+    }
     const db = getDb()!;
     await db.delete(schema.users).where(eq(schema.users.id, u.id));
     await destroySession(req, reply);
@@ -230,12 +241,13 @@ export async function authRoutes(app: FastifyInstance) {
   });
 }
 
-async function upsertAppleUser(sub: string, name?: string): Promise<User> {
+async function upsertAppleUser(sub: string, name?: string, refreshEnc?: string): Promise<User> {
   const db = getDb()!;
+  const update = { appleSub: sub, ...(name ? { displayName: name } : {}), ...(refreshEnc ? { appleRefreshEnc: refreshEnc } : {}) };
   const [u] = await db
     .insert(schema.users)
-    .values({ appleSub: sub, displayName: name ?? null })
-    .onConflictDoUpdate({ target: schema.users.appleSub, set: name ? { displayName: name } : { appleSub: sub } })
+    .values({ appleSub: sub, displayName: name ?? null, appleRefreshEnc: refreshEnc ?? null })
+    .onConflictDoUpdate({ target: schema.users.appleSub, set: update })
     .returning();
   return u!;
 }
