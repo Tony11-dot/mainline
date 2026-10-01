@@ -36,6 +36,13 @@
       "when": 1790521820170,
       "tag": "0004_chesscom",
       "breakpoints": true
+    },
+    {
+      "idx": 5,
+      "version": "7",
+      "when": 1790858512969,
+      "tag": "0005_apple",
+      "breakpoints": true
     }
   ]
 }

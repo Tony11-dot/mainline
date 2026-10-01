@@ -1,7 +1,8 @@
 import { create } from 'zustand';
-import type { Me } from '@mainline/shared';
+import { accountName, type Me } from '@mainline/shared';
 import { api, apiUrl, sessionToken } from './api';
 import { platform } from '../platform';
+import { toast } from '../ui/toast';
 
 interface AuthState {
   me: Me | null;
@@ -94,8 +95,60 @@ export async function startLogin(provider: 'lichess' | 'chesscom', returnPath = 
     }
   }
   const url = apiUrl(`/api/auth/${provider}/start?${params}`);
-  if (p.isNative) void p.openExternal(url.startsWith('http') ? url : `${location.origin}${url}`);
-  else location.href = url;
+  if (!p.isNative) {
+    location.href = url;
+    return;
+  }
+  const abs = url.startsWith('http') ? url : `${location.origin}${url}`;
+  // iOS: Apple's sign-in sheet hands the callback straight back (full size on iPad, no "Open in" prompt).
+  const native = await import('../platform/nativeAuth');
+  if (native.hasNativeAuth()) {
+    try {
+      await finishOAuthReturn(new URL(await native.nativeWebAuth(abs, 'app.mainline.chess')));
+      return;
+    } catch (e) {
+      if (native.isCancelled(e)) return;
+      /* sheet unavailable: fall back to the in-app browser + deep link */
+    }
+  }
+  void p.openExternal(abs);
+}
+
+/** Apps: the OAuth callback (app.mainline.chess://auth?code=… or ?auth_error=…) → bearer session. */
+export async function finishOAuthReturn(url: URL) {
+  const code = url.searchParams.get('code');
+  const err = url.searchParams.get('auth_error');
+  if (!code) {
+    if (err && err !== 'cancelled') toast(authErrorText(err), { kind: 'error' });
+    return;
+  }
+  try {
+    const { token } = await api<{ token: string }>('/api/auth/exchange', { method: 'POST', json: { code } });
+    await signedIn(token);
+  } catch (e) {
+    toast((e as Error).message, { kind: 'error' });
+  }
+}
+
+async function signedIn(token: string) {
+  sessionToken.set(token);
+  await useAuth.getState().refresh();
+  const me = useAuth.getState().me;
+  toast(me ? `Signed in as ${accountName(me)}` : 'Signed in', { kind: 'success' });
+}
+
+/** iOS: Sign in with Apple. The API verifies Apple's identity token (and our nonce inside it). */
+export async function signInWithApple() {
+  const native = await import('../platform/nativeAuth');
+  const raw = Array.from(crypto.getRandomValues(new Uint8Array(24)), (b) => b.toString(16).padStart(2, '0')).join('');
+  const hashed = Array.from(new Uint8Array(await crypto.subtle.digest('SHA-256', new TextEncoder().encode(raw))), (b) => b.toString(16).padStart(2, '0')).join('');
+  try {
+    const { identityToken, name } = await native.nativeAppleSignIn(hashed);
+    const { token } = await api<{ token: string }>('/api/auth/apple', { method: 'POST', json: { identityToken, nonce: raw, name: name || undefined } });
+    await signedIn(token);
+  } catch (e) {
+    if (!native.isCancelled(e)) toast(`Sign in with Apple failed: ${(e as Error).message}`, { kind: 'error' });
+  }
 }
 
 /** Human wording for ?auth_error= codes from the OAuth callbacks. */

@@ -1,9 +1,6 @@
-import { api, sessionToken } from './api';
-import { authErrorText, useAuth } from './auth';
-import { accountName } from '@mainline/shared';
+import { finishOAuthReturn } from './auth';
 import { setPendingImport } from './incoming';
 import { platform } from '../platform';
-import { toast } from '../ui/toast';
 
 /** Handles deep links and files handed to the app by the OS (all platforms). */
 export function handleIncoming(navigate: (to: string) => void) {
@@ -22,22 +19,8 @@ export function handleIncoming(navigate: (to: string) => void) {
     }
     // OAuth return: app.mainline.chess://auth?code=… (mobile) or mainline://auth?code=… (desktop)
     if ((url.protocol === 'app.mainline.chess:' || url.protocol === 'mainline:') && (url.host === 'auth' || url.pathname.replace(/^\/+/, '') === 'auth')) {
-      const code = url.searchParams.get('code');
-      const err = url.searchParams.get('auth_error');
       if (platform().kind !== 'desktop') void (await import('../platform/capacitor')).closeInAppBrowser();
-      if (!code) {
-        if (err) toast(authErrorText(err), { kind: 'error' });
-        return;
-      }
-      try {
-        const { token } = await api<{ token: string }>('/api/auth/exchange', { method: 'POST', json: { code } });
-        sessionToken.set(token);
-        await useAuth.getState().refresh();
-        const me = useAuth.getState().me;
-        toast(me ? `Signed in as ${accountName(me)}` : 'Signed in', { kind: 'success' });
-      } catch (e) {
-        toast((e as Error).message, { kind: 'error' });
-      }
+      await finishOAuthReturn(url);
       return;
     }
     // In-app links, e.g. from notifications: mainline paths

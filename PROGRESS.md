@@ -286,3 +286,12 @@ Visual checks: `VISUAL=1 pnpm e2e visual` (add `--update-snapshots` after an int
   - Migration `0004_chesscom`: `lichess_username` is optional, and `chesscom_id` is unique.
 - Fixed: a cancelled or failed sign-in in the iOS/Android app now returns to the app with a clear message, instead of landing on a web page. The web shows these messages too.
 - The privacy policy and cookie page now cover Chess.com sign-in.
+
+## Sign-in fixes for iPad, and Sign in with Apple (2026-10-01)
+
+- **Fixed: Sign in with Lichess on iPad.** App Review couldn't complete it on iPad. On iPhone and iPad, Lichess and Chess.com sign-in now open in Apple's sign-in sheet (`ASWebAuthenticationSession`), which hands the result straight back to the app. There's no "Open in MainLine?" prompt and no small floating browser window. Other links open full screen.
+- **Sign in with Apple** on iPhone and iPad. No chess account is needed, and MainLine gets only Apple's anonymous ID and, if you share it, your name.
+  - Server: `POST /api/auth/apple` checks Apple's identity token (signature against Apple's keys, issuer, audience, expiry and a one-time nonce), then returns a session.
+  - Migration `0005_apple` adds `apple_sub` and `display_name`.
+- iPad: the sidebar is the only navigation, with no bottom tab bar under it.
+- The privacy policy now covers Sign in with Apple.

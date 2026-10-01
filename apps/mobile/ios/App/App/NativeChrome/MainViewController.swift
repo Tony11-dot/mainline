@@ -5,6 +5,7 @@ import UIKit
 class MainViewController: CAPBridgeViewController {
     override open func capacitorDidLoad() {
         bridge?.registerPluginInstance(NativeChromePlugin())
+        bridge?.registerPluginInstance(AuthPlugin())
     }
 
     override func viewDidLoad() {

@@ -34,12 +34,15 @@ export async function startNativeChrome(router: { navigate: (to: string) => unkn
   }
   document.documentElement.dataset.nativeChrome = '';
   await NativeChrome.addListener('tabSelected', ({ id }) => void router.navigate(id));
+  // iPad (and wide split view): the web sidebar is the navigation, so the bottom bar stays hidden.
+  const wide = matchMedia('(min-width: 768px)');
   const sync = (path: string) => {
     void NativeChrome.select({ id: idFor(path) });
-    void NativeChrome.setVisible({ visible: !useLaunch.getState().active && !path.startsWith('/train') });
+    void NativeChrome.setVisible({ visible: !wide.matches && !useLaunch.getState().active && !path.startsWith('/train') });
   };
   router.subscribe((s) => sync(s.location.pathname));
   useLaunch.subscribe(() => sync(router.state.location.pathname));
+  wide.addEventListener('change', () => sync(router.state.location.pathname));
   sync(router.state.location.pathname);
   const theme = () => {
     const css = getComputedStyle(document.documentElement);

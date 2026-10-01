@@ -129,7 +129,8 @@ export function createCapacitorPlatform(kind: 'ios' | 'android'): Platform {
     },
 
     async openExternal(url) {
-      await Browser.open({ url, presentationStyle: 'popover' });
+      // Full screen: on iPad a popover is a small floating window that's easy to lose.
+      await Browser.open({ url, presentationStyle: 'fullscreen' });
     },
 
     onIncoming(cb) {

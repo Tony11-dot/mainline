@@ -7,7 +7,8 @@ import { RemindersSettings } from './settings/RemindersSettings';
 import { LOCALES, useT } from '../lib/i18n';
 import { syncNow, useSync } from '../lib/sync';
 import { playSound } from '../lib/sound';
-import { startLogin, useAuth } from '../lib/auth';
+import { signInWithApple, startLogin, useAuth } from '../lib/auth';
+import { platformKind } from '../platform';
 import { legalUrl } from '../lib/legal';
 import { Button, Segmented } from '../ui/primitives';
 import { Sheet } from '../ui/Sheet';
@@ -51,6 +52,7 @@ export function SettingsScreen() {
         ) : (
           <Row label="Account" hint="Optional. Syncs your repertoire across devices and imports your games.">
             <div className="flex flex-wrap justify-end gap-2">
+              {platformKind === 'ios' && <AppleButton onClick={() => void signInWithApple()} />}
               <Button size="sm" variant="primary" onClick={() => void startLogin('lichess')}>
                 Sign in with Lichess
               </Button>
@@ -315,6 +317,25 @@ function syncHint(s: ReturnType<typeof useSync.getState>): string {
   if (s.status === 'error') return `Sync problem: ${s.error ?? 'unknown'} — retrying automatically.`;
   if (s.lastSyncedAt) return `Synced ${new Date(s.lastSyncedAt).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })} · repertoire and training follow you across devices.`;
   return 'Your repertoire and training sync across devices.';
+}
+
+/** Apple's button style (HIG): black (white in dark mode), Apple logo, "Sign in with Apple". */
+function AppleButton({ onClick }: { onClick: () => void }) {
+  return (
+    <button
+      type="button"
+      onClick={onClick}
+      className="inline-flex h-8 items-center gap-1.5 rounded-[10px] bg-black px-3 text-sm font-semibold text-white active:opacity-80 dark:bg-white dark:text-black"
+    >
+      <svg viewBox="0 0 17 20" className="size-[15px]" aria-hidden>
+        <path
+          fill="currentColor"
+          d="M14.06 10.62c-.02-2.2 1.8-3.26 1.88-3.31-1.03-1.5-2.62-1.7-3.18-1.72-1.35-.14-2.64.8-3.33.8-.69 0-1.74-.78-2.87-.76A4.24 4.24 0 0 0 2.98 7.8c-1.53 2.65-.39 6.57 1.1 8.72.73 1.05 1.6 2.23 2.73 2.19 1.1-.04 1.51-.71 2.84-.71 1.32 0 1.7.71 2.86.69 1.18-.02 1.93-1.07 2.65-2.13a9.5 9.5 0 0 0 1.2-2.47 3.84 3.84 0 0 1-2.3-3.47ZM11.88 4.16A3.8 3.8 0 0 0 12.77 1.4a3.9 3.9 0 0 0-2.52 1.3 3.63 3.63 0 0 0-.92 2.67 3.21 3.21 0 0 0 2.55-1.21Z"
+        />
+      </svg>
+      Sign in with Apple
+    </button>
+  );
 }
 
 /** A neutral pawn glyph for Chess.com buttons (their logo is trademarked, so no brand artwork). */

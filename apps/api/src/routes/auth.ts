@@ -8,6 +8,7 @@ import { decryptSecret, encryptSecret, randomToken, sha256b64url, sign, verify }
 import { createSession, currentUser, destroySession, requireUser, setSessionCookie, type User } from '../lib/session';
 import { USER_AGENT } from '../lib/lichess';
 import { Lru } from '../lib/lru';
+import { verifyAppleIdentityToken } from '../lib/apple';
 
 const OAUTH_COOKIE = 'ml_oauth';
 export const NATIVE_SCHEME = 'app.mainline.chess';
@@ -31,6 +32,8 @@ export function toMe(u: User): Me {
     ratingSpeed: u.ratingSpeed as Me['ratingSpeed'],
     chesscomUsername: u.chesscomUsername,
     chesscomVerified: !!u.chesscomId,
+    displayName: u.displayName,
+    appleLinked: !!u.appleSub,
   };
 }
 
@@ -159,6 +162,19 @@ export async function authRoutes(app: FastifyInstance) {
     }),
   );
 
+  /**
+   * Sign in with Apple (iOS app): the app sends Apple's identity token, we verify it and answer with a
+   * bearer session token. Apple shares the name only on the very first sign-in, so it's saved then.
+   */
+  app.post('/api/auth/apple', async (req) => {
+    if (!getDb()) throw new MissingConfigError('DATABASE_URL', 'Accounts');
+    const body = z.object({ identityToken: z.string().min(20).max(8000), nonce: z.string().min(16).max(200), name: z.string().max(80).optional() }).parse(req.body);
+    const claims = await verifyAppleIdentityToken(body.identityToken, body.nonce);
+    if (!claims) throw Object.assign(new Error('Apple sign-in could not be verified'), { statusCode: 401 });
+    const user = await upsertAppleUser(claims.sub, body.name?.trim() || undefined);
+    return { token: await createSession(user.id) };
+  });
+
   /** Native apps trade the one-time code from the custom-scheme redirect for a bearer session token. */
   app.post('/api/auth/exchange', async (req) => {
     const { code } = z.object({ code: z.string().min(10) }).parse(req.body);
@@ -212,6 +228,16 @@ export async function authRoutes(app: FastifyInstance) {
     await destroySession(req, reply);
     return { deleted: true };
   });
+}
+
+async function upsertAppleUser(sub: string, name?: string): Promise<User> {
+  const db = getDb()!;
+  const [u] = await db
+    .insert(schema.users)
+    .values({ appleSub: sub, displayName: name ?? null })
+    .onConflictDoUpdate({ target: schema.users.appleSub, set: name ? { displayName: name } : { appleSub: sub } })
+    .returning();
+  return u!;
 }
 
 async function upsertLichessUser(acc: { username: string; perfs?: Record<string, { rating?: number; games?: number }> }, token: string) {

@@ -18,6 +18,7 @@
 		50B271D11FEDC1A000F3C39B /* public in Resources */ = {isa = PBXBuildFile; fileRef = 50B271D01FEDC1A000F3C39B /* public */; };
 		55E6700DBFF9973FE8B2022C /* PrivacyInfo.xcprivacy in Resources */ = {isa = PBXBuildFile; fileRef = 39B8A4DCA97E77C79E45E5B4 /* PrivacyInfo.xcprivacy */; };
 		9582B6832FE993A70072D4E8 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9582B6822FE993A50072D4E8 /* SceneDelegate.swift */; };
+		B1A7E5C0D2F34A6B8C9D0E11 /* AuthPlugin.swift in Sources */ = {isa = PBXBuildFile; fileRef = B1A7E5C0D2F34A6B8C9D0E12 /* AuthPlugin.swift */; };
 		A4DB7C7B3B053E8E44760846 /* NativeChromePlugin.swift in Sources */ = {isa = PBXBuildFile; fileRef = 72EDF824BAB866416E32D70D /* NativeChromePlugin.swift */; };
 /* End PBXBuildFile section */
 
@@ -32,6 +33,8 @@
 		504EC3111FED79650016851F /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		504EC3131FED79650016851F /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		50B271D01FEDC1A000F3C39B /* public */ = {isa = PBXFileReference; lastKnownFileType = folder; path = public; sourceTree = "<group>"; };
+		B1A7E5C0D2F34A6B8C9D0E12 /* AuthPlugin.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = AuthPlugin.swift; sourceTree = "<group>"; };
+		B1A7E5C0D2F34A6B8C9D0E13 /* App.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = App.entitlements; sourceTree = "<group>"; };
 		72EDF824BAB866416E32D70D /* NativeChromePlugin.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = NativeChromePlugin.swift; sourceTree = "<group>"; };
 		8D054B9E862DD899CB775224 /* MainViewController.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = MainViewController.swift; sourceTree = "<group>"; };
 		9582B6822FE993A50072D4E8 /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
@@ -76,6 +79,7 @@
 				504EC30B1FED79650016851F /* Main.storyboard */,
 				504EC30E1FED79650016851F /* Assets.xcassets */,
 				504EC3101FED79650016851F /* LaunchScreen.storyboard */,
+				B1A7E5C0D2F34A6B8C9D0E13 /* App.entitlements */,
 				504EC3131FED79650016851F /* Info.plist */,
 				2FAD9762203C412B000D30F8 /* config.xml */,
 				50B271D01FEDC1A000F3C39B /* public */,
@@ -88,6 +92,7 @@
 		AD1E1365F00F44525258177F /* NativeChrome */ = {
 			isa = PBXGroup;
 			children = (
+				B1A7E5C0D2F34A6B8C9D0E12 /* AuthPlugin.swift */,
 				72EDF824BAB866416E32D70D /* NativeChromePlugin.swift */,
 				8D054B9E862DD899CB775224 /* MainViewController.swift */,
 			);
@@ -179,6 +184,7 @@
 			files = (
 				504EC3081FED79650016851F /* AppDelegate.swift in Sources */,
 				9582B6832FE993A70072D4E8 /* SceneDelegate.swift in Sources */,
+				B1A7E5C0D2F34A6B8C9D0E11 /* AuthPlugin.swift in Sources */,
 				A4DB7C7B3B053E8E44760846 /* NativeChromePlugin.swift in Sources */,
 				35C801AA253FBC909D96FF2A /* MainViewController.swift in Sources */,
 			);
@@ -323,6 +329,7 @@
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_TEAM = NNFD7CKGLG;
+				CODE_SIGN_ENTITLEMENTS = App/App.entitlements;
 				INFOPLIST_FILE = App/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 15.0;
 				LD_RUNPATH_SEARCH_PATHS = (
@@ -346,6 +353,7 @@
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_TEAM = NNFD7CKGLG;
+				CODE_SIGN_ENTITLEMENTS = App/App.entitlements;
 				INFOPLIST_FILE = App/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 15.0;
 				LD_RUNPATH_SEARCH_PATHS = (

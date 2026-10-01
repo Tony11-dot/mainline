@@ -101,14 +101,19 @@ export const evalSubmitSchema = z.object({
 
 export interface Me {
   id: string;
-  /** Null for accounts created with Chess.com. */
+  /** Null for accounts created with Chess.com or Apple. */
   lichessUsername: string | null;
   rating: number;
   ratingSpeed: Speed;
   chesscomUsername: string | null;
   /** True once the Chess.com account was confirmed through Chess.com sign-in (not just typed in). */
   chesscomVerified: boolean;
+  /** Name shared through Sign in with Apple, if any. */
+  displayName: string | null;
+  /** True for accounts created with Sign in with Apple. */
+  appleLinked: boolean;
 }
 
-/** Display name for an account: its Lichess name, else its Chess.com name. */
-export const accountName = (me: Pick<Me, 'lichessUsername' | 'chesscomUsername'>) => me.lichessUsername ?? me.chesscomUsername ?? 'your account';
+/** Display name for an account: its Lichess name, else its Chess.com name, else the name from Apple. */
+export const accountName = (me: Pick<Me, 'lichessUsername' | 'chesscomUsername'> & Partial<Pick<Me, 'displayName' | 'appleLinked'>>) =>
+  me.lichessUsername ?? me.chesscomUsername ?? me.displayName ?? (me.appleLinked ? 'your Apple ID' : 'your account');
