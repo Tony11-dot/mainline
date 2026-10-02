@@ -126,7 +126,7 @@ export async function boardReady(page: Page, from: string) {
     .poll(async () => {
       const piece = await pieceAt(page, from);
       const label = (await page.locator('.ml-board').first().getAttribute('aria-label')) ?? '';
-      return !!piece && label.includes(`${piece.split(' ')[0]} to move`);
+      return !!piece && label.toLowerCase().includes(`${piece.split(' ')[0]} to move`);
     }, { timeout: 5000 })
     .toBe(true);
   await page.waitForTimeout(30);
@@ -138,7 +138,7 @@ export async function moveSettled(page: Page, from: string, before: string | nul
   if (!side) return;
   const other = side === 'white' ? 'black' : 'white';
   await expect
-    .poll(async () => ((await page.locator('.ml-board').first().getAttribute('aria-label')) ?? '').includes(`${other} to move`), { timeout: 1500 })
+    .poll(async () => ((await page.locator('.ml-board').first().getAttribute('aria-label')) ?? '').toLowerCase().includes(`${other} to move`), { timeout: 1500 })
     .toBe(true)
     .catch(() => undefined); // illegal moves never flip — that's fine
 }

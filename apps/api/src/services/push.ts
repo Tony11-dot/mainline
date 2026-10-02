@@ -4,6 +4,7 @@ import type { FastifyBaseLogger } from 'fastify';
 import { env, requireEnv } from '../env';
 import { getDb, schema } from '../db/client';
 import { nudgesForDay, type NudgeKind } from '@mainline/shared';
+import { translatorFor } from '../lib/i18n';
 
 export type Sub = typeof schema.pushSubs.$inferSelect;
 
@@ -32,13 +33,13 @@ const toMinutes = (hhmm: string) => {
   return (h ?? 19) * 60 + (m ?? 0);
 };
 
-type DecideSub = Pick<Sub, 'timezone' | 'reminderTime' | 'dueCount' | 'streak' | 'lastReviewDay' | 'lastNotifiedOn' | 'lastNudgeOn' | 'lastWeeklyOn'> & Partial<Pick<Sub, 'freezes' | 'lastLateOn'>>;
+type DecideSub = Pick<Sub, 'timezone' | 'reminderTime' | 'dueCount' | 'streak' | 'lastReviewDay' | 'lastNotifiedOn' | 'lastNudgeOn' | 'lastWeeklyOn'> & Partial<Pick<Sub, 'freezes' | 'lastLateOn' | 'lang'>>;
 
 /** Which notification (if any) a subscription should get now. Runs every 5 minutes; the rules live in nudgesForDay. */
 export function decide(sub: DecideSub, now: Date, windowMin = 5): PushMessage | null {
   const { date, minutes, weekday } = localParts(now, sub.timezone);
   const sent = { daily: sub.lastNotifiedOn, comeback: sub.lastNotifiedOn, nudge: sub.lastNudgeOn, late: sub.lastLateOn, weekly: sub.lastWeeklyOn };
-  const all = nudgesForDay({ streak: sub.streak, freezesAtLast: sub.freezes ?? 0, lastReviewDay: sub.lastReviewDay, date, due: sub.dueCount, reminderMinutes: toMinutes(sub.reminderTime), sunday: weekday === 'Sun' });
+  const all = nudgesForDay({ streak: sub.streak, freezesAtLast: sub.freezes ?? 0, lastReviewDay: sub.lastReviewDay, date, due: sub.dueCount, reminderMinutes: toMinutes(sub.reminderTime), sunday: weekday === 'Sun', tr: translatorFor(sub.lang) });
   const n = all.find((x) => minutes >= x.minutes && minutes < x.minutes + windowMin && sent[x.kind] !== date);
   return n ? { kind: n.kind, title: n.title, body: n.body, url: n.url, tag: n.tag } : null;
 }

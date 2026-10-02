@@ -1,6 +1,7 @@
 import { Capacitor, registerPlugin, type PluginListenerHandle } from '@capacitor/core';
 import { NAV } from '../ui/nav';
 import { useLaunch } from '../launch/LaunchScreen';
+import { t, useI18n } from '../lib/i18n';
 
 interface NativeChromePlugin {
   setTabs(o: { tabs: { id: string; label: string; sfSymbol: string }[]; selected?: string }): Promise<void>;
@@ -27,12 +28,16 @@ export async function startNativeChrome(router: { navigate: (to: string) => unkn
   try {
     // Just the animation while it plays: hide the bar before it's first installed.
     if (useLaunch.getState().active) await NativeChrome.setVisible({ visible: false });
-    await NativeChrome.setTabs({ tabs: NAV.map((n) => ({ id: n.to, label: n.label, sfSymbol: n.sfSymbol })), selected: idFor(router.state.location.pathname) });
+    await NativeChrome.setTabs({ tabs: NAV.map((n) => ({ id: n.to, label: t(n.label), sfSymbol: n.sfSymbol })), selected: idFor(router.state.location.pathname) });
   } catch (e) {
     console.warn('NativeChrome unavailable, keeping the web tab bar:', (e as Error).message);
     return; // plugin missing (e.g. an older native shell): keep the web tab bar
   }
   document.documentElement.dataset.nativeChrome = '';
+  // Tab titles follow the app language.
+  useI18n.subscribe((s, p) => {
+    if (s.lang !== p.lang) void NativeChrome.setTabs({ tabs: NAV.map((n) => ({ id: n.to, label: t(n.label), sfSymbol: n.sfSymbol })), selected: idFor(router.state.location.pathname) });
+  });
   await NativeChrome.addListener('tabSelected', ({ id }) => void router.navigate(id));
   // iPad (and wide split view): the web sidebar is the navigation, so the bottom bar stays hidden.
   const wide = matchMedia('(min-width: 768px)');

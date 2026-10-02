@@ -18,8 +18,10 @@ import { peekReplyWeights } from '../lib/explorer';
 import { Button, IconButton, PanelNote } from '../ui/primitives';
 import { CoachAnswer } from '../panels/CoachPanel';
 import type { StoreApi } from 'zustand';
+import { fmtPercent, msg, t, tn } from '../lib/i18n';
 
-const MODE_NAMES: Record<TrainMode, string> = { learn: 'Learn', review: 'Review', drill: 'Drill', quiz: 'Position quiz' };
+const MODE_NAMES: Record<TrainMode, string> = { learn: msg('Learn'), review: msg('Review'), drill: msg('Drill'), quiz: msg('Position quiz') };
+const MODE_DONE: Record<TrainMode, string> = { learn: msg('Learn complete'), review: msg('Review complete'), drill: msg('Drill complete'), quiz: msg('Position quiz complete') };
 
 export function TrainScreen() {
   const [params] = useSearchParams();
@@ -57,9 +59,9 @@ export function TrainScreen() {
       return;
     }
     setEmpty(false);
-    const t = createTrainer(mode, lines, data);
-    setTrainer(t);
-    t.getState().start();
+    const session = createTrainer(mode, lines, data);
+    setTrainer(session);
+    session.getState().start();
     // Plan once per session start; later library/card changes shouldn't reshuffle a running session.
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [lib.loaded, training.loaded, mode, params.get('reps'), run]);
@@ -105,11 +107,11 @@ function Session({ store, mode, onAgain }: { store: StoreApi<TrainerState>; mode
     <div className="mx-auto flex max-w-[640px] flex-col lg:max-w-[1100px] lg:flex-row lg:items-start lg:gap-8 lg:px-6 lg:py-6">
       <div className="lg:w-[min(calc(100dvh-8rem),640px)] lg:shrink-0">
         <div className="flex items-center gap-2 px-3 py-2 lg:px-0">
-          <IconButton icon={X} label="End session (Esc)" onClick={() => nav(-1)} />
-          <div className="h-2 flex-1 overflow-hidden rounded-full bg-surface-3" role="progressbar" aria-valuemin={0} aria-valuemax={totalSteps} aria-valuenow={doneSteps} aria-label="Session progress">
+          <IconButton icon={X} label={t('End session (Esc)')} onClick={() => nav(-1)} />
+          <div className="h-2 flex-1 overflow-hidden rounded-full bg-surface-3" role="progressbar" aria-valuemin={0} aria-valuemax={totalSteps} aria-valuenow={doneSteps} aria-label={t('Session progress')}>
             <div className="h-full rounded-full bg-brand transition-[width] duration-300 ease-[var(--ease-out)]" style={{ width: `${totalSteps ? (doneSteps / totalSteps) * 100 : 0}%` }} />
           </div>
-          <span className="tnum w-14 text-right text-sm font-semibold text-ink-2">
+          <span className="tnum w-14 text-end text-sm font-semibold text-ink-2">
             {doneSteps}/{totalSteps}
           </span>
         </div>
@@ -125,12 +127,12 @@ function Session({ store, mode, onAgain }: { store: StoreApi<TrainerState>; mode
           onMove={(u) => store.getState().userMove(u)}
           flash={s.feedback}
           syncKey={s.syncKey}
-          ariaLabel={`Training board. ${pos.turn} to move. ${yourTurn ? 'Your move' : 'Opponent to move'}.`}
+          ariaLabel={`${t('Training board.')} ${pos.turn === 'white' ? t('White to move.') : t('Black to move.')} ${yourTurn ? t('Your move') : t('Opponent to move')}.`}
         />
       </div>
       <div className="flex flex-col gap-3 px-4 pt-4 lg:w-[360px] lg:px-0 lg:pt-14">
         <p className="text-xs font-semibold text-ink-3">
-          {MODE_NAMES[mode]}
+          {t(MODE_NAMES[mode])}
           {opening ? ` · ${opening.name}` : ''}
         </p>
         <div data-expected={s.expected[0] ?? ''} data-phase={s.phase}>
@@ -143,12 +145,12 @@ function Session({ store, mode, onAgain }: { store: StoreApi<TrainerState>; mode
           </span>
           {s.phase === 'await' && (
             <Button size="sm" icon={Eye} onClick={() => store.getState().revealMove()}>
-              Show move
+              {t('Show move')}
             </Button>
           )}
           {mode !== 'quiz' && (
             <Button size="sm" variant="ghost" icon={SkipForward} onClick={() => store.getState().skipLine()}>
-              Skip line
+              {t('Skip line')}
             </Button>
           )}
         </div>
@@ -165,14 +167,14 @@ function moveNote(repId?: string, epd?: string, uci?: string) {
 function Prompt({ phase, expectedSan, message, color }: { phase: TrainerState['phase']; expectedSan?: string; message?: string; color: string }) {
   const text =
     phase === 'learn'
-      ? { title: `New move: ${expectedSan}`, sub: 'Play it on the board to learn it.', tone: 'brand' }
+      ? { title: t('New move: {move}', { move: expectedSan ?? '' }), sub: t('Play it on the board to learn it.'), tone: 'brand' }
       : phase === 'await'
-        ? { title: 'Your move', sub: `Find your repertoire move for ${color}.`, tone: 'ink' }
+        ? { title: t('Your move'), sub: color === 'white' ? t('Find your repertoire move for White.') : t('Find your repertoire move for Black.'), tone: 'ink' }
         : phase === 'wrong'
-          ? { title: `Not quite — it's ${expectedSan}`, sub: message ?? 'Play the move shown to continue.', tone: 'bad' }
+          ? { title: t('Not quite — it’s {move}', { move: expectedSan ?? '' }), sub: message ?? t('Play the move shown to continue.'), tone: 'bad' }
           : phase === 'lineDone'
-            ? { title: 'Line complete', sub: 'Next line…', tone: 'good' }
-            : { title: 'Opponent is moving…', sub: message ?? ' ', tone: 'muted' };
+            ? { title: t('Line complete'), sub: t('Next line…'), tone: 'good' }
+            : { title: t('Opponent is moving…'), sub: message ?? ' ', tone: 'muted' };
   const tones: Record<string, string> = { brand: 'text-brand-ink', ink: 'text-ink', bad: 'text-bad', good: 'text-good', muted: 'text-ink-2' };
   return (
     <div aria-live="polite">
@@ -200,25 +202,25 @@ function Summary({ s, mode, onAgain }: { s: TrainerState; mode: TrainMode; onAga
   return (
     <div className="mx-auto max-w-lg px-4 py-10 text-center">
       <CheckCircle2 size={48} className="mx-auto text-good" aria-hidden />
-      <h1 className="mt-3 text-2xl font-bold">{MODE_NAMES[mode]} complete</h1>
+      <h1 className="mt-3 text-2xl font-bold">{t(MODE_DONE[mode])}</h1>
       <dl className="tnum mt-6 grid grid-cols-3 gap-2 rounded-[var(--radius-l)] border border-line bg-surface p-4 shadow-1">
-        <Stat label={mode === 'learn' ? 'Learned' : 'Reviewed'} value={mode === 'learn' ? s.stats.learned : s.stats.graded} />
-        <Stat label="Accuracy" value={`${acc}%`} />
-        <Stat label="Time" value={secs >= 60 ? `${Math.floor(secs / 60)}m ${secs % 60}s` : `${secs}s`} />
+        <Stat label={mode === 'learn' ? t('Learned') : t('Reviewed')} value={mode === 'learn' ? s.stats.learned : s.stats.graded} />
+        <Stat label={t('Accuracy')} value={fmtPercent(acc / 100)} />
+        <Stat label={t('Time')} value={secs >= 60 ? t('{min} min {sec} s', { min: Math.floor(secs / 60), sec: secs % 60 }) : t('{sec} s', { sec: secs })} />
       </dl>
       {(streak > 0 || goalHit) && (
         <p className="mt-4 flex flex-wrap justify-center gap-2 text-sm font-semibold">
           {streak > 0 && (
             <span className="inline-flex items-center gap-1.5 rounded-full bg-flame-soft px-3 py-1 text-flame-ink">
-              <Flame size={15} fill="currentColor" aria-hidden /> {streak}-day streak
+              <Flame size={15} fill="currentColor" aria-hidden /> {tn(streak, '{n}-day streak', '{n}-day streak')}
             </span>
           )}
-          {goalHit && <span className="rounded-full bg-good-soft px-3 py-1 text-good">🎯 Daily goal complete</span>}
+          {goalHit && <span className="rounded-full bg-good-soft px-3 py-1 text-good">🎯 {t('Daily goal complete')}</span>}
         </p>
       )}
       {s.mistakes.length > 0 && (
-        <div className="mt-6 text-left">
-          <h2 className="mb-2 text-sm font-semibold text-ink-2">To look at again</h2>
+        <div className="mt-6 text-start">
+          <h2 className="mb-2 text-sm font-semibold text-ink-2">{t('To look at again')}</h2>
           <ul className="divide-y divide-line overflow-hidden rounded-[var(--radius-l)] border border-line bg-surface shadow-1">
             {s.mistakes.map((m, i) => {
               const pos = positionFromFen(m.fen);
@@ -227,17 +229,18 @@ function Summary({ s, mode, onAgain }: { s: TrainerState; mode: TrainMode; onAga
                   <span>
                     {m.played ? (
                       <>
-                        You played <b className="text-bad">{uciToSan(pos, m.played)}</b>,{' '}
+                        {t('You played')} <b className="text-bad">{uciToSan(pos, m.played)}</b>
+                        {' · '}
                       </>
                     ) : null}
-                    the move is <b className="text-good">{m.expected.map((u) => uciToSan(pos, u)).join(' / ')}</b>
+                    {t('The move is')} <b className="text-good">{m.expected.map((u) => uciToSan(pos, u)).join(' / ')}</b>
                   </span>
                   <span className="flex shrink-0 gap-3">
                     <button type="button" className="font-semibold text-brand hover:underline" onClick={() => setWhy(why === i ? null : i)} aria-expanded={why === i}>
-                      Why?
+                      {t('Why?')}
                     </button>
                     <Link to={`/explore?fen=${encodeURIComponent(m.fen)}&color=${m.color}`} className="font-semibold text-brand hover:underline">
-                      Explore
+                      {t('Explore')}
                     </Link>
                   </span>
                   {why === i && (
@@ -253,10 +256,10 @@ function Summary({ s, mode, onAgain }: { s: TrainerState; mode: TrainMode; onAga
       )}
       <div className="mt-8 flex justify-center gap-2">
         <Button icon={RotateCcw} onClick={onAgain}>
-          Again
+          {t('Again')}
         </Button>
         <Link to="/" className="inline-flex h-11 items-center rounded-[12px] bg-brand px-5 font-semibold text-on-brand">
-          Done
+          {t('Done')}
         </Link>
       </div>
     </div>
@@ -275,10 +278,10 @@ function Stat({ label, value }: { label: string; value: string | number }) {
 function EmptySession({ mode }: { mode: TrainMode }) {
   const nav = useNavigate();
   const copy: Record<TrainMode, { title: string; body: string }> = {
-    review: { title: 'You’re all caught up', body: 'No reviews are due. Learn new moves, or come back when positions are due again.' },
-    learn: { title: 'No new moves to learn', body: 'You’ve learned everything in your repertoire (or hit today’s new-move limit).' },
-    drill: { title: 'Nothing to drill yet', body: 'Add a repertoire with a few moves first.' },
-    quiz: { title: 'No positions learned yet', body: 'Learn some moves first — the quiz tests positions you know.' },
+    review: { title: t('You’re all caught up'), body: t('No reviews are due. Learn new moves, or come back when positions are due again.') },
+    learn: { title: t('No new moves to learn'), body: t('You’ve learned everything in your repertoire (or hit today’s new-move limit).') },
+    drill: { title: t('Nothing to drill yet'), body: t('Add a repertoire with a few moves first.') },
+    quiz: { title: t('No positions learned yet'), body: t('Learn some moves first — the quiz tests positions you know.') },
   };
   return (
     <div className="mx-auto max-w-lg px-4 py-16">
@@ -290,16 +293,16 @@ function EmptySession({ mode }: { mode: TrainMode }) {
             <div className="flex flex-wrap justify-center gap-2">
               {mode !== 'learn' && (
                 <Button variant="primary" onClick={() => nav('/train?mode=learn')}>
-                  Learn new moves
+                  {t('Learn new moves')}
                 </Button>
               )}
               <Button variant={mode === 'learn' ? 'primary' : 'secondary'} onClick={() => nav('/library')}>
-                Open repertoire
+                {t('Open repertoire')}
               </Button>
             </div>
             {/* Training hides the tab bar on phones: always offer the way back. */}
             <Button variant="ghost" size="sm" onClick={() => nav('/')}>
-              Back to Today
+              {t('Back to Today')}
             </Button>
           </div>
         }

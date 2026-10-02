@@ -6,6 +6,7 @@ import { Sheet, Field, inputCls } from '../../ui/Sheet';
 import { Button, Segmented } from '../../ui/primitives';
 import { MiniBoard } from '../../ui/MiniBoard';
 import { parseSanLine } from './sanLine';
+import { t } from '../../lib/i18n';
 
 export function NewRepertoireSheet({ open, initial, onClose }: { open: boolean; initial?: { folderId: string | null; color: Color; name?: string; moves?: string }; onClose: () => void }) {
   const lib = useLibrary();
@@ -32,7 +33,7 @@ export function NewRepertoireSheet({ open, initial, onClose }: { open: boolean; 
 
   const create = async () => {
     if (parsed.error) return;
-    const rep = await lib.createRepertoire({ name: name || parsed.sans.join(' ') || `${color === 'white' ? 'White' : 'Black'} repertoire`, color, folderId, rootMovesUci: parsed.ucis });
+    const rep = await lib.createRepertoire({ name: name || parsed.sans.join(' ') || (color === 'white' ? t('White repertoire') : t('Black repertoire')), color, folderId, rootMovesUci: parsed.ucis });
     onClose();
     nav(`/rep/${rep.id}`);
   };
@@ -41,34 +42,34 @@ export function NewRepertoireSheet({ open, initial, onClose }: { open: boolean; 
     <Sheet
       open={open}
       onClose={onClose}
-      title="New repertoire"
+      title={t('New repertoire')}
       footer={
         <>
           <Button variant="ghost" onClick={onClose}>
-            Cancel
+            {t('Cancel')}
           </Button>
           <Button variant="primary" onClick={() => void create()} disabled={!!parsed.error}>
-            Create & open
+            {t('Create & open')}
           </Button>
         </>
       }
     >
-      <Field label="I play">
-        <Segmented<Color> label="Colour" value={color} onChange={setColor} options={[{ value: 'white', label: 'White' }, { value: 'black', label: 'Black' }]} />
+      <Field label={t('I play')}>
+        <Segmented<Color> label={t('Colour')} value={color} onChange={setColor} options={[{ value: 'white', label: t('White') }, { value: 'black', label: t('Black') }]} />
       </Field>
-      <Field label="Name">
-        <input className={inputCls} value={name} onChange={(e) => setName(e.target.value)} placeholder={color === 'white' ? 'e.g. London System' : 'e.g. Najdorf'} maxLength={80} />
+      <Field label={t('Name')}>
+        <input className={inputCls} value={name} onChange={(e) => setName(e.target.value)} placeholder={color === 'white' ? t('e.g. London System') : t('e.g. Najdorf')} maxLength={80} />
       </Field>
-      <Field label="Folder">
+      <Field label={t('Folder')}>
         <select className={inputCls} value={folderId ?? ''} onChange={(e) => setFolderId(e.target.value || null)}>
           {folders.map((f) => (
             <option key={f.id} value={f.id}>
-              {folderPath(lib.folders, f.id).join(' / ')}
+              {folderPath(lib.folders, f.id).map((n) => t(n)).join(' / ')}
             </option>
           ))}
         </select>
       </Field>
-      <Field label="Starting moves (optional)" hint="The repertoire starts after these moves, e.g. 1.e4 c5 for a Sicilian.">
+      <Field label={t('Starting moves (optional)')} hint={t('The repertoire starts after these moves, e.g. 1.e4 c5 for a Sicilian.')}>
         <div className="flex gap-3">
           <input className={`${inputCls} ${parsed.error ? 'border-bad' : ''}`} value={moves} onChange={(e) => setMoves(e.target.value)} placeholder="1.e4 c5" autoCapitalize="off" autoCorrect="off" spellCheck={false} aria-invalid={!!parsed.error} />
           <MiniBoard fen={parsed.fen} size={64} orientation={color} />

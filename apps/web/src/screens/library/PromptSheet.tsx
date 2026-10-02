@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react';
 import { Sheet, Field, inputCls } from '../../ui/Sheet';
 import { Button } from '../../ui/primitives';
+import { t } from '../../lib/i18n';
 
 export function PromptSheet({ open, title, label, placeholder, initial = '', confirm, onClose, onSubmit }: { open: boolean; title: string; label: string; placeholder?: string; initial?: string; confirm: string; onClose: () => void; onSubmit: (v: string) => Promise<void> | void }) {
   const [value, setValue] = useState(initial);
@@ -20,7 +21,7 @@ export function PromptSheet({ open, title, label, placeholder, initial = '', con
       footer={
         <>
           <Button variant="ghost" onClick={onClose}>
-            Cancel
+            {t('Cancel')}
           </Button>
           <Button variant="primary" onClick={() => void submit()} disabled={!value.trim()}>
             {confirm}

@@ -2,6 +2,7 @@ import { createElement, memo } from 'react';
 import { parseFen } from 'chessops/fen';
 // Piece artwork: list screens can render mini boards before any full board has loaded it.
 import 'chessground/assets/chessground.cburnett.css';
+import { t } from '../lib/i18n';
 
 /** Static, cheap board for lists and previews (no chessground instance). */
 export const MiniBoard = memo(function MiniBoard({ fen, orientation = 'white', size = 120, lastMove, className = '', decorative }: { fen: string; orientation?: 'white' | 'black'; size?: number; lastMove?: string; className?: string; decorative?: boolean }) {
@@ -29,7 +30,7 @@ export const MiniBoard = memo(function MiniBoard({ fen, orientation = 'white', s
     <div
       className={`ml-mini cg-wrap relative shrink-0 overflow-hidden rounded-[8px] shadow-1 ${className}`}
       style={{ width: size, height: size, backgroundImage: 'repeating-conic-gradient(var(--sq-dark) 0 25%, var(--sq-light) 0 50%)', backgroundSize: '25% 25%' }}
-      {...(decorative ? { 'aria-hidden': true } : { role: 'img', 'aria-label': 'Chess position' })}
+      {...(decorative ? { 'aria-hidden': true } : { role: 'img', 'aria-label': t('Chess position') })}
     >
       {hl}
       {pieces}

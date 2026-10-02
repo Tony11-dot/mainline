@@ -5,7 +5,7 @@ import { usePrefs } from '../lib/prefs';
 import { NAV } from './nav';
 import { LogoMark, Wordmark } from './Logo';
 import { Toaster } from './toast';
-import { useT } from '../lib/i18n';
+import { t } from '../lib/i18n';
 
 export function AppShell() {
   return (
@@ -24,7 +24,6 @@ export function AppShell() {
 }
 
 function Sidebar() {
-  const t = useT();
   return (
     // iPad portrait and small windows get a compact rail (icon over label); wide screens the full sidebar.
     <aside className="sticky top-0 hidden h-dvh flex-col gap-1 border-e border-line bg-surface-2/60 px-2 py-5 md:flex lg:px-3">
@@ -36,8 +35,8 @@ function Sidebar() {
           <Wordmark height={30} />
         </span>
       </div>
-      <nav className="flex flex-col gap-0.5" aria-label="Main">
-        {NAV.map(({ to, key, icon: Icon }) => (
+      <nav className="flex flex-col gap-0.5" aria-label={t('Main')}>
+        {NAV.map(({ to, label, icon: Icon }) => (
           <NavLink
             key={to}
             to={to}
@@ -49,7 +48,7 @@ function Sidebar() {
             }
           >
             <Icon size={19} strokeWidth={2} aria-hidden />
-            {t(key)}
+            {t(label)}
           </NavLink>
         ))}
       </nav>
@@ -58,7 +57,6 @@ function Sidebar() {
 }
 
 function TabBar() {
-  const t = useT();
   const navigate = useNavigate();
   const path = useLocation().pathname;
   // The tab under the finger while it slides along the bar; lifting the finger opens it.
@@ -94,7 +92,7 @@ function TabBar() {
 
   return (
     <nav
-      aria-label="Main"
+      aria-label={t('Main')}
       data-web-tabbar
       className="glass fixed inset-x-3 z-[var(--z-chrome)] flex h-[var(--tabbar-h)] touch-none items-stretch justify-around rounded-[26px] px-1 select-none md:hidden"
       style={{ bottom: 'calc(var(--safe-bottom) + 10px)' }}
@@ -110,7 +108,7 @@ function TabBar() {
         }
       }}
     >
-      {NAV.map(({ to, key, icon: Icon }, i) => (
+      {NAV.map(({ to, label, icon: Icon }, i) => (
         <NavLink
           key={to}
           to={to}
@@ -124,7 +122,7 @@ function TabBar() {
           }}
         >
           <Icon size={22} strokeWidth={2} aria-hidden />
-          {t(key)}
+          {t(label)}
         </NavLink>
       ))}
     </nav>

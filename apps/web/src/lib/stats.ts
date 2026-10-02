@@ -4,6 +4,7 @@
  */
 import { buildGraph, isOwnTurn, playUci, positionFromFen, toEpd, INITIAL_FEN, type Deviation, type PlayedGame, type Repertoire, type RepMove, type ReviewEntry, type TrainCard } from '@mainline/shared';
 import type { OpeningInfo } from './openings';
+import { fmtPercent } from './i18n';
 
 const DAY = 86_400_000;
 
@@ -304,7 +305,7 @@ export function openingStats(games: PlayedGame[], byEpd: Map<string, OpeningInfo
     .sort((a, b) => b.rec.games - a.rec.games || b.lastPlayed - a.lastPlayed);
 }
 
-export const pct = (x: number | null | undefined) => (x === null || x === undefined ? '—' : `${Math.round(x * 100)}%`);
+export const pct = (x: number | null | undefined) => (x === null || x === undefined ? '—' : fmtPercent(x));
 
 const positionsCache = new WeakMap<PlayedGame, Set<string>>();
 

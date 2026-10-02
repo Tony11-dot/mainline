@@ -20,6 +20,7 @@ import {
   type Shape,
 } from '@mainline/shared';
 import { db, type MainlineDB, type SyncTable } from './idb';
+import { t as tl } from './i18n';
 
 export type { SyncTable };
 
@@ -126,7 +127,7 @@ export const useLibrary = create<LibraryState>((set, get) => {
 
     createFolder: async (name, color, parentId) => {
       const siblings = get().folders.filter((f) => !f.deleted && f.parentId === parentId);
-      const f: Folder = { id: uid(), parentId, name: name.trim() || 'New folder', color, sortIndex: nextIndex(siblings), updatedAt: now() };
+      const f: Folder = { id: uid(), parentId, name: name.trim() || tl('New folder'), color, sortIndex: nextIndex(siblings), updatedAt: now() };
       await saveFolders([f]);
       return f;
     },
@@ -159,7 +160,7 @@ export const useLibrary = create<LibraryState>((set, get) => {
       const root = rootFromMoves(rootMovesUci);
       const siblings = get().reps.filter((r) => !r.deleted && r.folderId === folderId);
       const t = now();
-      const r: Repertoire = { id: uid(), folderId, name: name.trim() || 'New repertoire', color, rootEpd: root.epd, rootMovesUci, sortIndex: nextIndex(siblings), createdAt: t, updatedAt: t };
+      const r: Repertoire = { id: uid(), folderId, name: name.trim() || tl('New repertoire'), color, rootEpd: root.epd, rootMovesUci, sortIndex: nextIndex(siblings), createdAt: t, updatedAt: t };
       await saveReps([r]);
       return r;
     },

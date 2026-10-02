@@ -14,7 +14,7 @@ export function CoachText({ text, fen, onMove, onHover }: { text: string; fen: s
         const lines = b.split('\n');
         if (lines.every((l) => /^\s*[-*•]\s+/.test(l)))
           return (
-            <ul key={i} className="ml-4 list-disc space-y-1 marker:text-ink-3">
+            <ul key={i} className="ms-4 list-disc space-y-1 marker:text-ink-3">
               {lines.map((l, j) => (
                 <li key={j}>{inline(l.replace(/^\s*[-*•]\s+/, ''), fen, onMove, onHover)}</li>
               ))}

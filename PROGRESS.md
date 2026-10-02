@@ -312,3 +312,18 @@ Visual checks: `VISUAL=1 pnpm e2e visual` (add `--update-snapshots` after an int
 - Move tree: the collapse toggle for variations sits on the variation rail, not on a row of its own.
 - Opening search: shorter placeholder, and no auto-focus on touch screens, so the keyboard doesn't cover the list.
 - Chess.com declined OAuth access (2026-10-02). Their sign-in button stays hidden (no credentials on the server). Importing Chess.com games by username still works.
+
+---
+
+## Translations — 20 languages (2026-10-02)
+
+**Built**
+- Gettext-style i18n: English text is the key. `t()`, `tn()` (Intl.PluralRules), `tx()` (rich text), `msg()` (marks constants). Catalogs in `packages/shared/locales/<lang>.json`, lazy-loaded; Settings → Language (Automatic follows the device).
+- Languages: en, ar, de, es, fa, fr, he, hi, id, it, ja, ko, nl, pl, pt (BR), ru, tr, uk, vi, zh (Simplified). 715 strings, 43 with plurals; every catalog is complete.
+- RTL for he/ar/fa: logical CSS properties, mirrored chevrons/toggles, chess notation isolated LTR.
+- Push nudges are sent in the subscriber's language (`push_subs.lang`, migration 0007); the AI coach answers in the app language.
+- iOS: `CFBundleLocalizations` + `<lang>.lproj/InfoPlist.strings`, so the App Store lists the languages and the web view reports the device language. Android: `locales_config.xml` (per-app language setting on Android 13+).
+
+**How to try**: Settings → Language, or set the device language. `pnpm --filter @mainline/web i18n --check` re-extracts strings and fails on missing translations or lost `{placeholders}`.
+
+**Known**: opening names (Lichess database), font and piece-set names stay in English as proper names.

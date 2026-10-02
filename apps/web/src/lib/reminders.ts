@@ -7,6 +7,7 @@ import { platform, type ReminderPlan } from '../platform';
 import { useLibrary } from './library';
 import { useTraining } from './training';
 import { usePrefs } from './prefs';
+import { t, tn, useI18n } from './i18n';
 
 const DAY = 86_400_000;
 const localDay = (t: number) => {
@@ -53,6 +54,7 @@ export function plannedNotifications(plan: ReminderPlan, now = new Date()): (Day
     day.setDate(day.getDate() + k);
     day.setHours(0, 0, 0, 0);
     const nudges = nudgesForDay({
+      tr: { lang: useI18n.getState().lang, t, tn },
       streak: plan.streakDays,
       freezesAtLast: plan.freezesAtLast,
       lastReviewDay: plan.lastReviewDay,
@@ -81,6 +83,8 @@ export function refreshReminders(delay = 1500) {
 
 export function startReminderSync() {
   useTraining.subscribe((s, p) => s.version !== p.version && refreshReminders());
+  // Reminder wording follows the app language.
+  useI18n.subscribe((s, p) => s.lang !== p.lang && refreshReminders(100));
   usePrefs.subscribe((s, p) => (s.remindersOn !== p.remindersOn || s.reminderTime !== p.reminderTime) && refreshReminders(100));
   document.addEventListener('visibilitychange', () => document.visibilityState === 'visible' && refreshReminders());
   refreshReminders(4000);

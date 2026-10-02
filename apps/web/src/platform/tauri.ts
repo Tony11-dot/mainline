@@ -6,6 +6,7 @@ import { writeTextFile } from '@tauri-apps/plugin-fs';
 import { openUrl } from '@tauri-apps/plugin-opener';
 import type { Platform, ReminderPlan } from './index';
 import { apiBaseFromEnv } from './web';
+import { t } from '../lib/i18n';
 
 /**
  * Desktop (Tauri 2: Windows / macOS / Linux). Desktop notifications can't be pre-scheduled, so while
@@ -48,7 +49,7 @@ export function createTauriPlatform(): Platform {
       if (update) {
         await update.downloadAndInstall();
         const { relaunch } = await import('@tauri-apps/plugin-process');
-        if (confirm(`MainLine ${update.version} is ready. Restart now?`)) await relaunch();
+        if (confirm(t('MainLine {version} is ready. Restart now?', { version: update.version }))) await relaunch();
       }
     } catch {
       /* offline or no release yet */

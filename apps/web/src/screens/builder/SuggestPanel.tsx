@@ -4,6 +4,7 @@ import { positionFromFen, rankMoves, uciToSan, type Color, type EvalLine, type M
 import { fetchExplorer } from '../../lib/explorer';
 import { usePrefs } from '../../lib/prefs';
 import { Button, PanelNote, Skeleton } from '../../ui/primitives';
+import { fmtPercent, t, tn } from '../../lib/i18n';
 
 /** Ranks candidate moves by engine eval, practical score at your rating, and master usage. */
 export function SuggestPanel({ fen, color, engineLines, onPick, onHover }: { fen: string; color: Color; engineLines: EvalLine[]; onPick: (uci: string) => void; onHover: (uci: string | null) => void }) {
@@ -22,7 +23,7 @@ export function SuggestPanel({ fen, color, engineLines, onPick, onHover }: { fen
   const ranked = rankMoves({ color, engineLines, lichess: ex.lichess, masters: ex.masters }).slice(0, 5);
   const pos = positionFromFen(fen);
   if (ex.loading && !engineLines.length) return <div className="flex flex-col gap-2 p-3">{[0, 1, 2].map((i) => <Skeleton key={i} className="h-14" />)}</div>;
-  if (!ranked.length) return <PanelNote title="Not enough data yet">Turn the engine on or sign in with Lichess for explorer stats.</PanelNote>;
+  if (!ranked.length) return <PanelNote title={t('Not enough data yet')}>{t('Turn the engine on or sign in with Lichess for explorer stats.')}</PanelNote>;
   return (
     <ol className="flex flex-col divide-y divide-line">
       {ranked.map((s, i) => (
@@ -32,23 +33,23 @@ export function SuggestPanel({ fen, color, engineLines, onPick, onHover }: { fen
             <div className="font-bold">{s.san ?? uciToSan(pos, s.uci)}</div>
             <Signals s={s} />
           </div>
-          <Button size="sm" icon={Plus} onClick={() => onPick(s.uci)} aria-label={`Add ${s.san ?? s.uci}`}>
-            Add
+          <Button size="sm" icon={Plus} onClick={() => onPick(s.uci)} aria-label={t('Add {move}', { move: s.san ?? s.uci })}>
+            {t('Add')}
           </Button>
         </li>
       ))}
-      <li className="px-3 py-2.5 text-xs text-ink-3">Engine 45% · your-rating results 35% · master popularity 20%. Every number comes from Stockfish or real games.</li>
+      <li className="px-3 py-2.5 text-xs text-ink-3">{t('Engine 45% · your-rating results 35% · master popularity 20%. Every number comes from Stockfish or real games.')}</li>
     </ol>
   );
 }
 
 function Signals({ s }: { s: MoveSuggestion }) {
-  const pct = (x?: number) => (x === undefined ? '—' : `${Math.round(x * 100)}%`);
+  const pct = (x?: number) => (x === undefined ? '—' : fmtPercent(x));
   return (
     <div className="tnum mt-0.5 flex flex-wrap gap-x-3 text-xs text-ink-2">
-      <span title="Expected score from the engine">Engine {pct(s.engine)}</span>
-      <span title="Your side's score at your rating">Club {pct(s.practical)}{s.practicalGames ? ` · ${s.practicalGames.toLocaleString()} games` : ''}</span>
-      <span title="Share of master games">Masters {pct(s.masterShare)}</span>
+      <span title={t('Expected score from the engine')}>{t('Engine')} {pct(s.engine)}</span>
+      <span title={t('Your side’s score at your rating')}>{t('Club')} {pct(s.practical)}{s.practicalGames ? ` · ${tn(s.practicalGames, '{n} game', '{n} games')}` : ''}</span>
+      <span title={t('Share of master games')}>{t('Masters')} {pct(s.masterShare)}</span>
     </div>
   );
 }

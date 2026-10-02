@@ -17,6 +17,7 @@ import { useEngineEval } from '../panels/useEngineEval';
 import { usePrefs } from '../lib/prefs';
 import { Segmented } from '../ui/primitives';
 import { SPLIT_LAYOUT, useMediaQuery } from '../ui/useMediaQuery';
+import { t } from '../lib/i18n';
 
 const exploreStore = createAnalysisStore();
 
@@ -79,7 +80,7 @@ export function ExploreScreen({ store = exploreStore }: { store?: AnalysisStore 
       onShapesChange={(sh) => s.setShapes(sh)}
       onMove={(uci, fromFen) => s.play(uci, fromFen)}
       drawMode={drawMode}
-      ariaLabel={`Board. ${view.turn} to move.`}
+      ariaLabel={`${t('Board.')} ${view.turn === 'white' ? t('White to move.') : t('Black to move.')}`}
     />
   );
 
@@ -91,13 +92,13 @@ export function ExploreScreen({ store = exploreStore }: { store?: AnalysisStore 
           <h1 className="truncate text-md font-semibold">{opening.name}</h1>
         </>
       ) : (
-        <h1 className="text-md font-semibold text-ink-2">{view.path ? 'Unnamed position' : 'Starting position'}</h1>
+        <h1 className="text-md font-semibold text-ink-2">{view.path ? t('Unnamed position') : t('Starting position')}</h1>
       )}
       <Link
         to={`/setup?${new URLSearchParams({ fen: view.node.fen })}`}
-        className="ml-auto flex h-9 shrink-0 items-center gap-1.5 rounded-[10px] px-2.5 text-sm font-medium text-ink-2 hover:bg-surface-3"
+        className="ms-auto flex h-9 shrink-0 items-center gap-1.5 rounded-[10px] px-2.5 text-sm font-medium text-ink-2 hover:bg-surface-3"
       >
-        <LayoutGrid size={16} aria-hidden /> Set up position
+        <LayoutGrid size={16} aria-hidden /> {t('Set up position')}
       </Link>
     </div>
   );
@@ -138,13 +139,13 @@ export function ExploreScreen({ store = exploreStore }: { store?: AnalysisStore 
       <BoardControls store={store} drawMode={drawMode} onToggleDraw={() => setDrawMode((d) => !d)} />
       <div className="px-3">
         <Segmented
-          label="Panel"
+          label={t('Panel')}
           value={pane}
           onChange={setPane}
           options={[
-            { value: 'explorer', label: 'Explorer' },
-            { value: 'moves', label: 'Moves' },
-            { value: 'engine', label: 'Engine' },
+            { value: 'explorer', label: t('Explorer') },
+            { value: 'moves', label: t('Moves') },
+            { value: 'engine', label: t('Engine') },
           ]}
         />
       </div>

@@ -1,6 +1,7 @@
 import { useEffect, useRef, useState } from 'react';
 import { Keyboard } from 'lucide-react';
 import { playUci, positionFromFen, sanToUci } from '@mainline/shared';
+import { t } from '../lib/i18n';
 
 /**
  * Keyboard move entry for accessibility and speed: type SAN ("Nf3", "exd5", "O-O") or UCI ("g1f3")
@@ -43,7 +44,7 @@ export function MoveInput({ fen, onMove, disabled }: { fen: string; onMove: (uci
   };
   return (
     <label className="relative flex items-center">
-      <Keyboard size={16} className="pointer-events-none absolute left-2.5 text-ink-3" aria-hidden />
+      <Keyboard size={16} className="pointer-events-none absolute start-2.5 text-ink-3" aria-hidden />
       <input
         ref={ref}
         value={value}
@@ -57,13 +58,13 @@ export function MoveInput({ fen, onMove, disabled }: { fen: string; onMove: (uci
           if (e.key === 'Escape') (e.target as HTMLInputElement).blur();
           e.stopPropagation(); // arrow keys edit the text, not the board
         }}
-        placeholder="Type a move (/)"
-        aria-label="Type a move in algebraic notation, then press Enter"
+        placeholder={t('Type a move (/)')}
+        aria-label={t('Type a move in algebraic notation, then press Enter')}
         aria-invalid={error}
         autoCapitalize="off"
         autoCorrect="off"
         spellCheck={false}
-        className={`h-9 w-40 rounded-[10px] border bg-surface pl-8 pr-2 text-sm outline-none transition-colors focus:border-brand focus:ring-3 focus:ring-brand/20 ${error ? 'border-bad' : 'border-line'}`}
+        className={`h-9 w-40 rounded-[10px] border bg-surface ps-8 pe-2 text-sm outline-none transition-colors focus:border-brand focus:ring-3 focus:ring-brand/20 ${error ? 'border-bad' : 'border-line'}`}
       />
     </label>
   );

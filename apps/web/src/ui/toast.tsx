@@ -1,6 +1,7 @@
 import { create } from 'zustand';
 import { useEffect } from 'react';
 import { CheckCircle2, AlertCircle, Info } from 'lucide-react';
+import { t } from '../lib/i18n';
 
 interface Toast {
   id: number;
@@ -28,7 +29,7 @@ export const useToasts = create<ToastState>((set, get) => ({
 export const toast = (text: string, opts: Partial<Omit<Toast, 'id' | 'text'>> = {}) => useToasts.getState().show({ text, kind: opts.kind ?? 'info', action: opts.action });
 
 /** Deleted something? Offer undo. */
-export const undoToast = (text: string, undo: () => void | Promise<void>) => toast(text, { action: { label: 'Undo', run: undo } });
+export const undoToast = (text: string, undo: () => void | Promise<void>) => toast(text, { action: { label: t('Undo'), run: undo } });
 
 export function Toaster() {
   const { toasts, dismiss } = useToasts();
@@ -45,7 +46,7 @@ export function Toaster() {
           <div
             key={t.id}
             role="status"
-            className="pointer-events-auto flex max-w-md items-center gap-3 rounded-[14px] bg-[oklch(0.22_0.015_262)] py-2.5 pl-3.5 pr-2 text-sm text-white shadow-3 animate-[toast-in_220ms_var(--ease-out)]"
+            className="pointer-events-auto flex max-w-md items-center gap-3 rounded-[14px] bg-[oklch(0.22_0.015_262)] py-2.5 ps-3.5 pe-2 text-sm text-white shadow-3 animate-[toast-in_220ms_var(--ease-out)]"
           >
             <Icon size={17} className={t.kind === 'error' ? 'text-[oklch(0.75_0.15_25)]' : t.kind === 'success' ? 'text-[oklch(0.8_0.15_150)]' : 'text-[oklch(0.8_0.08_262)]'} aria-hidden />
             <span className="min-w-0 flex-1">{t.text}</span>

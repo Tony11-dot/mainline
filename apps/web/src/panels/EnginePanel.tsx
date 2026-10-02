@@ -3,36 +3,37 @@ import { formatEval, plyFromFen, uciLineToSan, type EvalLine } from '@mainline/s
 import { engine } from '../lib/engine';
 import { usePrefs } from '../lib/prefs';
 import type { EngineView } from './useEngineEval';
+import { t, tn } from '../lib/i18n';
 
 export function EnginePanel({ fen, view, onPlayLine, onHoverMove }: { fen: string; view: EngineView; onPlayLine: (ucis: string[]) => void; onHoverMove?: (uci: string | null) => void }) {
   const { engineOn, set } = usePrefs();
   const best = view.lines[0];
   const flavor = engine.info;
   return (
-    <section aria-label="Engine" className="px-1">
+    <section aria-label={t('Engine')} className="px-1">
       <div className="flex items-center gap-3 px-3 py-2.5">
         <label className="relative inline-flex cursor-pointer items-center">
-          <input type="checkbox" className="peer sr-only" checked={engineOn} onChange={(e) => set({ engineOn: e.target.checked })} aria-label="Engine analysis" />
+          <input type="checkbox" className="peer sr-only" checked={engineOn} onChange={(e) => set({ engineOn: e.target.checked })} aria-label={t('Engine analysis')} />
           <span className="h-[26px] w-[44px] rounded-full bg-surface-3 transition-colors duration-200 peer-checked:bg-brand" />
-          <span className="absolute left-[3px] top-[3px] size-5 rounded-full bg-white shadow-1 transition-transform duration-200 ease-[var(--ease-out)] peer-checked:translate-x-[18px]" />
+          <span className="absolute start-[3px] top-[3px] size-5 rounded-full bg-white shadow-1 transition-transform duration-200 ease-[var(--ease-out)] peer-checked:translate-x-[18px] rtl:peer-checked:-translate-x-[18px]" />
         </label>
         <div className="tnum min-w-[4.5ch] text-xl font-bold tracking-tight">{engineOn ? formatEval(best) : '—'}</div>
-        <div className="ml-auto flex items-center gap-1.5 text-xs text-ink-3">
+        <div className="ms-auto flex items-center gap-1.5 text-xs text-ink-3">
           {engineOn && view.source === 'cloud' && <Cloud size={13} aria-hidden />}
           {engineOn && view.source === 'local' && <Cpu size={13} aria-hidden />}
           {engineOn ? (
             <span className="tnum">
-              {view.source === 'cloud' ? 'Cloud' : `Stockfish 19${flavor.threaded ? ` · ${flavor.threads} threads` : ''}`}
-              {view.depth ? ` · depth ${view.depth}` : ''}
-              {view.searching && <span className="ml-1 inline-block size-1.5 animate-pulse rounded-full bg-brand align-middle" />}
+              {view.source === 'cloud' ? t('Cloud') : `Stockfish 19${flavor.threaded ? ` · ${tn(flavor.threads, '{n} thread', '{n} threads')}` : ''}`}
+              {view.depth ? ` · ${t('depth {n}', { n: view.depth })}` : ''}
+              {view.searching && <span className="ms-1 inline-block size-1.5 animate-pulse rounded-full bg-brand align-middle" />}
             </span>
           ) : (
-            'Engine off'
+            t('Engine off')
           )}
         </div>
       </div>
       {engineOn && (
-        <ol className="flex flex-col">
+        <ol dir="ltr" className="flex flex-col">
           {(view.lines.length ? view.lines : [undefined, undefined, undefined]).map((line, i) => (
             <PvRow key={i} fen={fen} line={line} onPlayLine={onPlayLine} onHoverMove={onHoverMove} />
           ))}

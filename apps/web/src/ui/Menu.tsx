@@ -75,7 +75,7 @@ export function Menu({ trigger, items, label }: { trigger: (props: { onClick: (e
                 setAnchor(null);
                 it.onSelect();
               }}
-              className={`flex h-10 w-full items-center gap-2.5 rounded-[10px] px-3 text-left text-base font-medium outline-none hover:bg-surface-3 focus-visible:bg-surface-3 ${it.danger ? 'text-bad' : 'text-ink'}`}
+              className={`flex h-10 w-full items-center gap-2.5 rounded-[10px] px-3 text-start text-base font-medium outline-none hover:bg-surface-3 focus-visible:bg-surface-3 ${it.danger ? 'text-bad' : 'text-ink'}`}
             >
               {it.icon && <it.icon size={17} aria-hidden className={it.danger ? '' : 'text-ink-2'} />}
               {it.label}

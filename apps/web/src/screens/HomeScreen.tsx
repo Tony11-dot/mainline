@@ -7,10 +7,9 @@ import { useLibrary } from '../lib/library';
 import { useTraining, reviewsToday } from '../lib/training';
 import { usePrefs } from '../lib/prefs';
 import { LogoMark } from '../ui/Logo';
-import { useT } from '../lib/i18n';
+import { fmtPercent, t, tn } from '../lib/i18n';
 
 export function HomeScreen() {
-  const t = useT();
   const lib = useLibrary();
   const tr = useTraining();
   const newLimit = usePrefs((s) => s.dailyNewLimit);
@@ -32,13 +31,13 @@ export function HomeScreen() {
   const hasReps = lib.reps.some((r) => !r.deleted);
   const onboarded = usePrefs((s) => s.onboarded);
   if (lib.loaded && !hasReps && !onboarded) return <Navigate to="/welcome" replace />;
-  const primary = sum.due > 0 ? { to: '/train?mode=review', label: t('today.trainNow'), sub: `${sum.due} due · ~${sum.minutes} min` } : sum.newToday > 0 ? { to: '/train?mode=learn', label: t('today.learnNew'), sub: `${sum.newToday} new today · ~${sum.minutes} min` } : null;
+  const primary = sum.due > 0 ? { to: '/train?mode=review', label: t('Train now'), sub: t('{due} due · ~{min} min', { due: sum.due, min: sum.minutes }) } : sum.newToday > 0 ? { to: '/train?mode=learn', label: t('Learn new moves'), sub: t('{count} new today · ~{min} min', { count: sum.newToday, min: sum.minutes }) } : null;
 
   return (
     <div className="mx-auto max-w-3xl px-4 py-6 md:px-8 md:py-10">
       <div className="flex items-center gap-3">
         <LogoMark size={34} className="md:hidden" />
-        <h1 className="text-3xl font-bold">{t('today.title')}</h1>
+        <h1 className="text-3xl font-bold">{t('Today')}</h1>
         {hasReps && (
           <span className="ms-auto">
             <StreakBadge />
@@ -48,20 +47,22 @@ export function HomeScreen() {
       {hasReps && streak.atRisk && (
         <p className="mt-3 flex items-center gap-2 rounded-[var(--radius-m)] bg-flame-soft px-4 py-2.5 text-sm font-semibold text-flame-ink" data-testid="streak-at-risk">
           {streak.freezeUsed ? <Snowflake size={16} className="shrink-0 text-freeze" aria-hidden /> : <Flame size={16} className="shrink-0 text-flame" aria-hidden />}
-          {streak.freezeUsed ? `A streak freeze saved your ${streak.current}-day streak. Practise today to keep it.` : `Practise today to keep your ${streak.current}-day streak.`}
+          {streak.freezeUsed
+            ? tn(streak.current, 'A streak freeze saved your {n}-day streak. Practise today to keep it.', 'A streak freeze saved your {n}-day streak. Practise today to keep it.')
+            : tn(streak.current, 'Practise today to keep your {n}-day streak.', 'Practise today to keep your {n}-day streak.')}
         </p>
       )}
 
       {!lib.loaded ? null : !hasReps ? (
         <div className="mt-8 rounded-[var(--radius-xl)] border border-line bg-surface p-6 shadow-1">
-          <h2 className="text-xl font-bold">Start your first repertoire</h2>
-          <p className="mt-1 max-w-[52ch] text-ink-2">Pick an opening, play the moves you want on the board, and MainLine turns every position into spaced-repetition training.</p>
+          <h2 className="text-xl font-bold">{t('Start your first repertoire')}</h2>
+          <p className="mt-1 max-w-[52ch] text-ink-2">{t('Pick an opening, play the moves you want on the board, and MainLine turns every position into spaced-repetition training.')}</p>
           <div className="mt-5 flex flex-wrap gap-2">
             <Link to="/library/openings" className="inline-flex h-12 items-center gap-2 rounded-[14px] bg-brand px-5 font-semibold text-on-brand">
-              <BookOpen size={18} aria-hidden /> Browse openings
+              <BookOpen size={18} aria-hidden /> {t('Browse openings')}
             </Link>
             <Link to="/library" className="inline-flex h-12 items-center rounded-[14px] border border-line bg-surface px-5 font-semibold shadow-1">
-              Build from scratch
+              {t('Build from scratch')}
             </Link>
           </div>
         </div>
@@ -82,25 +83,25 @@ export function HomeScreen() {
             </Link>
           ) : (
             <div className="mt-6 rounded-[var(--radius-xl)] border border-line bg-surface p-5 shadow-1">
-              <p className="text-lg font-bold">All caught up</p>
-              <p className="text-ink-2">Nothing is due. Drill a line or add moves to your repertoire.</p>
+              <p className="text-lg font-bold">{t('All caught up')}</p>
+              <p className="text-ink-2">{t('Nothing is due. Drill a line or add moves to your repertoire.')}</p>
             </div>
           )}
 
           <Progress done={today.length} goal={goal} learned={sum.learned} positions={sum.positions} retention={sum.learned ? sum.retention : null} />
 
-          <h2 className="mt-8 mb-2 px-1 text-sm font-semibold text-ink-2">Practice</h2>
+          <h2 className="mt-8 mb-2 px-1 text-sm font-semibold text-ink-2">{t('Practice')}</h2>
           <ListGroup>
-            <ModeLink to="/train?mode=learn" icon={GraduationCap} title="Learn" sub={sum.newToday ? `${sum.newToday} new today` : 'Nothing new today'} />
-            <ModeLink to="/train?mode=drill" icon={Shuffle} title="Drill" sub="Random lines, real reply odds" />
-            <ModeLink to="/train?mode=quiz" icon={Dumbbell} title="Position quiz" sub="Weakest positions first" />
+            <ModeLink to="/train?mode=learn" icon={GraduationCap} title={t('Learn')} sub={sum.newToday ? t('{count} new today', { count: sum.newToday }) : t('Nothing new today')} />
+            <ModeLink to="/train?mode=drill" icon={Shuffle} title={t('Drill')} sub={t('Random lines, real reply odds')} />
+            <ModeLink to="/train?mode=quiz" icon={Dumbbell} title={t('Position quiz')} sub={t('Weakest positions first')} />
           </ListGroup>
         </>
       )}
-      <h2 className="mt-8 mb-2 px-1 text-sm font-semibold text-ink-2">Tools</h2>
+      <h2 className="mt-8 mb-2 px-1 text-sm font-semibold text-ink-2">{t('Tools')}</h2>
       <ListGroup>
-        <ModeLink to="/stats" icon={BarChart3} title="Statistics" sub="Accuracy, repertoires, openings, games" />
-        <ModeLink to="/setup" icon={Cpu} title="Analysis board" sub="Set up any position, run Stockfish" />
+        <ModeLink to="/stats" icon={BarChart3} title={t('Statistics')} sub={t('Accuracy, repertoires, openings, games')} />
+        <ModeLink to="/setup" icon={Cpu} title={t('Analysis board')} sub={t('Set up any position, run Stockfish')} />
       </ListGroup>
     </div>
   );
@@ -119,15 +120,15 @@ function Progress({ done, goal, learned, positions, retention }: { done: number;
           <circle cx="19" cy="19" r={r} fill="none" stroke={pct >= 1 ? 'var(--good)' : 'var(--brand)'} strokeWidth="4" strokeLinecap="round" strokeDasharray={c} strokeDashoffset={c * (1 - pct)} className="transition-[stroke-dashoffset] duration-500" />
         </svg>
         <div className="min-w-0">
-          <dt className="text-xs whitespace-nowrap text-ink-3">Daily goal</dt>
+          <dt className="text-xs whitespace-nowrap text-ink-3">{t('Daily goal')}</dt>
           <dd className="text-md font-bold">
             {done}
             <span className="font-semibold text-ink-3">/{goal}</span>
           </dd>
         </div>
       </div>
-      <Stat label="Learned" value={learned} of={positions} />
-      <Stat label="Retention" value={retention === null ? '—' : `${Math.round(retention * 100)}%`} />
+      <Stat label={t('Learned')} value={learned} of={positions} />
+      <Stat label={t('Retention')} value={retention === null ? '—' : fmtPercent(retention)} />
     </dl>
   );
 }

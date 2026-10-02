@@ -1,5 +1,6 @@
 import type { ReminderPlan } from '../platform';
 import { api } from './api';
+import { useI18n } from './i18n';
 
 const ENDPOINT_KEY = 'mainline.push.endpoint';
 
@@ -21,6 +22,7 @@ const state = (plan: ReminderPlan) => ({
   streak: plan.streakDays,
   freezes: plan.freezesAtLast,
   lastReviewDay: plan.lastReviewDay,
+  lang: useI18n.getState().lang,
 });
 
 /** Subscribes (asking permission when needed) or updates the server with the latest due count. */

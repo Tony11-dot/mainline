@@ -1,0 +1,1 @@
+ALTER TABLE "push_subs" ADD COLUMN "lang" text DEFAULT 'en' NOT NULL;

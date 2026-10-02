@@ -2,7 +2,7 @@ import { create } from 'zustand';
 import { persist, type PersistStorage } from 'zustand/middleware';
 import type { Speed } from '@mainline/shared';
 
-import { applyLocale } from './i18n';
+import { applyLocale, type LocaleId } from './i18n';
 import { fontDef, pieceCss, resolveTheme, themeVars, type BoardTheme, type FontId, type PieceSet, type ThemeId } from './appearance';
 
 export type { BoardTheme, FontId, PieceSet, ThemeId };
@@ -27,7 +27,7 @@ export interface Prefs {
   remindersEverEnabled: boolean;
   reminderTime: string;
   lichessUser: string;
-  locale: 'auto' | 'en' | 'he' | 'ar';
+  locale: LocaleId;
   onboarded: boolean;
   chesscomUser: string;
   engineLines: number;
@@ -111,7 +111,7 @@ export function bindPrefsToDocument() {
     const font = fontDef(p.font);
     root.style.setProperty('--font-sans-live', font.stack);
     void font.load?.();
-    applyLocale(p.locale);
+    void applyLocale(p.locale);
     if (p.reduceTransparency) root.dataset.reduceTransparency = '';
     else delete root.dataset.reduceTransparency;
     pieceStyle ??= Object.assign(document.createElement('style'), { id: 'ml-pieces' });

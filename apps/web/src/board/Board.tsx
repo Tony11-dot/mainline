@@ -11,6 +11,7 @@ import { legalDests, playUci, positionFromFen } from '@mainline/shared';
 import { usePrefs } from '../lib/prefs';
 import { platform } from '../platform';
 import { PromotionPicker, type PromotionRole } from './PromotionPicker';
+import { t } from '../lib/i18n';
 
 export type { DrawShape, Key };
 export type BoardColor = 'white' | 'black';
@@ -171,7 +172,7 @@ export function Board(props: BoardProps) {
       ref={wrap}
       className={`ml-board relative aspect-square w-full select-none ${props.className ?? ''} ${props.drawMode ? 'draw-mode' : ''}`}
       role="application"
-      aria-label={props.ariaLabel ?? 'Chess board'}
+      aria-label={props.ariaLabel ?? t('Chess board')}
     >
       <div ref={el} className="h-full w-full" />
       {promotion && (

@@ -3,7 +3,8 @@ import { createRoot } from 'react-dom/client';
 import { initPlatform, platform } from './platform';
 import { App, startPlatformHooks } from './App';
 import './styles.css';
-import { bindPrefsToDocument } from './lib/prefs';
+import { bindPrefsToDocument, usePrefs } from './lib/prefs';
+import { applyLocale } from './lib/i18n';
 import { installAudioUnlock } from './lib/sound';
 import { useAuth } from './lib/auth';
 import { useLibrary } from './lib/library';
@@ -14,6 +15,8 @@ import { autoImportGames } from './lib/games';
 
 await initPlatform();
 bindPrefsToDocument();
+// The language catalog loads before the first render, so nothing flashes in English.
+await applyLocale(usePrefs.getState().locale);
 installAudioUnlock();
 void useAuth.getState().refresh();
 void useLibrary.getState().load();

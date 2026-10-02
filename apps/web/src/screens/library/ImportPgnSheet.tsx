@@ -7,6 +7,7 @@ import { platform } from '../../platform';
 import { Sheet, Field, inputCls } from '../../ui/Sheet';
 import { Button, Segmented } from '../../ui/primitives';
 import { toast } from '../../ui/toast';
+import { t, tn } from '../../lib/i18n';
 
 /** Paste or open a PGN (variations and comments kept) into an existing or new repertoire. */
 export function ImportPgnSheet({ open, repId, initialText, onClose }: { open: boolean; repId?: string; initialText?: string; onClose: () => void }) {
@@ -33,12 +34,12 @@ export function ImportPgnSheet({ open, repId, initialText, onClose }: { open: bo
       if (target === 'new') {
         const root = lib.folders.find((f) => !f.deleted && f.parentId === null && f.color === color);
         const ev = text.match(/\[Event "([^"]+)"\]/)?.[1];
-        const fallback = ev && ev !== '?' ? ev : 'Imported repertoire';
+        const fallback = ev && ev !== '?' ? ev : t('Imported repertoire');
         id = (await lib.createRepertoire({ name: name || fallback, color, folderId: root?.id ?? null })).id;
       }
       const res = await lib.importPgn(id, text);
-      if (res.errors.length) toast(`Imported ${res.added} moves · ${res.errors.length} problem${res.errors.length > 1 ? 's' : ''}: ${res.errors[0]}`, { kind: 'error' });
-      else toast(`Imported ${res.added} move${res.added === 1 ? '' : 's'}`, { kind: 'success' });
+      if (res.errors.length) toast(tn(res.errors.length, 'Imported {added} moves · {n} problem: {first}', 'Imported {added} moves · {n} problems: {first}', { added: res.added, first: res.errors[0]! }), { kind: 'error' });
+      else toast(tn(res.added, 'Imported {n} move', 'Imported {n} moves'), { kind: 'success' });
       onClose();
       nav(`/rep/${id}`);
     } finally {
@@ -50,20 +51,20 @@ export function ImportPgnSheet({ open, repId, initialText, onClose }: { open: bo
     <Sheet
       open={open}
       onClose={onClose}
-      title="Import PGN"
+      title={t('Import PGN')}
       wide
       footer={
         <>
           <Button variant="ghost" onClick={onClose}>
-            Cancel
+            {t('Cancel')}
           </Button>
           <Button variant="primary" onClick={() => void run()} disabled={!text.trim()} loading={busy}>
-            Import
+            {t('Import')}
           </Button>
         </>
       }
     >
-      <Field label="PGN" hint="All games and variations are merged. Comments become move notes.">
+      <Field label="PGN" hint={t('All games and variations are merged. Comments become move notes.')}>
         <textarea className={`${inputCls} h-40 py-2.5 font-mono text-sm`} value={text} onChange={(e) => setText(e.target.value)} placeholder={'1. e4 e5 2. Nf3 Nc6 (2... d6) 3. Bb5 *'} spellCheck={false} />
       </Field>
       <Button
@@ -78,11 +79,11 @@ export function ImportPgnSheet({ open, repId, initialText, onClose }: { open: bo
           }
         }}
       >
-        Open a .pgn file
+        {t('Open a .pgn file')}
       </Button>
-      <Field label="Into">
+      <Field label={t('Into')}>
         <select className={inputCls} value={target} onChange={(e) => setTarget(e.target.value)}>
-          <option value="new">A new repertoire</option>
+          <option value="new">{t('A new repertoire')}</option>
           {reps.map((r) => (
             <option key={r.id} value={r.id}>
               {r.name} ({r.color})
@@ -92,11 +93,11 @@ export function ImportPgnSheet({ open, repId, initialText, onClose }: { open: bo
       </Field>
       {target === 'new' && (
         <>
-          <Field label="I play">
-            <Segmented<Color> label="Colour" value={color} onChange={setColor} options={[{ value: 'white', label: 'White' }, { value: 'black', label: 'Black' }]} />
+          <Field label={t('I play')}>
+            <Segmented<Color> label={t('Colour')} value={color} onChange={setColor} options={[{ value: 'white', label: t('White') }, { value: 'black', label: t('Black') }]} />
           </Field>
-          <Field label="Name">
-            <input className={inputCls} value={name} onChange={(e) => setName(e.target.value)} placeholder="Imported repertoire" />
+          <Field label={t('Name')}>
+            <input className={inputCls} value={name} onChange={(e) => setName(e.target.value)} placeholder={t('Imported repertoire')} />
           </Field>
         </>
       )}

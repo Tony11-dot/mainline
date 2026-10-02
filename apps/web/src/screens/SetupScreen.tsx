@@ -13,18 +13,34 @@ import { INITIAL_FEN } from '@mainline/shared';
 import { Button, IconButton, Segmented } from '../ui/primitives';
 import { usePrefs } from '../lib/prefs';
 import { platform } from '../platform';
+import { msg, t } from '../lib/i18n';
 
 const ROLES: Role[] = ['king', 'queen', 'rook', 'bishop', 'knight', 'pawn'];
 type Tool = 'move' | 'erase' | `${Color}-${Role}`;
 type Castle = 'K' | 'Q' | 'k' | 'q';
 
 const ERRORS: Record<string, string> = {
-  ERR_EMPTY: 'The board is empty.',
-  ERR_KINGS: 'Each side needs exactly one king.',
-  ERR_PAWNS_ON_BACKRANK: 'Pawns can’t stand on the first or last rank.',
-  ERR_OPPOSITE_CHECK: 'The side not to move is in check — switch who’s to move.',
-  ERR_IMPOSSIBLE_CHECK: 'That check can’t arise in a real game.',
-  ERR_VARIANT: 'That position isn’t standard chess.',
+  ERR_EMPTY: msg('The board is empty.'),
+  ERR_KINGS: msg('Each side needs exactly one king.'),
+  ERR_PAWNS_ON_BACKRANK: msg('Pawns can’t stand on the first or last rank.'),
+  ERR_OPPOSITE_CHECK: msg('The side not to move is in check — switch who’s to move.'),
+  ERR_IMPOSSIBLE_CHECK: msg('That check can’t arise in a real game.'),
+  ERR_VARIANT: msg('That position isn’t standard chess.'),
+};
+
+const PIECE_NAMES: Record<string, string> = {
+  'white-king': msg('White king'),
+  'white-queen': msg('White queen'),
+  'white-rook': msg('White rook'),
+  'white-bishop': msg('White bishop'),
+  'white-knight': msg('White knight'),
+  'white-pawn': msg('White pawn'),
+  'black-king': msg('Black king'),
+  'black-queen': msg('Black queen'),
+  'black-rook': msg('Black rook'),
+  'black-bishop': msg('Black bishop'),
+  'black-knight': msg('Black knight'),
+  'black-pawn': msg('Black pawn'),
 };
 
 /** The square under a point, from the board's live rect (chessground caches its bounds across scrolls). */
@@ -70,9 +86,9 @@ export function SetupScreen() {
   const rawFen = `${board} ${turn[0]} ${[...castles].sort((a, b) => 'KQkq'.indexOf(a) - 'KQkq'.indexOf(b)).join('') || '-'} - 0 1`;
   const checked = useMemo(() => {
     const setup = parseFen(rawFen);
-    if (setup.isErr) return { error: 'That FEN isn’t valid.' };
+    if (setup.isErr) return { error: t('That FEN isn’t valid.') };
     const pos = Chess.fromSetup(setup.value);
-    if (pos.isErr) return { error: ERRORS[pos.error.message] ?? 'That position isn’t legal.' };
+    if (pos.isErr) return { error: ERRORS[pos.error.message] ? t(ERRORS[pos.error.message]!) : t('That position isn’t legal.') };
     return { fen: makeFen(pos.value.toSetup()) };
   }, [rawFen]);
 
@@ -171,7 +187,7 @@ export function SetupScreen() {
   };
 
   const palette = (color: Color) => (
-    <div className="cg-wrap setup-palette" role="toolbar" aria-label={`${color} pieces`}>
+    <div className="cg-wrap setup-palette" role="toolbar" aria-label={color === 'white' ? t('White pieces') : t('Black pieces')}>
       {ROLES.map((role) => {
         const id = `${color}-${role}` as Tool;
         const on = tool === id;
@@ -179,7 +195,7 @@ export function SetupScreen() {
           <button
             key={role}
             type="button"
-            aria-label={`Place ${color} ${role}`}
+            aria-label={t('Place {piece}', { piece: t(PIECE_NAMES[`${color}-${role}`]!) })}
             aria-pressed={on}
             className={`setup-piece grid aspect-square w-[min(13vw,52px)] touch-none place-items-center rounded-[12px] transition-[background-color,transform] duration-150 ${on ? 'scale-105 bg-brand-soft ring-2 ring-brand' : 'hover:bg-surface-3'}`}
             onClick={() => pick(id)}
@@ -220,48 +236,48 @@ export function SetupScreen() {
       <div className="flex min-w-0 flex-col lg:w-[min(calc(100dvh-10rem),60%)]">
         <div className="flex min-h-[44px] items-center gap-1 px-2 lg:px-0">
           <Link to="/explore" className="flex h-10 items-center gap-1 rounded-[10px] px-2 text-sm font-medium text-ink-2 hover:bg-surface-3">
-            <ChevronLeft size={18} aria-hidden /> Explore
+            <ChevronLeft size={18} className="rtl:rotate-180" aria-hidden /> {t('Explore')}
           </Link>
-          <h1 className="ml-1 text-md font-semibold">Set up position</h1>
+          <h1 className="ms-1 text-md font-semibold">{t('Set up position')}</h1>
         </div>
         {palette(orientation === 'white' ? 'black' : 'white')}
         <div className="mx-auto w-full" style={{ maxWidth: 'calc(100dvh - 19rem)' }}>
-          <div className={`ml-board relative aspect-square w-full select-none ${tool !== 'move' ? 'cursor-crosshair' : ''}`} onPointerDownCapture={onBoardPointerDown} role="application" aria-label="Board editor">
+          <div className={`ml-board relative aspect-square w-full select-none ${tool !== 'move' ? 'cursor-crosshair' : ''}`} onPointerDownCapture={onBoardPointerDown} role="application" aria-label={t('Board editor')}>
             <div ref={el} className="h-full w-full" />
           </div>
         </div>
         {palette(orientation)}
         <div className="flex items-center justify-center gap-1 px-2">
           <Button size="sm" variant={tool === 'move' ? 'primary' : 'ghost'} icon={Hand} onClick={() => pick('move')} aria-pressed={tool === 'move'}>
-            Move
+            {t('Move')}
           </Button>
           <Button size="sm" variant={tool === 'erase' ? 'primary' : 'ghost'} icon={Eraser} onClick={() => pick('erase')} aria-pressed={tool === 'erase'}>
-            Erase
+            {t('Erase')}
           </Button>
-          <IconButton icon={Repeat2} label="Flip board" onClick={() => setOrientation((o) => (o === 'white' ? 'black' : 'white'))} />
+          <IconButton icon={Repeat2} label={t('Flip board')} onClick={() => setOrientation((o) => (o === 'white' ? 'black' : 'white'))} />
         </div>
       </div>
 
       <aside className="flex flex-col gap-4 px-4 lg:min-w-[320px] lg:flex-1 lg:px-0 lg:pt-12">
         <div className="flex flex-col gap-2">
-          <h2 className="text-sm font-semibold text-ink-2">To move</h2>
-          <Segmented label="Side to move" value={turn} onChange={setTurn} options={[{ value: 'white', label: 'White' }, { value: 'black', label: 'Black' }]} />
+          <h2 className="text-sm font-semibold text-ink-2">{t('To move')}</h2>
+          <Segmented label={t('Side to move')} value={turn} onChange={setTurn} options={[{ value: 'white', label: t('White') }, { value: 'black', label: t('Black') }]} />
         </div>
         <div className="flex flex-col gap-2">
-          <h2 className="text-sm font-semibold text-ink-2">Castling</h2>
+          <h2 className="text-sm font-semibold text-ink-2">{t('Castling')}</h2>
           <div className="flex flex-wrap gap-2">
-            {castleChip('K', 'White O-O')}
-            {castleChip('Q', 'White O-O-O')}
-            {castleChip('k', 'Black O-O')}
-            {castleChip('q', 'Black O-O-O')}
+            {castleChip('K', t('White O-O'))}
+            {castleChip('Q', t('White O-O-O'))}
+            {castleChip('k', t('Black O-O'))}
+            {castleChip('q', t('Black O-O-O'))}
           </div>
         </div>
         <div className="flex flex-wrap gap-2">
           <Button size="sm" variant="secondary" icon={RotateCcw} onClick={() => applyFen(INITIAL_FEN)}>
-            Starting position
+            {t('Starting position')}
           </Button>
           <Button size="sm" variant="secondary" icon={Trash2} onClick={() => applyFen('8/8/8/8/8/8/8/8 w - - 0 1')}>
-            Clear board
+            {t('Clear board')}
           </Button>
         </div>
         <div className="flex flex-col gap-2">
@@ -282,15 +298,15 @@ export function SetupScreen() {
               }}
               onBlur={() => setFenDraft(null)}
             />
-            <IconButton icon={Copy} label="Copy FEN" onClick={() => void navigator.clipboard?.writeText(okFen ?? rawFen).catch(() => undefined)} />
+            <IconButton icon={Copy} label={t('Copy FEN')} onClick={() => void navigator.clipboard?.writeText(okFen ?? rawFen).catch(() => undefined)} />
           </div>
-          {fenDraft !== null && <p className="text-xs text-ink-3">Paste or type a full FEN — it applies as soon as it’s valid.</p>}
+          {fenDraft !== null && <p className="text-xs text-ink-3">{t('Paste or type a full FEN — it applies as soon as it’s valid.')}</p>}
         </div>
         <p role="status" className={`min-h-5 text-sm ${error ? 'font-medium text-bad' : 'text-ink-3'}`}>
-          {error ?? 'Legal position — ready to analyse.'}
+          {error ?? t('Legal position — ready to analyse.')}
         </p>
         <Button size="lg" icon={Cpu} onClick={analyse} disabled={!!error}>
-          Analyse with engine
+          {t('Analyse with engine')}
         </Button>
       </aside>
     </div>

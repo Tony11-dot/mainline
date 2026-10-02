@@ -6,6 +6,7 @@ import { useTraining } from '../lib/training';
 import { analyse, useGames } from '../lib/games';
 import { pct, repertoireGames, repertoireShape, trainingStats } from '../lib/stats';
 import { MaturityBar, RecordBar } from '../ui/stats';
+import { t, tn } from '../lib/i18n';
 
 /** The whole repertoire at a glance: its size, how well you know it, and how it does in your games. */
 export function RepertoireStats({ rep }: { rep: Repertoire }) {
@@ -30,22 +31,22 @@ export function RepertoireStats({ rep }: { rep: Repertoire }) {
   );
 
   return (
-    <section aria-label="Repertoire statistics" className="border-b border-line p-3.5">
+    <section aria-label={t('Repertoire statistics')} className="border-b border-line p-3.5">
       <div className="flex items-center">
-        <h3 className="text-sm font-semibold">This repertoire</h3>
+        <h3 className="text-sm font-semibold">{t('This repertoire')}</h3>
         <Link to="/stats" className="ms-auto text-xs font-semibold text-brand">
-          All statistics
+          {t('All statistics')}
         </Link>
       </div>
       <dl className="mt-2 grid grid-cols-4 gap-2">
-        {cell('Moves', shape.moves)}
-        {cell('Lines', shape.lines)}
-        {cell('Deepest', shape.depth ? `${Math.ceil(shape.depth / 2)} mv` : '—')}
-        {cell('Replies', shape.replies)}
-        {cell('Known', pct(known))}
-        {cell('Accuracy', pct(tr.accuracy))}
-        {cell('Reviews', tr.reviews)}
-        {cell('Due', tr.due)}
+        {cell(t('Moves'), shape.moves)}
+        {cell(t('Lines'), shape.lines)}
+        {cell(t('Deepest'), shape.depth ? tn(Math.ceil(shape.depth / 2), '{n} move', '{n} moves') : '—')}
+        {cell(t('Replies'), shape.replies)}
+        {cell(t('Known'), pct(known))}
+        {cell(t('Accuracy'), pct(tr.accuracy))}
+        {cell(t('Reviews'), tr.reviews)}
+        {cell(t('Due'), tr.due)}
       </dl>
       {shape.ownPositions > 0 && (
         <div className="mt-3">
@@ -53,24 +54,24 @@ export function RepertoireStats({ rep }: { rep: Repertoire }) {
         </div>
       )}
       <div className="mt-3">
-        <h4 className="mb-1.5 text-xs font-semibold text-ink-3">In your games</h4>
+        <h4 className="mb-1.5 text-xs font-semibold text-ink-3">{t('In your games')}</h4>
         {rg.games ? (
           <>
             <RecordBar rec={rg} />
             <p className="tnum mt-1.5 text-xs text-ink-2">
-              {rg.avgBookPly !== null && <>Prep held for {Math.ceil(rg.avgBookPly / 2)} moves on average · </>}
-              {rg.theyLeft} surprise{rg.theyLeft === 1 ? '' : 's'} · {rg.youLeft} forgotten · {rg.prepEnded} past your prep
+              {rg.avgBookPly !== null && <>{tn(Math.ceil(rg.avgBookPly / 2), 'Prep held for {n} move on average', 'Prep held for {n} moves on average')} · </>}
+              {tn(rg.theyLeft, '{n} surprise', '{n} surprises')} · {t('{n} forgotten', { n: rg.youLeft })} · {t('{n} past your prep', { n: rg.prepEnded })}
             </p>
           </>
         ) : (
           <p className="text-xs text-ink-3">
-            No imported games reached it yet. <Link to="/games" className="font-semibold text-brand">Import games</Link>
+            {t('No imported games reached it yet.')} <Link to="/games" className="font-semibold text-brand">{t('Import games')}</Link>
           </p>
         )}
       </div>
       {tr.hardest.length > 0 && (
         <p className="tnum mt-2 text-xs text-ink-2">
-          Most-missed position: {tr.hardest[0]!.wrong} of {tr.hardest[0]!.total} wrong.
+          {t('Most-missed position: {wrong} of {total} wrong.', { wrong: tr.hardest[0]!.wrong, total: tr.hardest[0]!.total })}
         </p>
       )}
     </section>

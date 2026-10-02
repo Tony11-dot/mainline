@@ -229,6 +229,8 @@ export const pushSubs = pgTable('push_subs', {
   lastNudgeOn: text('last_nudge_on'),
   lastWeeklyOn: text('last_weekly_on'),
   lastLateOn: text('last_late_on'),
+  // App language for the reminder wording (packages/shared/locales).
+  lang: text('lang').default('en').notNull(),
   createdAt: ts('created_at').defaultNow().notNull(),
   updatedAt: ts('updated_at').defaultNow().notNull(),
 });

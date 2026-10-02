@@ -16,6 +16,7 @@ import { announce, announceMove, sanToSpeech } from './announce';
 import { useTraining } from './training';
 import { usePrefs } from './prefs';
 import { platform } from '../platform';
+import { t } from './i18n';
 
 export type Phase = 'idle' | 'auto' | 'await' | 'learn' | 'wrong' | 'lineDone' | 'done';
 
@@ -169,7 +170,7 @@ export function createTrainer(mode: TrainMode, lines: SessionLine[], data: RepDa
             play(std);
           } else {
             // Another repertoire's main move here (conflict): accepted, but the line continues with its own move.
-            set({ message: 'Also in your repertoire — continuing this line', syncKey: s.syncKey + 1 });
+            set({ message: t('Also in your repertoire — continuing this line'), syncKey: s.syncKey + 1 });
             play(lineMove);
           }
           set({ ply: s.ply + 1, phase: 'auto', hint: undefined, expected: [], feedback: { kind: 'right', key: Date.now() } });
@@ -190,13 +191,13 @@ export function createTrainer(mode: TrainMode, lines: SessionLine[], data: RepDa
         haptic('error');
         {
           const correct = s.expected[0] ? playUci(positionFromFen(s.fen), s.expected[0]).san : '';
-          announce(`Not quite. The move is ${sanToSpeech(correct)}.`);
+          announce(t('Not quite. The move is {move}.', { move: sanToSpeech(correct) }));
         }
         set({
           phase: s.phase === 'learn' ? 'learn' : 'wrong',
           failedHere: true,
           feedback: { kind: 'wrong', key: Date.now() },
-          message: isAlt ? 'That’s your alternate — the main move is shown' : undefined,
+          message: isAlt ? t('That’s your alternate — the main move is shown') : undefined,
         });
         // Let the wrong move register visually, then take it back and show the right one.
         timer = setTimeout(() => set({ syncKey: get().syncKey + 1, hint: get().expected[0] }), 420);

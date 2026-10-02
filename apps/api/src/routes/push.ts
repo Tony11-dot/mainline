@@ -12,6 +12,7 @@ const state = z.object({
   streak: z.number().int().min(0).max(100000).default(0),
   freezes: z.number().int().min(0).max(10).default(0),
   lastReviewDay: z.string().regex(/^\d{4}-\d\d-\d\d$/).nullable().optional(),
+  lang: z.string().regex(/^[a-z]{2}$/).default('en'),
 });
 const subscription = z.object({ endpoint: z.string().url().max(1000), keys: z.object({ p256dh: z.string().max(200), auth: z.string().max(100) }) });
 
@@ -23,7 +24,7 @@ export async function pushRoutes(app: FastifyInstance) {
     if (!db) throw new MissingConfigError('DATABASE_URL', 'Reminders');
     const body = state.extend({ subscription }).parse(req.body);
     const user = await currentUser(req);
-    const values = { endpoint: body.subscription.endpoint, keysJson: body.subscription.keys, userId: user?.id ?? null, timezone: body.timezone, reminderTime: body.reminderTime, dueCount: body.dueCount, streak: body.streak, freezes: body.freezes, lastReviewDay: body.lastReviewDay ?? null, updatedAt: new Date() };
+    const values = { endpoint: body.subscription.endpoint, keysJson: body.subscription.keys, userId: user?.id ?? null, timezone: body.timezone, reminderTime: body.reminderTime, dueCount: body.dueCount, streak: body.streak, freezes: body.freezes, lastReviewDay: body.lastReviewDay ?? null, lang: body.lang, updatedAt: new Date() };
     await db.insert(schema.pushSubs).values(values).onConflictDoUpdate({ target: schema.pushSubs.endpoint, set: values });
     return { ok: true };
   });

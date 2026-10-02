@@ -49,7 +49,7 @@ test('learn, then quiz with a mistake, summary', async ({ page }, info) => {
   expect(board).toContain('Your move');
   await page.evaluate(() => ((window as unknown as { __mlSoundLog: string[] }).__mlSoundLog = []));
   await move(page, 'a2', 'a3'); // legal in every quiz position of this repertoire, never correct
-  await expect(page.getByRole('heading', { name: /Not quite — it's/ })).toBeVisible();
+  await expect(page.getByRole('heading', { name: /Not quite — it’s/ })).toBeVisible();
   expect(await sounds()).toContain('error');
   // Answer everything else correctly (the prompt exposes the expected move for tests).
   const phaseEl = page.locator('[data-phase]');

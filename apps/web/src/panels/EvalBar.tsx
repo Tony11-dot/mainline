@@ -1,4 +1,5 @@
 import { formatEval, winningChances, type EvalLine } from '@mainline/shared';
+import { t } from '../lib/i18n';
 
 /** White-share gauge. Vertical beside the board on desktop, horizontal above it on phones. */
 export function EvalBar({ line, orientation, direction = 'vertical', className = '' }: { line?: EvalLine; orientation: 'white' | 'black'; direction?: 'vertical' | 'horizontal'; className?: string }) {
@@ -12,11 +13,11 @@ export function EvalBar({ line, orientation, direction = 'vertical', className =
     <div
       className={`relative overflow-hidden rounded-[6px] bg-[oklch(0.3_0.01_262)] ring-1 ring-line-strong ${vertical ? 'w-3' : 'h-1.5'} ${className}`}
       role="meter"
-      aria-label="Evaluation"
+      aria-label={t('Evaluation')}
       aria-valuemin={0}
       aria-valuemax={100}
       aria-valuenow={Math.round(whitePct)}
-      aria-valuetext={line ? label : 'No evaluation'}
+      aria-valuetext={line ? label : t('No evaluation')}
     >
       <div
         className="absolute bg-[oklch(0.97_0.004_262)] transition-[height,width] duration-500 ease-[var(--ease-out)]"

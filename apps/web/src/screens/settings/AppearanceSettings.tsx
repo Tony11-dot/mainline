@@ -14,6 +14,7 @@ import {
   type ThemeTokens,
 } from '../../lib/appearance';
 import { usePrefs } from '../../lib/prefs';
+import { t } from '../../lib/i18n';
 
 /**
  * Theme / font / board / pieces pickers — the same layout as ClassMate & ClassMusic Settings:
@@ -23,25 +24,25 @@ import { usePrefs } from '../../lib/prefs';
 export function AppearanceSettings() {
   return (
     <>
-      <Section title="Light themes">
+      <Section title={t('Light themes')}>
         {(['system', ...LIGHT_FAMILY] as ThemeId[]).map((id) => (
           <ThemeRow key={id} id={id} />
         ))}
       </Section>
-      <Section title="Dark themes">
+      <Section title={t('Dark themes')}>
         {DARK_FAMILY.map((id) => (
           <ThemeRow key={id} id={id} />
         ))}
       </Section>
-      <Section title="Font">
+      <Section title={t('Font')}>
         {FONTS.map((f) => (
           <FontRow key={f.id} id={f.id} name={f.name} stack={f.stack} load={f.load} />
         ))}
       </Section>
-      <Section title="Board">
+      <Section title={t('Board')}>
         <BoardPicker />
       </Section>
-      <Section title="Pieces">
+      <Section title={t('Pieces')}>
         <PiecePicker />
       </Section>
     </>
@@ -71,7 +72,7 @@ function ThemeRow({ id }: { id: ThemeId }) {
       role="radio"
       aria-checked={on}
       onClick={() => set({ appTheme: id })}
-      className="flex min-h-[60px] w-full items-center gap-3 px-3.5 py-2 text-left transition-colors hover:bg-surface-2"
+      className="flex min-h-[60px] w-full items-center gap-3 px-3.5 py-2 text-start transition-colors hover:bg-surface-2"
     >
       <ThemeSwatch tokens={tokens} system={id === 'system'} />
       <span className="flex-1 text-base font-medium text-ink">{themeName(id)}</span>
@@ -93,7 +94,7 @@ function ThemeSwatch({ tokens: t, system }: { tokens: ThemeTokens; system?: bool
         <span className="h-[3px] w-[34px] rounded-full" style={{ background: t.ink }} />
         <span className="h-[3px] w-6 rounded-full" style={{ background: t.inkSecondary }} />
       </span>
-      <span className="ml-auto h-6 w-[18px] shrink-0 rounded-[4px]" style={{ background: t.paper, boxShadow: `inset 0 0 0 0.5px ${t.separator}` }} />
+      <span className="ms-auto h-6 w-[18px] shrink-0 rounded-[4px]" style={{ background: t.paper, boxShadow: `inset 0 0 0 0.5px ${t.separator}` }} />
     </span>
   );
 }
@@ -109,13 +110,13 @@ function FontRow({ id, name, stack, load }: { id: (typeof FONTS)[number]['id']; 
       onPointerEnter={() => void load?.()}
       onFocus={() => void load?.()}
       onClick={() => set({ font: id })}
-      className="flex min-h-[52px] w-full items-center gap-3 px-3.5 py-2 text-left transition-colors hover:bg-surface-2"
+      className="flex min-h-[52px] w-full items-center gap-3 px-3.5 py-2 text-start transition-colors hover:bg-surface-2"
     >
       <span className="w-10 text-center text-xl text-ink" style={{ fontFamily: stack }} aria-hidden>
         Aa
       </span>
       <span className="flex-1 text-base font-medium text-ink" style={{ fontFamily: stack }}>
-        {name}
+        {t(name)}
       </span>
       <Check on={on} />
     </button>
@@ -132,7 +133,7 @@ const BOARD_PREVIEW: Record<Exclude<BoardTheme, 'match'>, [string, string]> = {
 function BoardPicker() {
   const { boardTheme, set } = usePrefs();
   return (
-    <div className="flex flex-wrap gap-3 p-3.5" role="radiogroup" aria-label="Board">
+    <div className="flex flex-wrap gap-3 p-3.5" role="radiogroup" aria-label={t('Board')}>
       {BOARD_THEMES.map((b) => {
         const [light, dark] =
           b.id === 'match' ? ['color-mix(in oklab, var(--brand) 9%, #f3f5f8)', 'color-mix(in oklab, var(--brand) 34%, #9ea6b3)'] : BOARD_PREVIEW[b.id];
@@ -143,7 +144,7 @@ function BoardPicker() {
               className={`size-14 rounded-[10px] transition-shadow ${on ? 'ring-2 ring-brand ring-offset-2 ring-offset-bg' : 'ring-1 ring-line'}`}
               style={{ backgroundImage: `repeating-conic-gradient(${dark} 0 25%, ${light} 0 50%)`, backgroundSize: '50% 50%' }}
             />
-            <span className={`text-xs font-semibold ${on ? 'text-ink' : 'text-ink-2'}`}>{b.name}</span>
+            <span className={`text-xs font-semibold ${on ? 'text-ink' : 'text-ink-2'}`}>{t(b.name)}</span>
           </button>
         );
       })}
@@ -154,7 +155,7 @@ function BoardPicker() {
 function PiecePicker() {
   const { pieceSet, set } = usePrefs();
   return (
-    <div className="grid grid-cols-4 gap-2 p-3.5 sm:grid-cols-8" role="radiogroup" aria-label="Pieces">
+    <div className="grid grid-cols-4 gap-2 p-3.5 sm:grid-cols-8" role="radiogroup" aria-label={t('Pieces')}>
       {PIECE_SETS.map((p) => {
         const on = pieceSet === p.id;
         return (
@@ -163,15 +164,15 @@ function PiecePicker() {
             type="button"
             role="radio"
             aria-checked={on}
-            aria-label={p.name}
+            aria-label={t(p.name)}
             onClick={() => set({ pieceSet: p.id })}
             className={`flex flex-col items-center gap-1 rounded-[12px] p-1.5 transition-colors ${on ? 'bg-brand-soft ring-2 ring-brand' : 'hover:bg-surface-2'}`}
           >
             <span className="flex">
               <img src={`/pieces/${p.id}/wN.svg`} alt="" className="size-8" loading="lazy" />
-              <img src={`/pieces/${p.id}/bQ.svg`} alt="" className="-ml-2 size-8" loading="lazy" />
+              <img src={`/pieces/${p.id}/bQ.svg`} alt="" className="-ms-2 size-8" loading="lazy" />
             </span>
-            <span className={`text-[11px] font-semibold ${on ? 'text-ink' : 'text-ink-2'}`}>{p.name}</span>
+            <span className={`text-[11px] font-semibold ${on ? 'text-ink' : 'text-ink-2'}`}>{t(p.name)}</span>
           </button>
         );
       })}

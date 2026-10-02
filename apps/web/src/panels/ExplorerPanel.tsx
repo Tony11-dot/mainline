@@ -6,6 +6,8 @@ import { ApiError } from '../lib/api';
 import { usePrefs } from '../lib/prefs';
 import { PanelNote, Segmented, Skeleton, Button } from '../ui/primitives';
 import { startLichessLogin } from '../lib/auth';
+import { speedName } from '../lib/speeds';
+import { fmtPercent, intlLocale, t, tn } from '../lib/i18n';
 
 export function useExplorer(source: ExplorerSource, fen: string, enabled = true) {
   const { rating, speeds } = usePrefs();
@@ -47,18 +49,18 @@ export function ExplorerPanel({ fen, onPlay, onHoverMove, highlightUcis }: { fen
   const bands = ratingBandsFor(rating);
 
   return (
-    <section aria-label="Opening explorer" className="flex flex-col">
+    <section aria-label={t('Opening explorer')} className="flex flex-col">
       <div className="px-3 pt-3 pb-2">
         <Segmented
-          label="Explorer database"
+          label={t('Explorer database')}
           value={source}
           onChange={setSource}
           options={[
-            { value: 'masters', label: 'Masters' },
+            { value: 'masters', label: t('Masters') },
             { value: 'lichess', label: `Lichess · ${bands[0]}${bands[1] ? `–${bands[1]}` : '+'}` },
           ]}
         />
-        {source === 'lichess' && <p className="mt-1.5 px-1 text-xs text-ink-3">Players rated {bands.join('–')}, {speeds.join(' & ')} games</p>}
+        {source === 'lichess' && <p className="mt-1.5 px-1 text-xs text-ink-3">{t('Players rated {range}, {speeds} games', { range: bands.join('–'), speeds: speeds.map(speedName).join(' & ') })}</p>}
       </div>
       {error ? (
         <ExplorerError error={error} />
@@ -69,8 +71,8 @@ export function ExplorerPanel({ fen, onPlay, onHoverMove, highlightUcis }: { fen
           ))}
         </div>
       ) : data && data.moves.length === 0 ? (
-        <PanelNote icon={BookOpen} title="No games from here">
-          {source === 'masters' ? 'Masters never reached this position.' : 'Nobody at this level has played this position yet.'}
+        <PanelNote icon={BookOpen} title={t('No games from here')}>
+          {source === 'masters' ? t('Masters never reached this position.') : t('Nobody at this level has played this position yet.')}
         </PanelNote>
       ) : data ? (
         <div className={loading ? 'opacity-60 transition-opacity' : 'transition-opacity'}>
@@ -85,30 +87,28 @@ export function ExplorerPanel({ fen, onPlay, onHoverMove, highlightUcis }: { fen
 function ExplorerError({ error }: { error: ApiError }) {
   if (error.notConfigured || error.status === 401)
     return (
-      <PanelNote icon={KeyRound} title="Explorer needs a Lichess link" action={<Button variant="primary" size="sm" onClick={() => startLichessLogin()}>Sign in with Lichess</Button>}>
-        Lichess requires a free account to read its opening database. Sign in once and your stats load here.
+      <PanelNote icon={KeyRound} title={t('Explorer needs a Lichess link')} action={<Button variant="primary" size="sm" onClick={() => startLichessLogin()}>{t('Sign in with Lichess')}</Button>}>
+        {t('Lichess requires a free account to read its opening database. Sign in once and your stats load here.')}
       </PanelNote>
     );
   if (error.status === 429)
     return (
-      <PanelNote icon={Timer} title="Lichess asked us to slow down">
-        Retrying automatically in about {error.retryAfter ?? 60} seconds.
+      <PanelNote icon={Timer} title={t('Lichess asked us to slow down')}>
+        {tn(error.retryAfter ?? 60, 'Retrying automatically in about {n} second.', 'Retrying automatically in about {n} seconds.')}
       </PanelNote>
     );
   if (error.offline)
     return (
-      <PanelNote icon={CloudOff} title="You're offline">
-        Stats for positions you've opened before are saved on this device.
+      <PanelNote icon={CloudOff} title={t('You’re offline')}>
+        {t('Stats for positions you’ve opened before are saved on this device.')}
       </PanelNote>
     );
-  return <PanelNote icon={CloudOff} title="Couldn't load the explorer">{error.message}</PanelNote>;
+  return <PanelNote icon={CloudOff} title={t('Couldn’t load the explorer')}>{error.message}</PanelNote>;
 }
 
+/** 1234567 → "1.2M" (or the app language's compact form). */
 function fmt(n: number) {
-  if (n >= 1_000_000) return `${(n / 1_000_000).toFixed(n >= 10_000_000 ? 0 : 1)}M`;
-  if (n >= 10_000) return `${Math.round(n / 1000)}k`;
-  if (n >= 1000) return `${(n / 1000).toFixed(1)}k`;
-  return String(n);
+  return new Intl.NumberFormat(intlLocale(), { notation: 'compact', maximumFractionDigits: n >= 10_000_000 || (n >= 10_000 && n < 1_000_000) ? 0 : 1 }).format(n);
 }
 
 function MovesTable({ data, onPlay, onHoverMove, highlightUcis }: { data: ExplorerData; onPlay: (uci: string) => void; onHoverMove?: (uci: string | null) => void; highlightUcis?: Set<string> }) {
@@ -121,9 +121,9 @@ function MovesTable({ data, onPlay, onHoverMove, highlightUcis }: { data: Explor
       </colgroup>
       <thead className="sr-only">
         <tr>
-          <th>Move</th>
-          <th>Games</th>
-          <th>White wins, draws, black wins</th>
+          <th>{t('Move')}</th>
+          <th>{t('Games')}</th>
+          <th>{t('White wins, draws, black wins')}</th>
         </tr>
       </thead>
       <tbody>
@@ -133,7 +133,7 @@ function MovesTable({ data, onPlay, onHoverMove, highlightUcis }: { data: Explor
         <tr className="border-t border-line text-ink-3">
           <td className="px-3 py-2 text-xs font-medium">Σ</td>
           <td className="tnum px-1 py-2 text-xs">{fmt(data.total)}</td>
-          <td className="py-2 pr-3">
+          <td className="py-2 pe-3">
             <WdlBar white={data.white} draws={data.draws} black={data.black} />
           </td>
         </tr>
@@ -157,17 +157,17 @@ function MoveRow({ m, total, onPlay, onHoverMove, mine }: { m: ExplorerMove; tot
           onPlay(m.uci);
         }
       }}
-      aria-label={`${m.san}, ${Math.round(pct)}% of games`}
+      aria-label={`${m.san}, ${t('{pct} of games', { pct: fmtPercent(pct / 100) })}`}
     >
       <td className="truncate px-3 py-2 font-semibold text-ink">
         {m.san}
-        {mine && <span className="ml-1.5 inline-block size-1.5 rounded-full bg-brand align-middle" aria-label="in your repertoire" />}
+        {mine && <span className="ms-1.5 inline-block size-1.5 rounded-full bg-brand align-middle" aria-label={t('in your repertoire')} />}
       </td>
       <td className="tnum px-1 py-2 text-ink-2">
-        <span className="inline-block w-[3.2ch] text-right font-medium text-ink">{pct < 1 ? '<1' : Math.round(pct)}</span>
+        <span className="inline-block w-[3.2ch] text-end font-medium text-ink">{pct < 1 ? '<1' : Math.round(pct)}</span>
         <span className="text-ink-3">%</span> <span className="text-xs text-ink-3">{fmt(m.total)}</span>
       </td>
-      <td className="py-2 pr-3">
+      <td className="py-2 pe-3">
         <WdlBar white={m.white} draws={m.draws} black={m.black} />
       </td>
     </tr>
@@ -183,10 +183,10 @@ export function WdlBar({ white, draws, black, compact = false }: { white: number
       </div>
     ) : null;
   return (
-    <div className={`tnum flex w-full overflow-hidden rounded-[6px] ring-1 ring-line ${compact ? 'h-2' : 'h-[18px]'}`} role="img" aria-label={`White ${w}%, draws ${d}%, black ${b}%`}>
-      {seg(w, 'bg-[oklch(0.985_0.003_262)] text-[oklch(0.3_0.02_262)]', 'White wins')}
-      {seg(d, 'bg-[oklch(0.72_0.012_262)] text-white', 'Draws')}
-      {seg(b, 'bg-[oklch(0.28_0.015_262)] text-white', 'Black wins')}
+    <div className={`tnum flex w-full overflow-hidden rounded-[6px] ring-1 ring-line ${compact ? 'h-2' : 'h-[18px]'}`} role="img" aria-label={t('White {w}, draws {d}, black {b}', { w: fmtPercent(w / 100), d: fmtPercent(d / 100), b: fmtPercent(b / 100) })}>
+      {seg(w, 'bg-[oklch(0.985_0.003_262)] text-[oklch(0.3_0.02_262)]', t('White wins'))}
+      {seg(d, 'bg-[oklch(0.72_0.012_262)] text-white', t('Draws'))}
+      {seg(b, 'bg-[oklch(0.28_0.015_262)] text-white', t('Black wins'))}
     </div>
   );
 }
@@ -194,7 +194,7 @@ export function WdlBar({ white, draws, black, compact = false }: { white: number
 function TopGames({ data }: { data: ExplorerData }) {
   return (
     <div className="mt-2 border-t border-line px-3 py-3">
-      <h3 className="mb-2 text-xs font-semibold text-ink-3">Top games</h3>
+      <h3 className="mb-2 text-xs font-semibold text-ink-3">{t('Top games')}</h3>
       <ul className="flex flex-col gap-1">
         {data.topGames.slice(0, 6).map((g) => (
           <li key={g.id}>

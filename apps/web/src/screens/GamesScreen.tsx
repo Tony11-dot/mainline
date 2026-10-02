@@ -25,6 +25,8 @@ import { api, ApiError } from '../lib/api';
 import { Button, PanelNote, Segmented } from '../ui/primitives';
 import { inputCls } from '../ui/Sheet';
 import { toast } from '../ui/toast';
+import { speedName } from '../lib/speeds';
+import { fmtPercent, intlLocale, msg, t, tn, tx } from '../lib/i18n';
 
 /** "1.e4 e5 2.Nf3" */
 export function lineText(ucis: string[], fen = INITIAL_FEN) {
@@ -33,10 +35,10 @@ export function lineText(ucis: string[], fen = INITIAL_FEN) {
 }
 
 const KIND_LABEL: Record<Deviation['kind'], string> = {
-  you_left_book: 'You left book',
-  opponent_left_book: 'Opponent left book',
-  end_of_prep: 'End of prep',
-  not_covered: 'Not in your repertoire',
+  you_left_book: msg('You left book'),
+  opponent_left_book: msg('Opponent left book'),
+  end_of_prep: msg('End of prep'),
+  not_covered: msg('Not in your repertoire'),
 };
 
 export function GamesScreen() {
@@ -56,56 +58,58 @@ export function GamesScreen() {
   return (
     <div className="mx-auto max-w-3xl px-4 py-6 md:px-8 md:py-10">
       <div className="flex items-center justify-between gap-3">
-        <h1 className="text-2xl font-bold">Games</h1>
+        <h1 className="text-2xl font-bold">{t('Games')}</h1>
         <Link to="/stats" className="inline-flex h-11 items-center gap-2 rounded-[12px] px-3 text-base font-semibold text-ink-2 hover:bg-surface-3 hover:text-ink">
-          <BarChart3 size={18} aria-hidden /> Statistics
+          <BarChart3 size={18} aria-hidden /> {t('Statistics')}
         </Link>
       </div>
-      <p className="mt-1 text-ink-2">See exactly where your real games leave your prep.</p>
+      <p className="mt-1 text-ink-2">{t('See exactly where your real games leave your prep.')}</p>
       <Accounts />
 
       {g.games.length === 0 ? (
         <div className="mt-8 rounded-[var(--radius-l)] border border-dashed border-line-strong">
-          <PanelNote icon={Swords} title="No games imported yet">
-            Add your Lichess or Chess.com username above and import. MainLine only looks at the openings.
+          <PanelNote icon={Swords} title={t('No games imported yet')}>
+            {t('Add your Lichess or Chess.com username above and import. MainLine only looks at the openings.')}
           </PanelNote>
         </div>
       ) : (
         <>
           <dl className="tnum mt-6 grid grid-cols-2 gap-2 sm:grid-cols-4">
-            <Tile label="In your repertoire" value={`${covered.length}/${g.games.length}`} />
-            <Tile label="You left book" value={count('you_left_book')} tone="bad" />
-            <Tile label="Opponent left book" value={count('opponent_left_book')} tone="warn" />
-            <Tile label="End of prep" value={count('end_of_prep')} tone="good" />
+            <Tile label={t('In your repertoire')} value={`${covered.length}/${g.games.length}`} />
+            <Tile label={t('You left book')} value={count('you_left_book')} tone="bad" />
+            <Tile label={t('Opponent left book')} value={count('opponent_left_book')} tone="warn" />
+            <Tile label={t('End of prep')} value={count('end_of_prep')} tone="good" />
           </dl>
 
           <section className="mt-8">
             <div className="mb-2 flex items-center justify-between gap-3">
-              <h2 className="text-lg font-bold">Where your prep breaks</h2>
+              <h2 className="text-lg font-bold">{t('Where your prep breaks')}</h2>
             </div>
             <Segmented
-              label="Break type"
+              label={t('Break type')}
               value={tab}
               onChange={setTab}
               options={[
-                { value: 'opponent_left_book', label: 'Surprises' },
-                { value: 'you_left_book', label: 'Forgotten' },
-                { value: 'end_of_prep', label: 'Prep ended' },
+                { value: 'opponent_left_book', label: t('Surprises') },
+                { value: 'you_left_book', label: t('Forgotten') },
+                { value: 'end_of_prep', label: t('Prep ended') },
               ]}
             />
             <BreakList bps={bps.filter((b) => b.kind === tab)} />
           </section>
 
           <section className="mt-8">
-            <h2 className="mb-2 text-lg font-bold">Your results per line</h2>
+            <h2 className="mb-2 text-lg font-bold">{t('Your results per line')}</h2>
             <ul className="divide-y divide-line overflow-hidden rounded-[var(--radius-l)] border border-line bg-surface shadow-1">
               {lines.slice(0, 12).map((l) => (
                 <li key={l.color + l.path.join()} className="flex items-center gap-3 px-4 py-3">
-                  <span className={`size-3 shrink-0 rounded-full ring-1 ring-line-strong ${l.color === 'white' ? 'bg-white' : 'bg-[oklch(0.25_0.015_262)]'}`} aria-label={`as ${l.color}`} />
+                  <span className={`size-3 shrink-0 rounded-full ring-1 ring-line-strong ${l.color === 'white' ? 'bg-white' : 'bg-[oklch(0.25_0.015_262)]'}`} aria-label={l.color === 'white' ? t('As White') : t('As Black')} />
                   <span className="min-w-0 flex-1">
-                    <span className="block truncate text-sm font-semibold">{lineText(l.path)}</span>
+                    <span className="block truncate text-sm font-semibold">
+                      <bdi>{lineText(l.path)}</bdi>
+                    </span>
                     <span className="tnum text-xs text-ink-3">
-                      {l.games} game{l.games === 1 ? '' : 's'} · you score {Math.round(l.score * 100)}%
+                      {tn(l.games, '{n} game', '{n} games')} · {t('you score {pct}', { pct: fmtPercent(l.score) })}
                     </span>
                   </span>
                   <span className="w-28 shrink-0">
@@ -113,7 +117,7 @@ export function GamesScreen() {
                   </span>
                 </li>
               ))}
-              {!lines.length && <li className="px-4 py-3 text-sm text-ink-2">No games reached your repertoire yet.</li>}
+              {!lines.length && <li className="px-4 py-3 text-sm text-ink-2">{t('No games reached your repertoire yet.')}</li>}
             </ul>
           </section>
 
@@ -134,25 +138,30 @@ function Accounts() {
   const run = async () => {
     try {
       const r = await g.importAll();
-      toast(r.added ? `Imported ${r.added} game${r.added === 1 ? '' : 's'}${r.madeDue ? ` · ${r.madeDue} position${r.madeDue === 1 ? '' : 's'} you forgot are now due` : ''}` : 'You’re up to date', { kind: 'success' });
+      toast(
+        r.added
+          ? tn(r.added, 'Imported {n} game', 'Imported {n} games') + (r.madeDue ? ` · ${tn(r.madeDue, '{n} position you forgot is now due', '{n} positions you forgot are now due')}` : '')
+          : t('You’re up to date'),
+        { kind: 'success' },
+      );
     } catch (e) {
-      toast(e instanceof ApiError ? e.message : 'Import failed', { kind: 'error' });
+      toast(e instanceof ApiError ? e.message : t('Import failed'), { kind: 'error' });
     }
   };
   return (
     <div className="mt-5 grid gap-3 rounded-[var(--radius-l)] border border-line bg-surface p-4 shadow-1 sm:grid-cols-[1fr_1fr_auto] sm:items-end">
       <label className="block">
         <span className="mb-1 block text-sm font-semibold text-ink-2">Lichess</span>
-        <input className={inputCls} value={p.lichessUser} placeholder={me?.lichessUsername ?? 'username'} onChange={(e) => p.set({ lichessUser: e.target.value.trim() })} autoCapitalize="off" autoCorrect="off" spellCheck={false} aria-label="Lichess username" />
+        <input className={inputCls} value={p.lichessUser} placeholder={me?.lichessUsername ?? t('username')} onChange={(e) => p.set({ lichessUser: e.target.value.trim() })} autoCapitalize="off" autoCorrect="off" spellCheck={false} aria-label={t('Lichess username')} />
       </label>
       <label className="block">
         <span className="mb-1 block text-sm font-semibold text-ink-2">Chess.com</span>
-        <input className={inputCls} value={p.chesscomUser} placeholder={me?.chesscomUsername ?? 'username'} onChange={(e) => p.set({ chesscomUser: e.target.value.trim() })} autoCapitalize="off" autoCorrect="off" spellCheck={false} aria-label="Chess.com username" />
+        <input className={inputCls} value={p.chesscomUser} placeholder={me?.chesscomUsername ?? t('username')} onChange={(e) => p.set({ chesscomUser: e.target.value.trim() })} autoCapitalize="off" autoCorrect="off" spellCheck={false} aria-label={t('Chess.com username')} />
       </label>
       <Button variant="primary" icon={Download} loading={g.importing} disabled={!acc.lichess && !acc.chesscom} onClick={() => void run()}>
-        Import games
+        {t('Import games')}
       </Button>
-      {g.lastImport && <p className="text-xs text-ink-3 sm:col-span-3">Last imported {new Date(g.lastImport).toLocaleString()} · new games are checked automatically.</p>}
+      {g.lastImport && <p className="text-xs text-ink-3 sm:col-span-3">{t('Last imported {when} · new games are checked automatically.', { when: new Date(g.lastImport).toLocaleString(intlLocale()) })}</p>}
     </div>
   );
 }
@@ -177,7 +186,7 @@ function repFor(color: Color, epd: string): string | undefined {
 function BreakList({ bps }: { bps: BreakPoint[] }) {
   const nav = useNavigate();
   const lib = useLibrary();
-  if (!bps.length) return <p className="mt-3 text-sm text-ink-2">Nothing here — nicely done.</p>;
+  if (!bps.length) return <p className="mt-3 text-sm text-ink-2">{t('Nothing here — nicely done.')}</p>;
   return (
     <ul className="mt-3 divide-y divide-line overflow-hidden rounded-[var(--radius-l)] border border-line bg-surface shadow-1">
       {bps.slice(0, 15).map((b) => {
@@ -188,26 +197,27 @@ function BreakList({ bps }: { bps: BreakPoint[] }) {
         return (
           <li key={b.kind + b.epd + b.color} className="flex flex-wrap items-center gap-x-3 gap-y-2 px-4 py-3">
             <span className="min-w-0 flex-1">
-              <span className="block truncate text-sm font-semibold">{lineText(b.path) || 'Start'}</span>
+              <span className="block truncate text-sm font-semibold">{b.path.length ? <bdi>{lineText(b.path)}</bdi> : t('Start')}</span>
               <span className="text-sm text-ink-2">
                 {b.kind === 'opponent_left_book' && topSan && (
-                  <>
-                    They played <b className="text-ink">{topSan}</b>
-                  </>
+                  <>{tx('They played {move}', { move: <b className="text-ink">{topSan}</b> })}</>
                 )}
                 {b.kind === 'you_left_book' && topSan && (
                   <>
-                    You played <b className="text-bad">{topSan}</b> instead of <b className="text-good">{b.expected.map((u) => uciToSan(pos, u)).join(' / ')}</b> · now due
+                    {tx('You played {played} instead of {expected} · now due', {
+                      played: <b className="text-bad">{topSan}</b>,
+                      expected: <b className="text-good">{b.expected.map((u) => uciToSan(pos, u)).join(' / ')}</b>,
+                    })}
                   </>
                 )}
-                {b.kind === 'end_of_prep' && <>Your prep ends here{topSan ? <> · next move was <b className="text-ink">{topSan}</b></> : null}</>}
-                <span className="tnum text-ink-3"> · {b.count} game{b.count === 1 ? '' : 's'}</span>
+                {b.kind === 'end_of_prep' && <>{topSan ? tx('Your prep ends here · next move was {move}', { move: <b className="text-ink">{topSan}</b> }) : t('Your prep ends here')}</>}
+                <span className="tnum text-ink-3"> · {tn(b.count, '{n} game', '{n} games')}</span>
               </span>
             </span>
             <span className="flex gap-1.5">
               {repId && (
                 <Button size="sm" variant="ghost" onClick={() => nav(`/rep/${repId}?at=${encodeURIComponent(b.epd)}`)}>
-                  Open
+                  {t('Open')}
                 </Button>
               )}
               {b.kind === 'opponent_left_book' && top && repId && (
@@ -216,10 +226,10 @@ function BreakList({ bps }: { bps: BreakPoint[] }) {
                   icon={Plus}
                   onClick={async () => {
                     await lib.addMove(repId, epdToFen(b.epd), top.uci);
-                    toast(`Added ${topSan} — choose your reply`, { kind: 'success', action: { label: 'Open', run: () => nav(`/rep/${repId}?at=${encodeURIComponent(b.epd)}`) } });
+                    toast(t('Added {move} — choose your reply', { move: topSan ?? '' }), { kind: 'success', action: { label: t('Open'), run: () => nav(`/rep/${repId}?at=${encodeURIComponent(b.epd)}`) } });
                   }}
                 >
-                  Add {topSan}
+                  {t('Add {move}', { move: topSan ?? '' })}
                 </Button>
               )}
             </span>
@@ -233,24 +243,24 @@ function BreakList({ bps }: { bps: BreakPoint[] }) {
 function RecentGames({ games, devs }: { games: PlayedGame[]; devs: Map<string, Deviation> }) {
   return (
     <section className="mt-8">
-      <h2 className="mb-2 text-lg font-bold">Recent games</h2>
+      <h2 className="mb-2 text-lg font-bold">{t('Recent games')}</h2>
       <ul className="divide-y divide-line overflow-hidden rounded-[var(--radius-l)] border border-line bg-surface shadow-1">
         {games.map((g) => {
           const d = devs.get(g.id);
           const tone = d?.kind === 'you_left_book' ? 'bg-bad-soft text-bad' : d?.kind === 'opponent_left_book' ? 'bg-warn-soft text-[oklch(0.45_0.1_70)] dark:text-warn' : d?.kind === 'end_of_prep' ? 'bg-good-soft text-good' : 'bg-surface-3 text-ink-3';
           return (
             <li key={g.id} className="flex items-center gap-3 px-4 py-2.5 text-sm">
-              <span className={`tnum w-10 shrink-0 text-center font-bold ${g.result === 'win' ? 'text-good' : g.result === 'loss' ? 'text-bad' : 'text-ink-3'}`}>{g.result === 'win' ? 'Won' : g.result === 'loss' ? 'Lost' : 'Draw'}</span>
+              <span className={`tnum w-10 shrink-0 text-center font-bold ${g.result === 'win' ? 'text-good' : g.result === 'loss' ? 'text-bad' : 'text-ink-3'}`}>{g.result === 'win' ? t('Won') : g.result === 'loss' ? t('Lost') : t('Draw')}</span>
               <span className="min-w-0 flex-1 truncate">
-                vs <b>{g.opponent}</b> {g.opponentRating ? <span className="tnum text-ink-3">({g.opponentRating})</span> : null} · <span className="text-ink-3">{g.speed}</span>
+                {tx('vs {opponent}', { opponent: <b>{g.opponent}</b> })} {g.opponentRating ? <span className="tnum text-ink-3">({g.opponentRating})</span> : null} · <span className="text-ink-3">{speedName(g.speed)}</span>
               </span>
               {d && (
                 <span className={`hidden shrink-0 rounded-full px-2 py-0.5 text-xs font-semibold sm:inline ${tone}`}>
-                  {KIND_LABEL[d.kind]}
-                  {d.kind !== 'not_covered' ? ` · move ${Math.floor(d.ply / 2) + 1}` : ''}
+                  {t(KIND_LABEL[d.kind])}
+                  {d.kind !== 'not_covered' ? ` · ${t('move {n}', { n: Math.floor(d.ply / 2) + 1 })}` : ''}
                 </span>
               )}
-              <a href={g.url} target="_blank" rel="noreferrer" className="shrink-0 text-ink-3 hover:text-ink" aria-label="Open game">
+              <a href={g.url} target="_blank" rel="noreferrer" className="shrink-0 text-ink-3 hover:text-ink" aria-label={t('Open game')}>
                 <ExternalLink size={15} />
               </a>
             </li>
@@ -280,9 +290,9 @@ function OpponentPrep() {
   return (
     <section className="mt-10">
       <h2 className="flex items-center gap-2 text-lg font-bold">
-        <Target size={19} className="text-brand" aria-hidden /> Opponent prep
+        <Target size={19} className="text-brand" aria-hidden /> {t('Opponent prep')}
       </h2>
-      <p className="mt-0.5 text-sm text-ink-2">Enter your next opponent: see what they usually play and where it meets your repertoire.</p>
+      <p className="mt-0.5 text-sm text-ink-2">{t('Enter your next opponent: see what they usually play and where it meets your repertoire.')}</p>
       <form
         className="mt-3 flex flex-wrap gap-2"
         onSubmit={(e) => {
@@ -290,34 +300,34 @@ function OpponentPrep() {
           if (user.trim()) void run();
         }}
       >
-        <Segmented label="Site" value={site} onChange={setSite} options={[{ value: 'lichess', label: 'Lichess' }, { value: 'chesscom', label: 'Chess.com' }]} className="w-56" />
-        <input className={`${inputCls} min-w-0 flex-1`} value={user} onChange={(e) => setUser(e.target.value.trim())} placeholder="Their username" aria-label="Opponent username" autoCapitalize="off" autoCorrect="off" spellCheck={false} />
+        <Segmented label={t('Site')} value={site} onChange={setSite} options={[{ value: 'lichess', label: 'Lichess' }, { value: 'chesscom', label: 'Chess.com' }]} className="w-56" />
+        <input className={`${inputCls} min-w-0 flex-1`} value={user} onChange={(e) => setUser(e.target.value.trim())} placeholder={t('Their username')} aria-label={t('Opponent username')} autoCapitalize="off" autoCorrect="off" spellCheck={false} />
         <Button type="submit" variant="primary" icon={Search} loading={state.loading} disabled={!user}>
-          Analyse
+          {t('Analyse')}
         </Button>
       </form>
       {state.error && <p className="mt-3 text-sm text-bad">{state.error}</p>}
       {state.meets && (
         <div className="mt-4 flex flex-col gap-4">
-          <p className="tnum text-sm text-ink-3">{state.games} recent games analysed.</p>
+          <p className="tnum text-sm text-ink-3">{tn(state.games ?? 0, '{n} recent game analysed.', '{n} recent games analysed.')}</p>
           {state.meets.map(({ color, meets }) => (
             <div key={color}>
-              <h3 className="mb-1.5 text-sm font-semibold text-ink-2">When you're {color}</h3>
+              <h3 className="mb-1.5 text-sm font-semibold text-ink-2">{color === 'white' ? t('When you’re White') : t('When you’re Black')}</h3>
               {meets.length === 0 ? (
-                <p className="text-sm text-ink-2">No overlap with your {color} repertoire in their games.</p>
+                <p className="text-sm text-ink-2">{color === 'white' ? t('No overlap with your White repertoire in their games.') : t('No overlap with your Black repertoire in their games.')}</p>
               ) : (
                 <ul className="divide-y divide-line overflow-hidden rounded-[var(--radius-l)] border border-line bg-surface shadow-1">
                   {meets.map((m) => {
                     const san = uciToSan(positionFromFen(m.fen), m.theirMove);
                     return (
                       <li key={m.epd + m.theirMove} className="flex items-center gap-3 px-4 py-2.5 text-sm">
-                        <span className={`size-2 shrink-0 rounded-full ${m.prepared ? 'bg-good' : 'bg-warn'}`} aria-label={m.prepared ? 'prepared' : 'not prepared'} />
+                        <span className={`size-2 shrink-0 rounded-full ${m.prepared ? 'bg-good' : 'bg-warn'}`} aria-label={m.prepared ? t('prepared') : t('not prepared')} />
                         <span className="min-w-0 flex-1">
                           <span className="block truncate">
-                            {lineText(m.path)} … they play <b>{san}</b>
+                            <bdi>{lineText(m.path)}</bdi> … {tx('they play {move}', { move: <b>{san}</b> })}
                           </span>
                           <span className="tnum text-xs text-ink-3">
-                            {Math.round(m.theirShare * 100)}% of their games here · reached in {Math.round(m.reach * 100)}% · {m.prepared ? 'you’re prepared' : 'not in your repertoire'}
+                            {t('{share} of their games here · reached in {reach}', { share: fmtPercent(m.theirShare), reach: fmtPercent(m.reach) })} · {m.prepared ? t('you’re prepared') : t('not in your repertoire')}
                           </span>
                         </span>
                       </li>
@@ -335,12 +345,12 @@ function OpponentPrep() {
 
 /** Your own results: wins green, draws grey, losses red. */
 function ResultBar({ win, draw, loss }: { win: number; draw: number; loss: number }) {
-  const t = win + draw + loss || 1;
+  const total = win + draw + loss || 1;
   return (
-    <span className="flex h-2 w-full overflow-hidden rounded-full bg-surface-3" role="img" aria-label={`${win} won, ${draw} drawn, ${loss} lost`}>
-      <span className="bg-good" style={{ width: `${(win / t) * 100}%` }} />
-      <span className="bg-ink-3/50" style={{ width: `${(draw / t) * 100}%` }} />
-      <span className="bg-bad" style={{ width: `${(loss / t) * 100}%` }} />
+    <span className="flex h-2 w-full overflow-hidden rounded-full bg-surface-3" role="img" aria-label={t('{win} won, {draw} drawn, {loss} lost', { win, draw, loss })}>
+      <span className="bg-good" style={{ width: `${(win / total) * 100}%` }} />
+      <span className="bg-ink-3/50" style={{ width: `${(draw / total) * 100}%` }} />
+      <span className="bg-bad" style={{ width: `${(loss / total) * 100}%` }} />
     </span>
   );
 }

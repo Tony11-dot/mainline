@@ -27,6 +27,7 @@ import { SPLIT_LAYOUT, useMediaQuery } from '../ui/useMediaQuery';
 import { AutoBuildSheet } from './builder/AutoBuildSheet';
 import { SuggestPanel } from './builder/SuggestPanel';
 import { NotesPanel } from './builder/NotesPanel';
+import { t, tn } from '../lib/i18n';
 
 type Pane = 'tree' | 'explorer' | 'engine' | 'stats' | 'coach' | 'notes' | 'suggest' | 'insights';
 
@@ -110,8 +111,8 @@ export function RepertoireScreen() {
   if (!rep)
     return (
       <div className="mx-auto max-w-xl px-4 py-16">
-        <PanelNote title="This repertoire doesn't exist anymore" action={<Button onClick={() => nav('/library')}>Back to repertoire</Button>}>
-          It may have been deleted on another device.
+        <PanelNote title={t('This repertoire doesn’t exist anymore')} action={<Button onClick={() => nav('/library')}>{t('Back to repertoire')}</Button>}>
+          {t('It may have been deleted on another device.')}
         </PanelNote>
       </div>
     );
@@ -141,14 +142,14 @@ export function RepertoireScreen() {
     const m = await lib.addMove(rep.id, fen, played.uci);
     const mainHere = useLibrary.getState().moves.find((x) => x.repertoireId === rep.id && !x.deleted && x.fromEpd === m.fromEpd && x.isMainline && x.uci !== m.uci);
     if (!m.isMainline && mainHere) {
-      toast(`Added ${m.san} as an alternate — you play ${mainHere.san} here`, { action: { label: 'Make main', run: () => lib.makeMain(rep.id, m.fromEpd, m.uci) } });
+      toast(t('Added {move} as an alternate — you play {main} here', { move: m.san, main: mainHere.san }), { action: { label: t('Make main'), run: () => lib.makeMain(rep.id, m.fromEpd, m.uci) } });
     }
   };
 
   const deleteHere = async () => {
     if (!currentMove) return;
     const undo = await lib.deleteBranch(rep.id, currentMove.fromEpd, currentMove.uci);
-    undoToast(`Deleted ${currentMove.san} and everything after it`, undo);
+    undoToast(t('Deleted {move} and everything after it', { move: currentMove.san }), undo);
   };
 
   const board = (
@@ -167,7 +168,7 @@ export function RepertoireScreen() {
       }}
       onMove={(u, f) => void addMove(u, f)}
       drawMode={drawMode}
-      ariaLabel={`Repertoire board. ${view.turn} to move.`}
+      ariaLabel={`${t('Repertoire board.')} ${view.turn === 'white' ? t('White to move.') : t('Black to move.')}`}
     />
   );
 
@@ -176,22 +177,22 @@ export function RepertoireScreen() {
       {own ? (
         main ? (
           <Chip tone="brand" icon={Crown}>
-            You play {main.san}
-            {here.length > 1 ? ` · ${here.length - 1} alt` : ''}
+            {t('You play {move}', { move: main.san })}
+            {here.length > 1 ? ` · ${tn(here.length - 1, '{n} alternate', '{n} alternates')}` : ''}
           </Chip>
         ) : (
           <Chip tone="warn" icon={Lightbulb}>
-            Your move — not decided yet
+            {t('Your move — not decided yet')}
           </Chip>
         )
       ) : (
         <Chip tone="neutral" icon={Waypoints}>
-          {here.length ? `${here.length} repl${here.length === 1 ? 'y' : 'ies'} prepared` : 'Their move — no replies yet'}
+          {here.length ? tn(here.length, '{n} reply prepared', '{n} replies prepared') : t('Their move — no replies yet')}
         </Chip>
       )}
       {conflict && (
         <Chip tone="warn">
-          Conflict: {[...conflict.choices.keys()].map((u) => uciToSan(positionFromFen(epdToFen(conflict.epd)), u)).join(' vs ')}
+          {t('Conflict')}: {[...conflict.choices.keys()].map((u) => uciToSan(positionFromFen(epdToFen(conflict.epd)), u)).join(' / ')}
         </Chip>
       )}
     </div>
@@ -201,20 +202,20 @@ export function RepertoireScreen() {
     <div className="flex flex-wrap gap-2">
       {own && (
         <Button size="sm" icon={Sparkles} onClick={() => setPane('suggest')}>
-          Suggest my move
+          {t('Suggest my move')}
         </Button>
       )}
       <Button size="sm" icon={Waypoints} onClick={() => setAutoOpen(true)}>
-        Add popular replies
+        {t('Add popular replies')}
       </Button>
       {view.node.tags?.includes('alt') && currentMove && (
         <Button size="sm" icon={Star} onClick={() => void lib.makeMain(rep.id, currentMove.fromEpd, currentMove.uci)}>
-          Make main move
+          {t('Make main move')}
         </Button>
       )}
       {currentMove && (
         <Button size="sm" variant="ghost" icon={Trash2} onClick={() => void deleteHere()} className="text-bad hover:text-bad">
-          Delete from here
+          {t('Delete from here')}
         </Button>
       )}
     </div>
@@ -223,7 +224,7 @@ export function RepertoireScreen() {
   const repUcis = new Set(here.map((m) => m.uci));
   const parentNode = view.path ? nodeAt(view.root, parentPath(view.path)) : undefined;
   const panes: Record<Pane, React.ReactNode> = {
-    tree: <MoveTree store={store} emptyHint={own ? 'Play your first move on the board.' : 'Play the moves you expect from your opponent.'} />,
+    tree: <MoveTree store={store} emptyHint={own ? t('Play your first move on the board.') : t('Play the moves you expect from your opponent.')} />,
     explorer: <ExplorerPanel fen={view.node.fen} onPlay={(u) => void addMove(u)} onHoverMove={setHoverUci} highlightUcis={repUcis} />,
     engine: <EnginePanel fen={view.node.fen} view={ev} onPlayLine={(ucis) => ucis[0] && void addMove(ucis[0])} onHoverMove={setHoverUci} />,
     notes: <NotesPanel key={currentMove ? `${currentMove.fromEpd}${currentMove.uci}` : 'root'} move={currentMove} onSave={(note) => currentMove && lib.setNote(rep.id, currentMove.fromEpd, currentMove.uci, note)} />,
@@ -245,29 +246,29 @@ export function RepertoireScreen() {
       />
     ),
     insights: <InsightsPanel rep={rep} onOpen={(epd) => { const p = pathToEpd(view.root, epd); if (p !== undefined) store.getState().goto(p); }} />,
-    suggest: own ? <SuggestPanel fen={view.node.fen} color={rep.color} engineLines={ev.lines} onPick={(u) => void addMove(u)} onHover={setHoverUci} /> : <PanelNote title="Suggestions are for your moves">Step to a position where it's your turn.</PanelNote>,
+    suggest: own ? <SuggestPanel fen={view.node.fen} color={rep.color} engineLines={ev.lines} onPick={(u) => void addMove(u)} onHover={setHoverUci} /> : <PanelNote title={t('Suggestions are for your moves')}>{t('Step to a position where it’s your turn.')}</PanelNote>,
   };
   const paneOptions = [
-    { value: 'tree' as const, label: 'Moves' },
-    { value: 'explorer' as const, label: 'Explorer' },
-    { value: 'engine' as const, label: 'Engine' },
-    { value: 'stats' as const, label: 'Stats' },
-    { value: 'coach' as const, label: 'Coach' },
-    ...(own ? [{ value: 'suggest' as const, label: 'Suggest' }] : []),
-    { value: 'notes' as const, label: 'Notes' },
-    { value: 'insights' as const, label: 'Coverage' },
+    { value: 'tree' as const, label: t('Moves') },
+    { value: 'explorer' as const, label: t('Explorer') },
+    { value: 'engine' as const, label: t('Engine') },
+    { value: 'stats' as const, label: t('Stats') },
+    { value: 'coach' as const, label: t('Coach') },
+    ...(own ? [{ value: 'suggest' as const, label: t('Suggest') }] : []),
+    { value: 'notes' as const, label: t('Notes') },
+    { value: 'insights' as const, label: t('Coverage') },
   ];
   const activePane = pane === 'suggest' && !own ? 'tree' : pane;
 
   const header = (
     <div className="flex min-h-[44px] items-center gap-2 px-4 lg:px-0">
-      <Link to="/library" className="-ml-2 flex size-10 items-center justify-center rounded-full text-ink-2 hover:bg-surface-3" aria-label="Back to repertoire">
-        <ArrowLeft size={20} />
+      <Link to="/library" className="-ms-2 flex size-10 items-center justify-center rounded-full text-ink-2 hover:bg-surface-3" aria-label={t('Back to repertoire')}>
+        <ArrowLeft size={20} className="rtl:rotate-180" />
       </Link>
       <div className="min-w-0">
         <h1 className="truncate text-md font-bold">{rep.name}</h1>
         <p className="truncate text-xs text-ink-3">
-          {folderPath(lib.folders, rep.folderId).join(' / ')}
+          {folderPath(lib.folders, rep.folderId).map((n) => t(n)).join(' / ')}
           {opening ? ` · ${opening.eco} ${opening.name}` : ''}
         </p>
       </div>
@@ -334,7 +335,7 @@ function Chip({ tone, icon: Icon, children }: { tone: 'brand' | 'warn' | 'neutra
 /** Scrollable pill tabs — the builder has more panels than fit a segmented control on phones. */
 function PaneTabs<T extends string>({ value, onChange, options }: { value: T; onChange: (v: T) => void; options: { value: T; label: string }[] }) {
   return (
-    <div role="tablist" aria-label="Panel" className="-mx-3 flex gap-1.5 overflow-x-auto px-3 pb-0.5 [scrollbar-width:none] lg:mx-0 lg:flex-wrap lg:px-0">
+    <div role="tablist" aria-label={t('Panel')} className="-mx-3 flex gap-1.5 overflow-x-auto px-3 pb-0.5 [scrollbar-width:none] lg:mx-0 lg:flex-wrap lg:px-0">
       {options.map((o) => (
         <button
           key={o.value}

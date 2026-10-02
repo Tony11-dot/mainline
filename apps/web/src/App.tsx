@@ -1,4 +1,5 @@
 import { createBrowserRouter, RouterProvider } from 'react-router';
+import { useI18n } from './lib/i18n';
 import { AppShell } from './ui/AppShell';
 import { LaunchScreen, shouldShowLaunch, useLaunch } from './launch/LaunchScreen';
 import { platform } from './platform';
@@ -48,9 +49,11 @@ export function startPlatformHooks() {
 
 export function App() {
   const launching = useLaunch((s) => s.active);
+  // Changing language remounts the screens so every string re-renders in the new language.
+  const lang = useI18n((s) => s.lang);
   return (
     <>
-      <RouterProvider router={router} />
+      <RouterProvider key={lang} router={router} />
       {launching && <LaunchScreen onDone={() => useLaunch.setState({ active: false })} />}
     </>
   );

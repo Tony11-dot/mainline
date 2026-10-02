@@ -1,3 +1,4 @@
+import { msg, t } from './i18n';
 /**
  * Themes and fonts — the same collection as ClassMate / ClassNotes / ClassMusic (`ThemePreset`,
  * `FontLibrary`): the same 19 named themes plus "System default", the same curated font pack, same
@@ -89,10 +90,31 @@ export const THEME_TOKENS: Record<Exclude<ThemeId, 'system'>, ThemeTokens> = {
 export const LIGHT_FAMILY: ThemeId[] = ['light', 'coffee', 'matcha', 'rose', 'sand', 'sky', 'lavender', 'peach', 'mint'];
 export const DARK_FAMILY: ThemeId[] = ['dark', 'midnight', 'nord', 'forest', 'dracula', 'obsidian', 'wine', 'solarized', 'plum', 'ocean'];
 
+const THEME_NAMES: Record<ThemeId, string> = {
+  system: msg('System default'),
+  light: msg('Light'),
+  coffee: msg('Coffee'),
+  matcha: msg('Matcha'),
+  rose: msg('Rosé'),
+  sand: msg('Sand'),
+  sky: msg('Sky'),
+  lavender: msg('Lavender'),
+  peach: msg('Peach'),
+  mint: msg('Mint'),
+  dark: msg('Dark'),
+  midnight: msg('Midnight'),
+  nord: msg('Nord'),
+  forest: msg('Forest'),
+  dracula: msg('Dracula'),
+  obsidian: msg('Obsidian'),
+  wine: msg('Wine'),
+  solarized: msg('Solarized'),
+  plum: msg('Plum'),
+  ocean: msg('Ocean'),
+};
+
 export function themeName(id: ThemeId): string {
-  if (id === 'system') return 'System default';
-  if (id === 'rose') return 'Rosé';
-  return id[0]!.toUpperCase() + id.slice(1);
+  return t(THEME_NAMES[id]);
 }
 
 export const prefersDark = () => typeof matchMedia !== 'undefined' && matchMedia('(prefers-color-scheme: dark)').matches;
@@ -141,7 +163,7 @@ export interface FontDef {
 /** Same ids, names and order as ClassMate-Notes' FontLibrary / ClassMusic's AppFont. */
 export const FONTS: FontDef[] = [
   { id: 'cabinet', name: 'Cabinet Grotesk', stack: `'Cabinet Grotesk', ${SYSTEM_STACK}`, load: () => import('../assets/fonts/cabinet-grotesk/index.css') },
-  { id: 'system', name: 'Default', stack: SYSTEM_STACK },
+  { id: 'system', name: msg('Default'), stack: SYSTEM_STACK },
   { id: 'noteworthy', name: 'Noteworthy', stack: `'Noteworthy', 'Patrick Hand', ${SYSTEM_STACK}`, load: () => import('@fontsource/patrick-hand') },
   { id: 'bradley', name: 'Bradley Hand', stack: `'Bradley Hand', 'Caveat', ${SYSTEM_STACK}`, load: () => import('@fontsource/caveat') },
   { id: 'marker', name: 'Marker Felt', stack: `'Marker Felt', 'Permanent Marker', ${SYSTEM_STACK}`, load: () => import('@fontsource/permanent-marker') },
@@ -160,16 +182,16 @@ export const fontDef = (id: FontId) => FONTS.find((f) => f.id === id) ?? FONTS[1
 
 export type BoardTheme = 'match' | 'blue' | 'slate' | 'brown' | 'green';
 export const BOARD_THEMES: { id: BoardTheme; name: string }[] = [
-  { id: 'match', name: 'Match theme' },
-  { id: 'blue', name: 'Blue' },
-  { id: 'slate', name: 'Slate' },
-  { id: 'brown', name: 'Wood' },
-  { id: 'green', name: 'Green' },
+  { id: 'match', name: msg('Match theme') },
+  { id: 'blue', name: msg('Blue') },
+  { id: 'slate', name: msg('Slate') },
+  { id: 'brown', name: msg('Wood') },
+  { id: 'green', name: msg('Green') },
 ];
 
 export type PieceSet = 'cburnett' | 'merida' | 'chessnut' | 'fantasy' | 'spatial' | 'celtic' | 'rhosgfx' | 'mpchess';
 export const PIECE_SETS: { id: PieceSet; name: string }[] = [
-  { id: 'cburnett', name: 'Classic' },
+  { id: 'cburnett', name: msg('Classic') },
   { id: 'merida', name: 'Merida' },
   { id: 'chessnut', name: 'Chessnut' },
   { id: 'fantasy', name: 'Fantasy' },

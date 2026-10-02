@@ -1,5 +1,6 @@
 import { useEffect, useRef, type ReactNode } from 'react';
 import { X } from 'lucide-react';
+import { t } from '../lib/i18n';
 
 /**
  * Native <dialog>: a bottom sheet on phones, a centered panel on larger screens.
@@ -32,7 +33,7 @@ export function Sheet({ open, onClose, title, children, footer, wide }: { open: 
           <div className="mx-auto mt-2 h-1.5 w-10 rounded-full bg-line-strong sm:hidden" aria-hidden />
           <header className="flex items-center justify-between gap-3 px-5 pt-3 pb-2 sm:pt-5">
             <h2 className="text-lg font-bold">{title}</h2>
-            <button type="button" onClick={onClose} aria-label="Close" className="flex size-9 items-center justify-center rounded-full bg-surface-3 text-ink-2 hover:text-ink">
+            <button type="button" onClick={onClose} aria-label={t('Close')} className="flex size-9 items-center justify-center rounded-full bg-surface-3 text-ink-2 hover:text-ink">
               <X size={18} />
             </button>
           </header>

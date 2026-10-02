@@ -1,9 +1,12 @@
 import { createElement, useEffect } from 'react';
+import { msg, t } from '../lib/i18n';
 
 export type PromotionRole = 'queen' | 'knight' | 'rook' | 'bishop';
 const ROLES: PromotionRole[] = ['queen', 'knight', 'rook', 'bishop'];
 
 /** Lichess-style picker: the four pieces stacked on the promotion file, from the promotion square inward. */
+const PROMOTE: Record<string, string> = { queen: msg('Promote to queen'), rook: msg('Promote to rook'), bishop: msg('Promote to bishop'), knight: msg('Promote to knight') };
+
 export function PromotionPicker(props: { color: 'white' | 'black'; file: number; orientation: 'white' | 'black'; onPick: (r: PromotionRole | null) => void }) {
   const { color, file, orientation, onPick } = props;
   const col = orientation === 'white' ? file : 7 - file;
@@ -26,7 +29,7 @@ export function PromotionPicker(props: { color: 'white' | 'black'; file: number;
         if (e.target === e.currentTarget) onPick(null);
       }}
       role="dialog"
-      aria-label="Choose promotion piece"
+      aria-label={t('Choose promotion piece')}
     >
       <div className="cg-wrap pointer-events-none" style={{ width: '100%', height: '100%' }}>
       {ROLES.map((role, i) => {
@@ -35,7 +38,7 @@ export function PromotionPicker(props: { color: 'white' | 'black'; file: number;
           <button
             key={role}
             type="button"
-            aria-label={`Promote to ${role}`}
+            aria-label={t(PROMOTE[role]!)}
             className="promo-choice pointer-events-auto absolute flex items-center justify-center"
             style={{ left: `${col * 12.5}%`, top: `${row * 12.5}%`, width: '12.5%', height: '12.5%' }}
             onPointerDown={(e) => {

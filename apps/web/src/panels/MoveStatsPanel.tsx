@@ -7,6 +7,8 @@ import { usePrefs } from '../lib/prefs';
 import { useTraining } from '../lib/training';
 import { PanelNote, Skeleton } from '../ui/primitives';
 import { WdlBar } from './ExplorerPanel';
+import { fmtPercent, t, tn, tx } from '../lib/i18n';
+import { speedName } from '../lib/speeds';
 
 /** Everything known about one repertoire move — every number from an engine or a game database. */
 export function MoveStatsPanel({ parentFen, uci, color }: { parentFen?: string; uci?: string; color: Color }) {
@@ -32,7 +34,7 @@ export function MoveStatsPanel({ parentFen, uci, color }: { parentFen?: string; 
     return () => ctrl.abort();
   }, [parentFen, uci, rating, speeds]);
 
-  if (!parentFen || !uci) return <PanelNote title="Select a move">Step into the line to see stats for that move.</PanelNote>;
+  if (!parentFen || !uci) return <PanelNote title={t('Select a move')}>{t('Step into the line to see stats for that move.')}</PanelNote>;
   if (d.loading)
     return (
       <div className="flex flex-col gap-2 p-3.5">
@@ -53,69 +55,73 @@ export function MoveStatsPanel({ parentFen, uci, color }: { parentFen?: string; 
   const epd = toEpd(parentFen);
   const mine = mover === color ? reviews.filter((r) => r.cardEpd === epd && r.color === color && r.mode !== 'drill') : [];
   const correct = mine.filter((r) => r.rating > 1).length;
-  const score = (m?: { white: number; draws: number; black: number; total: number }) => (m && m.total ? Math.round(((color === 'white' ? m.white : m.black) + m.draws / 2) / m.total * 100) : undefined);
+  const score = (m?: { white: number; draws: number; black: number; total: number }) => (m && m.total ? fmtPercent(((color === 'white' ? m.white : m.black) + m.draws / 2) / m.total) : undefined);
 
   return (
     <dl className="flex flex-col divide-y divide-line text-sm">
-      <Row label="Engine">
+      <Row label={t('Engine')}>
         {after ? (
           <span className="tnum font-semibold">
-            {formatEval(after)} after this move
-            {best && <span className="font-normal text-ink-2"> · best {formatEval(best)}</span>}
-            <span className="font-normal text-ink-3"> · depth {d.after!.depth}</span>
+            {t('{eval} after this move', { eval: formatEval(after) })}
+            {best && <span className="font-normal text-ink-2"> · {t('best {eval}', { eval: formatEval(best) })}</span>}
+            <span className="font-normal text-ink-3"> · {t('depth {n}', { n: d.after!.depth })}</span>
           </span>
         ) : (
-          <span className="text-ink-3">No cloud evaluation for this position yet</span>
+          <span className="text-ink-3">{t('No cloud evaluation for this position yet')}</span>
         )}
       </Row>
       {swing !== undefined && (
-        <Row label="Eval swing">
+        <Row label={t('Eval swing')}>
           <span className={`tnum inline-flex items-center gap-1.5 font-semibold ${swing >= 0.7 ? 'text-warn' : ''}`}>
             {swing >= 0.7 && <TriangleAlert size={14} aria-hidden />}
-            {swing <= 0.05 ? 'None — this is the engine’s choice' : `−${swing.toFixed(2)} for ${mover} vs the engine’s best`}
+            {swing <= 0.05 ? t('None — this is the engine’s choice') : mover === 'white' ? t('−{swing} for White vs the engine’s best', { swing: swing.toFixed(2) }) : t('−{swing} for Black vs the engine’s best', { swing: swing.toFixed(2) })}
           </span>
         </Row>
       )}
-      <Row label={`At ${rating} (${speeds.join('/')})`}>
+      <Row label={t('At {rating} ({speeds})', { rating: String(rating), speeds: speeds.map(speedName).join('/') })}>
         {lm && d.lichess ? (
           <div className="flex flex-col gap-1.5">
             <span className="tnum">
-              <b>{Math.round((lm.total / d.lichess.total) * 100)}%</b> of {d.lichess.total.toLocaleString()} games · you score <b>{score(lm)}%</b>
+              {tx('{pct} of {games} · you score {score}', {
+                pct: <b>{fmtPercent(lm.total / d.lichess.total)}</b>,
+                games: tn(d.lichess.total, '{n} game', '{n} games'),
+                score: <b>{score(lm)}</b>,
+              })}
             </span>
             <WdlBar white={lm.white} draws={lm.draws} black={lm.black} />
           </div>
         ) : (
-          <span className="text-ink-3">{d.lichess ? 'Not played at this level' : 'Explorer unavailable'}</span>
+          <span className="text-ink-3">{d.lichess ? t('Not played at this level') : t('Explorer unavailable')}</span>
         )}
       </Row>
-      <Row label="Masters">
+      <Row label={t('Masters')}>
         {mm && d.masters ? (
           <div className="flex flex-col gap-1.5">
             <span className="tnum">
-              <b>{Math.round((mm.total / d.masters.total) * 100)}%</b> · {mm.total.toLocaleString()} games · you score <b>{score(mm)}%</b>
+              <b>{fmtPercent(mm.total / d.masters.total)}</b> · {tn(mm.total, '{n} game', '{n} games')} · {tx('you score {score}', { score: <b>{score(mm)}</b> })}
             </span>
             <WdlBar white={mm.white} draws={mm.draws} black={mm.black} />
             {players.length > 0 && (
               <span className="text-ink-2">
-                Played by {players.map((g) => `${(mover === 'white' ? g.white : g.black).name.split(',')[0]} (${g.year ?? '?'})`).join(', ')}
+                {t('Played by')} {players.map((g) => `${(mover === 'white' ? g.white : g.black).name.split(',')[0]} (${g.year ?? '?'})`).join(', ')}
               </span>
             )}
           </div>
         ) : (
-          <span className="text-ink-3">{d.masters ? 'No master games' : 'Explorer unavailable'}</span>
+          <span className="text-ink-3">{d.masters ? t('No master games') : t('Explorer unavailable')}</span>
         )}
       </Row>
       {mover === color && (
-        <Row label="Your training">
-          <span className="tnum">{mine.length ? `${correct} of ${mine.length} correct (${Math.round((correct / mine.length) * 100)}%)` : 'Not trained yet'}</span>
+        <Row label={t('Your training')}>
+          <span className="tnum">{mine.length ? t('{correct} of {total} correct ({pct})', { correct, total: mine.length, pct: fmtPercent(correct / mine.length) }) : t('Not trained yet')}</span>
         </Row>
       )}
       {lm && (
-        <Row label="Result split">
+        <Row label={t('Result split')}>
           <span className="tnum text-ink-2">
             {(() => {
               const [w, dr, b] = wdlPercents(lm.white, lm.draws, lm.black);
-              return `White ${w}% · draws ${dr}% · Black ${b}%`;
+              return t('White {w} · draws {d} · Black {b}', { w: fmtPercent(w / 100), d: fmtPercent(dr / 100), b: fmtPercent(b / 100) });
             })()}
           </span>
         </Row>

@@ -10,16 +10,10 @@ import { playSound } from '../lib/sound';
 import { signInWithApple, startLogin, useAuth } from '../lib/auth';
 import { platformKind } from '../platform';
 import { legalUrl } from '../lib/legal';
+import { speedName } from '../lib/speeds';
 import { Button, Segmented } from '../ui/primitives';
 import { Sheet } from '../ui/Sheet';
 
-const SPEED_NAMES: Record<Speed, string> = {
-  bullet: msg('Bullet'),
-  blitz: msg('Blitz'),
-  rapid: msg('Rapid'),
-  classical: msg('Classical'),
-  correspondence: msg('Correspondence'),
-};
 // accountName() (shared) falls back to these when an account has no chess username.
 msg('your Apple ID');
 msg('your account');
@@ -36,7 +30,7 @@ export function SettingsScreen() {
         {me ? (
           <>
             <Row label={t('Signed in as {name}', { name: t(accountName(me)) })} hint={syncHint(sync)}>
-              <Button size="sm" variant="ghost" onClick={() => void syncNow()} className="mr-1">
+              <Button size="sm" variant="ghost" onClick={() => void syncNow()} className="me-1">
                 {t('Sync now')}
               </Button>
               <Button size="sm" icon={LogOut} onClick={() => void logout()}>
@@ -103,7 +97,7 @@ export function SettingsScreen() {
                   }}
                   className={`h-9 rounded-full px-3.5 text-sm font-semibold transition-colors ${on ? 'bg-brand text-on-brand' : 'bg-surface-3 text-ink-2 hover:text-ink'}`}
                 >
-                  {t(SPEED_NAMES[s])}
+                  {speedName(s)}
                 </button>
               );
             })}
@@ -322,7 +316,7 @@ export function Toggle({ label, hint, checked, onChange }: { label: string; hint
       <label className="relative inline-flex cursor-pointer items-center">
         <input type="checkbox" className="peer sr-only" checked={checked} onChange={(e) => onChange(e.target.checked)} aria-label={label} />
         <span className="h-[31px] w-[51px] rounded-full bg-surface-3 transition-colors duration-200 peer-checked:bg-good peer-focus-visible:ring-2 peer-focus-visible:ring-brand" />
-        <span className="absolute left-[2px] top-[2px] size-[27px] rounded-full bg-white shadow-2 transition-transform duration-200 ease-[var(--ease-out)] peer-checked:translate-x-[20px]" />
+        <span className="absolute start-[2px] top-[2px] size-[27px] rounded-full bg-white shadow-2 transition-transform duration-200 ease-[var(--ease-out)] peer-checked:translate-x-[20px] rtl:peer-checked:-translate-x-[20px]" />
       </label>
     </Row>
   );

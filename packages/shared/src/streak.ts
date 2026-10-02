@@ -1,3 +1,4 @@
+import { english, type Translator } from './i18n';
 /**
  * Duolingo-style streaks, derived purely from the review log (so they sync with the reviews and need
  * no extra storage):
@@ -120,65 +121,70 @@ export interface NudgeCtx {
 export const COMEBACK_DAYS = [2, 3, 5, 7, 14, 30];
 
 const pick = <T>(xs: T[], seed: number) => xs[((seed % xs.length) + xs.length) % xs.length]!;
-const plural = (n: number, w: string) => `${n} ${w}${n === 1 ? '' : 's'}`;
-
-/** Reminder wording. Short, specific, a little cheeky — never guilt-heavy. */
-export function nudgeText(kind: NudgeKind, c: NudgeCtx): { title: string; body: string } {
+/** Reminder wording. Short, specific, a little cheeky — never guilt-heavy. `L` translates (English by default). */
+export function nudgeText(kind: NudgeKind, c: NudgeCtx, L: Translator = english): { title: string; body: string } {
   const mins = Math.max(1, Math.round((c.due * 8) / 60));
-  const due = plural(c.due, 'position');
+  const due = L.tn(c.due, '{n} position', '{n} positions');
   const s = c.streak;
   switch (kind) {
     case 'daily':
-      if (c.freezeUsed && s > 0) return { title: '❄️ Streak freeze used', body: `Your ${s}-day streak survived yesterday. Train today to keep it going.` };
+      if (c.freezeUsed && s > 0) return { title: L.t('❄️ Streak freeze used'), body: L.tn(s, 'Your {n}-day streak survived yesterday. Train today to keep it going.', 'Your {n}-day streak survived yesterday. Train today to keep it going.') };
       if (s > 0 && c.due > 0)
         return pick(
           [
-            { title: `🔥 Day ${s + 1} is waiting`, body: `${due} due · about ${mins} min.` },
-            { title: `${due} due`, body: `About ${mins} min to keep your ${s}-day streak alive.` },
-            { title: 'Your openings called', body: `${due} want a quick look. Keep the ${s}-day streak going.` },
-            { title: `Keep the flame lit 🔥`, body: `${s} days strong. ${due} due today.` },
+            { title: L.t('🔥 Day {day} is waiting', { day: s + 1 }), body: L.t('{due} due · about {min} min.', { due, min: mins }) },
+            { title: L.t('{due} due', { due }), body: L.tn(s, 'About {min} min to keep your {n}-day streak alive.', 'About {min} min to keep your {n}-day streak alive.', { min: mins }) },
+            { title: L.t('Your openings called'), body: L.tn(s, '{due} want a quick look. Keep the {n}-day streak going.', '{due} want a quick look. Keep the {n}-day streak going.', { due }) },
+            { title: L.t('Keep the flame lit 🔥'), body: L.tn(s, '{n} day strong. {due} due today.', '{n} days strong. {due} due today.', { due }) },
           ],
           c.seed,
         );
-      if (s > 0) return pick([{ title: `🔥 ${s}-day streak`, body: 'Nothing due — learn one new move to make it one more.' }, { title: 'Quick one today?', body: `Learn a new move or drill a line to keep your ${s}-day streak.` }], c.seed);
+      if (s > 0)
+        return pick(
+          [
+            { title: L.tn(s, '🔥 {n}-day streak', '🔥 {n}-day streak'), body: L.t('Nothing due — learn one new move to make it one more.') },
+            { title: L.t('Quick one today?'), body: L.tn(s, 'Learn a new move or drill a line to keep your {n}-day streak.', 'Learn a new move or drill a line to keep your {n}-day streak.') },
+          ],
+          c.seed,
+        );
       return pick(
         [
-          { title: `${due} due`, body: `About ${mins} min to keep your openings sharp.` },
-          { title: 'Time for your openings', body: `${due} ready for review. Start a streak today.` },
+          { title: L.t('{due} due', { due }), body: L.t('About {min} min to keep your openings sharp.', { min: mins }) },
+          { title: L.t('Time for your openings'), body: L.t('{due} ready for review. Start a streak today.', { due }) },
         ],
         c.seed,
       );
     case 'nudge':
       return pick(
         [
-          { title: `Your ${s}-day streak is at risk`, body: 'A two-minute review keeps it alive.' },
-          { title: `Don't let ${s} days slip`, body: c.due ? `${due} due. Two minutes is enough.` : 'One quick drill keeps the streak.' },
-          { title: '🔥 Still time today', body: `Protect your ${s}-day streak before midnight.` },
+          { title: L.tn(s, 'Your {n}-day streak is at risk', 'Your {n}-day streak is at risk'), body: L.t('A two-minute review keeps it alive.') },
+          { title: L.tn(s, 'Don’t let {n} day slip', 'Don’t let {n} days slip'), body: c.due ? L.t('{due} due. Two minutes is enough.', { due }) : L.t('One quick drill keeps the streak.') },
+          { title: L.t('🔥 Still time today'), body: L.tn(s, 'Protect your {n}-day streak before midnight.', 'Protect your {n}-day streak before midnight.') },
         ],
         c.seed,
       );
     case 'late':
       return pick(
         [
-          { title: `⏳ Last call for your ${s}-day streak`, body: 'About 90 minutes left today. One line is enough.' },
-          { title: `${s} days on the line`, body: 'Play one line before midnight to save your streak.' },
+          { title: L.tn(s, '⏳ Last call for your {n}-day streak', '⏳ Last call for your {n}-day streak'), body: L.t('About 90 minutes left today. One line is enough.') },
+          { title: L.tn(s, '{n} day on the line', '{n} days on the line'), body: L.t('Play one line before midnight to save your streak.') },
         ],
         c.seed,
       );
     case 'comeback': {
       const a = c.away ?? 0;
-      if (a >= 14) return { title: 'Your repertoire misses you', body: c.due ? `${due} are waiting. Five minutes gets you back on track.` : 'Five minutes gets you back on track.' };
-      if (a >= 5) return { title: 'Openings fade without practice', body: c.due ? `${due} are slipping. A quick review brings them back.` : 'A quick review brings them back.' };
+      if (a >= 14) return { title: L.t('Your repertoire misses you'), body: c.due ? L.t('{due} are waiting. Five minutes gets you back on track.', { due }) : L.t('Five minutes gets you back on track.') };
+      if (a >= 5) return { title: L.t('Openings fade without practice'), body: c.due ? L.t('{due} are slipping. A quick review brings them back.', { due }) : L.t('A quick review brings them back.') };
       return pick(
         [
-          { title: 'Start a new streak today', body: c.due ? `${due} due. Day 1 starts with one line.` : 'Day 1 starts with one line.' },
-          { title: 'Ready for a comeback?', body: c.due ? `${due} are waiting for you.` : 'Your repertoire is waiting for you.' },
+          { title: L.t('Start a new streak today'), body: c.due ? L.t('{due} due. Day 1 starts with one line.', { due }) : L.t('Day 1 starts with one line.') },
+          { title: L.t('Ready for a comeback?'), body: c.due ? L.t('{due} are waiting for you.', { due }) : L.t('Your repertoire is waiting for you.') },
         ],
         c.seed,
       );
     }
     case 'weekly':
-      return { title: 'Your week in openings', body: s > 0 ? `${s}-day streak · ${due} due now.` : `${due} are waiting for you.` };
+      return { title: L.t('Your week in openings'), body: s > 0 ? L.tn(s, '{n}-day streak · {due} due now.', '{n}-day streak · {due} due now.', { due }) : L.t('{due} are waiting for you.', { due }) };
   }
 }
 
@@ -198,12 +204,12 @@ export interface DayNudge {
  * Duolingo-style escalation for a live streak: the daily reminder, a 20:30 nudge, a 22:30 last call
  * (3+ day streaks). Lapsed players get a comeback note on a thinning schedule, then silence.
  */
-export function nudgesForDay(o: { streak: number; freezesAtLast: number; lastReviewDay: string | null; date: string; due: number; reminderMinutes: number; sunday?: boolean }): DayNudge[] {
+export function nudgesForDay(o: { streak: number; freezesAtLast: number; lastReviewDay: string | null; date: string; due: number; reminderMinutes: number; sunday?: boolean; tr?: Translator }): DayNudge[] {
   const s = streakOn(o, o.date);
   if (s.doneToday) return [];
   const ctx: NudgeCtx = { streak: s.streak, due: o.due, away: s.away, freezeUsed: s.freezeUsed, seed: daysBetween('2026-01-01', o.date) };
   const url = o.due > 0 ? '/train?mode=review' : '/';
-  const make = (kind: NudgeKind, minutes: number, tag: string): DayNudge => ({ kind, minutes, ...nudgeText(kind, ctx), url, tag });
+  const make = (kind: NudgeKind, minutes: number, tag: string): DayNudge => ({ kind, minutes, ...nudgeText(kind, ctx, o.tr), url, tag });
   const out: DayNudge[] = [];
   if (s.streak > 0 || (o.due > 0 && (s.away === null || s.away <= 1))) out.push(make('daily', o.reminderMinutes, 'due'));
   else if (s.away !== null && COMEBACK_DAYS.includes(s.away)) out.push(make('comeback', o.reminderMinutes, 'due'));

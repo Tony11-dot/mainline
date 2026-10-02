@@ -15,6 +15,7 @@ const body = z.object({
   question: z.string().max(400).optional(),
   rating: z.number().int().min(400).max(3200).optional(),
   speeds: z.array(z.enum(['bullet', 'blitz', 'rapid', 'classical', 'correspondence'])).max(5).optional(),
+  lang: z.string().regex(/^[a-z]{2}$/).optional(),
 });
 
 export async function coachRoutes(app: FastifyInstance) {

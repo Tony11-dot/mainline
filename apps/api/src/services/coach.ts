@@ -17,6 +17,8 @@ export interface CoachInput {
   question?: string;
   rating?: number;
   speeds?: string[];
+  /** App language (ISO 639-1); the AI answers in it. Templates stay English. */
+  lang?: string;
 }
 
 export interface CoachResult {
@@ -35,7 +37,13 @@ Rules (non-negotiable):
 - Every concrete move you mention must be written as [[SAN]] (e.g. [[Nf3]], [[O-O]]) and must either be legal right now from the FEN or appear in the packet's engine lines or line.
 - Never invent evaluations, percentages or grades. Quote numbers only from the packet. If unsure why a move is good, say "the engine prefers" rather than inventing a reason.
 - Never recommend a move that is not in the packet.
-- Plain, warm, precise English. Short markdown: 1–2 short paragraphs or a few bullets. No headings.`;
+- Plain, warm, precise prose. Short markdown: 1–2 short paragraphs or a few bullets. No headings.`;
+
+/** Languages the app ships in, by code, for the answer-language instruction. */
+export const COACH_LANGUAGES: Record<string, string> = {
+  en: 'English', ar: 'Arabic', de: 'German', es: 'Spanish', fa: 'Persian', fr: 'French', he: 'Hebrew', hi: 'Hindi', id: 'Indonesian', it: 'Italian',
+  ja: 'Japanese', ko: 'Korean', nl: 'Dutch', pl: 'Polish', pt: 'Brazilian Portuguese', ru: 'Russian', tr: 'Turkish', uk: 'Ukrainian', vi: 'Vietnamese', zh: 'Simplified Chinese',
+};
 
 const TASKS: Record<CoachKind, (f: FactsPacket) => string> = {
   move: (f) => `Explain why ${f.sideToMove} plays [[${f.move}]] here: the idea, what it prepares, what it prevents, typical plans for both sides and the key pawn structure. 80–150 words.`,
@@ -46,7 +54,7 @@ const TASKS: Record<CoachKind, (f: FactsPacket) => string> = {
 };
 
 function keyFor(i: CoachInput) {
-  return sha256([FACTS_VERSION, i.kind, toEpd(i.fen), i.moveUci ?? '', i.playedUci ?? '', (i.lineUcis ?? []).join(','), i.question?.trim().toLowerCase() ?? '', i.rating ?? ''].join('|'));
+  return sha256([FACTS_VERSION, i.kind, toEpd(i.fen), i.moveUci ?? '', i.playedUci ?? '', (i.lineUcis ?? []).join(','), i.question?.trim().toLowerCase() ?? '', i.rating ?? '', i.lang && i.lang !== 'en' ? i.lang : ''].join('|'));
 }
 
 async function safe<T>(p: Promise<T>): Promise<T | undefined> {
@@ -109,7 +117,7 @@ export async function explain(input: CoachInput, explorerToken: string | undefin
   if (!aiConfigured()) {
     result = { text: templateExplanation(facts), source: 'template', facts };
   } else {
-    result = await askAi(facts);
+    result = await askAi(facts, input.lang);
   }
   hot.set(key, result);
   // Cache real AI output forever (shared across users) so the free quota is spent once per position.
@@ -122,8 +130,9 @@ export async function explain(input: CoachInput, explorerToken: string | undefin
   return result;
 }
 
-async function askAi(facts: FactsPacket): Promise<CoachResult> {
-  const prompt = `FACTS (JSON):\n${JSON.stringify(facts)}\n\nTASK: ${TASKS[facts.kind](facts)}`;
+async function askAi(facts: FactsPacket, lang = 'en'): Promise<CoachResult> {
+  const language = COACH_LANGUAGES[lang] ?? 'English';
+  const prompt = `FACTS (JSON):\n${JSON.stringify(facts)}\n\nTASK: ${TASKS[facts.kind](facts)}\n\nLANGUAGE: Write the whole answer in ${language}. Keep every [[move]] token exactly as written, in standard SAN.`;
   for (let attempt = 0; attempt < 2; attempt++) {
     try {
       const { text, model } = await generate({ system: SYSTEM_PROMPT, prompt: attempt ? `${prompt}\n\nYour previous answer mentioned moves that are not legal here or not in the packet. Only use moves from the packet.` : prompt, long: facts.kind === 'line', maxTokens: facts.kind === 'line' ? 700 : 450 });

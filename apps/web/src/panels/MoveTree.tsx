@@ -3,6 +3,7 @@ import { useStore } from 'zustand';
 import { ChevronRight } from 'lucide-react';
 import { childPath, type TreeNode } from '@mainline/shared';
 import type { AnalysisStore } from '../board/analysis';
+import { t, tn } from '../lib/i18n';
 
 /**
  * Lichess-style inline move list: the mainline flows as text, variations are indented blocks that can
@@ -28,11 +29,11 @@ export function MoveTree({ store, emptyHint }: { store: AnalysisStore; emptyHint
   }, [path]);
 
   if (!root.children.length)
-    return <p className="px-4 py-6 text-center text-sm text-ink-3">{emptyHint ?? 'Make a move on the board to start.'}</p>;
+    return <p className="px-4 py-6 text-center text-sm text-ink-3">{emptyHint ?? t('Make a move on the board to start.')}</p>;
 
   const ctx: Ctx = { current: path, goto: (p) => store.getState().goto(p), collapsed, toggle: (p) => store.getState().toggleCollapsed(p) };
   return (
-    <div ref={ref} className="px-3 py-2 text-[0.9375rem] leading-[1.9]" role="tree" aria-label="Moves">
+    <div ref={ref} dir="ltr" className="px-3 py-2 text-start text-[0.9375rem] leading-[1.9]" role="tree" aria-label={t('Moves')}>
       <Line parent={root} parentPath="" ctx={ctx} forceNumber />
     </div>
   );
@@ -72,16 +73,16 @@ function Variations({ parentPath, vars, ctx }: { parentPath: string; vars: TreeN
   const key = `${parentPath}|vars`;
   const closed = ctx.collapsed.has(key);
   return (
-    <div className="relative my-0.5 ml-2 border-s border-line-strong ps-3" role="group">
+    <div className="relative my-0.5 ms-2 border-s border-line-strong ps-3" role="group">
       <button
         type="button"
         onClick={() => ctx.toggle(key)}
         // Sits on the variation rail beside the first line, so it never takes a row of its own.
         className="absolute -start-[9px] top-[0.475em] inline-flex size-[17px] items-center justify-center rounded-full bg-surface text-ink-3 ring-1 ring-line-strong before:absolute before:-inset-3 before:content-[''] hover:text-ink"
         aria-expanded={!closed}
-        aria-label={closed ? `Show ${vars.length} variation${vars.length > 1 ? 's' : ''}` : 'Hide variations'}
+        aria-label={closed ? tn(vars.length, 'Show {n} variation', 'Show {n} variations') : t('Hide variations')}
       >
-        <ChevronRight size={11} strokeWidth={2.6} className={`transition-transform duration-150 ${closed ? '' : 'rotate-90'}`} />
+        <ChevronRight size={11} strokeWidth={2.6} className={`transition-transform duration-150 ${closed ? 'rtl:rotate-180' : 'rotate-90'}`} />
       </button>
       {closed ? (
         <span className="text-sm text-ink-3">
@@ -108,21 +109,21 @@ function Move({ node, path, ctx, showNumber }: { node: TreeNode; path: string; c
   const white = node.ply % 2 === 1;
   return (
     <>
-      {showNumber && <span className="tnum mr-0.5 text-ink-3">{white ? `${n}.` : `${n}…`}</span>}
+      {showNumber && <span className="tnum me-0.5 text-ink-3">{white ? `${n}.` : `${n}…`}</span>}
       <button
         type="button"
         role="treeitem"
         aria-selected={active}
         data-active={active}
         onClick={() => ctx.goto(path)}
-        title={node.tags?.includes('alt') ? 'Alternate move (not trained)' : node.tags?.includes('tr') ? 'Transposition: this position is reached by another move order too' : undefined}
-        className={`mr-1 rounded-[6px] px-1 font-semibold transition-colors duration-100 ${
+        title={node.tags?.includes('alt') ? t('Alternate move (not trained)') : node.tags?.includes('tr') ? t('Transposition: this position is reached by another move order too') : undefined}
+        className={`me-1 rounded-[6px] px-1 font-semibold transition-colors duration-100 ${
           active ? 'bg-brand text-on-brand' : node.tags?.includes('alt') ? 'italic text-ink-3 hover:bg-brand-soft' : 'text-ink hover:bg-brand-soft'
         }`}
       >
         {node.san}
-        {node.tags?.includes('tr') && <span className={`ml-0.5 text-[0.7em] ${active ? 'text-on-brand/80' : 'text-brand'}`} aria-label="transposition">⇄</span>}
-        {node.tags?.includes('note') && <span className={`ml-0.5 inline-block size-1.5 rounded-full align-super ${active ? 'bg-on-brand' : 'bg-warn'}`} aria-label="has a note" />}
+        {node.tags?.includes('tr') && <span className={`ms-0.5 text-[0.7em] ${active ? 'text-on-brand/80' : 'text-brand'}`} aria-label={t('transposition')}>⇄</span>}
+        {node.tags?.includes('note') && <span className={`ms-0.5 inline-block size-1.5 rounded-full align-super ${active ? 'bg-on-brand' : 'bg-warn'}`} aria-label={t('has a note')} />}
       </button>
     </>
   );

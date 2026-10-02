@@ -10,3 +10,4 @@ export * from './coverage';
 export * from './facts';
 export * from './games';
 export * from './streak';
+export * from './i18n';

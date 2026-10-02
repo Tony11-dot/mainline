@@ -2,6 +2,7 @@ import { lazy, Suspense, useMemo, useState } from 'react';
 import { Flame } from 'lucide-react';
 import { streakInfo, type StreakInfo } from '@mainline/shared';
 import { useTraining } from '../lib/training';
+import { t, tn } from '../lib/i18n';
 
 // The sheet and the celebration load on demand; Home only needs the badge up front.
 const StreakSheet = lazy(() => import('./streakViews').then((m) => ({ default: m.StreakSheet })));
@@ -30,7 +31,7 @@ export function StreakBadge() {
         type="button"
         onClick={() => setOpen(true)}
         className={`tnum inline-flex h-9 items-center gap-1 rounded-full px-3 text-base font-bold transition-colors ${lit ? 'bg-flame-soft text-flame-ink' : 'bg-surface-3 text-ink-3'}`}
-        aria-label={`${s.current}-day streak${s.atRisk ? ', practise today to keep it' : ''}. Show streak details.`}
+        aria-label={`${tn(s.current, '{n}-day streak', '{n}-day streak')}${s.atRisk ? ` · ${t('Practise today to keep it going.')}` : ''} ${t('Show streak details.')}`}
         data-testid="streak-badge"
       >
         <Flame size={18} fill={lit ? 'currentColor' : 'none'} aria-hidden className={lit ? 'text-flame' : ''} />

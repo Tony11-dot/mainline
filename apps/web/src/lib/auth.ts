@@ -3,6 +3,7 @@ import { accountName, type Me } from '@mainline/shared';
 import { api, apiUrl, sessionToken } from './api';
 import { platform } from '../platform';
 import { toast } from '../ui/toast';
+import { t } from './i18n';
 
 interface AuthState {
   me: Me | null;
@@ -134,7 +135,7 @@ async function signedIn(token: string) {
   sessionToken.set(token);
   await useAuth.getState().refresh();
   const me = useAuth.getState().me;
-  toast(me ? `Signed in as ${accountName(me)}` : 'Signed in', { kind: 'success' });
+  toast(me ? t('Signed in as {name}', { name: t(accountName(me)) }) : t('Signed in'), { kind: 'success' });
 }
 
 /** iOS: Sign in with Apple. The API verifies Apple's identity token (and our nonce inside it). */
@@ -150,7 +151,7 @@ export async function signInWithApple() {
     });
     await signedIn(token);
   } catch (e) {
-    if (!native.isCancelled(e)) toast(`Sign in with Apple failed: ${(e as Error).message}`, { kind: 'error' });
+    if (!native.isCancelled(e)) toast(t('Sign in with Apple failed: {error}', { error: (e as Error).message }), { kind: 'error' });
   }
 }
 
@@ -158,12 +159,12 @@ export async function signInWithApple() {
 export function authErrorText(code: string): string {
   switch (code) {
     case 'cancelled':
-      return 'Sign-in cancelled';
+      return t('Sign-in cancelled');
     case 'already_linked':
-      return 'That Chess.com account is already linked to another MainLine account';
+      return t('That Chess.com account is already linked to another MainLine account');
     case 'expired':
-      return 'Sign-in took too long — try again';
+      return t('Sign-in took too long — try again');
     default:
-      return `Sign-in failed (${code})`;
+      return t('Sign-in failed ({code})', { code });
   }
 }

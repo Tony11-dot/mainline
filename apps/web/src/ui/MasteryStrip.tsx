@@ -1,5 +1,6 @@
 import { memo } from 'react';
 import { buildGraph, isOwnTurn, lines, retrievability, type RepMove, type Repertoire, type TrainCard } from '@mainline/shared';
+import { fmtPercent, t } from '../lib/i18n';
 
 /**
  * Mastery heatmap: one cell per position you must know, in line order, coloured by how likely you are
@@ -25,7 +26,7 @@ export const MasteryStrip = memo(function MasteryStrip({ rep, moves, cards, now 
   const mean = learned.length ? learned.reduce((a, b) => a + b, 0) / learned.length : 0;
   const cells = values.slice(0, 60);
   return (
-    <span className="mt-1 flex items-center gap-2" aria-label={`Mastery ${Math.round(mean * 100)}%, ${learned.length} of ${order.length} learned`} role="img">
+    <span className="mt-1 flex items-center gap-2" aria-label={t('Mastery {pct}, {learned} of {total} learned', { pct: fmtPercent(mean), learned: learned.length, total: order.length })} role="img">
       <span className="flex flex-wrap gap-[2px]">
         {cells.map((v, i) => (
           <span

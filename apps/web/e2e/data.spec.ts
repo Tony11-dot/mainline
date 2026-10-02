@@ -16,7 +16,7 @@ test('guests can erase every byte on the device from Settings', async ({ page },
   await page.goto('/settings');
   await page.getByRole('button', { name: 'Erase data' }).click();
   const sheet = page.getByRole('dialog', { name: 'Erase all data on this device' });
-  await expect(sheet).toContainText("can't be undone");
+  await expect(sheet).toContainText("can’t be undone");
   await sheet.getByRole('button', { name: 'Delete permanently' }).click();
 
   await page.waitForURL((u) => u.pathname === '/' || u.pathname === '/welcome');
