@@ -79,7 +79,15 @@ export function OpeningsScreen() {
       </div>
       <div className="relative mt-4">
         <Search size={18} className="pointer-events-none absolute left-3.5 top-1/2 -translate-y-1/2 text-ink-3" aria-hidden />
-        <input autoFocus className={`${inputCls} pl-10`} placeholder="Search 3,800 openings — name or ECO (e.g. “najdorf”, “B90”)" value={q} onChange={(e) => setQ(e.target.value)} aria-label="Search openings" />
+        <input
+          // On phones the keyboard would cover the list before anyone asked to type.
+          autoFocus={!matchMedia('(pointer: coarse)').matches}
+          className={`${inputCls} pl-10`}
+          placeholder="Name or ECO, e.g. Najdorf or B90"
+          value={q}
+          onChange={(e) => setQ(e.target.value)}
+          aria-label="Search openings"
+        />
       </div>
       {!q && <h2 className="mt-6 mb-2 text-sm font-semibold text-ink-2">Popular</h2>}
       <div className="mt-3 grid gap-5 lg:grid-cols-[1fr_340px]">

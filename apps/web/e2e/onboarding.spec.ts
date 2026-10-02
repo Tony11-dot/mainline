@@ -22,5 +22,5 @@ test('first run: level → starter repertoires → learning', async ({ page }, i
   for (const name of ['Italian Game', 'London System', 'Caro-Kann Defence']) await expect(page.getByRole('link', { name: new RegExp(name) })).toBeVisible();
   // Rating chosen during onboarding is kept.
   await page.goto('/settings');
-  await expect(page.getByLabel('Rating')).toHaveValue('2000');
+  await expect(page.getByLabel('Rating', { exact: true })).toHaveValue('2000');
 });

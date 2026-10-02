@@ -1,8 +1,10 @@
 import { createElement, memo } from 'react';
 import { parseFen } from 'chessops/fen';
+// Piece artwork: list screens can render mini boards before any full board has loaded it.
+import 'chessground/assets/chessground.cburnett.css';
 
 /** Static, cheap board for lists and previews (no chessground instance). */
-export const MiniBoard = memo(function MiniBoard({ fen, orientation = 'white', size = 120, lastMove, className = '' }: { fen: string; orientation?: 'white' | 'black'; size?: number; lastMove?: string; className?: string }) {
+export const MiniBoard = memo(function MiniBoard({ fen, orientation = 'white', size = 120, lastMove, className = '', decorative }: { fen: string; orientation?: 'white' | 'black'; size?: number; lastMove?: string; className?: string; decorative?: boolean }) {
   const setup = parseFen(fen.split(' ').length === 4 ? `${fen} 0 1` : fen);
   if (setup.isErr) return null;
   const board = setup.unwrap().board;
@@ -27,8 +29,7 @@ export const MiniBoard = memo(function MiniBoard({ fen, orientation = 'white', s
     <div
       className={`ml-mini cg-wrap relative shrink-0 overflow-hidden rounded-[8px] shadow-1 ${className}`}
       style={{ width: size, height: size, backgroundImage: 'repeating-conic-gradient(var(--sq-dark) 0 25%, var(--sq-light) 0 50%)', backgroundSize: '25% 25%' }}
-      role="img"
-      aria-label="Chess position"
+      {...(decorative ? { 'aria-hidden': true } : { role: 'img', 'aria-label': 'Chess position' })}
     >
       {hl}
       {pieces}

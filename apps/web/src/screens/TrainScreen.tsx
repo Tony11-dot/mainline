@@ -275,7 +275,7 @@ function Stat({ label, value }: { label: string; value: string | number }) {
 function EmptySession({ mode }: { mode: TrainMode }) {
   const nav = useNavigate();
   const copy: Record<TrainMode, { title: string; body: string }> = {
-    review: { title: 'Nothing due right now', body: 'Every position you’ve learned is fresh. Learn new moves or come back later.' },
+    review: { title: 'You’re all caught up', body: 'No reviews are due. Learn new moves, or come back when positions are due again.' },
     learn: { title: 'No new moves to learn', body: 'You’ve learned everything in your repertoire (or hit today’s new-move limit).' },
     drill: { title: 'Nothing to drill yet', body: 'Add a repertoire with a few moves first.' },
     quiz: { title: 'No positions learned yet', body: 'Learn some moves first — the quiz tests positions you know.' },
@@ -286,10 +286,20 @@ function EmptySession({ mode }: { mode: TrainMode }) {
         icon={CheckCircle2}
         title={copy[mode].title}
         action={
-          <div className="flex gap-2">
-            {mode !== 'learn' && <Button onClick={() => nav('/train?mode=learn')}>Learn new moves</Button>}
-            <Button variant="primary" onClick={() => nav('/library')}>
-              Open repertoire
+          <div className="flex flex-col items-center gap-3">
+            <div className="flex flex-wrap justify-center gap-2">
+              {mode !== 'learn' && (
+                <Button variant="primary" onClick={() => nav('/train?mode=learn')}>
+                  Learn new moves
+                </Button>
+              )}
+              <Button variant={mode === 'learn' ? 'primary' : 'secondary'} onClick={() => nav('/library')}>
+                Open repertoire
+              </Button>
+            </div>
+            {/* Training hides the tab bar on phones: always offer the way back. */}
+            <Button variant="ghost" size="sm" onClick={() => nav('/')}>
+              Back to Today
             </Button>
           </div>
         }

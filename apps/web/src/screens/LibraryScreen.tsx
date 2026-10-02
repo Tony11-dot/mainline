@@ -17,9 +17,10 @@ import {
   TriangleAlert,
 } from 'lucide-react';
 import { findConflicts, type Color, type Folder, type Repertoire } from '@mainline/shared';
-import { repMoves, repStats, useLibrary } from '../lib/library';
+import { repMoves, repPreview, repStats, useLibrary } from '../lib/library';
 import { useTraining } from '../lib/training';
 import { MasteryStrip } from '../ui/MasteryStrip';
+import { MiniBoard } from '../ui/MiniBoard';
 import { platform } from '../platform';
 import { Button, IconButton, PanelNote } from '../ui/primitives';
 import { Menu, type MenuItem } from '../ui/Menu';
@@ -154,7 +155,19 @@ export function LibraryScreen() {
               <FolderMenu folder={root} ctx={ctx} isRoot />
             </div>
             <div className="overflow-hidden rounded-[var(--radius-l)] border border-line bg-surface shadow-1" onDragOver={(e) => e.preventDefault()}>
-              <FolderChildren parentId={root.id} depth={0} ctx={ctx} emptyText={`No ${root.color} repertoires yet.`} />
+              <FolderChildren
+                parentId={root.id}
+                depth={0}
+                ctx={ctx}
+                empty={
+                  <div className="flex items-center justify-between gap-3 py-2 ps-4 pe-2">
+                    <p className="text-sm text-ink-3">None yet.</p>
+                    <Button variant="ghost" size="sm" icon={Plus} className="text-brand-ink" onClick={() => setSheet({ kind: 'new-rep', folderId: root.id, color: root.color })}>
+                      New {root.color === 'white' ? 'White' : 'Black'} repertoire
+                    </Button>
+                  </div>
+                }
+              />
             </div>
           </section>
         ))}
@@ -202,10 +215,10 @@ interface TreeCtx {
   setSheet: (s: SheetState) => void;
 }
 
-function FolderChildren({ parentId, depth, ctx, emptyText }: { parentId: string; depth: number; ctx: TreeCtx; emptyText?: string }) {
+function FolderChildren({ parentId, depth, ctx, empty }: { parentId: string; depth: number; ctx: TreeCtx; empty?: React.ReactNode }) {
   const subs = ctx.folders.filter((f) => f.parentId === parentId).sort((a, b) => a.sortIndex - b.sortIndex);
   const reps = ctx.reps.filter((r) => r.folderId === parentId).sort((a, b) => a.sortIndex - b.sortIndex);
-  if (!subs.length && !reps.length) return emptyText ? <p className="px-4 py-4 text-sm text-ink-3">{emptyText}</p> : <p className="py-2 text-sm text-ink-3" style={{ paddingLeft: 16 + (depth + 1) * 20 }}>Empty folder</p>;
+  if (!subs.length && !reps.length) return empty ? empty : <p className="py-2 text-sm text-ink-3" style={{ paddingLeft: 16 + (depth + 1) * 20 }}>Empty folder</p>;
   return (
     <ul role="group" className="divide-y divide-line">
       {subs.map((f) => (
@@ -308,14 +321,13 @@ function RepRow({ rep, depth, ctx }: { rep: Repertoire; depth: number; ctx: Tree
   const lib = useLibrary();
   const nav = useNavigate();
   const stats = useMemo(() => repStats(ctx.moves, rep), [ctx.moves, rep]);
+  const preview = useMemo(() => repPreview(ctx.moves, rep), [ctx.moves, rep]);
   const cards = useTraining((t) => t.cards);
   return (
     <li role="treeitem" aria-selected={false}>
       <div {...dragProps('rep', rep.id)} className="flex min-h-[60px] items-center gap-2 pr-2 hover:bg-surface-2" style={{ paddingLeft: 12 + depth * 20 }}>
-        <Link to={`/rep/${rep.id}`} className="flex min-w-0 flex-1 items-center gap-3 py-2.5" style={{ paddingLeft: 24 }}>
-          <span className={`flex size-8 shrink-0 items-center justify-center rounded-[9px] text-base ring-1 ring-line ${rep.color === 'white' ? 'bg-white text-[oklch(0.25_0.02_262)]' : 'bg-[oklch(0.25_0.015_262)] text-white'}`} aria-hidden>
-            {rep.color === 'white' ? '♔' : '♚'}
-          </span>
+        <Link to={`/rep/${rep.id}`} className="flex min-w-0 flex-1 items-center gap-3.5 py-3" style={{ paddingLeft: depth ? 24 : 4 }}>
+          <MiniBoard fen={preview.epd} lastMove={preview.lastUci} orientation={rep.color} size={52} className="rounded-[7px]" decorative />
           <span className="min-w-0">
             <span className="block truncate font-semibold">{rep.name}</span>
             <span className="tnum block text-sm text-ink-2">

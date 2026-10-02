@@ -3,13 +3,13 @@ import { NavLink, Outlet, useLocation, useNavigate } from 'react-router';
 import { platform } from '../platform';
 import { usePrefs } from '../lib/prefs';
 import { NAV } from './nav';
-import { Wordmark } from './Logo';
+import { LogoMark, Wordmark } from './Logo';
 import { Toaster } from './toast';
 import { useT } from '../lib/i18n';
 
 export function AppShell() {
   return (
-    <div className="min-h-dvh md:grid md:grid-cols-[232px_1fr]">
+    <div className="min-h-dvh md:grid md:grid-cols-[80px_1fr] lg:grid-cols-[232px_1fr]">
       <Sidebar />
       <main
         className="min-w-0 pb-[calc(var(--tabbar-h)+var(--safe-bottom)+16px)] md:pb-0"
@@ -26,9 +26,15 @@ export function AppShell() {
 function Sidebar() {
   const t = useT();
   return (
-    <aside className="sticky top-0 hidden h-dvh flex-col gap-1 border-e border-line bg-surface-2/60 px-3 py-5 md:flex">
-      <div className="mb-6 flex items-center px-2 pt-1">
-        <Wordmark height={30} />
+    // iPad portrait and small windows get a compact rail (icon over label); wide screens the full sidebar.
+    <aside className="sticky top-0 hidden h-dvh flex-col gap-1 border-e border-line bg-surface-2/60 px-2 py-5 md:flex lg:px-3">
+      <div className="mb-6 flex items-center justify-center px-2 pt-1 lg:justify-start">
+        <span className="flex lg:hidden">
+          <LogoMark size={30} />
+        </span>
+        <span className="hidden lg:flex">
+          <Wordmark height={30} />
+        </span>
       </div>
       <nav className="flex flex-col gap-0.5" aria-label="Main">
         {NAV.map(({ to, key, icon: Icon }) => (
@@ -37,7 +43,7 @@ function Sidebar() {
             to={to}
             end={to === '/'}
             className={({ isActive }) =>
-              `flex h-10 items-center gap-3 rounded-[10px] px-3 text-base font-medium transition-colors duration-150 ${
+              `flex h-14 flex-col items-center justify-center gap-1 rounded-[12px] text-[11px] font-semibold transition-colors duration-150 lg:h-10 lg:flex-row lg:justify-start lg:gap-3 lg:rounded-[10px] lg:px-3 lg:text-base lg:font-medium ${
                 isActive ? 'bg-brand-soft text-brand-ink' : 'text-ink-2 hover:bg-surface-3 hover:text-ink'
               }`
             }

@@ -60,7 +60,7 @@ test('create a repertoire, add a line, alternates, delete + undo, PGN import', a
   await expect(page.getByText(/positions? to know/)).toBeVisible();
 
   // PGN import into a new repertoire
-  await page.getByRole('button', { name: 'New' }).click();
+  await page.getByRole('button', { name: 'New', exact: true }).click();
   await page.getByRole('menuitem', { name: 'Import PGN' }).click();
   const imp = page.getByRole('dialog', { name: 'Import PGN' });
   await imp.locator('textarea').fill('[Event "London"]\n\n1. d4 d5 2. Bf4 (2. Nf3 Nf6 3. Bf4) 2... Nf6 3. e3 *');

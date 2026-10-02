@@ -299,3 +299,16 @@ Visual checks: `VISUAL=1 pnpm e2e visual` (add `--update-snapshots` after an int
   - The app sends Apple's one-time authorization code at sign-in. The server trades it for a refresh token, stores it encrypted, and revokes it when the account is deleted.
   - This needs `APPLE_SIWA_KEY_ID` and `APPLE_SIWA_PRIVATE_KEY`, the Sign in with Apple key from Certificates, IDs & Profiles → Keys. Both are set on Railway.
   - Migration `0006_apple_revoke`. The app half ships in the next iOS build.
+
+## UI polish pass (2026-10-02)
+
+- **Fixed: mini boards with no pieces.** Repertoire and opening-library thumbnails showed an empty board until a full board had been opened somewhere else. The piece artwork now loads with the mini board.
+- **iPad portrait:** the sidebar becomes a compact rail (icon over label) below 1024pt wide, so the builder's board gets full size instead of running into the screen edge.
+- **Repertoire list:** each repertoire shows a thumbnail of its main line, in place of a tiny ♔/♚ glyph. An empty White/Black section now has a "New … repertoire" button.
+- **Today:** the three stat cards are one quiet progress panel (daily goal ring, learned, retention). Practice and Tools are grouped lists with chevrons.
+- **Settings:** signed out, the account block reads "Sign in to sync" with full-size buttons (Sign in with Apple first on iOS). Rating, new moves per day and daily goal use − / + steppers instead of browser number spinners.
+- **Train:** when nothing is due, the copy no longer claims you've learned positions you haven't. "Learn new moves" is the primary action, and "Back to Today" is always offered, since training hides the tab bar.
+- **Statistics:** before the first review, one "start your first session" step replaces a grid of zeros.
+- Move tree: the collapse toggle for variations sits on the variation rail, not on a row of its own.
+- Opening search: shorter placeholder, and no auto-focus on touch screens, so the keyboard doesn't cover the list.
+- Chess.com declined OAuth access (2026-10-02). Their sign-in button stays hidden (no credentials on the server). Importing Chess.com games by username still works.

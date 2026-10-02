@@ -72,11 +72,12 @@ function Variations({ parentPath, vars, ctx }: { parentPath: string; vars: TreeN
   const key = `${parentPath}|vars`;
   const closed = ctx.collapsed.has(key);
   return (
-    <div className="my-0.5 ml-1 border-l border-line-strong pl-2.5" role="group">
+    <div className="relative my-0.5 ml-2 border-s border-line-strong ps-3" role="group">
       <button
         type="button"
         onClick={() => ctx.toggle(key)}
-        className="-ml-[17px] mr-0.5 inline-flex size-4 items-center justify-center rounded-full bg-surface text-ink-3 ring-1 ring-line hover:text-ink align-middle"
+        // Sits on the variation rail beside the first line, so it never takes a row of its own.
+        className="absolute -start-[9px] top-[0.475em] inline-flex size-[17px] items-center justify-center rounded-full bg-surface text-ink-3 ring-1 ring-line-strong before:absolute before:-inset-3 before:content-[''] hover:text-ink"
         aria-expanded={!closed}
         aria-label={closed ? `Show ${vars.length} variation${vars.length > 1 ? 's' : ''}` : 'Hide variations'}
       >

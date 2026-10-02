@@ -1,6 +1,6 @@
 import { useEffect, useMemo } from 'react';
 import { Link, Navigate } from 'react-router';
-import { BarChart3, BookOpen, Cpu, Dumbbell, Flame, GraduationCap, Play, Shuffle, Snowflake } from 'lucide-react';
+import { BarChart3, BookOpen, ChevronRight, Cpu, Dumbbell, Flame, GraduationCap, Play, Shuffle, Snowflake } from 'lucide-react';
 import { trainingSummary } from '@mainline/shared';
 import { StreakBadge, useStreak } from '../ui/streak';
 import { useLibrary } from '../lib/library';
@@ -87,67 +87,78 @@ export function HomeScreen() {
             </div>
           )}
 
-          <dl className="tnum mt-4 grid grid-cols-3 gap-2">
-            <Tile label="Positions learned" value={`${sum.learned}/${sum.positions}`} />
-            <Tile label="Retention" value={sum.learned ? `${Math.round(sum.retention * 100)}%` : '—'} />
-            <GoalTile done={today.length} goal={goal} />
-          </dl>
+          <Progress done={today.length} goal={goal} learned={sum.learned} positions={sum.positions} retention={sum.learned ? sum.retention : null} />
 
-          <h2 className="mt-8 mb-2 text-sm font-semibold text-ink-2">Practice</h2>
-          <div className="grid gap-2 sm:grid-cols-3">
-            <ModeLink to="/train?mode=learn" icon={GraduationCap} title="Learn" sub={sum.newToday ? `${sum.newToday} new today` : 'Nothing new'} />
+          <h2 className="mt-8 mb-2 px-1 text-sm font-semibold text-ink-2">Practice</h2>
+          <ListGroup>
+            <ModeLink to="/train?mode=learn" icon={GraduationCap} title="Learn" sub={sum.newToday ? `${sum.newToday} new today` : 'Nothing new today'} />
             <ModeLink to="/train?mode=drill" icon={Shuffle} title="Drill" sub="Random lines, real reply odds" />
             <ModeLink to="/train?mode=quiz" icon={Dumbbell} title="Position quiz" sub="Weakest positions first" />
-          </div>
+          </ListGroup>
         </>
       )}
-      <h2 className="mt-8 mb-2 text-sm font-semibold text-ink-2">Tools</h2>
-      <div className="grid gap-2 sm:grid-cols-2">
+      <h2 className="mt-8 mb-2 px-1 text-sm font-semibold text-ink-2">Tools</h2>
+      <ListGroup>
         <ModeLink to="/stats" icon={BarChart3} title="Statistics" sub="Accuracy, repertoires, openings, games" />
         <ModeLink to="/setup" icon={Cpu} title="Analysis board" sub="Set up any position, run Stockfish" />
-      </div>
+      </ListGroup>
     </div>
   );
 }
 
-function Tile({ label, value }: { label: string; value: string }) {
-  return (
-    <div className="rounded-[var(--radius-m)] border border-line bg-surface px-3 py-2.5 shadow-1">
-      <dt className="text-xs text-ink-3">{label}</dt>
-      <dd className="text-lg font-bold">{value}</dd>
-    </div>
-  );
-}
-
-function ModeLink({ to, icon: Icon, title, sub }: { to: string; icon: typeof Play; title: string; sub: string }) {
-  return (
-    <Link to={to} className="flex items-center gap-3 rounded-[var(--radius-m)] border border-line bg-surface px-4 py-3 shadow-1 transition-colors hover:bg-surface-2">
-      <Icon size={20} className="text-brand" aria-hidden />
-      <span>
-        <span className="block font-semibold">{title}</span>
-        <span className="block text-sm text-ink-2">{sub}</span>
-      </span>
-    </Link>
-  );
-}
-
-function GoalTile({ done, goal }: { done: number; goal: number }) {
+/** Today at a glance: the daily goal ring, then learned and retention, in one quiet panel. */
+function Progress({ done, goal, learned, positions, retention }: { done: number; goal: number; learned: number; positions: number; retention: number | null }) {
   const pct = goal ? Math.min(1, done / goal) : 0;
   const r = 15;
   const c = 2 * Math.PI * r;
   return (
-    <div className="flex items-center gap-2 rounded-[var(--radius-m)] border border-line bg-surface px-3 py-2.5 shadow-1 min-[400px]:gap-2.5">
-      {/* The ring shrinks on narrow phones so the count still fits. */}
-      <svg viewBox="0 0 38 38" className="size-7 shrink-0 -rotate-90 min-[400px]:size-[38px]" aria-hidden>
-        <circle cx="19" cy="19" r={r} fill="none" stroke="var(--surface-3)" strokeWidth="4" />
-        <circle cx="19" cy="19" r={r} fill="none" stroke={pct >= 1 ? 'var(--good)' : 'var(--brand)'} strokeWidth="4" strokeLinecap="round" strokeDasharray={c} strokeDashoffset={c * (1 - pct)} className="transition-[stroke-dashoffset] duration-500" />
-      </svg>
-      <div className="min-w-0">
-        <dt className="text-xs text-ink-3">Daily goal</dt>
-        <dd className="text-lg font-bold">
-          {done}/{goal}
-        </dd>
+    <dl className="tnum mt-3 flex items-stretch rounded-[var(--radius-l)] border border-line bg-surface shadow-1">
+      <div className="flex min-w-0 flex-[1.25] items-center gap-2.5 py-3 ps-3.5 pe-2 sm:gap-3 sm:px-4">
+        <svg viewBox="0 0 38 38" className="size-8 shrink-0 -rotate-90 sm:size-9" aria-hidden>
+          <circle cx="19" cy="19" r={r} fill="none" stroke="var(--surface-3)" strokeWidth="4" />
+          <circle cx="19" cy="19" r={r} fill="none" stroke={pct >= 1 ? 'var(--good)' : 'var(--brand)'} strokeWidth="4" strokeLinecap="round" strokeDasharray={c} strokeDashoffset={c * (1 - pct)} className="transition-[stroke-dashoffset] duration-500" />
+        </svg>
+        <div className="min-w-0">
+          <dt className="text-xs whitespace-nowrap text-ink-3">Daily goal</dt>
+          <dd className="text-md font-bold">
+            {done}
+            <span className="font-semibold text-ink-3">/{goal}</span>
+          </dd>
+        </div>
       </div>
+      <Stat label="Learned" value={learned} of={positions} />
+      <Stat label="Retention" value={retention === null ? '—' : `${Math.round(retention * 100)}%`} />
+    </dl>
+  );
+}
+
+function Stat({ label, value, of }: { label: string; value: number | string; of?: number }) {
+  return (
+    <div className="min-w-0 flex-1 border-s border-line px-3.5 py-3 sm:px-4">
+      <dt className="truncate text-xs text-ink-3">{label}</dt>
+      <dd className="text-md font-bold">
+        {value}
+        {of !== undefined && <span className="font-semibold text-ink-3">/{of}</span>}
+      </dd>
     </div>
+  );
+}
+
+function ListGroup({ children }: { children: React.ReactNode }) {
+  return <div className="divide-y divide-line overflow-hidden rounded-[var(--radius-l)] border border-line bg-surface shadow-1">{children}</div>;
+}
+
+function ModeLink({ to, icon: Icon, title, sub }: { to: string; icon: typeof Play; title: string; sub: string }) {
+  return (
+    <Link to={to} className="flex min-h-[60px] items-center gap-3.5 px-4 py-2.5 transition-colors duration-150 hover:bg-surface-2 active:bg-surface-3">
+      <span className="flex size-9 shrink-0 items-center justify-center rounded-[10px] bg-brand-soft text-brand-ink">
+        <Icon size={19} aria-hidden />
+      </span>
+      <span className="min-w-0 flex-1">
+        <span className="block font-semibold">{title}</span>
+        <span className="block truncate text-sm text-ink-2">{sub}</span>
+      </span>
+      <ChevronRight size={18} className="shrink-0 text-ink-3 rtl:rotate-180" aria-hidden />
+    </Link>
   );
 }

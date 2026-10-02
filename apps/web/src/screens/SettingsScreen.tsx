@@ -1,5 +1,5 @@
 import { useState, type ReactNode } from 'react';
-import { BadgeCheck, LogOut, Trash2 } from 'lucide-react';
+import { BadgeCheck, LogOut, Minus, Plus, Trash2 } from 'lucide-react';
 import { accountName, SPEEDS, type Speed } from '@mainline/shared';
 import { usePrefs } from '../lib/prefs';
 import { AppearanceSettings } from './settings/AppearanceSettings';
@@ -50,59 +50,33 @@ export function SettingsScreen() {
             )}
           </>
         ) : (
-          <Row label="Account" hint="Optional. Syncs your repertoire across devices and imports your games.">
-            <div className="flex flex-wrap justify-end gap-2">
+          <div className="px-4 py-4">
+            <div className="text-base font-medium">Sign in to sync</div>
+            <p className="text-sm text-ink-2">Optional. Keeps your repertoire and training in step across devices. Everything works without an account.</p>
+            <div className="mt-3.5 grid gap-2 sm:flex sm:flex-wrap">
               {platformKind === 'ios' && <AppleButton onClick={() => void signInWithApple()} />}
-              <Button size="sm" variant="primary" onClick={() => void startLogin('lichess')}>
+              <Button variant={platformKind === 'ios' ? 'secondary' : 'primary'} onClick={() => void startLogin('lichess')}>
                 Sign in with Lichess
               </Button>
               {providers.chesscom && (
-                <Button size="sm" onClick={() => void startLogin('chesscom')}>
+                <Button onClick={() => void startLogin('chesscom')}>
                   <ChessComMark /> Sign in with Chess.com
                 </Button>
               )}
             </div>
-          </Row>
+          </div>
         )}
       </Group>
 
       <Group title="Your level">
         <Row label="Rating" hint="Explorer stats and coverage use players around this rating.">
-          <input
-            type="number"
-            inputMode="numeric"
-            min={400}
-            max={3200}
-            step={50}
-            value={p.rating}
-            onChange={(e) => p.set({ rating: Math.max(400, Math.min(3200, Number(e.target.value) || 1500)) })}
-            className="tnum h-10 w-24 rounded-[10px] border border-line bg-surface px-3 text-right text-base font-semibold"
-            aria-label="Rating"
-          />
+          <Stepper label="Rating" value={p.rating} min={400} max={3200} step={50} onChange={(rating) => p.set({ rating })} />
         </Row>
         <Row label="New moves per day" hint="How many new positions Learn introduces each day.">
-          <input
-            type="number"
-            inputMode="numeric"
-            min={0}
-            max={100}
-            value={p.dailyNewLimit}
-            onChange={(e) => p.set({ dailyNewLimit: Math.max(0, Math.min(100, Number(e.target.value) || 0)) })}
-            className="tnum h-10 w-20 rounded-[10px] border border-line bg-surface px-3 text-right text-base font-semibold"
-            aria-label="New moves per day"
-          />
+          <Stepper label="New moves per day" value={p.dailyNewLimit} min={0} max={100} step={1} onChange={(dailyNewLimit) => p.set({ dailyNewLimit })} />
         </Row>
         <Row label="Daily goal" hint="Reviews per day for the goal ring on Today.">
-          <input
-            type="number"
-            inputMode="numeric"
-            min={1}
-            max={500}
-            value={p.dailyGoal}
-            onChange={(e) => p.set({ dailyGoal: Math.max(1, Math.min(500, Number(e.target.value) || 20)) })}
-            className="tnum h-10 w-20 rounded-[10px] border border-line bg-surface px-3 text-right text-base font-semibold"
-            aria-label="Daily goal"
-          />
+          <Stepper label="Daily goal" value={p.dailyGoal} min={1} max={500} step={5} onChange={(dailyGoal) => p.set({ dailyGoal })} />
         </Row>
         <Row label="Time controls" stack>
           <div className="flex flex-wrap gap-1.5">
@@ -299,6 +273,38 @@ function Row({ label, hint, children, stack }: { label: string; hint?: string; c
   );
 }
 
+/** − value + : taps for the usual nudge, and the number itself can still be typed (committed on blur / Enter). */
+function Stepper({ label, value, min, max, step, onChange }: { label: string; value: number; min: number; max: number; step: number; onChange: (v: number) => void }) {
+  const [draft, setDraft] = useState<string | null>(null);
+  const clamp = (v: number) => Math.max(min, Math.min(max, v));
+  const commit = () => {
+    if (draft !== null && draft.trim() !== '' && Number.isFinite(Number(draft))) onChange(clamp(Math.round(Number(draft))));
+    setDraft(null);
+  };
+  const nudge = (dir: 1 | -1) => onChange(clamp(dir > 0 ? Math.floor(value / step) * step + step : Math.ceil(value / step) * step - step));
+  const btn = 'flex size-10 items-center justify-center text-ink-2 transition-colors duration-150 hover:bg-surface-3 hover:text-ink active:bg-surface-3 disabled:pointer-events-none disabled:opacity-35';
+  return (
+    <div className="flex h-10 items-center overflow-hidden rounded-[12px] border border-line bg-surface-2">
+      <button type="button" className={btn} aria-label={`Decrease ${label.toLowerCase()}`} disabled={value <= min} onClick={() => nudge(-1)}>
+        <Minus size={16} strokeWidth={2.4} aria-hidden />
+      </button>
+      <input
+        type="text"
+        inputMode="numeric"
+        aria-label={label}
+        value={draft ?? String(value)}
+        onChange={(e) => setDraft(e.target.value.replace(/[^0-9]/g, ''))}
+        onBlur={commit}
+        onKeyDown={(e) => e.key === 'Enter' && (e.target as HTMLInputElement).blur()}
+        className="tnum h-full w-[3.75rem] border-x border-line bg-surface text-center text-base font-semibold outline-none focus:bg-brand-softer"
+      />
+      <button type="button" className={btn} aria-label={`Increase ${label.toLowerCase()}`} disabled={value >= max} onClick={() => nudge(1)}>
+        <Plus size={16} strokeWidth={2.4} aria-hidden />
+      </button>
+    </div>
+  );
+}
+
 export function Toggle({ label, hint, checked, onChange }: { label: string; hint?: string; checked: boolean; onChange: (v: boolean) => void }) {
   return (
     <Row label={label} hint={hint}>
@@ -325,9 +331,9 @@ function AppleButton({ onClick }: { onClick: () => void }) {
     <button
       type="button"
       onClick={onClick}
-      className="inline-flex h-8 items-center gap-1.5 rounded-[10px] bg-black px-3 text-sm font-semibold text-white active:opacity-80 dark:bg-white dark:text-black"
+      className="inline-flex h-11 items-center justify-center gap-2 rounded-[12px] bg-black px-4 text-base font-semibold text-white active:opacity-80 dark:bg-white dark:text-black"
     >
-      <svg viewBox="0 0 17 20" className="size-[15px]" aria-hidden>
+      <svg viewBox="0 0 17 20" className="size-[17px] -translate-y-px" aria-hidden>
         <path
           fill="currentColor"
           d="M14.06 10.62c-.02-2.2 1.8-3.26 1.88-3.31-1.03-1.5-2.62-1.7-3.18-1.72-1.35-.14-2.64.8-3.33.8-.69 0-1.74-.78-2.87-.76A4.24 4.24 0 0 0 2.98 7.8c-1.53 2.65-.39 6.57 1.1 8.72.73 1.05 1.6 2.23 2.73 2.19 1.1-.04 1.51-.71 2.84-.71 1.32 0 1.7.71 2.86.69 1.18-.02 1.93-1.07 2.65-2.13a9.5 9.5 0 0 0 1.2-2.47 3.84 3.84 0 0 1-2.3-3.47ZM11.88 4.16A3.8 3.8 0 0 0 12.77 1.4a3.9 3.9 0 0 0-2.52 1.3 3.63 3.63 0 0 0-.92 2.67 3.21 3.21 0 0 0 2.55-1.21Z"

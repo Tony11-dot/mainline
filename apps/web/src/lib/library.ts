@@ -325,6 +325,22 @@ export function repMoves(moves: RepMove[], repId: string) {
   return moves.filter((m) => m.repertoireId === repId && !m.deleted);
 }
 
+/** Where the repertoire's main line stands a few moves in: the thumbnail that tells repertoires apart. */
+export function repPreview(moves: RepMove[], rep: Repertoire, plies = 8) {
+  const g = buildGraph(repMoves(moves, rep.id));
+  let epd = rep.rootEpd;
+  let lastUci: string | undefined;
+  const seen = new Set([epd]);
+  for (let i = 0; i < plies; i++) {
+    const next = g.get(epd)?.[0];
+    if (!next || seen.has(next.toEpd)) break;
+    epd = next.toEpd;
+    lastUci = next.uci;
+    seen.add(epd);
+  }
+  return { epd, lastUci };
+}
+
 export function repStats(moves: RepMove[], rep: Repertoire) {
   const g = buildGraph(repMoves(moves, rep.id));
   let own = 0;

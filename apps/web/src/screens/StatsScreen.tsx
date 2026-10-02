@@ -49,15 +49,22 @@ export function StatsScreen() {
 
       <div className="mt-6">
         <StatSection title="Training">
-          <StatGrid>
-            <StatTile label="Reviews" value={t.reviews.toLocaleString()} sub={`${t.activeDays30} active days / 30`} />
-            <StatTile label="Accuracy" value={pct(t.accuracy)} sub={`7 days ${pct(t.accuracy7)} · 30 days ${pct(t.accuracy30)}`} />
-            <StatTile label="Due now" value={t.due} sub={`${t.lapses} lapses so far`} />
-            <StatTile label="Answer time" value={t.medianMs ? `${(t.medianMs / 1000).toFixed(1)} s` : '—'} sub="median, correct answers" />
-          </StatGrid>
-          <div className="mt-2">
-            <ReviewsChart daily={t.daily} />
-          </div>
+          {t.reviews === 0 && t.due === 0 ? (
+            // Before the first review every tile would read 0 or —; one clear next step instead.
+            <Empty text="Your training numbers start with your first session." to="/train?mode=learn" cta="Learn new moves" />
+          ) : (
+            <>
+              <StatGrid>
+                <StatTile label="Reviews" value={t.reviews.toLocaleString()} sub={`${t.activeDays30} active days / 30`} />
+                <StatTile label="Accuracy" value={pct(t.accuracy)} sub={`7 days ${pct(t.accuracy7)} · 30 days ${pct(t.accuracy30)}`} />
+                <StatTile label="Due now" value={t.due} sub={`${t.lapses} lapses so far`} />
+                <StatTile label="Answer time" value={t.medianMs ? `${(t.medianMs / 1000).toFixed(1)} s` : '—'} sub="median, correct answers" />
+              </StatGrid>
+              <div className="mt-2">
+                <ReviewsChart daily={t.daily} />
+              </div>
+            </>
+          )}
           {MaturityTotal(t.maturity) > 0 && (
             <div className="mt-2 rounded-[var(--radius-l)] border border-line bg-surface p-3.5 shadow-1">
               <h3 className="mb-2.5 text-sm font-semibold">Positions by memory strength</h3>

@@ -40,7 +40,7 @@ test('learn, then quiz with a mistake, summary', async ({ page }, info) => {
 
   // Nothing due immediately after learning.
   await page.goto('/train?mode=review');
-  await expect(page.getByRole('heading', { name: 'Nothing due right now' })).toBeVisible();
+  await expect(page.getByRole('heading', { name: 'You’re all caught up' })).toBeVisible();
 
   // Quiz: weakest positions first; play a wrong move once.
   await page.goto('/train?mode=quiz');
