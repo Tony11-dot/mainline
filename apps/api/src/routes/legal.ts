@@ -1,11 +1,12 @@
 import type { FastifyInstance } from 'fastify';
 import { env } from '../env';
 
-/** Privacy policy and terms, required by the App Store and Google Play. Plain HTML, no scripts. */
+/** Privacy policy and terms (required by the App Store and Google Play), cookie list and accessibility statement. Plain HTML, no scripts. */
 export async function legalRoutes(app: FastifyInstance) {
   app.get('/privacy', async (_req, reply) => reply.type('text/html').header('Cache-Control', 'public, max-age=3600').send(page('Privacy policy', PRIVACY())));
   app.get('/terms', async (_req, reply) => reply.type('text/html').header('Cache-Control', 'public, max-age=3600').send(page('Terms of use', TERMS())));
   app.get('/cookies', async (_req, reply) => reply.type('text/html').header('Cache-Control', 'public, max-age=3600').send(page('Cookies and local storage', COOKIES())));
+  app.get('/accessibility', async (_req, reply) => reply.type('text/html').header('Cache-Control', 'public, max-age=3600').send(page('Accessibility statement', ACCESSIBILITY())));
 }
 
 export const LEGAL_UPDATED = '25 September 2026';
@@ -112,6 +113,24 @@ const COOKIES = () => `
 <p>See the <a href="${esc(env.PUBLIC_URL)}/privacy">privacy policy</a> and the <a href="${esc(env.PUBLIC_URL)}/terms">terms of use</a>. Questions: ${contact()}.</p>
 `;
 
+const ACCESSIBILITY = () => `
+<p>MainLine should work for every chess player, including players with disabilities. We aim for the web, mobile and desktop apps to meet the Web Content Accessibility Guidelines (WCAG) 2.1 at level AA.</p>
+
+<h2>What we have done</h2>
+<ul>
+  <li><strong>Play without the mouse.</strong> Type any move in standard notation (<code>Nf3</code>, <code>exd5</code>, <code>O-O</code>) or as coordinates (<code>g1f3</code>) and press Enter. Press <code>/</code> anywhere to jump to the move box.</li>
+  <li><strong>Screen readers.</strong> Moves and trainer feedback are announced in words (for example “Knight takes f 3, check”), and buttons and controls have labels.</li>
+  <li><strong>Reading and contrast.</strong> Light and dark themes, a choice of board colours and fonts, and pages that reflow with browser zoom and the system text size.</li>
+  <li><strong>Motion.</strong> Animations are reduced when your device asks for reduced motion.</li>
+</ul>
+
+<h2>Known limitations</h2>
+<p>Dragging pieces on the board itself is a visual, pointer-based interaction; use the move box instead. Opening statistics and engine evaluations come from external sources and are shown mainly as numbers and bars.</p>
+
+<h2>Feedback</h2>
+<p>If something in MainLine is hard to use, tell us what you were trying to do and which device you use: ${contact()}. We read every message.</p>
+`;
+
 function page(title: string, body: string) {
   return `<!doctype html>
 <html lang="en">
@@ -141,7 +160,7 @@ function page(title: string, body: string) {
 <h1>${title}</h1>
 <p class="updated">MainLine · last updated ${LEGAL_UPDATED}</p>
 ${body}
-<nav><a href="${esc(env.PUBLIC_URL)}/privacy">Privacy policy</a> · <a href="${esc(env.PUBLIC_URL)}/terms">Terms of use</a> · <a href="${esc(env.PUBLIC_URL)}/cookies">Cookies</a></nav>
+<nav><a href="${esc(env.PUBLIC_URL)}/privacy">Privacy policy</a> · <a href="${esc(env.PUBLIC_URL)}/terms">Terms of use</a> · <a href="${esc(env.PUBLIC_URL)}/cookies">Cookies</a> · <a href="${esc(env.PUBLIC_URL)}/accessibility">Accessibility</a></nav>
 </main></body>
 </html>`;
 }
