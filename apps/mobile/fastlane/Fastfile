@@ -70,7 +70,11 @@ def changelog(limit)
     .gsub(/\*\*(.+?)\*\*/, '\1').gsub(/`([^`]+)`/, '\1').gsub(/\[([^\]]+)\]\([^)]+\)/, '\1')
     .gsub(/^\s*[-*] /, "• ").gsub(/\n{3,}/, "\n\n").strip
   out = "#{title.to_s.strip}\n\n#{plain}"
-  out.length > limit ? "#{out[0, limit - 1].rstrip}…" : out
+  # Stores count UTF-16 code units (an emoji is two), not Ruby characters.
+  units = ->(s) { s.encode("UTF-16LE").bytesize / 2 }
+  return out if units.(out) <= limit
+  out = out[0..-2] while units.(out) > limit - 1
+  "#{out.rstrip}…"
 end
 
 # ── iOS ────────────────────────────────────────────────────────────────────────
