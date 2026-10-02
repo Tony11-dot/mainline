@@ -936,9 +936,20 @@
  "Goes with your repertoire": "Pasuje do twojego repertuaru",
  "Guided": "Z przewodnikiem",
  "Hidden gem": "Ukryty klejnot",
- "Living dangerously": "Na krawędzi",
  "Pick a reply to prepare for it.": "Wybierz odpowiedź, aby się na nią przygotować.",
  "Surprise weapon": "Broń zaskoczenia",
  "The arrow shows the top pick. Play it, drag another piece, or tap a row.": "Strzałka pokazuje najlepszy wybór. Zagraj go, przeciągnij inną bierkę lub stuknij wiersz.",
- "Their move": "Ich ruch"
+ "Their move": "Ich ruch",
+ "Dubious": "Wątpliwy",
+ "What the tags mean": "Co znaczą etykiety",
+ "Already saved in this repertoire.": "Już zapisany w tym repertuarze.",
+ "Leads to a position another of your repertoires already covers.": "Prowadzi do pozycji, którą obejmuje już inny twój repertuar.",
+ "The engine rates it clearly worse than the best move (roughly a pawn).": "Silnik ocenia go wyraźnie gorzej niż najlepszy ruch (mniej więcej o pionka).",
+ "The move masters play most here.": "Ruch, który mistrzowie grają tu najczęściej.",
+ "The engine’s best move, or within about a tenth of a pawn of it.": "Najlepszy ruch silnika lub gorszy od niego najwyżej o około jedną dziesiątą pionka.",
+ "Nearly as good as the engine’s best, yet rarely played by masters.": "Prawie tak dobry jak najlepszy ruch silnika, ale mistrzowie grają go rzadko.",
+ "The best score at your rating, over enough games that it isn’t luck, and the engine says it’s sound.": "Najlepszy wynik na twoim poziomie, na tyle partiach, że to nie przypadek, a silnik uznaje ruch za poprawny.",
+ "Played most at your rating.": "Najczęściej grany na twoim poziomie.",
+ "Rare among masters, yet it scores clearly above 50% at your rating and holds up with the engine.": "Rzadki u mistrzów, ale na twoim poziomie daje wyraźnie ponad 50% i wytrzymuje sprawdzenie silnikiem.",
+ "Engine tags appear once the engine has searched deep enough. Masters: share of master games. Club: your side’s score at your rating.": "Etykiety silnika pojawiają się, gdy silnik policzy wystarczająco głęboko. Mistrzowie: udział partii mistrzów. Klubowy: wynik twojej strony na twoim poziomie."
 }

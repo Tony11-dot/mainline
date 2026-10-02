@@ -893,9 +893,20 @@
  "Goes with your repertoire": "משתלב ברפרטואר שלך",
  "Guided": "מודרך",
  "Hidden gem": "יהלום נסתר",
- "Living dangerously": "חיים על הקצה",
  "Pick a reply to prepare for it.": "בחרו תגובה כדי להתכונן אליה.",
  "Surprise weapon": "נשק הפתעה",
  "The arrow shows the top pick. Play it, drag another piece, or tap a row.": "החץ מראה את הבחירה המובילה. שחקו אותה, גררו כלי אחר או הקישו על שורה.",
- "Their move": "המסע שלהם"
+ "Their move": "המסע שלהם",
+ "Dubious": "מפוקפק",
+ "What the tags mean": "מה התגיות אומרות",
+ "Already saved in this repertoire.": "כבר שמור ברפרטואר הזה.",
+ "Leads to a position another of your repertoires already covers.": "מוביל לעמדה שרפרטואר אחר שלך כבר מכסה.",
+ "The engine rates it clearly worse than the best move (roughly a pawn).": "המנוע מעריך אותו כגרוע בבירור מהמסע הטוב ביותר (בערך רגלי).",
+ "The move masters play most here.": "המסע שאמנים משחקים הכי הרבה כאן.",
+ "The engine’s best move, or within about a tenth of a pawn of it.": "המסע הטוב ביותר של המנוע, או בטווח של כעשירית רגלי ממנו.",
+ "Nearly as good as the engine’s best, yet rarely played by masters.": "טוב כמעט כמו הבחירה של המנוע, אבל אמנים משחקים אותו לעיתים רחוקות.",
+ "The best score at your rating, over enough games that it isn’t luck, and the engine says it’s sound.": "הניקוד הטוב ביותר בדירוג שלך, על פני מספיק משחקים כדי שזה לא מזל, והמנוע מאשר שהוא תקין.",
+ "Played most at your rating.": "המסע הנפוץ ביותר בדירוג שלך.",
+ "Rare among masters, yet it scores clearly above 50% at your rating and holds up with the engine.": "נדיר אצל אמנים, אבל בדירוג שלך הוא משיג בבירור יותר מ־50% ועומד בבדיקת המנוע.",
+ "Engine tags appear once the engine has searched deep enough. Masters: share of master games. Club: your side’s score at your rating.": "תגיות המנוע מופיעות אחרי שהמנוע חישב לעומק מספיק. אמנים: שיעור במשחקי אמנים. מועדון: הניקוד של הצד שלך בדירוג שלך."
 }

@@ -807,9 +807,20 @@
  "Goes with your repertoire": "Cocok dengan repertoarmu",
  "Guided": "Terpandu",
  "Hidden gem": "Permata tersembunyi",
- "Living dangerously": "Hidup di tepi jurang",
  "Pick a reply to prepare for it.": "Pilih balasan untuk bersiap menghadapinya.",
  "Surprise weapon": "Senjata kejutan",
  "The arrow shows the top pick. Play it, drag another piece, or tap a row.": "Panah menunjukkan pilihan teratas. Mainkan, seret bidak lain, atau ketuk sebuah baris.",
- "Their move": "Langkah mereka"
+ "Their move": "Langkah mereka",
+ "Dubious": "Meragukan",
+ "What the tags mean": "Arti label",
+ "Already saved in this repertoire.": "Sudah tersimpan di repertoar ini.",
+ "Leads to a position another of your repertoires already covers.": "Menuju posisi yang sudah dicakup repertoarmu yang lain.",
+ "The engine rates it clearly worse than the best move (roughly a pawn).": "Mesin menilainya jelas lebih buruk dari langkah terbaik (sekitar satu bidak).",
+ "The move masters play most here.": "Langkah yang paling sering dimainkan master di sini.",
+ "The engine’s best move, or within about a tenth of a pawn of it.": "Langkah terbaik mesin, atau selisih sekitar sepersepuluh bidak darinya.",
+ "Nearly as good as the engine’s best, yet rarely played by masters.": "Hampir sebaik pilihan terbaik mesin, tetapi jarang dimainkan master.",
+ "The best score at your rating, over enough games that it isn’t luck, and the engine says it’s sound.": "Skor terbaik di ratingmu, dari cukup banyak permainan sehingga bukan kebetulan, dan mesin menilainya sehat.",
+ "Played most at your rating.": "Paling sering dimainkan di ratingmu.",
+ "Rare among masters, yet it scores clearly above 50% at your rating and holds up with the engine.": "Jarang di kalangan master, tetapi di ratingmu skornya jelas di atas 50% dan lolos pemeriksaan mesin.",
+ "Engine tags appear once the engine has searched deep enough. Masters: share of master games. Club: your side’s score at your rating.": "Label mesin muncul setelah mesin menghitung cukup dalam. Master: porsi dalam permainan master. Klub: skor sisimu di ratingmu."
 }

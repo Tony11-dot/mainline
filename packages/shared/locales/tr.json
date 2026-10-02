@@ -850,9 +850,20 @@
  "Goes with your repertoire": "Repertuvarınla uyumlu",
  "Guided": "Rehberli",
  "Hidden gem": "Gizli cevher",
- "Living dangerously": "Tehlikeli yaşam",
  "Pick a reply to prepare for it.": "Hazırlanmak için bir yanıt seç.",
  "Surprise weapon": "Sürpriz silah",
  "The arrow shows the top pick. Play it, drag another piece, or tap a row.": "Ok en iyi seçimi gösterir. Onu oyna, başka bir taşı sürükle ya da bir satıra dokun.",
- "Their move": "Rakibin hamlesi"
+ "Their move": "Rakibin hamlesi",
+ "Dubious": "Şüpheli",
+ "What the tags mean": "Etiketlerin anlamı",
+ "Already saved in this repertoire.": "Bu repertuvarda zaten kayıtlı.",
+ "Leads to a position another of your repertoires already covers.": "Başka bir repertuvarının zaten kapsadığı bir konuma götürür.",
+ "The engine rates it clearly worse than the best move (roughly a pawn).": "Motor onu en iyi hamleden açıkça daha kötü buluyor (yaklaşık bir piyon).",
+ "The move masters play most here.": "Ustaların burada en çok oynadığı hamle.",
+ "The engine’s best move, or within about a tenth of a pawn of it.": "Motorun en iyi hamlesi ya da ondan en fazla yaklaşık onda bir piyon geride.",
+ "Nearly as good as the engine’s best, yet rarely played by masters.": "Neredeyse motorun en iyisi kadar iyi, ama ustalar nadiren oynuyor.",
+ "The best score at your rating, over enough games that it isn’t luck, and the engine says it’s sound.": "Senin puanında en iyi skor; şans olmayacak kadar çok oyunda, ve motor da sağlam buluyor.",
+ "Played most at your rating.": "Senin puanında en çok oynanan.",
+ "Rare among masters, yet it scores clearly above 50% at your rating and holds up with the engine.": "Ustalar arasında nadir, ama senin puanında açıkça %50’nin üzerinde skor yapıyor ve motor kontrolünden geçiyor.",
+ "Engine tags appear once the engine has searched deep enough. Masters: share of master games. Club: your side’s score at your rating.": "Motor etiketleri, motor yeterince derin hesapladığında görünür. Ustalar: usta oyunlarındaki payı. Kulüp: senin puanında tarafının skoru."
 }

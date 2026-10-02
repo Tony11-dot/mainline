@@ -24,6 +24,8 @@ export class LichessError extends Error {
 
 const queue = new KeyedSerialQueue();
 const blockedUntil = new Map<string, number>();
+/** Requests actually sent to Lichess (cache hits never get here): lets background jobs keep a budget. */
+export const lichessStats = { calls: 0 };
 export const USER_AGENT = `Mainline/0.1 (+${env.PUBLIC_URL}; chess opening trainer)`;
 
 /**
@@ -40,6 +42,7 @@ export async function lichessFetch(url: string, opts: { token?: string; bucket?:
     if (w > 0) await sleep(w);
     const headers: Record<string, string> = { 'User-Agent': USER_AGENT, Accept: opts.accept ?? 'application/json' };
     if (opts.token) headers.Authorization = `Bearer ${opts.token}`;
+    lichessStats.calls++;
     const res = await fetch(url, { ...opts.init, headers: { ...headers, ...(opts.init?.headers as Record<string, string>) } });
     if (res.status === 429) {
       blockedUntil.set(key, Date.now() + 60_000);

@@ -1022,9 +1022,20 @@
  "Goes with your repertoire": "تتماشى مع ذخيرتك",
  "Guided": "موجَّه",
  "Hidden gem": "جوهرة مخفية",
- "Living dangerously": "العيش على الحافة",
  "Pick a reply to prepare for it.": "اختر ردًّا لتستعد له.",
  "Surprise weapon": "سلاح المفاجأة",
  "The arrow shows the top pick. Play it, drag another piece, or tap a row.": "يُظهر السهم الاختيار الأفضل. العبه، أو اسحب قطعة أخرى، أو اضغط على صف.",
- "Their move": "نقلتهم"
+ "Their move": "نقلتهم",
+ "Dubious": "مشكوك فيها",
+ "What the tags mean": "ماذا تعني الوسوم",
+ "Already saved in this repertoire.": "محفوظة بالفعل في هذه الذخيرة.",
+ "Leads to a position another of your repertoires already covers.": "تؤدي إلى وضعية تغطيها ذخيرة أخرى لديك بالفعل.",
+ "The engine rates it clearly worse than the best move (roughly a pawn).": "يقيّمها المحرك أسوأ بوضوح من أفضل نقلة (بنحو بيدق).",
+ "The move masters play most here.": "النقلة التي يلعبها الأساتذة أكثر من غيرها هنا.",
+ "The engine’s best move, or within about a tenth of a pawn of it.": "أفضل نقلة لدى المحرك، أو في حدود عُشر بيدق تقريبًا منها.",
+ "Nearly as good as the engine’s best, yet rarely played by masters.": "جيدة تقريبًا مثل أفضل نقلة لدى المحرك، لكن الأساتذة نادرًا ما يلعبونها.",
+ "The best score at your rating, over enough games that it isn’t luck, and the engine says it’s sound.": "أفضل نتيجة في مستوى تصنيفك، عبر عدد كافٍ من المباريات بحيث لا تكون حظًّا، والمحرك يؤكد أنها سليمة.",
+ "Played most at your rating.": "الأكثر لعبًا في مستوى تصنيفك.",
+ "Rare among masters, yet it scores clearly above 50% at your rating and holds up with the engine.": "نادرة بين الأساتذة، لكنها تحقق بوضوح أكثر من 50% في مستوى تصنيفك وتصمد أمام المحرك.",
+ "Engine tags appear once the engine has searched deep enough. Masters: share of master games. Club: your side’s score at your rating.": "تظهر وسوم المحرك بعد أن يبحث المحرك بعمق كافٍ. الأساتذة: النسبة في مباريات الأساتذة. الأندية: نتيجة طرفك في مستوى تصنيفك."
 }

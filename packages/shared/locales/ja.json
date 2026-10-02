@@ -807,9 +807,20 @@
  "Goes with your repertoire": "レパートリーと好相性",
  "Guided": "ガイド",
  "Hidden gem": "隠れた名手",
- "Living dangerously": "危ない橋",
  "Pick a reply to prepare for it.": "応手を選んで備えましょう。",
  "Surprise weapon": "奇襲兵器",
  "The arrow shows the top pick. Play it, drag another piece, or tap a row.": "矢印が一番のおすすめです。そのまま指すか、別の駒をドラッグするか、行をタップしてください。",
- "Their move": "相手の手"
+ "Their move": "相手の手",
+ "Dubious": "疑問手",
+ "What the tags mean": "タグの意味",
+ "Already saved in this repertoire.": "このレパートリーに保存済みです。",
+ "Leads to a position another of your repertoires already covers.": "ほかのレパートリーですでにカバーしている局面につながります。",
+ "The engine rates it clearly worse than the best move (roughly a pawn).": "エンジンの評価では最善手より明らかに悪い手です（ポーン約1個分）。",
+ "The move masters play most here.": "この局面でマスターが最も多く指す手です。",
+ "The engine’s best move, or within about a tenth of a pawn of it.": "エンジンの最善手、またはその差がポーン約0.1個分以内の手です。",
+ "Nearly as good as the engine’s best, yet rarely played by masters.": "エンジンの最善手とほぼ同等なのに、マスターはめったに指さない手です。",
+ "The best score at your rating, over enough games that it isn’t luck, and the engine says it’s sound.": "あなたのレーティングで最高のスコア。偶然とは言えない対局数があり、エンジンも健全と判断しています。",
+ "Played most at your rating.": "あなたのレーティングで最も多く指される手です。",
+ "Rare among masters, yet it scores clearly above 50% at your rating and holds up with the engine.": "マスターには珍しい手ですが、あなたのレーティングでは明らかに50%を超えるスコアを出し、エンジンの検証にも耐えます。",
+ "Engine tags appear once the engine has searched deep enough. Masters: share of master games. Club: your side’s score at your rating.": "エンジンのタグは、エンジンが十分な深さまで読んだ後に表示されます。マスター：マスター対局での割合。クラブ：あなたのレーティングでの自分側のスコア。"
 }

@@ -850,9 +850,20 @@
  "Goes with your repertoire": "Si sposa con il tuo repertorio",
  "Guided": "Guidato",
  "Hidden gem": "Gemma nascosta",
- "Living dangerously": "Vivere pericolosamente",
  "Pick a reply to prepare for it.": "Scegli una risposta per prepararti.",
  "Surprise weapon": "Arma a sorpresa",
  "The arrow shows the top pick. Play it, drag another piece, or tap a row.": "La freccia mostra la scelta migliore. Giocala, trascina un altro pezzo o tocca una riga.",
- "Their move": "La sua mossa"
+ "Their move": "La sua mossa",
+ "Dubious": "Dubbia",
+ "What the tags mean": "Cosa significano le etichette",
+ "Already saved in this repertoire.": "Già salvata in questo repertorio.",
+ "Leads to a position another of your repertoires already covers.": "Porta a una posizione già coperta da un altro tuo repertorio.",
+ "The engine rates it clearly worse than the best move (roughly a pawn).": "Il motore la valuta nettamente peggiore della mossa migliore (circa un pedone).",
+ "The move masters play most here.": "La mossa che i maestri giocano di più qui.",
+ "The engine’s best move, or within about a tenth of a pawn of it.": "La mossa migliore del motore, o entro circa un decimo di pedone da essa.",
+ "Nearly as good as the engine’s best, yet rarely played by masters.": "Quasi buona quanto la migliore del motore, ma giocata di rado dai maestri.",
+ "The best score at your rating, over enough games that it isn’t luck, and the engine says it’s sound.": "Il punteggio migliore al tuo livello, su abbastanza partite da non essere fortuna, e il motore la ritiene solida.",
+ "Played most at your rating.": "La più giocata al tuo livello.",
+ "Rare among masters, yet it scores clearly above 50% at your rating and holds up with the engine.": "Rara tra i maestri, ma al tuo livello ottiene nettamente più del 50% e regge al vaglio del motore.",
+ "Engine tags appear once the engine has searched deep enough. Masters: share of master games. Club: your side’s score at your rating.": "Le etichette del motore compaiono quando il motore ha calcolato abbastanza in profondità. Maestri: quota di partite dei maestri. Club: il punteggio del tuo lato al tuo livello."
 }

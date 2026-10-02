@@ -34,6 +34,13 @@ export async function fetchExplorer(source: ExplorerSource, fen: string, rating:
   }
 }
 
+/** Stores explorer data that arrived another way (the guide bundle), as if fetched. */
+export function primeExplorer(source: ExplorerSource, fen: string, rating: number, speeds: Speed[], data: ExplorerData) {
+  const key = explorerKey(source, fen, rating, speeds);
+  mem.set(key, data);
+  void db().then((d) => d.put('explorer', { key, value: data, at: Date.now() })).catch(() => undefined);
+}
+
 /** Peek without network (for offline training / instant paint). */
 export async function cachedExplorer(source: ExplorerSource, fen: string, rating: number, speeds: Speed[]) {
   const key = explorerKey(source, fen, rating, speeds);

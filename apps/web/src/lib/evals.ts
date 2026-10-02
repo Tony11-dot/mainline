@@ -26,3 +26,15 @@ export function rememberLocalEval(fen: string, ev: EvalData) {
   // Share deep local evals with everyone (server validates the PV and keeps the deepest).
   if (ev.depth >= 18) void api('/api/eval', { method: 'POST', json: { fen, depth: ev.depth, lines: ev.lines } }).catch(() => undefined);
 }
+
+/** Stores an eval that arrived another way (the guide bundle), as if fetched. null = not in the cloud. */
+export function primeEval(epd: string, ev: EvalData | null) {
+  mem.set(epd, ev);
+  if (ev) void db().then((d) => d.put('evals', { key: epd, value: ev, at: Date.now() })).catch(() => undefined);
+}
+
+/** A known eval without network: memory, then IndexedDB. undefined = unknown, null = known miss. */
+export async function cachedEval(epd: string): Promise<EvalData | null | undefined> {
+  if (mem.has(epd)) return mem.get(epd);
+  return (await db().then((d) => d.get('evals', epd)).catch(() => undefined))?.value;
+}

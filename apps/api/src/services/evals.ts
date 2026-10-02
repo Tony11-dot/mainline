@@ -5,6 +5,7 @@ import { lichessJson } from '../lib/lichess';
 import { Lru } from '../lib/lru';
 
 const hot = new Lru<EvalData | null>(20000, 24 * 3600_000);
+const MISS_TTL = 30 * 86_400_000;
 
 interface CloudEval {
   fen: string;
@@ -21,7 +22,13 @@ export async function getEval(fen: string, multiPv = 3): Promise<EvalData | null
   const db = getDb();
   if (db) {
     const row = await db.query.engineEvals.findFirst({ where: eq(schema.engineEvals.epd, epd) });
-    if (row) {
+    // A remembered miss (depth 0, no lines): Lichess had no cloud eval; ask again only after a while.
+    if (row && row.depth === 0) {
+      if (row.updatedAt.getTime() > Date.now() - MISS_TTL) {
+        hot.set(epd, null, 6 * 3600_000);
+        return null;
+      }
+    } else if (row) {
       const data: EvalData = { epd, depth: row.depth, lines: row.multipvJson as EvalLine[], source: row.source };
       // Local evals below depth 30 might be superseded by the cloud; cloud hits are final.
       if (row.source === 'cloud' || row.depth >= 30) {
@@ -35,6 +42,14 @@ export async function getEval(fen: string, multiPv = 3): Promise<EvalData | null
   if (!cloud) {
     hot.set(epd, null, 6 * 3600_000);
     const row = db ? await db.query.engineEvals.findFirst({ where: eq(schema.engineEvals.epd, epd) }) : undefined;
+    if (db && (!row || row.depth === 0)) {
+      // Remember the miss, so background warm-ups don't ask Lichess about it every night.
+      await db
+        .insert(schema.engineEvals)
+        .values({ epd, depth: 0, multipvJson: [], source: 'cloud', updatedAt: new Date() })
+        .onConflictDoUpdate({ target: schema.engineEvals.epd, set: { updatedAt: new Date() }, setWhere: sqlDeeper(1) });
+      return null;
+    }
     return row ? { epd, depth: row.depth, lines: row.multipvJson as EvalLine[], source: row.source } : null;
   }
   const lines: EvalLine[] = cloud.pvs.map((pv) => ({

@@ -1,8 +1,7 @@
-import { createElement, useEffect, useState } from 'react';
+import { createElement, useEffect, useState, type ReactNode } from 'react';
+import { CircleHelp } from 'lucide-react';
 import { formatEval, positionFromFen, uciToSan, type ExplorerData, type GuideCandidate, type GuideTag } from '@mainline/shared';
-import { fetchExplorer } from '../../lib/explorer';
-import { usePrefs } from '../../lib/prefs';
-import { fmtPercent, msg, t, tn } from '../../lib/i18n';
+import { fmtPercent, intlLocale, msg, t, tn } from '../../lib/i18n';
 import { Skeleton, Spinner } from '../../ui/primitives';
 
 export interface ExplorerPair {
@@ -11,33 +10,23 @@ export interface ExplorerPair {
   loading: boolean;
 }
 
-/** Lichess (your rating band) and masters numbers for a position. */
-export function useExplorerPair(fen: string, enabled = true): ExplorerPair {
-  const { rating, speeds } = usePrefs();
-  const [ex, setEx] = useState<ExplorerPair>({ loading: true });
-  useEffect(() => {
-    if (!enabled) return;
-    const ctrl = new AbortController();
-    setEx({ loading: true });
-    void Promise.allSettled([fetchExplorer('lichess', fen, rating, speeds, ctrl.signal), fetchExplorer('masters', fen, rating, speeds, ctrl.signal)]).then(([l, m]) => {
-      if (ctrl.signal.aborted) return;
-      setEx({ lichess: l.status === 'fulfilled' ? l.value : undefined, masters: m.status === 'fulfilled' ? m.value : undefined, loading: false });
-    });
-    return () => ctrl.abort();
-  }, [fen, rating, speeds, enabled]);
-  return ex;
+export interface ExplorerPair {
+  lichess?: ExplorerData;
+  masters?: ExplorerData;
+  loading: boolean;
 }
 
-const TAGS: Record<GuideTag, { icon: string; label: string; tone: string }> = {
-  yours: { icon: '✅', label: msg('In your repertoire'), tone: 'bg-brand-soft text-brand-ink' },
-  fits: { icon: '🧩', label: msg('Goes with your repertoire'), tone: 'bg-brand-soft text-brand-ink' },
-  book: { icon: '📖', label: msg('By the book'), tone: 'bg-surface-3 text-ink-2' },
-  engine: { icon: '🤖', label: msg('Engine’s pick'), tone: 'bg-good-soft text-good' },
-  gem: { icon: '💎', label: msg('Hidden gem'), tone: 'bg-[oklch(0.94_0.04_300)] text-[oklch(0.42_0.14_300)] dark:bg-[oklch(0.32_0.07_300)] dark:text-[oklch(0.85_0.08_300)]' },
-  club: { icon: '🏆', label: msg('Club crusher'), tone: 'bg-warn-soft text-[oklch(0.45_0.1_70)] dark:text-warn' },
-  crowd: { icon: '🍿', label: msg('Crowd favourite'), tone: 'bg-surface-3 text-ink-2' },
-  surprise: { icon: '🎁', label: msg('Surprise weapon'), tone: 'bg-warn-soft text-[oklch(0.45_0.1_70)] dark:text-warn' },
-  risky: { icon: '🎲', label: msg('Living dangerously'), tone: 'bg-bad-soft text-bad' },
+/** Each tag, and the exact rule behind it (shown in the panel's "What the tags mean"). */
+const TAGS: Record<GuideTag, { icon: string; label: string; rule: string; tone: string }> = {
+  yours: { icon: '✅', label: msg('In your repertoire'), rule: msg('Already saved in this repertoire.'), tone: 'bg-brand-soft text-brand-ink' },
+  fits: { icon: '🧩', label: msg('Goes with your repertoire'), rule: msg('Leads to a position another of your repertoires already covers.'), tone: 'bg-brand-soft text-brand-ink' },
+  dubious: { icon: '🤨', label: msg('Dubious'), rule: msg('The engine rates it clearly worse than the best move (roughly a pawn).'), tone: 'bg-bad-soft text-bad' },
+  book: { icon: '📖', label: msg('By the book'), rule: msg('The move masters play most here.'), tone: 'bg-surface-3 text-ink-2' },
+  engine: { icon: '🤖', label: msg('Engine’s pick'), rule: msg('The engine’s best move, or within about a tenth of a pawn of it.'), tone: 'bg-good-soft text-good' },
+  gem: { icon: '💎', label: msg('Hidden gem'), rule: msg('Nearly as good as the engine’s best, yet rarely played by masters.'), tone: 'bg-[oklch(0.94_0.04_300)] text-[oklch(0.42_0.14_300)] dark:bg-[oklch(0.32_0.07_300)] dark:text-[oklch(0.85_0.08_300)]' },
+  club: { icon: '🏆', label: msg('Club crusher'), rule: msg('The best score at your rating, over enough games that it isn’t luck, and the engine says it’s sound.'), tone: 'bg-warn-soft text-[oklch(0.45_0.1_70)] dark:text-warn' },
+  crowd: { icon: '🍿', label: msg('Crowd favourite'), rule: msg('Played most at your rating.'), tone: 'bg-surface-3 text-ink-2' },
+  surprise: { icon: '🎁', label: msg('Surprise weapon'), rule: msg('Rare among masters, yet it scores clearly above 50% at your rating and holds up with the engine.'), tone: 'bg-warn-soft text-[oklch(0.45_0.1_70)] dark:text-warn' },
 };
 
 /** The guided builder's move picker: the top candidates for your move, or what they're likely to reply. */
@@ -56,6 +45,7 @@ export function GuidePanel(props: {
   const { fen, own, candidates, explorer, searching, replying, onPlay, onHover } = props;
   const pos = positionFromFen(fen);
   const [all, setAll] = useState(false);
+  const [legend, setLegend] = useState(false);
   useEffect(() => setAll(false), [fen]);
 
   if (!own) {
@@ -89,7 +79,17 @@ export function GuidePanel(props: {
   const shown = all ? candidates : candidates.slice(0, 5);
   return (
     <section className="flex flex-col" aria-label={t('Your move')}>
-      <Header title={t('Your move')} hint={candidates.length ? t('The arrow shows the top pick. Play it, drag another piece, or tap a row.') : undefined} busy={searching || explorer.loading} />
+      <Header
+        title={t('Your move')}
+        hint={candidates.length ? t('The arrow shows the top pick. Play it, drag another piece, or tap a row.') : undefined}
+        busy={searching || explorer.loading}
+        action={
+          <button type="button" onClick={() => setLegend((v) => !v)} aria-expanded={legend} aria-label={t('What the tags mean')} title={t('What the tags mean')} className="-me-1 ms-auto flex size-8 items-center justify-center rounded-full text-ink-3 hover:bg-surface-3 hover:text-ink">
+            <CircleHelp size={17} aria-hidden />
+          </button>
+        }
+      />
+      {legend && <Legend />}
       {candidates.length === 0 ? (
         explorer.loading || searching ? <Rows /> : <p className="px-4 pb-4 text-sm text-ink-2">{t('Not enough data yet')} — {t('Play your first move on the board.')}</p>
       ) : (
@@ -114,7 +114,7 @@ export function GuidePanel(props: {
                   </div>
                   <div className="tnum mt-0.5 flex flex-wrap gap-x-3 text-xs text-ink-2">
                     <span title={t('Share of master games')}>
-                      {t('Masters')} {c.masterShare === undefined ? '—' : fmtPercent(c.masterShare)}
+                      {t('Masters')} {c.masterShare === undefined ? '—' : fmtShare(c.masterShare)}
                     </span>
                     <span title={t('Your side’s score at your rating')}>
                       {t('Club')} {c.practical === undefined ? '—' : fmtPercent(c.practical)}
@@ -141,15 +141,35 @@ export function GuidePanel(props: {
   );
 }
 
-function Header({ title, hint, busy }: { title: string; hint?: string; busy: boolean }) {
+function Header({ title, hint, busy, action }: { title: string; hint?: string; busy: boolean; action?: ReactNode }) {
   return (
     <header className="px-3 pt-3 pb-2">
       <h2 className="flex items-center gap-2 text-sm font-bold">
         {title}
         {busy && <Spinner size={12} />}
+        {action}
       </h2>
       {hint && <p className="mt-0.5 text-xs text-ink-3">{hint}</p>}
     </header>
+  );
+}
+
+function Legend() {
+  return (
+    <div className="mx-3 mb-3 rounded-[var(--radius-m)] bg-surface-2 p-3">
+      <h3 className="text-xs font-bold">{t('What the tags mean')}</h3>
+      <dl className="mt-2 flex flex-col gap-2">
+        {(Object.keys(TAGS) as GuideTag[]).map((g) => (
+          <div key={g} className="flex flex-col items-start gap-1">
+            <dt>
+              <Tag tag={g} />
+            </dt>
+            <dd className="text-xs text-ink-2">{t(TAGS[g].rule)}</dd>
+          </div>
+        ))}
+      </dl>
+      <p className="mt-3 text-xs text-ink-3">{t('Engine tags appear once the engine has searched deep enough. Masters: share of master games. Club: your side’s score at your rating.')}</p>
+    </div>
   );
 }
 
@@ -166,7 +186,7 @@ function Rows() {
 export function Tag({ tag }: { tag: GuideTag }) {
   const d = TAGS[tag];
   return (
-    <span className={`inline-flex h-6 items-center gap-1 rounded-full px-2 text-xs font-semibold whitespace-nowrap ${d.tone}`}>
+    <span className={`inline-flex h-6 items-center gap-1 rounded-full px-2 text-xs font-semibold whitespace-nowrap ${d.tone}`} title={t(d.rule)}>
       <span aria-hidden>{d.icon}</span>
       {t(d.label)}
     </span>
@@ -179,5 +199,8 @@ function PieceIcon({ fen, uci }: { fen: string; uci: string }) {
   if (!piece) return <span className="size-9 shrink-0" />;
   return <span className="cg-wrap guide-piece size-9 shrink-0" aria-hidden>{createElement('piece', { className: `${piece.color} ${piece.role}` })}</span>;
 }
+
+/** Shares under 1% keep one significant digit, so a rare move never reads as "0%". */
+const fmtShare = (x: number) => (x > 0 && x < 0.01 ? new Intl.NumberFormat(intlLocale(), { style: 'percent', maximumSignificantDigits: 1 }).format(x) : fmtPercent(x));
 
 const squareIndex = (sq: string) => (sq.charCodeAt(0) - 97) + 8 * (Number(sq[1]) - 1);

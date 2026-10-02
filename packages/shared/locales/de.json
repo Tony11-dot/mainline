@@ -850,9 +850,20 @@
  "Goes with your repertoire": "Passt zu deinem Repertoire",
  "Guided": "Geführt",
  "Hidden gem": "Verstecktes Juwel",
- "Living dangerously": "Am Abgrund",
  "Pick a reply to prepare for it.": "Wähle eine Antwort, um dich darauf vorzubereiten.",
  "Surprise weapon": "Überraschungswaffe",
  "The arrow shows the top pick. Play it, drag another piece, or tap a row.": "Der Pfeil zeigt die beste Wahl. Spiel sie, zieh eine andere Figur oder tippe auf eine Zeile.",
- "Their move": "Ihr Zug"
+ "Their move": "Ihr Zug",
+ "Dubious": "Zweifelhaft",
+ "What the tags mean": "Was die Etiketten bedeuten",
+ "Already saved in this repertoire.": "Bereits in diesem Repertoire gespeichert.",
+ "Leads to a position another of your repertoires already covers.": "Führt zu einer Stellung, die ein anderes deiner Repertoires schon abdeckt.",
+ "The engine rates it clearly worse than the best move (roughly a pawn).": "Die Engine bewertet ihn klar schlechter als den besten Zug (etwa ein Bauer).",
+ "The move masters play most here.": "Der Zug, den Meister hier am häufigsten spielen.",
+ "The engine’s best move, or within about a tenth of a pawn of it.": "Der beste Zug der Engine oder höchstens etwa ein Zehntel Bauer schlechter.",
+ "Nearly as good as the engine’s best, yet rarely played by masters.": "Fast so gut wie der beste Zug der Engine, aber selten von Meistern gespielt.",
+ "The best score at your rating, over enough games that it isn’t luck, and the engine says it’s sound.": "Die beste Punktzahl auf deinem Niveau, über genug Partien, dass es kein Glück ist, und die Engine hält ihn für solide.",
+ "Played most at your rating.": "Auf deinem Niveau am häufigsten gespielt.",
+ "Rare among masters, yet it scores clearly above 50% at your rating and holds up with the engine.": "Selten bei Meistern, erzielt auf deinem Niveau aber klar über 50 % und hält der Engine stand.",
+ "Engine tags appear once the engine has searched deep enough. Masters: share of master games. Club: your side’s score at your rating.": "Engine-Etiketten erscheinen, sobald die Engine tief genug gerechnet hat. Meister: Anteil an Meisterpartien. Verein: Punktzahl deiner Seite auf deinem Niveau."
 }

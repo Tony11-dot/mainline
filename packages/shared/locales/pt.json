@@ -850,9 +850,20 @@
  "Goes with your repertoire": "Combina com seu repertório",
  "Guided": "Guiado",
  "Hidden gem": "Joia escondida",
- "Living dangerously": "Vivendo perigosamente",
  "Pick a reply to prepare for it.": "Escolha uma resposta para se preparar para ela.",
  "Surprise weapon": "Arma surpresa",
  "The arrow shows the top pick. Play it, drag another piece, or tap a row.": "A seta mostra a melhor opção. Jogue-a, arraste outra peça ou toque em uma linha.",
- "Their move": "Lance deles"
+ "Their move": "Lance deles",
+ "Dubious": "Duvidoso",
+ "What the tags mean": "O que as etiquetas significam",
+ "Already saved in this repertoire.": "Já está salvo neste repertório.",
+ "Leads to a position another of your repertoires already covers.": "Leva a uma posição que outro repertório seu já cobre.",
+ "The engine rates it clearly worse than the best move (roughly a pawn).": "O motor o avalia como claramente pior que o melhor lance (cerca de um peão).",
+ "The move masters play most here.": "O lance que os mestres mais jogam aqui.",
+ "The engine’s best move, or within about a tenth of a pawn of it.": "O melhor lance do motor, ou a cerca de um décimo de peão dele.",
+ "Nearly as good as the engine’s best, yet rarely played by masters.": "Quase tão bom quanto o melhor do motor, mas raramente jogado por mestres.",
+ "The best score at your rating, over enough games that it isn’t luck, and the engine says it’s sound.": "A melhor pontuação no seu rating, em partidas suficientes para não ser sorte, e o motor confirma que é sólido.",
+ "Played most at your rating.": "O mais jogado no seu rating.",
+ "Rare among masters, yet it scores clearly above 50% at your rating and holds up with the engine.": "Raro entre mestres, mas pontua claramente acima de 50% no seu rating e se sustenta na análise do motor.",
+ "Engine tags appear once the engine has searched deep enough. Masters: share of master games. Club: your side’s score at your rating.": "As etiquetas do motor aparecem quando o motor calculou com profundidade suficiente. Mestres: participação em partidas de mestres. Clube: pontuação do seu lado no seu rating."
 }

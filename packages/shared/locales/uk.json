@@ -936,9 +936,20 @@
  "Goes with your repertoire": "Пасує до вашого репертуару",
  "Guided": "З підказками",
  "Hidden gem": "Прихована перлина",
- "Living dangerously": "Життя на межі",
  "Pick a reply to prepare for it.": "Виберіть відповідь, щоб підготуватися до неї.",
  "Surprise weapon": "Зброя-сюрприз",
  "The arrow shows the top pick. Play it, drag another piece, or tap a row.": "Стрілка показує найкращий варіант. Зіграйте його, перетягніть іншу фігуру або торкніться рядка.",
- "Their move": "Хід суперника"
+ "Their move": "Хід суперника",
+ "Dubious": "Сумнівний",
+ "What the tags mean": "Що означають мітки",
+ "Already saved in this repertoire.": "Уже збережено в цьому репертуарі.",
+ "Leads to a position another of your repertoires already covers.": "Веде до позиції, яку вже охоплює інший ваш репертуар.",
+ "The engine rates it clearly worse than the best move (roughly a pawn).": "Рушій оцінює його явно гірше за найкращий хід (приблизно на пішака).",
+ "The move masters play most here.": "Хід, який майстри найчастіше грають тут.",
+ "The engine’s best move, or within about a tenth of a pawn of it.": "Найкращий хід рушія або гірший за нього не більше ніж на десяту пішака.",
+ "Nearly as good as the engine’s best, yet rarely played by masters.": "Майже такий самий добрий, як найкращий хід рушія, але майстри грають його рідко.",
+ "The best score at your rating, over enough games that it isn’t luck, and the engine says it’s sound.": "Найкращий результат на вашому рейтингу на достатній кількості партій, щоб це не було везінням, і рушій вважає хід коректним.",
+ "Played most at your rating.": "Найчастіший хід на вашому рейтингу.",
+ "Rare among masters, yet it scores clearly above 50% at your rating and holds up with the engine.": "Рідкісний у майстрів, але на вашому рейтингу набирає помітно більше 50% і витримує перевірку рушієм.",
+ "Engine tags appear once the engine has searched deep enough. Masters: share of master games. Club: your side’s score at your rating.": "Мітки рушія з’являються, коли рушій порахував достатньо глибоко. Майстри: частка партій майстрів. Клубний: результат вашої сторони на вашому рейтингу."
 }

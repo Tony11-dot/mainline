@@ -807,9 +807,20 @@
  "Goes with your repertoire": "与你的开局库相配",
  "Guided": "引导",
  "Hidden gem": "隐藏宝石",
- "Living dangerously": "刀尖起舞",
  "Pick a reply to prepare for it.": "选一个应着来做准备。",
  "Surprise weapon": "奇袭武器",
  "The arrow shows the top pick. Play it, drag another piece, or tap a row.": "箭头指示首选着法。直接走它、拖动其他棋子，或点按一行。",
- "Their move": "对方走棋"
+ "Their move": "对方走棋",
+ "Dubious": "可疑着法",
+ "What the tags mean": "标签的含义",
+ "Already saved in this repertoire.": "已保存在这个开局库中。",
+ "Leads to a position another of your repertoires already covers.": "通向你另一个开局库已覆盖的局面。",
+ "The engine rates it clearly worse than the best move (roughly a pawn).": "引擎认为它明显比最佳着法差（约一个兵）。",
+ "The move masters play most here.": "大师在这里下得最多的着法。",
+ "The engine’s best move, or within about a tenth of a pawn of it.": "引擎的最佳着法，或与之相差约十分之一个兵以内。",
+ "Nearly as good as the engine’s best, yet rarely played by masters.": "几乎和引擎的最佳着法一样好，但大师很少下。",
+ "The best score at your rating, over enough games that it isn’t luck, and the engine says it’s sound.": "在你的等级分下得分最高，对局数量足以排除运气，而且引擎认为它站得住。",
+ "Played most at your rating.": "在你的等级分下最常下的着法。",
+ "Rare among masters, yet it scores clearly above 50% at your rating and holds up with the engine.": "在大师中很少见，但在你的等级分下得分明显超过 50%，并经得起引擎检验。",
+ "Engine tags appear once the engine has searched deep enough. Masters: share of master games. Club: your side’s score at your rating.": "引擎标签会在引擎计算到足够深度后出现。大师：在大师对局中的占比。俱乐部：在你的等级分下你这一方的得分。"
 }

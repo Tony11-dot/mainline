@@ -50,3 +50,9 @@ export function openingCount() {
   load();
   return all.length;
 }
+
+/** Every named opening (shortest lines first). */
+export function allOpenings(): readonly Opening[] {
+  load();
+  return all;
+}

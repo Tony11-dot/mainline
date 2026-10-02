@@ -3,6 +3,7 @@ import { z } from 'zod';
 import { evalSubmitSchema, explorerQuerySchema, positionFromFen } from '@mainline/shared';
 import { getExplorer } from '../services/explorer';
 import { getEval, submitLocalEval } from '../services/evals';
+import { getGuide } from '../services/guide';
 import { openingAt, searchOpenings } from '../services/openings';
 import { currentUser, explorerToken } from '../lib/session';
 
@@ -26,6 +27,20 @@ export async function chessRoutes(app: FastifyInstance) {
         ratings: q.ratings ? q.ratings.split(',').filter(Boolean).map(Number) : undefined,
         speeds: q.speeds ? q.speeds.split(',').filter(Boolean) : undefined,
       },
+      explorerToken(user),
+    );
+    reply.header('Cache-Control', 'private, max-age=3600');
+    return data;
+  });
+
+  app.get('/api/guide', async (req, reply) => {
+    const q = z
+      .object({ fen: z.string().min(10).max(120), ratings: z.string().regex(/^[0-9,]*$/).optional(), speeds: z.string().regex(/^[a-z,]*$/).optional(), evals: z.enum(['0', '1']).default('1') })
+      .parse(req.query);
+    assertFen(q.fen);
+    const user = await currentUser(req);
+    const data = await getGuide(
+      { fen: q.fen, ratings: q.ratings ? q.ratings.split(',').filter(Boolean).map(Number) : undefined, speeds: q.speeds ? q.speeds.split(',').filter(Boolean) : undefined, evals: q.evals === '1' },
       explorerToken(user),
     );
     reply.header('Cache-Control', 'private, max-age=3600');

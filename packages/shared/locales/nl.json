@@ -850,9 +850,20 @@
  "Goes with your repertoire": "Past bij je repertoire",
  "Guided": "Begeleid",
  "Hidden gem": "Verborgen parel",
- "Living dangerously": "Gevaarlijk leven",
  "Pick a reply to prepare for it.": "Kies een antwoord om je erop voor te bereiden.",
  "Surprise weapon": "Verrassingswapen",
  "The arrow shows the top pick. Play it, drag another piece, or tap a row.": "De pijl toont de beste keuze. Speel die, sleep een ander stuk of tik op een rij.",
- "Their move": "Hun zet"
+ "Their move": "Hun zet",
+ "Dubious": "Twijfelachtig",
+ "What the tags mean": "Wat de labels betekenen",
+ "Already saved in this repertoire.": "Al opgeslagen in dit repertoire.",
+ "Leads to a position another of your repertoires already covers.": "Leidt naar een stelling die een ander repertoire van je al dekt.",
+ "The engine rates it clearly worse than the best move (roughly a pawn).": "De engine vindt hem duidelijk slechter dan de beste zet (ongeveer een pion).",
+ "The move masters play most here.": "De zet die meesters hier het vaakst spelen.",
+ "The engine’s best move, or within about a tenth of a pawn of it.": "De beste zet van de engine, of hooguit ongeveer een tiende pion slechter.",
+ "Nearly as good as the engine’s best, yet rarely played by masters.": "Bijna zo goed als de beste zet van de engine, maar zelden gespeeld door meesters.",
+ "The best score at your rating, over enough games that it isn’t luck, and the engine says it’s sound.": "De beste score op jouw rating, over genoeg partijen om geen geluk te zijn, en de engine vindt hem degelijk.",
+ "Played most at your rating.": "Het meest gespeeld op jouw rating.",
+ "Rare among masters, yet it scores clearly above 50% at your rating and holds up with the engine.": "Zeldzaam bij meesters, maar scoort op jouw rating duidelijk boven 50% en houdt stand bij de engine.",
+ "Engine tags appear once the engine has searched deep enough. Masters: share of master games. Club: your side’s score at your rating.": "Engine-labels verschijnen zodra de engine diep genoeg heeft gerekend. Meesters: aandeel in meesterpartijen. Club: score van jouw kant op jouw rating."
 }

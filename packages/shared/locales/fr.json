@@ -850,9 +850,20 @@
  "Goes with your repertoire": "Va avec ton répertoire",
  "Guided": "Guidé",
  "Hidden gem": "Pépite cachée",
- "Living dangerously": "Vivre dangereusement",
  "Pick a reply to prepare for it.": "Choisis une réponse pour t’y préparer.",
  "Surprise weapon": "Arme surprise",
  "The arrow shows the top pick. Play it, drag another piece, or tap a row.": "La flèche montre le meilleur choix. Joue-le, fais glisser une autre pièce ou touche une ligne.",
- "Their move": "Leur coup"
+ "Their move": "Leur coup",
+ "Dubious": "Douteux",
+ "What the tags mean": "Ce que veulent dire les étiquettes",
+ "Already saved in this repertoire.": "Déjà enregistré dans ce répertoire.",
+ "Leads to a position another of your repertoires already covers.": "Mène à une position qu’un autre de vos répertoires couvre déjà.",
+ "The engine rates it clearly worse than the best move (roughly a pawn).": "Le moteur le juge nettement moins bon que le meilleur coup (environ un pion).",
+ "The move masters play most here.": "Le coup que les maîtres jouent le plus ici.",
+ "The engine’s best move, or within about a tenth of a pawn of it.": "Le meilleur coup du moteur, ou à environ un dixième de pion près.",
+ "Nearly as good as the engine’s best, yet rarely played by masters.": "Presque aussi bon que le meilleur coup du moteur, mais rarement joué par les maîtres.",
+ "The best score at your rating, over enough games that it isn’t luck, and the engine says it’s sound.": "Le meilleur score à votre niveau, sur assez de parties pour que ce ne soit pas de la chance, et le moteur le juge solide.",
+ "Played most at your rating.": "Le plus joué à votre niveau.",
+ "Rare among masters, yet it scores clearly above 50% at your rating and holds up with the engine.": "Rare chez les maîtres, mais il marque nettement plus de 50 % à votre niveau et tient face au moteur.",
+ "Engine tags appear once the engine has searched deep enough. Masters: share of master games. Club: your side’s score at your rating.": "Les étiquettes du moteur apparaissent une fois que le moteur a calculé assez profondément. Maîtres : part dans les parties de maîtres. Club : score de votre camp à votre niveau."
 }

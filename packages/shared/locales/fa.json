@@ -850,9 +850,20 @@
  "Goes with your repertoire": "با رپرتوار شما جور است",
  "Guided": "هدایت‌شده",
  "Hidden gem": "گوهر پنهان",
- "Living dangerously": "زندگی روی لبه",
  "Pick a reply to prepare for it.": "یک پاسخ را انتخاب کنید تا برایش آماده شوید.",
  "Surprise weapon": "سلاح غافلگیری",
  "The arrow shows the top pick. Play it, drag another piece, or tap a row.": "پیکان بهترین انتخاب را نشان می‌دهد. آن را بازی کنید، مهرهٔ دیگری را بکشید یا روی یک ردیف بزنید.",
- "Their move": "حرکت حریف"
+ "Their move": "حرکت حریف",
+ "Dubious": "مشکوک",
+ "What the tags mean": "معنی برچسب‌ها",
+ "Already saved in this repertoire.": "از قبل در این رپرتوار ذخیره شده است.",
+ "Leads to a position another of your repertoires already covers.": "به وضعیتی می‌رسد که رپرتوار دیگری از شما آن را پوشش می‌دهد.",
+ "The engine rates it clearly worse than the best move (roughly a pawn).": "موتور آن را به‌وضوح بدتر از بهترین حرکت می‌داند (حدود یک پیاده).",
+ "The move masters play most here.": "حرکتی که استادان اینجا بیش از همه بازی می‌کنند.",
+ "The engine’s best move, or within about a tenth of a pawn of it.": "بهترین حرکت موتور، یا در فاصلهٔ حدود یک‌دهم پیاده از آن.",
+ "Nearly as good as the engine’s best, yet rarely played by masters.": "تقریباً به خوبیِ بهترین حرکت موتور، اما استادان به‌ندرت آن را بازی می‌کنند.",
+ "The best score at your rating, over enough games that it isn’t luck, and the engine says it’s sound.": "بهترین امتیاز در ریتینگ شما، در تعداد بازی کافی که شانسی نباشد، و موتور هم آن را سالم می‌داند.",
+ "Played most at your rating.": "پرتکرارترین حرکت در ریتینگ شما.",
+ "Rare among masters, yet it scores clearly above 50% at your rating and holds up with the engine.": "میان استادان نادر است، اما در ریتینگ شما به‌وضوح بیش از ۵۰٪ امتیاز می‌گیرد و از نظر موتور هم قابل‌قبول است.",
+ "Engine tags appear once the engine has searched deep enough. Masters: share of master games. Club: your side’s score at your rating.": "برچسب‌های موتور وقتی ظاهر می‌شوند که موتور به عمق کافی رسیده باشد. استادان: سهم در بازی‌های استادان. باشگاهی: امتیاز طرف شما در ریتینگ شما."
 }

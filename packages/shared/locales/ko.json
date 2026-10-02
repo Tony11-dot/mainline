@@ -807,9 +807,20 @@
  "Goes with your repertoire": "내 레퍼토리와 찰떡",
  "Guided": "가이드",
  "Hidden gem": "숨은 보석",
- "Living dangerously": "아슬아슬",
  "Pick a reply to prepare for it.": "대비할 응수를 고르세요.",
  "Surprise weapon": "기습 무기",
  "The arrow shows the top pick. Play it, drag another piece, or tap a row.": "화살표가 최고의 수를 보여 줘요. 그대로 두거나, 다른 기물을 끌거나, 행을 탭하세요.",
- "Their move": "상대 차례"
+ "Their move": "상대 차례",
+ "Dubious": "의심스러운 수",
+ "What the tags mean": "태그의 의미",
+ "Already saved in this repertoire.": "이 레퍼토리에 이미 저장되어 있어요.",
+ "Leads to a position another of your repertoires already covers.": "다른 레퍼토리에서 이미 다루는 포지션으로 이어져요.",
+ "The engine rates it clearly worse than the best move (roughly a pawn).": "엔진은 최선의 수보다 확실히 나쁘다고 평가해요(폰 약 1개).",
+ "The move masters play most here.": "이 포지션에서 마스터가 가장 많이 두는 수예요.",
+ "The engine’s best move, or within about a tenth of a pawn of it.": "엔진의 최선의 수이거나, 그 차이가 폰 약 0.1개 이내인 수예요.",
+ "Nearly as good as the engine’s best, yet rarely played by masters.": "엔진의 최선의 수만큼 좋지만, 마스터는 거의 두지 않는 수예요.",
+ "The best score at your rating, over enough games that it isn’t luck, and the engine says it’s sound.": "내 레이팅에서 가장 높은 점수예요. 운이라고 할 수 없을 만큼 대국이 충분하고, 엔진도 건전하다고 봐요.",
+ "Played most at your rating.": "내 레이팅에서 가장 많이 두는 수예요.",
+ "Rare among masters, yet it scores clearly above 50% at your rating and holds up with the engine.": "마스터에게는 드물지만, 내 레이팅에서는 확실히 50% 넘게 득점하고 엔진 검증도 통과해요.",
+ "Engine tags appear once the engine has searched deep enough. Masters: share of master games. Club: your side’s score at your rating.": "엔진 태그는 엔진이 충분히 깊이 계산한 뒤에 나타나요. 마스터: 마스터 대국 비율. 클럽: 내 레이팅에서 내 쪽 점수."
 }

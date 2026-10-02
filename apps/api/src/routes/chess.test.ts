@@ -82,6 +82,37 @@ describe('eval', () => {
   });
 });
 
+describe('guide bundle', () => {
+  it('returns explorer numbers plus the eval after each popular move, then serves it from cache', async () => {
+    const SIC = 'rnbqkbnr/pp1ppppp/8/2p5/4P3/8/PPPP1PPP/RNBQKBNR w KQkq c6 0 2';
+    const ex = (moves: [string, string, number][]) => ({ white: 1, draws: 1, black: 1, moves: moves.map(([uci, san, n]) => ({ uci, san, white: n, draws: 0, black: 0 })) });
+    const spy = mockFetch((url) => {
+      if (url.includes('explorer.lichess.org/lichess')) return Response.json(ex([['g1f3', 'Nf3', 300], ['b1c3', 'Nc3', 100]]));
+      if (url.includes('explorer.lichess.org/masters')) return Response.json(ex([['g1f3', 'Nf3', 50], ['c2c3', 'c3', 10]]));
+      if (url.includes('cloud-eval')) {
+        const fen = decodeURIComponent(new URL(url).searchParams.get('fen')!);
+        if (fen.startsWith('rnbqkbnr/pp1ppppp/8/2p5/4P3/8/PPPP1PPP/')) return Response.json({ fen, depth: 40, knodes: 1, pvs: [{ moves: 'g1f3 d7d6', cp: 30 }] });
+        if (fen.includes('2N5')) return Response.json({ fen, depth: 35, knodes: 1, pvs: [{ moves: 'b8c6', cp: 15 }] });
+      }
+      return new Response('{}', { status: 404 });
+    });
+    const url = `/api/guide?fen=${encodeURIComponent(SIC)}&ratings=1600,1800&speeds=blitz`;
+    const res = await app.inject({ url });
+    expect(res.statusCode).toBe(200);
+    const b = res.json();
+    expect(b.lichess.moves.map((m: { uci: string }) => m.uci)).toEqual(['g1f3', 'b1c3']);
+    expect(b.masters.total).toBe(3);
+    expect(b.eval.lines[0].moves[0]).toBe('g1f3');
+    // Nf3 is covered by the position's own eval; the others get their own.
+    expect(Object.keys(b.children).sort()).toEqual(['b1c3', 'c2c3']);
+    expect(b.children.b1c3.lines[0]).toEqual({ moves: ['b8c6'], cp: 15 });
+    expect(b.children.c2c3).toBeNull();
+    const calls = spy.mock.calls.length;
+    await app.inject({ url });
+    expect(spy.mock.calls.length).toBe(calls);
+  });
+});
+
 describe('openings', () => {
   it('names positions and searches', async () => {
     const at = await app.inject({ url: `/api/openings/at?fen=${encodeURIComponent('rnbqkbnr/pp1ppppp/8/2p5/4P3/8/PPPP1PPP/RNBQKBNR w KQkq c6 0 2')}` });

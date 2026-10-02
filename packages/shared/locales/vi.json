@@ -807,9 +807,20 @@
  "Goes with your repertoire": "Hợp với bộ khai cuộc của bạn",
  "Guided": "Có hướng dẫn",
  "Hidden gem": "Viên ngọc ẩn",
- "Living dangerously": "Sống mạo hiểm",
  "Pick a reply to prepare for it.": "Chọn một nước đáp để chuẩn bị.",
  "Surprise weapon": "Vũ khí bất ngờ",
  "The arrow shows the top pick. Play it, drag another piece, or tap a row.": "Mũi tên chỉ lựa chọn hàng đầu. Đi nước đó, kéo quân khác hoặc chạm vào một dòng.",
- "Their move": "Lượt của họ"
+ "Their move": "Lượt của họ",
+ "Dubious": "Đáng ngờ",
+ "What the tags mean": "Ý nghĩa của các nhãn",
+ "Already saved in this repertoire.": "Đã lưu trong bộ khai cuộc này.",
+ "Leads to a position another of your repertoires already covers.": "Dẫn tới một thế cờ mà bộ khai cuộc khác của bạn đã có.",
+ "The engine rates it clearly worse than the best move (roughly a pawn).": "Engine đánh giá nước này kém rõ rệt so với nước tốt nhất (khoảng một tốt).",
+ "The move masters play most here.": "Nước mà kiện tướng đi nhiều nhất ở đây.",
+ "The engine’s best move, or within about a tenth of a pawn of it.": "Nước tốt nhất của engine, hoặc chỉ kém khoảng một phần mười con tốt.",
+ "Nearly as good as the engine’s best, yet rarely played by masters.": "Gần tốt bằng nước hay nhất của engine, nhưng kiện tướng hiếm khi đi.",
+ "The best score at your rating, over enough games that it isn’t luck, and the engine says it’s sound.": "Điểm cao nhất ở mức rating của bạn, qua đủ nhiều ván để không phải may mắn, và engine xác nhận là chắc chắn.",
+ "Played most at your rating.": "Được đi nhiều nhất ở mức rating của bạn.",
+ "Rare among masters, yet it scores clearly above 50% at your rating and holds up with the engine.": "Hiếm ở kiện tướng, nhưng ở mức rating của bạn đạt rõ trên 50% và vẫn đứng vững trước engine.",
+ "Engine tags appear once the engine has searched deep enough. Masters: share of master games. Club: your side’s score at your rating.": "Nhãn engine xuất hiện khi engine đã tính đủ sâu. Kiện tướng: tỷ lệ trong ván của kiện tướng. Câu lạc bộ: điểm của bên bạn ở mức rating của bạn."
 }

@@ -331,9 +331,16 @@ Visual checks: `VISUAL=1 pnpm e2e visual` (add `--update-snapshots` after an int
 ## Guided opening builder + drag fix (2026-10-03)
 
 **Built**
-- Repertoire builder "Guided" mode (on by default, toggle in the header). On your move the board shows an arrow for the top pick and the panel below lists up to 8 candidates: piece, SAN, eval after the move, master share, club score at your rating, games, and tags (📖 By the book, 🤖 Engine's pick, 💎 Hidden gem, 🏆 Club crusher, 🍿 Crowd favourite, 🎁 Surprise weapon, 🎲 Living dangerously, ✅ In your repertoire, 🧩 Goes with your repertoire). Play the arrow, drag another piece, or tap a row.
+- Repertoire builder "Guided" mode (on by default, toggle in the header). On your move the board shows an arrow for the top pick and the panel below lists up to 8 candidates: piece, SAN, eval after the move, master share, club score at your rating, games, and tags (📖 By the book, 🤖 Engine's pick, 💎 Hidden gem, 🏆 Club crusher, 🍿 Crowd favourite, 🎁 Surprise weapon, 🤨 Dubious, ✅ In your repertoire, 🧩 Goes with your repertoire). Play the arrow, drag another piece, or tap a row.
 - After your move the opponent answers at once: your prepared reply if there is one, else what players at your rating play most (else masters). Out of book it waits for you. On their turn the panel lists popular replies to branch with.
 - Opening library → Play as White/Black now builds from the starting position (the opening's moves become the first line) and continues guided from there.
 - Rename a repertoire by tapping its name in the builder header.
 - Board drag: the lifted piece now stays exactly under the finger/cursor (the old `scale` on the dragged piece multiplied chessground's translate).
 - Logic in `packages/shared/src/guide.ts` (unit-tested); e2e `guide.spec.ts`.
+
+## Accurate, instant guide tags (2026-10-03)
+
+- Tag rules tightened (all in `guideCandidates`): engine tags (🤖 💎 🤨 and the engine checks inside 🏆 🎁) wait for a search of the position itself at depth ≥ 16; 🤖 = within 0.01 expected score (~0.1 pawn) of best; 🤨 Dubious (was "Living dangerously") = more than 0.08 (~1 pawn) worse; 🏆 and 🎁 need ≥ 100 games, a 95% lower bound on the score (≥ 50% / ≥ 52%) and an engine-sound move; 📖 needs ≥ 50 master games, 💎 and 🎁 ≥ 100. Moves with no eval and few games are left out once the engine has spoken. Master shares under 1% show one significant digit.
+- "What the tags mean" (? in the panel header) lists every tag with its exact rule; each tag's tooltip says the same.
+- `GET /api/guide`: explorer (rating band + masters), the position's eval and the eval after each popular move the position's eval doesn't cover — one round trip, cached in Postgres/LRU. The device's Stockfish only fills gaps. The client keeps bundles in memory + IndexedDB (instant revisits, offline) and prefetches along the arrow (after the top pick and the guide's reply), so each next step is ready at once (~0 ms measured on real data).
+- Nightly warm-up (`warmGuides`, after the repertoire prefetch): every position along the opening library's lines, shallowest first, default rating band, within a Lichess request budget. Cloud-eval misses are remembered for 30 days so the warm-up keeps moving forward.

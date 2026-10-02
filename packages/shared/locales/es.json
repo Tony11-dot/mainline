@@ -850,9 +850,20 @@
  "Goes with your repertoire": "Encaja con tu repertorio",
  "Guided": "Guiado",
  "Hidden gem": "Joya oculta",
- "Living dangerously": "Al filo de la navaja",
  "Pick a reply to prepare for it.": "Elige una respuesta para prepararte.",
  "Surprise weapon": "Arma sorpresa",
  "The arrow shows the top pick. Play it, drag another piece, or tap a row.": "La flecha muestra la mejor opción. Juégala, arrastra otra pieza o toca una fila.",
- "Their move": "Su jugada"
+ "Their move": "Su jugada",
+ "Dubious": "Dudosa",
+ "What the tags mean": "Qué significan las etiquetas",
+ "Already saved in this repertoire.": "Ya está guardada en este repertorio.",
+ "Leads to a position another of your repertoires already covers.": "Lleva a una posición que otro de tus repertorios ya cubre.",
+ "The engine rates it clearly worse than the best move (roughly a pawn).": "El motor la valora claramente peor que la mejor jugada (alrededor de un peón).",
+ "The move masters play most here.": "La jugada que más juegan los maestros aquí.",
+ "The engine’s best move, or within about a tenth of a pawn of it.": "La mejor jugada del motor, o a menos de una décima de peón de ella.",
+ "Nearly as good as the engine’s best, yet rarely played by masters.": "Casi tan buena como la mejor del motor, pero los maestros rara vez la juegan.",
+ "The best score at your rating, over enough games that it isn’t luck, and the engine says it’s sound.": "La mejor puntuación a tu nivel, con suficientes partidas como para no ser suerte, y el motor dice que es sólida.",
+ "Played most at your rating.": "La más jugada a tu nivel.",
+ "Rare among masters, yet it scores clearly above 50% at your rating and holds up with the engine.": "Rara entre maestros, pero a tu nivel puntúa claramente por encima del 50 % y aguanta el examen del motor.",
+ "Engine tags appear once the engine has searched deep enough. Masters: share of master games. Club: your side’s score at your rating.": "Las etiquetas del motor aparecen cuando el motor ha calculado con suficiente profundidad. Maestros: porcentaje en partidas de maestros. Club: puntuación de tu bando a tu nivel."
 }
