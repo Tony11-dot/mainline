@@ -842,5 +842,17 @@
  "🔥 {n}-day streak": {
   "one": "🔥 {n} günlük seri",
   "other": "🔥 {n} günlük seri"
- }
+ },
+ "By the book": "Kitabına uygun",
+ "Club crusher": "Kulüp ezici",
+ "Crowd favourite": "Kalabalığın gözdesi",
+ "Engine’s pick": "Motorun seçimi",
+ "Goes with your repertoire": "Repertuvarınla uyumlu",
+ "Guided": "Rehberli",
+ "Hidden gem": "Gizli cevher",
+ "Living dangerously": "Tehlikeli yaşam",
+ "Pick a reply to prepare for it.": "Hazırlanmak için bir yanıt seç.",
+ "Surprise weapon": "Sürpriz silah",
+ "The arrow shows the top pick. Play it, drag another piece, or tap a row.": "Ok en iyi seçimi gösterir. Onu oyna, başka bir taşı sürükle ya da bir satıra dokun.",
+ "Their move": "Rakibin hamlesi"
 }

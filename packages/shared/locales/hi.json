@@ -842,5 +842,17 @@
  "🔥 {n}-day streak": {
   "one": "🔥 {n} दिन की स्ट्रीक",
   "other": "🔥 {n} दिन की स्ट्रीक"
- }
+ },
+ "By the book": "किताब के मुताबिक",
+ "Club crusher": "क्लब का दबंग",
+ "Crowd favourite": "भीड़ की पसंद",
+ "Engine’s pick": "इंजन की पसंद",
+ "Goes with your repertoire": "आपके रिपर्टरी से मेल खाती",
+ "Guided": "निर्देशित",
+ "Hidden gem": "छिपा रत्न",
+ "Living dangerously": "जोखिम भरी चाल",
+ "Pick a reply to prepare for it.": "तैयारी के लिए एक जवाब चुनें।",
+ "Surprise weapon": "सरप्राइज़ हथियार",
+ "The arrow shows the top pick. Play it, drag another piece, or tap a row.": "तीर सबसे अच्छी चाल दिखाता है। उसे खेलें, कोई दूसरा मोहरा खींचें या किसी पंक्ति पर टैप करें।",
+ "Their move": "उनकी चाल"
 }

@@ -41,7 +41,8 @@ export function useEngineEval(fen: string, enabled: boolean, multiPv = 3): Engin
     });
     fetchCloudEval(fen, ctrl.signal)
       .then((cloud) => {
-        if (cancelled || !cloud || cloud.depth < 22 || cloud.lines.length < Math.min(multiPv, 1)) return;
+        // Many candidates (the guide) need more lines than the cloud usually keeps: then local search wins.
+        if (cancelled || !cloud || cloud.depth < 22 || cloud.lines.length < (multiPv > 3 ? 5 : 1)) return;
         gotCloud = true;
         stop();
         setView({ lines: cloud.lines.slice(0, multiPv), depth: cloud.depth, source: cloud.source, searching: false });

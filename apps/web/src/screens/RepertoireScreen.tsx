@@ -3,8 +3,8 @@ import { Link, useNavigate, useParams, useSearchParams } from 'react-router';
 import { useStore } from 'zustand';
 import type { DrawShape } from 'chessground/draw';
 import type { Key } from 'chessground/types';
-import { ArrowLeft, Crown, Lightbulb, Sparkles, Star, Trash2, Waypoints } from 'lucide-react';
-import { addLine, buildGraph, childPath, pathToUcis, findConflicts, isOwnTurn, mainMoveAt, nodeAt, parentPath, playUci, positionFromFen, uciToSan, epdToFen } from '@mainline/shared';
+import { ArrowLeft, Compass, Crown, Lightbulb, Pencil, Sparkles, Star, Trash2, Waypoints } from 'lucide-react';
+import { addLine, buildGraph, childPath, pathToUcis, findConflicts, guideCandidates, guideReply, isOwnTurn, mainMoveAt, nodeAt, parentPath, playUci, positionFromFen, uciToSan, epdToFen } from '@mainline/shared';
 import { Board } from '../board/Board';
 import { BoardControls } from '../board/BoardControls';
 import { bindAnalysisKeys, createAnalysisStore, locate, useBoardView } from '../board/analysis';
@@ -27,6 +27,8 @@ import { SPLIT_LAYOUT, useMediaQuery } from '../ui/useMediaQuery';
 import { AutoBuildSheet } from './builder/AutoBuildSheet';
 import { SuggestPanel } from './builder/SuggestPanel';
 import { NotesPanel } from './builder/NotesPanel';
+import { GuidePanel, useExplorerPair } from './builder/GuidePanel';
+import { fetchExplorer } from '../lib/explorer';
 import { t, tn } from '../lib/i18n';
 
 type Pane = 'tree' | 'explorer' | 'engine' | 'stats' | 'coach' | 'notes' | 'suggest' | 'insights';
@@ -40,6 +42,9 @@ export function RepertoireScreen() {
   const rep = lib.reps.find((r) => r.id === id && !r.deleted);
   const store = useMemo(() => createAnalysisStore(), []);
   const initialised = useRef(false);
+  /** Opened from "Play as …": let the opponent answer the opening's last move straight away. */
+  const kickReply = useRef(false);
+  const autoReplyRef = useRef<((path: string) => void) | null>(null);
   /** Paths played optimistically whose IndexedDB write hasn't been reflected in a rebuild yet. */
   const pendingPaths = useRef(new Set<string>());
 
@@ -65,18 +70,33 @@ export function RepertoireScreen() {
       store.getState().setOrientation(rep.color);
       const at = params.get('at');
       if (at) path = pathToEpd(root, at) ?? path;
+      if (params.get('guide') === '1') {
+        usePrefs.getState().set({ guided: true });
+        kickReply.current = true;
+      }
     }
     store.setState({ root, path, version: s.version + 1 });
   }, [lib.version, rep?.id]); // eslint-disable-line react-hooks/exhaustive-deps
 
   useEffect(() => bindAnalysisKeys(store), [store]);
+  useEffect(() => {
+    if (!kickReply.current || !autoReplyRef.current || !store.getState().version) return;
+    kickReply.current = false;
+    autoReplyRef.current(store.getState().path);
+  });
 
   const view = useBoardView(store);
   const orientation = useStore(store, (s) => s.orientation);
   const engineOn = usePrefs((s) => s.engineOn);
-  const ev = useEngineEval(view.node.fen, engineOn);
+  const guided = usePrefs((s) => s.guided);
+  const ev = useEngineEval(view.node.fen, engineOn || guided, guided ? 8 : 3);
+  const explorer = useExplorerPair(view.node.fen, guided);
+  const [replying, setReplying] = useState(false);
+  const [renaming, setRenaming] = useState(false);
   const opening = useOpeningName(view.nodes.map((n) => n.fen));
   const [hoverUci, setHoverUci] = useState<string | null>(null);
+  // A row that moved away under the pointer never sends pointerleave: drop its arrow with the position.
+  useEffect(() => setHoverUci(null), [view.path]);
   const [drawMode, setDrawMode] = useState(false);
   const [pane, setPane] = useState<Pane>('tree');
   const [autoOpen, setAutoOpen] = useState(false);
@@ -84,13 +104,33 @@ export function RepertoireScreen() {
 
   const moves = useMemo(() => (rep ? repMoves(lib.moves, rep.id) : []), [lib.version, rep?.id]); // eslint-disable-line react-hooks/exhaustive-deps
   const graph = useMemo(() => buildGraph(moves), [moves]);
-  const here = graph.get(view.node.epd) ?? [];
+  const here = useMemo(() => graph.get(view.node.epd) ?? [], [graph, view.node.epd]);
   const own = rep ? isOwnTurn(rep.color, view.node.epd) : false;
   const main = own ? mainMoveAt(graph, view.node.epd) : undefined;
   const conflict = useMemo(() => {
     if (!rep || !own) return undefined;
     return findConflicts(lib.reps.filter((r) => !r.deleted && r.color === rep.color), lib.moves).find((c) => c.epd === view.node.epd);
   }, [lib.version, view.node.epd, own]); // eslint-disable-line react-hooks/exhaustive-deps
+  /** Positions your other repertoires of this colour already cover: candidates leading there "go with" them. */
+  const otherEpds = useMemo(() => {
+    const ids = new Set(lib.reps.filter((r) => !r.deleted && r.color === rep?.color && r.id !== rep?.id).map((r) => r.id));
+    const out = new Set<string>();
+    for (const m of lib.moves) if (!m.deleted && ids.has(m.repertoireId)) out.add(m.toEpd);
+    return out;
+  }, [lib.version, rep?.id]); // eslint-disable-line react-hooks/exhaustive-deps
+  const candidates = useMemo(() => {
+    if (!rep || !guided || !own) return [];
+    const pos = positionFromFen(view.node.fen);
+    const fits = new Set<string>();
+    for (const [from, tos] of view.dests) for (const to of tos) {
+      try {
+        if (otherEpds.has(playUci(pos, from + to).epd)) fits.add(from + to);
+      } catch {
+        /* promotions etc. need a piece suffix — not worth a badge */
+      }
+    }
+    return guideCandidates({ color: rep.color, engineLines: ev.lines, lichess: explorer.lichess, masters: explorer.masters, inRep: new Set(here.map((m) => m.uci)), fitsRep: fits, max: 8 });
+  }, [rep, guided, own, view.node.fen, view.dests, ev.lines, explorer, here, otherEpds]);
   const currentMove = useMemo(() => {
     if (!view.path) return undefined;
     const parent = nodeAt(view.root, parentPath(view.path));
@@ -100,12 +140,13 @@ export function RepertoireScreen() {
   const autoShapes = useMemo<DrawShape[]>(() => {
     const out: DrawShape[] = [];
     if (hoverUci) out.push({ orig: hoverUci.slice(0, 2) as Key, dest: hoverUci.slice(2, 4) as Key, brush: 'blue' });
+    else if (guided && candidates[0]) out.push({ orig: candidates[0].uci.slice(0, 2) as Key, dest: candidates[0].uci.slice(2, 4) as Key, brush: 'green' });
     else if (engineOn && ev.lines[0]?.moves[0]) {
       const b = ev.lines[0].moves[0];
       out.push({ orig: b.slice(0, 2) as Key, dest: b.slice(2, 4) as Key, brush: 'paleBlue' });
     }
     return out;
-  }, [hoverUci, engineOn, ev.lines]);
+  }, [hoverUci, engineOn, ev.lines, guided, candidates]);
 
   if (!lib.loaded) return null;
   if (!rep)
@@ -130,8 +171,10 @@ export function RepertoireScreen() {
     } catch {
       return;
     }
+    const mine = positionFromFen(fen).turn === rep.color;
     if (node.children.some((c) => c.uci === played.uci)) {
       st.goto(childPath(base, played.uci), { sound: true });
+      if (mine && usePrefs.getState().guided) void autoReply(childPath(base, played.uci));
       return;
     }
     if (base !== st.path) st.goto(base);
@@ -139,12 +182,43 @@ export function RepertoireScreen() {
     // and the rebuild keeps this path because the node already exists.
     pendingPaths.current.add(childPath(base, played.uci));
     store.getState().play(played.uci);
+    if (mine && usePrefs.getState().guided) void autoReply(childPath(base, played.uci));
     const m = await lib.addMove(rep.id, fen, played.uci);
     const mainHere = useLibrary.getState().moves.find((x) => x.repertoireId === rep.id && !x.deleted && x.fromEpd === m.fromEpd && x.isMainline && x.uci !== m.uci);
     if (!m.isMainline && mainHere) {
       toast(t('Added {move} as an alternate — you play {main} here', { move: m.san, main: mainHere.san }), { action: { label: t('Make main'), run: () => lib.makeMain(rep.id, m.fromEpd, m.uci) } });
     }
   };
+
+  /**
+   * Guided mode: the opponent answers at once — with the reply you already prepared, else what players
+   * at your level play most (or masters). Out of book, it waits for you to play their move.
+   */
+  async function autoReply(path: string) {
+    const node = nodeAt(store.getState().root, path);
+    if (!node || isOwnTurn(rep!.color, node.epd)) return;
+    setReplying(true);
+    try {
+      let uci = node.children[0]?.uci;
+      if (!uci) {
+        const { rating, speeds } = usePrefs.getState();
+        const [l, m] = await Promise.allSettled([fetchExplorer('lichess', node.fen, rating, speeds), fetchExplorer('masters', node.fen, rating, speeds)]);
+        uci = guideReply({ lichess: l.status === 'fulfilled' ? l.value : undefined, masters: m.status === 'fulfilled' ? m.value : undefined });
+      }
+      // Let the move animation finish first, so the reply reads as a reply.
+      await new Promise((r) => setTimeout(r, Math.max(280, usePrefs.getState().animationMs + 160)));
+      const st = store.getState();
+      if (!uci || st.path !== path) return;
+      const live = nodeAt(st.root, path);
+      if (live?.children.some((c) => c.uci === uci)) st.goto(childPath(path, uci), { sound: true });
+      else await addMove(uci, node.fen);
+    } catch {
+      /* offline or no data: the panel says what to do */
+    } finally {
+      setReplying(false);
+    }
+  }
+  autoReplyRef.current = (p) => void autoReply(p);
 
   const deleteHere = async () => {
     if (!currentMove) return;
@@ -200,7 +274,7 @@ export function RepertoireScreen() {
 
   const actions = (
     <div className="flex flex-wrap gap-2">
-      {own && (
+      {own && !guided && (
         <Button size="sm" icon={Sparkles} onClick={() => setPane('suggest')}>
           {t('Suggest my move')}
         </Button>
@@ -265,13 +339,61 @@ export function RepertoireScreen() {
       <Link to="/library" className="-ms-2 flex size-10 items-center justify-center rounded-full text-ink-2 hover:bg-surface-3" aria-label={t('Back to repertoire')}>
         <ArrowLeft size={20} className="rtl:rotate-180" />
       </Link>
-      <div className="min-w-0">
-        <h1 className="truncate text-md font-bold">{rep.name}</h1>
+      <div className="min-w-0 flex-1">
+        {renaming ? (
+          <input
+            autoFocus
+            defaultValue={rep.name}
+            aria-label={t('Rename')}
+            className="w-full rounded-md border border-line-strong bg-surface px-2 py-0.5 text-md font-bold"
+            onBlur={(e) => {
+              void lib.renameRepertoire(rep.id, e.target.value);
+              setRenaming(false);
+            }}
+            onKeyDown={(e) => {
+              if (e.key === 'Enter') e.currentTarget.blur();
+              if (e.key === 'Escape') setRenaming(false);
+            }}
+          />
+        ) : (
+          <button type="button" onClick={() => setRenaming(true)} className="group flex max-w-full items-center gap-1.5 text-start" aria-label={`${t('Rename')}: ${rep.name}`}>
+            <h1 className="truncate text-md font-bold">{rep.name}</h1>
+            <Pencil size={13} className="shrink-0 text-ink-3 opacity-60 group-hover:opacity-100" aria-hidden />
+          </button>
+        )}
         <p className="truncate text-xs text-ink-3">
           {folderPath(lib.folders, rep.folderId).map((n) => t(n)).join(' / ')}
           {opening ? ` · ${opening.eco} ${opening.name}` : ''}
         </p>
       </div>
+      <button
+        type="button"
+        aria-pressed={guided}
+        onClick={() => usePrefs.getState().set({ guided: !guided })}
+        className={`inline-flex h-9 shrink-0 items-center gap-1.5 rounded-full px-3 text-sm font-semibold transition-colors ${guided ? 'bg-brand text-on-brand' : 'bg-surface-3 text-ink-2 hover:text-ink'}`}
+      >
+        <Compass size={16} aria-hidden />
+        {t('Guided')}
+      </button>
+    </div>
+  );
+
+  const guide = guided && (
+    <div className="overflow-hidden rounded-[var(--radius-l)] border border-line bg-surface shadow-1">
+      <GuidePanel
+        fen={view.node.fen}
+        own={own}
+        candidates={candidates}
+        explorer={explorer}
+        searching={ev.searching}
+        prepared={new Set(here.map((m) => m.uci))}
+        replying={replying}
+        onPlay={(u) => {
+          setHoverUci(null);
+          void addMove(u);
+        }}
+        onHover={setHoverUci}
+      />
     </div>
   );
 
@@ -293,6 +415,7 @@ export function RepertoireScreen() {
             {status}
             {actions}
           </div>
+          {guide}
           <PaneTabs value={activePane} onChange={setPane} options={paneOptions} />
           <div className="min-h-0 flex-1 overflow-auto rounded-[var(--radius-l)] border border-line bg-surface shadow-1">{panes[activePane]}</div>
         </aside>
@@ -309,6 +432,7 @@ export function RepertoireScreen() {
         {board}
       </div>
       <BoardControls store={store} drawMode={drawMode} onToggleDraw={() => setDrawMode((d) => !d)} onTypedMove={(u) => void addMove(u)} />
+      {guide && <div className="px-3 pb-3">{guide}</div>}
       <div className="flex flex-col gap-2.5 px-3 pb-3">
         {status}
         <div className="-mx-3 overflow-x-auto px-3 [scrollbar-width:none]">{actions}</div>

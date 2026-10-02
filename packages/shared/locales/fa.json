@@ -842,5 +842,17 @@
  "🔥 {n}-day streak": {
   "one": "🔥 زنجیرهٔ {n} روزه",
   "other": "🔥 زنجیرهٔ {n} روزه"
- }
+ },
+ "By the book": "طبق کتاب",
+ "Club crusher": "کوبنده باشگاهی",
+ "Crowd favourite": "محبوب جمع",
+ "Engine’s pick": "انتخاب موتور",
+ "Goes with your repertoire": "با رپرتوار شما جور است",
+ "Guided": "هدایت‌شده",
+ "Hidden gem": "گوهر پنهان",
+ "Living dangerously": "زندگی روی لبه",
+ "Pick a reply to prepare for it.": "یک پاسخ را انتخاب کنید تا برایش آماده شوید.",
+ "Surprise weapon": "سلاح غافلگیری",
+ "The arrow shows the top pick. Play it, drag another piece, or tap a row.": "پیکان بهترین انتخاب را نشان می‌دهد. آن را بازی کنید، مهرهٔ دیگری را بکشید یا روی یک ردیف بزنید.",
+ "Their move": "حرکت حریف"
 }

@@ -43,7 +43,7 @@ test('coach, stats and coverage in the builder', async ({ page }, info) => {
   await page.getByRole('tab', { name: 'Ask' }).click();
   await page.getByLabel('Ask the coach').fill('What is the plan?');
   await page.getByRole('button', { name: 'Ask', exact: true }).click();
-  const chip = page.getByRole('button', { name: 'Bb5' });
+  const chip = page.getByRole('button', { name: 'Bb5', exact: true });
   await expect(chip).toBeVisible();
   await expect(page.getByText('Plan: castle with')).toBeVisible();
   await chip.click(); // plays the move from the coach's text

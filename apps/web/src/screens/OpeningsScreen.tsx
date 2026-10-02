@@ -1,7 +1,7 @@
 import { useEffect, useMemo, useState } from 'react';
 import { Link, useNavigate } from 'react-router';
 import { ArrowLeft, Search } from 'lucide-react';
-import { epdToFen, playLine, INITIAL_FEN, type Color, type ExplorerData } from '@mainline/shared';
+import { epdToFen, playLine, playUci, positionFromFen, toEpd, INITIAL_FEN, type Color, type ExplorerData } from '@mainline/shared';
 import { openingIndex, searchOpenings, type OpeningInfo } from '../lib/openings';
 import { useLibrary } from '../lib/library';
 import { useGames } from '../lib/games';
@@ -66,8 +66,15 @@ export function OpeningsScreen() {
 
   const start = async (o: OpeningInfo, color: Color) => {
     const root = lib.folders.find((f) => !f.deleted && f.parentId === null && f.color === color);
-    const rep = await lib.createRepertoire({ name: o.name.split(':').at(-1)!.trim() || o.name, color, folderId: root?.id ?? null, rootMovesUci: o.uci.split(' ') });
-    nav(`/rep/${rep.id}`);
+    // Built from the starting position: the opening's moves become the first line of the repertoire,
+    // and the guide carries on from where the named opening ends.
+    const rep = await lib.createRepertoire({ name: o.name.split(':').at(-1)!.trim() || o.name, color, folderId: root?.id ?? null });
+    let fen = INITIAL_FEN;
+    for (const uci of o.uci.split(' ')) {
+      await lib.addMove(rep.id, fen, uci);
+      fen = playUci(positionFromFen(fen), uci).fen;
+    }
+    nav(`/rep/${rep.id}?guide=1&at=${encodeURIComponent(toEpd(fen))}`);
   };
 
   return (

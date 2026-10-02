@@ -842,5 +842,17 @@
  "🔥 {n}-day streak": {
   "one": "🔥 {n}-Tage-Serie",
   "other": "🔥 {n}-Tage-Serie"
- }
+ },
+ "By the book": "Nach Lehrbuch",
+ "Club crusher": "Vereinsschreck",
+ "Crowd favourite": "Publikumsliebling",
+ "Engine’s pick": "Wahl der Engine",
+ "Goes with your repertoire": "Passt zu deinem Repertoire",
+ "Guided": "Geführt",
+ "Hidden gem": "Verstecktes Juwel",
+ "Living dangerously": "Am Abgrund",
+ "Pick a reply to prepare for it.": "Wähle eine Antwort, um dich darauf vorzubereiten.",
+ "Surprise weapon": "Überraschungswaffe",
+ "The arrow shows the top pick. Play it, drag another piece, or tap a row.": "Der Pfeil zeigt die beste Wahl. Spiel sie, zieh eine andere Figur oder tippe auf eine Zeile.",
+ "Their move": "Ihr Zug"
 }

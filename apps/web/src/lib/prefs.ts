@@ -32,6 +32,8 @@ export interface Prefs {
   chesscomUser: string;
   engineLines: number;
   reduceTransparency: boolean;
+  /** Repertoire builder walks you through moves (suggestions + automatic replies). */
+  guided: boolean;
   set: (p: Partial<Omit<Prefs, 'set'>>) => void;
 }
 
@@ -88,6 +90,7 @@ export const usePrefs = create<Prefs>()(
       chesscomUser: '',
       engineLines: 3,
       reduceTransparency: false,
+      guided: true,
       set: (p) => set(p),
     }),
     {

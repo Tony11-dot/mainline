@@ -327,3 +327,13 @@ Visual checks: `VISUAL=1 pnpm e2e visual` (add `--update-snapshots` after an int
 **How to try**: Settings → Language, or set the device language. `pnpm --filter @mainline/web i18n --check` re-extracts strings and fails on missing translations or lost `{placeholders}`.
 
 **Known**: opening names (Lichess database), font and piece-set names stay in English as proper names.
+
+## Guided opening builder + drag fix (2026-10-03)
+
+**Built**
+- Repertoire builder "Guided" mode (on by default, toggle in the header). On your move the board shows an arrow for the top pick and the panel below lists up to 8 candidates: piece, SAN, eval after the move, master share, club score at your rating, games, and tags (📖 By the book, 🤖 Engine's pick, 💎 Hidden gem, 🏆 Club crusher, 🍿 Crowd favourite, 🎁 Surprise weapon, 🎲 Living dangerously, ✅ In your repertoire, 🧩 Goes with your repertoire). Play the arrow, drag another piece, or tap a row.
+- After your move the opponent answers at once: your prepared reply if there is one, else what players at your rating play most (else masters). Out of book it waits for you. On their turn the panel lists popular replies to branch with.
+- Opening library → Play as White/Black now builds from the starting position (the opening's moves become the first line) and continues guided from there.
+- Rename a repertoire by tapping its name in the builder header.
+- Board drag: the lifted piece now stays exactly under the finger/cursor (the old `scale` on the dragged piece multiplied chessground's translate).
+- Logic in `packages/shared/src/guide.ts` (unit-tested); e2e `guide.spec.ts`.
