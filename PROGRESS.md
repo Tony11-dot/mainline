@@ -344,3 +344,11 @@ Visual checks: `VISUAL=1 pnpm e2e visual` (add `--update-snapshots` after an int
 - "What the tags mean" (? in the panel header) lists every tag with its exact rule; each tag's tooltip says the same.
 - `GET /api/guide`: explorer (rating band + masters), the position's eval and the eval after each popular move the position's eval doesn't cover — one round trip, cached in Postgres/LRU. The device's Stockfish only fills gaps. The client keeps bundles in memory + IndexedDB (instant revisits, offline) and prefetches along the arrow (after the top pick and the guide's reply), so each next step is ready at once (~0 ms measured on real data).
 - Nightly warm-up (`warmGuides`, after the repertoire prefetch): every position along the opening library's lines, shallowest first, default rating band, within a Lichess request budget. Cloud-eval misses are remembered for 30 days so the warm-up keeps moving forward.
+
+## Guide on both sides, opening names, reachable sheet buttons, drag that follows the board (2026-10-03)
+
+- The guide now rates the side to move on both turns: on the opponent's turn the panel shows their likely moves with the same tags, evals and stats (rated from their side), so you can see what's coming and branch for it.
+- Each suggestion shows the named opening or variation it leads to (bundled lichess-org/chess-openings table).
+- The board draws the top three suggestions as arrows (bold for the top pick; green on your turn, red on theirs), each pinned with its leading tag's icon.
+- iOS: the native tab bar floats above the web view and covered bottom-sheet footers (the Create buttons). It now hides while any sheet or full-screen moment is open (`ui/overlay.ts`).
+- Board drag: chessground caches the board's position and refreshes it only on window scroll/resize, so content loading in above the board left the lifted piece trailing the finger (or grabbing the wrong square). The board now re-measures on every press and move.

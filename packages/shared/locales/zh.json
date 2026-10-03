@@ -822,5 +822,6 @@
  "The best score at your rating, over enough games that it isn’t luck, and the engine says it’s sound.": "在你的等级分下得分最高，对局数量足以排除运气，而且引擎认为它站得住。",
  "Played most at your rating.": "在你的等级分下最常下的着法。",
  "Rare among masters, yet it scores clearly above 50% at your rating and holds up with the engine.": "在大师中很少见，但在你的等级分下得分明显超过 50%，并经得起引擎检验。",
- "Engine tags appear once the engine has searched deep enough. Masters: share of master games. Club: your side’s score at your rating.": "引擎标签会在引擎计算到足够深度后出现。大师：在大师对局中的占比。俱乐部：在你的等级分下你这一方的得分。"
+ "Engine tags appear once the engine has searched deep enough. Masters: share of master games. Club: your side’s score at your rating.": "引擎标签会在引擎计算到足够深度后出现。大师：在大师对局中的占比。俱乐部：在你的等级分下你这一方的得分。",
+ "Their score at your rating": "在你的等级分下对方的得分"
 }

@@ -822,5 +822,6 @@
  "The best score at your rating, over enough games that it isn’t luck, and the engine says it’s sound.": "Skor terbaik di ratingmu, dari cukup banyak permainan sehingga bukan kebetulan, dan mesin menilainya sehat.",
  "Played most at your rating.": "Paling sering dimainkan di ratingmu.",
  "Rare among masters, yet it scores clearly above 50% at your rating and holds up with the engine.": "Jarang di kalangan master, tetapi di ratingmu skornya jelas di atas 50% dan lolos pemeriksaan mesin.",
- "Engine tags appear once the engine has searched deep enough. Masters: share of master games. Club: your side’s score at your rating.": "Label mesin muncul setelah mesin menghitung cukup dalam. Master: porsi dalam permainan master. Klub: skor sisimu di ratingmu."
+ "Engine tags appear once the engine has searched deep enough. Masters: share of master games. Club: your side’s score at your rating.": "Label mesin muncul setelah mesin menghitung cukup dalam. Master: porsi dalam permainan master. Klub: skor sisimu di ratingmu.",
+ "Their score at your rating": "Skor mereka di level Anda"
 }

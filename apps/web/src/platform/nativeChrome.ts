@@ -1,6 +1,7 @@
 import { Capacitor, registerPlugin, type PluginListenerHandle } from '@capacitor/core';
 import { NAV } from '../ui/nav';
 import { useLaunch } from '../launch/LaunchScreen';
+import { useOverlays } from '../ui/overlay';
 import { t, useI18n } from '../lib/i18n';
 
 interface NativeChromePlugin {
@@ -43,10 +44,14 @@ export async function startNativeChrome(router: { navigate: (to: string) => unkn
   const wide = matchMedia('(min-width: 768px)');
   const sync = (path: string) => {
     void NativeChrome.select({ id: idFor(path) });
-    void NativeChrome.setVisible({ visible: !wide.matches && !useLaunch.getState().active && !path.startsWith('/train') });
+    void NativeChrome.setVisible({ visible: !wide.matches && !useLaunch.getState().active && useOverlays.getState().open === 0 && !path.startsWith('/train') });
   };
   router.subscribe((s) => sync(s.location.pathname));
   useLaunch.subscribe(() => sync(router.state.location.pathname));
+  // Sheets put their footer buttons where the bar floats: get out of the way while one is open.
+  useOverlays.subscribe((s, p) => {
+    if ((s.open > 0) !== (p.open > 0)) sync(router.state.location.pathname);
+  });
   wide.addEventListener('change', () => sync(router.state.location.pathname));
   sync(router.state.location.pathname);
   const theme = () => {

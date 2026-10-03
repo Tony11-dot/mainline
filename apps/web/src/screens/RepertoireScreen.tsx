@@ -4,7 +4,7 @@ import { useStore } from 'zustand';
 import type { DrawShape } from 'chessground/draw';
 import type { Key } from 'chessground/types';
 import { ArrowLeft, Compass, Crown, Lightbulb, Pencil, Sparkles, Star, Trash2, Waypoints } from 'lucide-react';
-import { addLine, buildGraph, bundleEngine, childPath, pathToUcis, findConflicts, guideCandidates, guideMoves, guideReply, GUIDE_MIN_DEPTH, isOwnTurn, mergeEngine, mainMoveAt, nodeAt, parentPath, playUci, positionFromFen, uciToSan, epdToFen } from '@mainline/shared';
+import { addLine, buildGraph, bundleEngine, childPath, pathToUcis, findConflicts, guideCandidates, guideMoves, guideReply, GUIDE_MIN_DEPTH, type GuideCandidate, isOwnTurn, mergeEngine, mainMoveAt, nodeAt, parentPath, playUci, positionFromFen, uciToSan, epdToFen } from '@mainline/shared';
 import { Board } from '../board/Board';
 import { BoardControls } from '../board/BoardControls';
 import { bindAnalysisKeys, createAnalysisStore, locate, useBoardView } from '../board/analysis';
@@ -27,7 +27,7 @@ import { SPLIT_LAYOUT, useMediaQuery } from '../ui/useMediaQuery';
 import { AutoBuildSheet } from './builder/AutoBuildSheet';
 import { SuggestPanel } from './builder/SuggestPanel';
 import { NotesPanel } from './builder/NotesPanel';
-import { GuidePanel } from './builder/GuidePanel';
+import { GuidePanel, TAG_PIN } from './builder/GuidePanel';
 import { fetchGuide, prefetchGuide, useGuide } from '../lib/guide';
 import { t, tn } from '../lib/i18n';
 
@@ -90,18 +90,18 @@ export function RepertoireScreen() {
   const engineOn = usePrefs((s) => s.engineOn);
   const guided = usePrefs((s) => s.guided);
   const ownHere = rep ? isOwnTurn(rep.color, view.node.epd) : false;
-  const guideData = useGuide(view.node.fen, guided, ownHere);
+  const [replying, setReplying] = useState(false);
+  const guideData = useGuide(view.node.fen, guided, true);
   const explorer = { lichess: guideData.bundle?.lichess, masters: guideData.bundle?.masters, loading: guideData.loading && !guideData.bundle };
   const fromBundle = useMemo(() => bundleEngine(guideData.bundle), [guideData.bundle]);
   // Stockfish on the device only fills what the server's evals don't cover: the position's own best
   // moves (needed before anything can be called the engine's pick) or popular moves nobody has analysed.
   const localNeeded =
     guided &&
-    ownHere &&
+    !replying &&
     !guideData.loading &&
     (!guideData.bundle?.eval?.lines.length || guideMoves(guideData.bundle?.lichess, guideData.bundle?.masters, 8).some((u) => !fromBundle.lines.some((l) => l.moves[0] === u) && guideData.bundle?.children?.[u] !== null));
   const ev = useEngineEval(view.node.fen, engineOn || localNeeded, localNeeded ? 8 : 3);
-  const [replying, setReplying] = useState(false);
   const [renaming, setRenaming] = useState(false);
   const opening = useOpeningName(view.nodes.map((n) => n.fen));
   const [hoverUci, setHoverUci] = useState<string | null>(null);
@@ -129,10 +129,11 @@ export function RepertoireScreen() {
     return out;
   }, [lib.version, rep?.id]); // eslint-disable-line react-hooks/exhaustive-deps
   const candidates = useMemo(() => {
-    if (!rep || !guided || !own) return [];
+    if (!rep || !guided) return [];
     const pos = positionFromFen(view.node.fen);
     const fits = new Set<string>();
-    for (const [from, tos] of view.dests) for (const to of tos) {
+    // On their turn the same guide rates their options from their side: what they're likely to throw at you.
+    if (own) for (const [from, tos] of view.dests) for (const to of tos) {
       try {
         if (otherEpds.has(playUci(pos, from + to).epd)) fits.add(from + to);
       } catch {
@@ -142,12 +143,12 @@ export function RepertoireScreen() {
     const engine = localNeeded && ev.lines.length ? mergeEngine(fromBundle, { lines: ev.lines, depth: ev.depth }) : fromBundle;
     // "Engine's pick" means the best move overall, so engine tags need a search of this position itself.
     const searched = !!guideData.bundle?.eval?.lines.length || (localNeeded && ev.lines.length > 0);
-    return guideCandidates({ color: rep.color, engineLines: engine.lines, engineDepth: searched ? engine.depth : 0, lichess: guideData.bundle?.lichess, masters: guideData.bundle?.masters, inRep: new Set(here.map((m) => m.uci)), fitsRep: fits, max: 8 });
+    return guideCandidates({ color: pos.turn, engineLines: engine.lines, engineDepth: searched ? engine.depth : 0, lichess: guideData.bundle?.lichess, masters: guideData.bundle?.masters, inRep: new Set(here.map((m) => m.uci)), fitsRep: fits, max: 8 });
   }, [rep, guided, own, view.node.fen, view.dests, ev.lines, ev.depth, localNeeded, fromBundle, guideData.bundle, here, otherEpds]);
 
   // Fetch ahead along the arrow: the position after the top pick, then after the reply the guide will
   // play, so the next step shows at once.
-  const topPick = candidates[0]?.uci;
+  const topPick = own ? candidates[0]?.uci : undefined;
   useEffect(() => {
     if (!guided || !topPick || !rep) return;
     let live = true;
@@ -160,7 +161,7 @@ export function RepertoireScreen() {
         return;
       }
       const prepared = view.node.children.find((c) => c.uci === topPick)?.children[0]?.uci;
-      const reply = prepared ?? guideReply((await prefetchGuide(child, false)) ?? {});
+      const reply = prepared ?? guideReply((await prefetchGuide(child, true)) ?? {});
       if (!live || !reply) return;
       try {
         await prefetchGuide(playUci(positionFromFen(child), reply).fen, true);
@@ -181,14 +182,18 @@ export function RepertoireScreen() {
 
   const autoShapes = useMemo<DrawShape[]>(() => {
     const out: DrawShape[] = [];
-    if (hoverUci) out.push({ orig: hoverUci.slice(0, 2) as Key, dest: hoverUci.slice(2, 4) as Key, brush: 'blue' });
-    else if (guided && candidates[0]) out.push({ orig: candidates[0].uci.slice(0, 2) as Key, dest: candidates[0].uci.slice(2, 4) as Key, brush: 'green' });
-    else if (engineOn && ev.lines[0]?.moves[0]) {
-      const b = ev.lines[0].moves[0];
-      out.push({ orig: b.slice(0, 2) as Key, dest: b.slice(2, 4) as Key, brush: 'paleBlue' });
-    }
+    const arrow = (uci: string, brush: string, label?: string): DrawShape => ({ orig: uci.slice(0, 2) as Key, dest: uci.slice(2, 4) as Key, brush, ...(label ? { label: { text: label } } : {}) });
+    const pin = (c?: GuideCandidate) => (c?.tags[0] ? TAG_PIN[c.tags[0]] : undefined);
+    if (guided && candidates.length) {
+      // The top few suggestions, each pinned with its leading tag; the top pick is the bold one.
+      candidates.slice(0, 3).forEach((c, i) => {
+        if (c.uci !== hoverUci) out.push(arrow(c.uci, i === 0 ? (own ? 'green' : 'red') : own ? 'paleGreen' : 'paleRed', pin(c)));
+      });
+      if (hoverUci) out.push(arrow(hoverUci, 'blue', pin(candidates.find((c) => c.uci === hoverUci))));
+    } else if (hoverUci) out.push(arrow(hoverUci, 'blue'));
+    else if (engineOn && ev.lines[0]?.moves[0]) out.push(arrow(ev.lines[0].moves[0], 'paleBlue'));
     return out;
-  }, [hoverUci, engineOn, ev.lines, guided, candidates]);
+  }, [hoverUci, engineOn, ev.lines, guided, candidates, own]);
 
   if (!lib.loaded) return null;
   if (!rep)
@@ -424,7 +429,6 @@ export function RepertoireScreen() {
         candidates={candidates}
         explorer={explorer}
         searching={guideData.loading || (localNeeded && (ev.searching || ev.depth < GUIDE_MIN_DEPTH))}
-        prepared={new Set(here.map((m) => m.uci))}
         replying={replying}
         onPlay={(u) => {
           setHoverUci(null);

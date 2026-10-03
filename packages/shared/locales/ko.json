@@ -822,5 +822,6 @@
  "The best score at your rating, over enough games that it isn’t luck, and the engine says it’s sound.": "내 레이팅에서 가장 높은 점수예요. 운이라고 할 수 없을 만큼 대국이 충분하고, 엔진도 건전하다고 봐요.",
  "Played most at your rating.": "내 레이팅에서 가장 많이 두는 수예요.",
  "Rare among masters, yet it scores clearly above 50% at your rating and holds up with the engine.": "마스터에게는 드물지만, 내 레이팅에서는 확실히 50% 넘게 득점하고 엔진 검증도 통과해요.",
- "Engine tags appear once the engine has searched deep enough. Masters: share of master games. Club: your side’s score at your rating.": "엔진 태그는 엔진이 충분히 깊이 계산한 뒤에 나타나요. 마스터: 마스터 대국 비율. 클럽: 내 레이팅에서 내 쪽 점수."
+ "Engine tags appear once the engine has searched deep enough. Masters: share of master games. Club: your side’s score at your rating.": "엔진 태그는 엔진이 충분히 깊이 계산한 뒤에 나타나요. 마스터: 마스터 대국 비율. 클럽: 내 레이팅에서 내 쪽 점수.",
+ "Their score at your rating": "내 레이팅에서 상대 쪽 점수"
 }

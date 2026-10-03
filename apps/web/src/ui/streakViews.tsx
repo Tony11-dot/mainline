@@ -6,6 +6,7 @@ import { usePrefs } from '../lib/prefs';
 import { playSound } from '../lib/sound';
 import { platform } from '../platform';
 import { Sheet } from './Sheet';
+import { useOverlay } from './overlay';
 import { Button } from './primitives';
 import { intlLocale, t, tn } from '../lib/i18n';
 
@@ -112,6 +113,7 @@ const milestoneLine = (n: number) =>
  */
 export function StreakCelebration({ before, after, goalHit, onDone }: { before: StreakInfo; after: StreakInfo; goalHit: boolean; onDone: () => void }) {
   const ref = useRef<HTMLDivElement>(null);
+  useOverlay();
   useEffect(() => {
     ref.current?.focus();
     const t = setTimeout(() => {

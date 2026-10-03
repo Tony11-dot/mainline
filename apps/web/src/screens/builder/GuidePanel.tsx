@@ -1,14 +1,9 @@
 import { createElement, useEffect, useState, type ReactNode } from 'react';
 import { CircleHelp } from 'lucide-react';
-import { formatEval, positionFromFen, uciToSan, type ExplorerData, type GuideCandidate, type GuideTag } from '@mainline/shared';
+import { formatEval, playUci, positionFromFen, toEpd, uciToSan, type ExplorerData, type GuideCandidate, type GuideTag } from '@mainline/shared';
 import { fmtPercent, intlLocale, msg, t, tn } from '../../lib/i18n';
 import { Skeleton, Spinner } from '../../ui/primitives';
-
-export interface ExplorerPair {
-  lichess?: ExplorerData;
-  masters?: ExplorerData;
-  loading: boolean;
-}
+import { useOpeningsByEpd } from '../../board/useOpeningName';
 
 export interface ExplorerPair {
   lichess?: ExplorerData;
@@ -29,15 +24,16 @@ const TAGS: Record<GuideTag, { icon: string; label: string; rule: string; tone: 
   surprise: { icon: '🎁', label: msg('Surprise weapon'), rule: msg('Rare among masters, yet it scores clearly above 50% at your rating and holds up with the engine.'), tone: 'bg-warn-soft text-[oklch(0.45_0.1_70)] dark:text-warn' },
 };
 
-/** The guided builder's move picker: the top candidates for your move, or what they're likely to reply. */
+/** The tag's icon alone, pinned on the board's suggestion arrows. */
+export const TAG_PIN = Object.fromEntries(Object.entries(TAGS).map(([k, v]) => [k, v.icon])) as Record<GuideTag, string>;
+
+/** The guided builder's move picker: the top candidates for whoever is to move, rated from their side. */
 export function GuidePanel(props: {
   fen: string;
   own: boolean;
   candidates: GuideCandidate[];
   explorer: ExplorerPair;
   searching: boolean;
-  /** Replies already in the repertoire at an opponent position. */
-  prepared: Set<string>;
   replying: boolean;
   onPlay: (uci: string) => void;
   onHover: (uci: string | null) => void;
@@ -48,41 +44,24 @@ export function GuidePanel(props: {
   const [legend, setLegend] = useState(false);
   useEffect(() => setAll(false), [fen]);
 
-  if (!own) {
-    const total = explorer.lichess?.total ?? 0;
-    const replies = (explorer.lichess?.moves ?? []).filter((m) => m.total > 0).slice(0, 6);
-    return (
-      <section className="flex flex-col" aria-label={t('Their move')}>
-        <Header title={t('Their move')} hint={replying ? t('Opponent is moving…') : replies.length ? t('Pick a reply to prepare for it.') : undefined} busy={replying || explorer.loading} />
-        {explorer.loading ? (
-          <Rows />
-        ) : replies.length === 0 ? (
-          <p className="px-4 pb-4 text-sm text-ink-2">{t('Opponent left book')} — {t('Play the moves you expect from your opponent.')}</p>
-        ) : (
-          <ol className="flex flex-col divide-y divide-line">
-            {replies.map((m) => (
-              <li key={m.uci}>
-                <button type="button" onClick={() => onPlay(m.uci)} onPointerEnter={() => onHover(m.uci)} onPointerLeave={() => onHover(null)} className="flex w-full items-center gap-3 px-3 py-2.5 text-start hover:bg-surface-2">
-                  <PieceIcon fen={fen} uci={m.uci} />
-                  <bdi className="tnum min-w-[3.5ch] text-md font-bold">{m.san}</bdi>
-                  {props.prepared.has(m.uci) && <Tag tag="yours" />}
-                  <span className="tnum ms-auto text-sm text-ink-2">{t('{pct} of games', { pct: fmtPercent(m.total / total) })}</span>
-                </button>
-              </li>
-            ))}
-          </ol>
-        )}
-      </section>
-    );
-  }
+  const names = useOpeningsByEpd();
+  /** The named opening or variation a move leads to, when that position has a name of its own. */
+  const reached = (uci: string) => {
+    if (!names) return undefined;
+    try {
+      return names.get(toEpd(playUci(pos, uci).fen))?.name;
+    } catch {
+      return undefined;
+    }
+  };
 
   const shown = all ? candidates : candidates.slice(0, 5);
   return (
-    <section className="flex flex-col" aria-label={t('Your move')}>
+    <section className="flex flex-col" aria-label={own ? t('Your move') : t('Their move')}>
       <Header
-        title={t('Your move')}
-        hint={candidates.length ? t('The arrow shows the top pick. Play it, drag another piece, or tap a row.') : undefined}
-        busy={searching || explorer.loading}
+        title={own ? t('Your move') : t('Their move')}
+        hint={own ? (candidates.length ? t('The arrow shows the top pick. Play it, drag another piece, or tap a row.') : undefined) : replying ? t('Opponent is moving…') : candidates.length ? t('Pick a reply to prepare for it.') : undefined}
+        busy={replying || searching || explorer.loading}
         action={
           <button type="button" onClick={() => setLegend((v) => !v)} aria-expanded={legend} aria-label={t('What the tags mean')} title={t('What the tags mean')} className="-me-1 ms-auto flex size-8 items-center justify-center rounded-full text-ink-3 hover:bg-surface-3 hover:text-ink">
             <CircleHelp size={17} aria-hidden />
@@ -91,10 +70,18 @@ export function GuidePanel(props: {
       />
       {legend && <Legend />}
       {candidates.length === 0 ? (
-        explorer.loading || searching ? <Rows /> : <p className="px-4 pb-4 text-sm text-ink-2">{t('Not enough data yet')} — {t('Play your first move on the board.')}</p>
+        explorer.loading || searching ? (
+          <Rows />
+        ) : own ? (
+          <p className="px-4 pb-4 text-sm text-ink-2">{t('Not enough data yet')} — {t('Play your first move on the board.')}</p>
+        ) : (
+          <p className="px-4 pb-4 text-sm text-ink-2">{t('Opponent left book')} — {t('Play the moves you expect from your opponent.')}</p>
+        )
       ) : (
         <ol className="flex flex-col divide-y divide-line">
-          {shown.map((c, i) => (
+          {shown.map((c, i) => {
+            const name = reached(c.uci);
+            return (
             <li key={c.uci}>
               <button
                 type="button"
@@ -102,7 +89,7 @@ export function GuidePanel(props: {
                 onPointerEnter={() => onHover(c.uci)}
                 onPointerLeave={() => onHover(null)}
                 className={`flex w-full items-center gap-3 px-3 py-2.5 text-start transition-colors hover:bg-surface-2 ${i === 0 ? 'bg-brand-softer' : ''}`}
-                aria-label={`${c.san ?? uciToSan(pos, c.uci)}${c.tags.length ? ` — ${c.tags.map((g) => t(TAGS[g].label)).join(', ')}` : ''}`}
+                aria-label={`${c.san ?? uciToSan(pos, c.uci)}${name ? `, ${name}` : ''}${c.tags.length ? ` — ${c.tags.map((g) => t(TAGS[g].label)).join(', ')}` : ''}`}
               >
                 <PieceIcon fen={fen} uci={c.uci} />
                 <div className="min-w-0 flex-1">
@@ -112,11 +99,16 @@ export function GuidePanel(props: {
                       <Tag key={g} tag={g} />
                     ))}
                   </div>
+                  {name && (
+                    <p className="mt-0.5 truncate text-xs font-medium text-ink-2" title={name}>
+                      <bdi>{name}</bdi>
+                    </p>
+                  )}
                   <div className="tnum mt-0.5 flex flex-wrap gap-x-3 text-xs text-ink-2">
                     <span title={t('Share of master games')}>
                       {t('Masters')} {c.masterShare === undefined ? '—' : fmtShare(c.masterShare)}
                     </span>
-                    <span title={t('Your side’s score at your rating')}>
+                    <span title={own ? t('Your side’s score at your rating') : t('Their score at your rating')}>
                       {t('Club')} {c.practical === undefined ? '—' : fmtPercent(c.practical)}
                     </span>
                     {c.games > 0 && <span>{tn(c.games, '{n} game', '{n} games')}</span>}
@@ -127,7 +119,8 @@ export function GuidePanel(props: {
                 </span>
               </button>
             </li>
-          ))}
+            );
+          })}
           {candidates.length > 5 && (
             <li>
               <button type="button" onClick={() => setAll((a) => !a)} className="w-full px-3 py-2.5 text-sm font-semibold text-brand hover:bg-surface-2">

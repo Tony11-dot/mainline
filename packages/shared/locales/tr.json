@@ -865,5 +865,6 @@
  "The best score at your rating, over enough games that it isn’t luck, and the engine says it’s sound.": "Senin puanında en iyi skor; şans olmayacak kadar çok oyunda, ve motor da sağlam buluyor.",
  "Played most at your rating.": "Senin puanında en çok oynanan.",
  "Rare among masters, yet it scores clearly above 50% at your rating and holds up with the engine.": "Ustalar arasında nadir, ama senin puanında açıkça %50’nin üzerinde skor yapıyor ve motor kontrolünden geçiyor.",
- "Engine tags appear once the engine has searched deep enough. Masters: share of master games. Club: your side’s score at your rating.": "Motor etiketleri, motor yeterince derin hesapladığında görünür. Ustalar: usta oyunlarındaki payı. Kulüp: senin puanında tarafının skoru."
+ "Engine tags appear once the engine has searched deep enough. Masters: share of master games. Club: your side’s score at your rating.": "Motor etiketleri, motor yeterince derin hesapladığında görünür. Ustalar: usta oyunlarındaki payı. Kulüp: senin puanında tarafının skoru.",
+ "Their score at your rating": "Senin seviyende onların skoru"
 }

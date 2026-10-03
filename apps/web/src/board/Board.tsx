@@ -77,7 +77,20 @@ export function Board(props: BoardProps) {
     // chessground measures itself only on window resize; layout changes (panels, rotation) need this.
     const ro = new ResizeObserver(() => cg.current?.redrawAll());
     if (wrap.current) ro.observe(wrap.current);
+    // It also caches where the board is, refreshed only on window scroll/resize. Content loading in above
+    // the board (titles, panels, banners) moves it without either, and the dragged piece then trails the
+    // finger by that distance. Re-measure on every press and every move, before chessground reads it.
+    const remeasure = () => cg.current?.state.dom.bounds.clear();
+    const node = wrap.current;
+    node?.addEventListener('touchstart', remeasure, { capture: true, passive: true });
+    node?.addEventListener('mousedown', remeasure, { capture: true, passive: true });
+    window.addEventListener('touchmove', remeasure, { capture: true, passive: true });
+    window.addEventListener('mousemove', remeasure, { capture: true, passive: true });
     return () => {
+      node?.removeEventListener('touchstart', remeasure, { capture: true });
+      node?.removeEventListener('mousedown', remeasure, { capture: true });
+      window.removeEventListener('touchmove', remeasure, { capture: true });
+      window.removeEventListener('mousemove', remeasure, { capture: true });
       ro.disconnect();
       cg.current?.destroy();
       cg.current = null;

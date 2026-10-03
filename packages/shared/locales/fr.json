@@ -865,5 +865,6 @@
  "The best score at your rating, over enough games that it isn’t luck, and the engine says it’s sound.": "Le meilleur score à votre niveau, sur assez de parties pour que ce ne soit pas de la chance, et le moteur le juge solide.",
  "Played most at your rating.": "Le plus joué à votre niveau.",
  "Rare among masters, yet it scores clearly above 50% at your rating and holds up with the engine.": "Rare chez les maîtres, mais il marque nettement plus de 50 % à votre niveau et tient face au moteur.",
- "Engine tags appear once the engine has searched deep enough. Masters: share of master games. Club: your side’s score at your rating.": "Les étiquettes du moteur apparaissent une fois que le moteur a calculé assez profondément. Maîtres : part dans les parties de maîtres. Club : score de votre camp à votre niveau."
+ "Engine tags appear once the engine has searched deep enough. Masters: share of master games. Club: your side’s score at your rating.": "Les étiquettes du moteur apparaissent une fois que le moteur a calculé assez profondément. Maîtres : part dans les parties de maîtres. Club : score de votre camp à votre niveau.",
+ "Their score at your rating": "Leur score à votre niveau"
 }

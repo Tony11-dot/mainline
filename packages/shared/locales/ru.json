@@ -951,5 +951,6 @@
  "The best score at your rating, over enough games that it isn’t luck, and the engine says it’s sound.": "Лучший результат на вашем рейтинге на достаточном числе партий, чтобы это не было везением, и движок считает ход корректным.",
  "Played most at your rating.": "Самый частый ход на вашем рейтинге.",
  "Rare among masters, yet it scores clearly above 50% at your rating and holds up with the engine.": "Редок у мастеров, но на вашем рейтинге набирает заметно больше 50% и выдерживает проверку движком.",
- "Engine tags appear once the engine has searched deep enough. Masters: share of master games. Club: your side’s score at your rating.": "Метки движка появляются, когда движок посчитал достаточно глубоко. Мастера: доля партий мастеров. Клубный: результат вашей стороны на вашем рейтинге."
+ "Engine tags appear once the engine has searched deep enough. Masters: share of master games. Club: your side’s score at your rating.": "Метки движка появляются, когда движок посчитал достаточно глубоко. Мастера: доля партий мастеров. Клубный: результат вашей стороны на вашем рейтинге.",
+ "Their score at your rating": "Их результат на вашем уровне"
 }

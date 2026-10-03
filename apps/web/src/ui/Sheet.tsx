@@ -1,6 +1,7 @@
 import { useEffect, useRef, type ReactNode } from 'react';
 import { X } from 'lucide-react';
 import { t } from '../lib/i18n';
+import { useOverlay } from './overlay';
 
 /**
  * Native <dialog>: a bottom sheet on phones, a centered panel on larger screens.
@@ -8,6 +9,8 @@ import { t } from '../lib/i18n';
  */
 export function Sheet({ open, onClose, title, children, footer, wide }: { open: boolean; onClose: () => void; title: string; children: ReactNode; footer?: ReactNode; wide?: boolean }) {
   const ref = useRef<HTMLDialogElement>(null);
+  // The native iOS tab bar floats above the web view and would cover the footer's buttons.
+  useOverlay(open);
   useEffect(() => {
     const d = ref.current;
     if (!d) return;

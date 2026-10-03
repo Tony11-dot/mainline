@@ -865,5 +865,6 @@
  "The best score at your rating, over enough games that it isn’t luck, and the engine says it’s sound.": "De beste score op jouw rating, over genoeg partijen om geen geluk te zijn, en de engine vindt hem degelijk.",
  "Played most at your rating.": "Het meest gespeeld op jouw rating.",
  "Rare among masters, yet it scores clearly above 50% at your rating and holds up with the engine.": "Zeldzaam bij meesters, maar scoort op jouw rating duidelijk boven 50% en houdt stand bij de engine.",
- "Engine tags appear once the engine has searched deep enough. Masters: share of master games. Club: your side’s score at your rating.": "Engine-labels verschijnen zodra de engine diep genoeg heeft gerekend. Meesters: aandeel in meesterpartijen. Club: score van jouw kant op jouw rating."
+ "Engine tags appear once the engine has searched deep enough. Masters: share of master games. Club: your side’s score at your rating.": "Engine-labels verschijnen zodra de engine diep genoeg heeft gerekend. Meesters: aandeel in meesterpartijen. Club: score van jouw kant op jouw rating.",
+ "Their score at your rating": "Hun score op jouw niveau"
 }

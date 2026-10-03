@@ -908,5 +908,6 @@
  "The best score at your rating, over enough games that it isn’t luck, and the engine says it’s sound.": "הניקוד הטוב ביותר בדירוג שלך, על פני מספיק משחקים כדי שזה לא מזל, והמנוע מאשר שהוא תקין.",
  "Played most at your rating.": "המסע הנפוץ ביותר בדירוג שלך.",
  "Rare among masters, yet it scores clearly above 50% at your rating and holds up with the engine.": "נדיר אצל אמנים, אבל בדירוג שלך הוא משיג בבירור יותר מ־50% ועומד בבדיקת המנוע.",
- "Engine tags appear once the engine has searched deep enough. Masters: share of master games. Club: your side’s score at your rating.": "תגיות המנוע מופיעות אחרי שהמנוע חישב לעומק מספיק. אמנים: שיעור במשחקי אמנים. מועדון: הניקוד של הצד שלך בדירוג שלך."
+ "Engine tags appear once the engine has searched deep enough. Masters: share of master games. Club: your side’s score at your rating.": "תגיות המנוע מופיעות אחרי שהמנוע חישב לעומק מספיק. אמנים: שיעור במשחקי אמנים. מועדון: הניקוד של הצד שלך בדירוג שלך.",
+ "Their score at your rating": "התוצאה שלהם ברמה שלך"
 }

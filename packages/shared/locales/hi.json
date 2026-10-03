@@ -865,5 +865,6 @@
  "The best score at your rating, over enough games that it isn’t luck, and the engine says it’s sound.": "आपकी रेटिंग पर सबसे अच्छा स्कोर, इतने गेम में कि यह किस्मत न हो, और इंजन भी इसे ठोस मानता है।",
  "Played most at your rating.": "आपकी रेटिंग पर सबसे ज़्यादा खेली जाने वाली।",
  "Rare among masters, yet it scores clearly above 50% at your rating and holds up with the engine.": "मास्टर्स में दुर्लभ, फिर भी आपकी रेटिंग पर साफ़ तौर पर 50% से ज़्यादा स्कोर करती है और इंजन की जाँच में टिकती है।",
- "Engine tags appear once the engine has searched deep enough. Masters: share of master games. Club: your side’s score at your rating.": "इंजन टैग तब दिखते हैं जब इंजन काफ़ी गहराई तक गणना कर चुका हो। मास्टर्स: मास्टर गेम में हिस्सा। क्लब: आपकी रेटिंग पर आपके पक्ष का स्कोर।"
+ "Engine tags appear once the engine has searched deep enough. Masters: share of master games. Club: your side’s score at your rating.": "इंजन टैग तब दिखते हैं जब इंजन काफ़ी गहराई तक गणना कर चुका हो। मास्टर्स: मास्टर गेम में हिस्सा। क्लब: आपकी रेटिंग पर आपके पक्ष का स्कोर।",
+ "Their score at your rating": "आपकी रेटिंग पर उनका स्कोर"
 }

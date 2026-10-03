@@ -1037,5 +1037,6 @@
  "The best score at your rating, over enough games that it isn’t luck, and the engine says it’s sound.": "أفضل نتيجة في مستوى تصنيفك، عبر عدد كافٍ من المباريات بحيث لا تكون حظًّا، والمحرك يؤكد أنها سليمة.",
  "Played most at your rating.": "الأكثر لعبًا في مستوى تصنيفك.",
  "Rare among masters, yet it scores clearly above 50% at your rating and holds up with the engine.": "نادرة بين الأساتذة، لكنها تحقق بوضوح أكثر من 50% في مستوى تصنيفك وتصمد أمام المحرك.",
- "Engine tags appear once the engine has searched deep enough. Masters: share of master games. Club: your side’s score at your rating.": "تظهر وسوم المحرك بعد أن يبحث المحرك بعمق كافٍ. الأساتذة: النسبة في مباريات الأساتذة. الأندية: نتيجة طرفك في مستوى تصنيفك."
+ "Engine tags appear once the engine has searched deep enough. Masters: share of master games. Club: your side’s score at your rating.": "تظهر وسوم المحرك بعد أن يبحث المحرك بعمق كافٍ. الأساتذة: النسبة في مباريات الأساتذة. الأندية: نتيجة طرفك في مستوى تصنيفك.",
+ "Their score at your rating": "نتيجتهم عند مستواك"
 }

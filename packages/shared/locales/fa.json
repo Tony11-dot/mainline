@@ -865,5 +865,6 @@
  "The best score at your rating, over enough games that it isn’t luck, and the engine says it’s sound.": "بهترین امتیاز در ریتینگ شما، در تعداد بازی کافی که شانسی نباشد، و موتور هم آن را سالم می‌داند.",
  "Played most at your rating.": "پرتکرارترین حرکت در ریتینگ شما.",
  "Rare among masters, yet it scores clearly above 50% at your rating and holds up with the engine.": "میان استادان نادر است، اما در ریتینگ شما به‌وضوح بیش از ۵۰٪ امتیاز می‌گیرد و از نظر موتور هم قابل‌قبول است.",
- "Engine tags appear once the engine has searched deep enough. Masters: share of master games. Club: your side’s score at your rating.": "برچسب‌های موتور وقتی ظاهر می‌شوند که موتور به عمق کافی رسیده باشد. استادان: سهم در بازی‌های استادان. باشگاهی: امتیاز طرف شما در ریتینگ شما."
+ "Engine tags appear once the engine has searched deep enough. Masters: share of master games. Club: your side’s score at your rating.": "برچسب‌های موتور وقتی ظاهر می‌شوند که موتور به عمق کافی رسیده باشد. استادان: سهم در بازی‌های استادان. باشگاهی: امتیاز طرف شما در ریتینگ شما.",
+ "Their score at your rating": "امتیاز آن‌ها در سطح شما"
 }

@@ -822,5 +822,6 @@
  "The best score at your rating, over enough games that it isn’t luck, and the engine says it’s sound.": "Điểm cao nhất ở mức rating của bạn, qua đủ nhiều ván để không phải may mắn, và engine xác nhận là chắc chắn.",
  "Played most at your rating.": "Được đi nhiều nhất ở mức rating của bạn.",
  "Rare among masters, yet it scores clearly above 50% at your rating and holds up with the engine.": "Hiếm ở kiện tướng, nhưng ở mức rating của bạn đạt rõ trên 50% và vẫn đứng vững trước engine.",
- "Engine tags appear once the engine has searched deep enough. Masters: share of master games. Club: your side’s score at your rating.": "Nhãn engine xuất hiện khi engine đã tính đủ sâu. Kiện tướng: tỷ lệ trong ván của kiện tướng. Câu lạc bộ: điểm của bên bạn ở mức rating của bạn."
+ "Engine tags appear once the engine has searched deep enough. Masters: share of master games. Club: your side’s score at your rating.": "Nhãn engine xuất hiện khi engine đã tính đủ sâu. Kiện tướng: tỷ lệ trong ván của kiện tướng. Câu lạc bộ: điểm của bên bạn ở mức rating của bạn.",
+ "Their score at your rating": "Điểm của họ ở trình độ của bạn"
 }

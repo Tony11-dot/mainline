@@ -951,5 +951,6 @@
  "The best score at your rating, over enough games that it isn’t luck, and the engine says it’s sound.": "Найкращий результат на вашому рейтингу на достатній кількості партій, щоб це не було везінням, і рушій вважає хід коректним.",
  "Played most at your rating.": "Найчастіший хід на вашому рейтингу.",
  "Rare among masters, yet it scores clearly above 50% at your rating and holds up with the engine.": "Рідкісний у майстрів, але на вашому рейтингу набирає помітно більше 50% і витримує перевірку рушієм.",
- "Engine tags appear once the engine has searched deep enough. Masters: share of master games. Club: your side’s score at your rating.": "Мітки рушія з’являються, коли рушій порахував достатньо глибоко. Майстри: частка партій майстрів. Клубний: результат вашої сторони на вашому рейтингу."
+ "Engine tags appear once the engine has searched deep enough. Masters: share of master games. Club: your side’s score at your rating.": "Мітки рушія з’являються, коли рушій порахував достатньо глибоко. Майстри: частка партій майстрів. Клубний: результат вашої сторони на вашому рейтингу.",
+ "Their score at your rating": "Їхній результат на вашому рівні"
 }
