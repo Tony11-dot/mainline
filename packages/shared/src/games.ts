@@ -267,3 +267,41 @@ export function opponentMeets(theirGames: PlayedGame[], book: Book, opts = { min
   walk(relevant, 0, [], 1);
   return out.sort((a, b) => Number(a.prepared) - Number(b.prepared) || b.reach - a.reach);
 }
+
+/* ---------------- Your own results, per position ---------------- */
+
+export interface MyMoveStats {
+  games: number;
+  /** Your score in those games (win + ½ draw), 0..1. */
+  score: number;
+}
+
+/**
+ * What happened in your games from each position, by the move played there (yours or your opponent's):
+ * epd → uci → how many games and how you scored. Only games where you had `color`.
+ */
+export function myMovesByPosition(games: PlayedGame[], color: Color, maxPly = OPENING_PLIES): Map<string, Map<string, MyMoveStats>> {
+  const acc = new Map<string, Map<string, { games: number; points: number }>>();
+  for (const g of games) {
+    if (g.color !== color) continue;
+    const points = g.result === 'win' ? 1 : g.result === 'draw' ? 0.5 : 0;
+    let pos = positionFromFen(INITIAL_FEN);
+    for (const uci of g.ucis.slice(0, maxPly)) {
+      const epd = toEpd(pos);
+      let next;
+      try {
+        next = playUci(pos, uci);
+      } catch {
+        break;
+      }
+      const byMove = acc.get(epd) ?? acc.set(epd, new Map()).get(epd)!;
+      const s = byMove.get(next.uci) ?? byMove.set(next.uci, { games: 0, points: 0 }).get(next.uci)!;
+      s.games++;
+      s.points += points;
+      pos = next.pos;
+    }
+  }
+  const out = new Map<string, Map<string, MyMoveStats>>();
+  for (const [epd, byMove] of acc) out.set(epd, new Map([...byMove].map(([u, s]) => [u, { games: s.games, score: s.points / s.games }])));
+  return out;
+}

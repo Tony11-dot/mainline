@@ -78,3 +78,17 @@ test('opening library starts a repertoire', async ({ page }, info) => {
   await expect(page.getByRole('heading', { name: /English Attack/ })).toBeVisible();
   await expectPiece(page, 'e3', 'white bishop');
 });
+
+test('ready-made repertoire: add a complete White 1.e4 repertoire from the library', async ({ page }, info) => {
+  test.skip(info.project.name === 'android');
+  await page.goto('/library');
+  await page.getByRole('button', { name: 'Ready-made repertoires' }).first().click();
+  const sheet = page.getByRole('dialog', { name: 'Ready-made repertoires' });
+  const card = sheet.getByRole('listitem').filter({ has: page.getByRole('heading', { name: 'Ruy Lopez & Open Sicilian' }) });
+  await expect(card.getByText('Open Sicilian', { exact: true })).toBeVisible();
+  await card.getByRole('button', { name: 'Add' }).click();
+  await expect(page.getByRole('heading', { name: 'Ruy Lopez & Open Sicilian' })).toBeVisible();
+  // Every main reply is already answered: after 1.e4 the tree branches into all of them.
+  const tree = page.getByRole('tree', { name: 'Moves' });
+  for (const reply of ['e5', 'c5', 'c6', 'e6', 'd5', 'Nf6']) await expect(tree.getByRole('treeitem', { name: reply }).first()).toBeVisible();
+});

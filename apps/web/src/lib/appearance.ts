@@ -203,13 +203,17 @@ export const PIECE_SETS: { id: PieceSet; name: string }[] = [
 
 const ROLES = { pawn: 'P', knight: 'N', bishop: 'B', rook: 'R', queen: 'Q', king: 'K' } as const;
 
-/** CSS that swaps chessground's piece sprites (cburnett is built in, so it needs no override). */
+/**
+ * CSS that swaps chessground's piece sprites (cburnett is built in, so it needs no override). The
+ * built-in sprites load with the board's code, after this style is in place, and use the same selectors:
+ * `:root` outranks them whatever the order.
+ */
 export function pieceCss(set: PieceSet): string {
   if (set === 'cburnett') return '';
   const rules: string[] = [];
   for (const color of ['white', 'black'] as const) {
     for (const [role, letter] of Object.entries(ROLES)) {
-      rules.push(`.cg-wrap piece.${role}.${color}{background-image:url('/pieces/${set}/${color[0]}${letter}.svg')}`);
+      rules.push(`:root .cg-wrap piece.${role}.${color}{background-image:url('/pieces/${set}/${color[0]}${letter}.svg')}`);
     }
   }
   return rules.join('\n');

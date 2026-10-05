@@ -14,6 +14,8 @@ export interface ExplorerPair {
 /** Each tag, and the exact rule behind it (shown in the panel's "What the tags mean"). */
 const TAGS: Record<GuideTag, { icon: string; label: string; rule: string; tone: string }> = {
   yours: { icon: '✅', label: msg('In your repertoire'), rule: msg('Already saved in this repertoire.'), tone: 'bg-brand-soft text-brand-ink' },
+  proven: { icon: '🎯', label: msg('Works for you'), rule: msg('In your own games from this position, you scored 60% or more after this move (at least 5 games).'), tone: 'bg-good-soft text-good' },
+  trouble: { icon: '🩹', label: msg('Trouble for you'), rule: msg('In your own games from this position, you scored 40% or less after this move (at least 3 games).'), tone: 'bg-bad-soft text-bad' },
   fits: { icon: '🧩', label: msg('Goes with your repertoire'), rule: msg('Leads to a position another of your repertoires already covers.'), tone: 'bg-brand-soft text-brand-ink' },
   dubious: { icon: '🤨', label: msg('Dubious'), rule: msg('The engine rates it clearly worse than the best move (roughly a pawn).'), tone: 'bg-bad-soft text-bad' },
   book: { icon: '📖', label: msg('By the book'), rule: msg('The move masters play most here.'), tone: 'bg-surface-3 text-ink-2' },
@@ -35,10 +37,13 @@ export function GuidePanel(props: {
   explorer: ExplorerPair;
   searching: boolean;
   replying: boolean;
+  /** The opponent's reply is played for you (else you pick it from their suggestions). */
+  autoReply: boolean;
+  onAutoReply: (on: boolean) => void;
   onPlay: (uci: string) => void;
   onHover: (uci: string | null) => void;
 }) {
-  const { fen, own, candidates, explorer, searching, replying, onPlay, onHover } = props;
+  const { fen, own, candidates, explorer, searching, replying, autoReply, onAutoReply, onPlay, onHover } = props;
   const pos = positionFromFen(fen);
   const [all, setAll] = useState(false);
   const [legend, setLegend] = useState(false);
@@ -69,6 +74,16 @@ export function GuidePanel(props: {
         }
       />
       {legend && <Legend />}
+      {!own && (
+        <label className="mx-3 mb-2 flex cursor-pointer items-center justify-between gap-3 text-xs text-ink-2">
+          <span>{t('Play their most likely reply for me')}</span>
+          <span className="relative inline-flex shrink-0 items-center">
+            <input type="checkbox" className="peer sr-only" checked={autoReply} onChange={(e) => onAutoReply(e.target.checked)} />
+            <span className="h-[22px] w-[38px] rounded-full bg-surface-3 transition-colors duration-200 peer-checked:bg-good peer-focus-visible:ring-2 peer-focus-visible:ring-brand" />
+            <span className="absolute start-[2px] top-[2px] size-[18px] rounded-full bg-white shadow-2 transition-transform duration-200 peer-checked:translate-x-[16px] rtl:peer-checked:-translate-x-[16px]" />
+          </span>
+        </label>
+      )}
       {candidates.length === 0 ? (
         explorer.loading || searching ? (
           <Rows />
@@ -112,6 +127,11 @@ export function GuidePanel(props: {
                       {t('Club')} {c.practical === undefined ? '—' : fmtPercent(c.practical)}
                     </span>
                     {c.games > 0 && <span>{tn(c.games, '{n} game', '{n} games')}</span>}
+                    {c.mine && (
+                      <span className="font-semibold text-ink" title={t('Your score after this move in your own games')}>
+                        {tn(c.mine.games, 'You: {score} in {n} game', 'You: {score} in {n} games', { score: fmtPercent(c.mine.score) })}
+                      </span>
+                    )}
                   </div>
                 </div>
                 <span className="tnum shrink-0 rounded-md bg-surface-3 px-2 py-1 text-sm font-bold" title={t('{eval} after this move', { eval: formatEval(c.line) })} dir="ltr">
@@ -162,6 +182,7 @@ function Legend() {
         ))}
       </dl>
       <p className="mt-3 text-xs text-ink-3">{t('Engine tags appear once the engine has searched deep enough. Masters: share of master games. Club: your side’s score at your rating.')}</p>
+      <p className="mt-1 text-xs text-ink-3">{t('You: your score after the move in your imported games (Games tab).')}</p>
     </div>
   );
 }

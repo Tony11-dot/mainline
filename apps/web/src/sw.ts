@@ -20,7 +20,14 @@ precacheAndRoute(self.__WB_MANIFEST);
 // SPA navigations → cached index.html (except API and the share-target POST).
 registerRoute(new NavigationRoute(createHandlerBoundToURL('/index.html'), { denylist: [/^\/api\//, /^\/import/, /^\/privacy/, /^\/terms/, /^\/cookies/] }));
 
-registerRoute(({ url }) => url.pathname.startsWith('/engine/'), new CacheFirst({ cacheName: 'engine', plugins: [new ExpirationPlugin({ maxEntries: 8 })] }));
+// Engine: only the single-threaded build goes through the worker. The threaded build's own thread
+// workers fail to start when a service worker answers for them, and it retries until the page freezes;
+// offline, that build fails to load and the app falls back to the single-threaded one, kept cached here.
+const SINGLE_ENGINE = ['/engine/stockfish-19-lite-single.js', '/engine/stockfish-19-lite-single.wasm'];
+registerRoute(({ url }) => SINGLE_ENGINE.includes(url.pathname), new CacheFirst({ cacheName: 'engine', plugins: [new ExpirationPlugin({ maxEntries: 8 })] }));
+self.addEventListener('install', (event) => {
+  event.waitUntil(caches.open('engine').then((c) => c.addAll(SINGLE_ENGINE)).catch(() => undefined));
+});
 registerRoute(({ url }) => url.pathname.startsWith('/pieces/'), new CacheFirst({ cacheName: 'pieces', plugins: [new ExpirationPlugin({ maxEntries: 200 })] }));
 registerRoute(({ request }) => request.destination === 'font', new CacheFirst({ cacheName: 'fonts', plugins: [new ExpirationPlugin({ maxEntries: 60 })] }));
 registerRoute(({ url }) => url.pathname === '/api/openings/at' || url.pathname === '/api/eval', new StaleWhileRevalidate({ cacheName: 'evals', plugins: [new ExpirationPlugin({ maxEntries: 2000, maxAgeSeconds: 30 * 86400 })] }));

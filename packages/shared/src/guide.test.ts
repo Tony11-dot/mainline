@@ -24,6 +24,18 @@ describe('guideCandidates', () => {
     expect(c.find((x) => x.uci === 'e2e4')!.line?.cp).toBe(28);
   });
 
+  it('shows what you played in your own games, tagging what works for you and what gives you trouble', () => {
+    const mine = new Map([['e2e4', { games: 8, score: 0.7 }], ['d2d4', { games: 4, score: 0.25 }], ['h2h4', { games: 2, score: 1 }]]);
+    const c = guideCandidates({ color: 'white', engineLines, engineDepth: 30, lichess, masters, mine });
+    const by = Object.fromEntries(c.map((x) => [x.uci, x]));
+    expect(by['e2e4']!.tags).toContain('proven');
+    expect(by['e2e4']!.mine).toEqual({ games: 8, score: 0.7 });
+    expect(by['d2d4']!.tags).toContain('trouble');
+    // Not in any database, but you've played it twice: it still shows, without a "works for you" claim.
+    expect(by['h2h4']).toBeDefined();
+    expect(by['h2h4']!.tags).not.toContain('proven');
+  });
+
   it('marks moves already in (or fitting) your repertoires', () => {
     const c = guideCandidates({ color: 'white', engineLines, lichess, masters, inRep: new Set(['e2e4']), fitsRep: new Set(['d2d4']) });
     expect(c.find((x) => x.uci === 'e2e4')!.tags[0]).toBe('yours');

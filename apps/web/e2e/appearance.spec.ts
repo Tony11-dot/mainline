@@ -41,6 +41,10 @@ test('theme, font, board and pieces pickers apply everywhere and persist', async
   expect(v.theme).toBe('dark');
   expect(v.font).toContain('Georgia');
   expect(v.pieces).toContain('/pieces/merida/');
+  // Without a reload too: the board's built-in sprites load after the choice and must not win.
+  await page.getByRole('link', { name: 'Explore' }).first().click();
+  await expect.poll(() => page.locator('.ml-board piece.white.knight').first().evaluate((el) => getComputedStyle(el).backgroundImage)).toContain('merida');
+  await page.goto('/settings');
   await page.reload();
   v = await vars();
   expect(v.brand).toBe('#BD93F9');

@@ -32,8 +32,10 @@ export interface Prefs {
   chesscomUser: string;
   engineLines: number;
   reduceTransparency: boolean;
-  /** Repertoire builder walks you through moves (suggestions + automatic replies). */
+  /** Repertoire builder walks you through moves with suggestions for both sides. */
   guided: boolean;
+  /** Guided builder plays the opponent's most likely reply for you instead of letting you pick it. */
+  autoReply: boolean;
   set: (p: Partial<Omit<Prefs, 'set'>>) => void;
 }
 
@@ -91,6 +93,7 @@ export const usePrefs = create<Prefs>()(
       engineLines: 3,
       reduceTransparency: false,
       guided: true,
+      autoReply: false,
       set: (p) => set(p),
     }),
     {

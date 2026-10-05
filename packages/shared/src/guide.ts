@@ -1,15 +1,18 @@
 import type { EvalData, EvalLine, ExplorerData } from './api';
 import type { Color } from './chess';
+import type { MyMoveStats } from './games';
 import { rankMoves, type MoveSuggestion } from './suggest';
 
 /** Why a candidate is worth a look. Each maps to a short, friendly label in the app. */
-export type GuideTag = 'yours' | 'fits' | 'book' | 'engine' | 'gem' | 'club' | 'crowd' | 'surprise' | 'dubious';
+export type GuideTag = 'yours' | 'fits' | 'proven' | 'trouble' | 'book' | 'engine' | 'gem' | 'club' | 'crowd' | 'surprise' | 'dubious';
 
 export interface GuideCandidate extends MoveSuggestion {
   /** Engine line that starts with this move (eval after it, White POV). */
   line?: EvalLine;
   /** Games with this move at the user's rating. */
   games: number;
+  /** How you did after this move in your own games from this position. */
+  mine?: MyMoveStats;
   tags: GuideTag[];
 }
 
@@ -22,6 +25,9 @@ const ENGINE_TIE = 0.01;
 const GEM_MARGIN = 0.03;
 const SOUND_MARGIN = 0.05;
 const DUBIOUS_MARGIN = 0.08;
+/** Your own games: enough of them, and a clear enough score, before a tag says a move works (or doesn't) for you. */
+export const MINE_PROVEN = { games: 5, score: 0.6 };
+export const MINE_TROUBLE = { games: 3, score: 0.4 };
 
 /** One-sided 95% lower bound on a score from `n` games: a club tag shouldn't rest on a lucky streak. */
 export function scoreLowerBound(p: number, n: number): number {
@@ -33,11 +39,16 @@ export function scoreLowerBound(p: number, n: number): number {
  * usage) plus anything already in your repertoires, each tagged with what makes it stand out.
  * `inRep`: moves this repertoire already has here. `fitsRep`: moves leading to a position another of
  * your repertoires (same colour) already covers. `engineDepth`: the shallowest search behind `engineLines`;
- * engine-based tags are held back until it reaches GUIDE_MIN_DEPTH.
+ * engine-based tags are held back until it reaches GUIDE_MIN_DEPTH. `mine`: what was played here in your own
+ * games and how you scored after each move; moves from at least two of your games always show.
  */
-export function guideCandidates(opts: { color: Color; engineLines?: EvalLine[]; engineDepth?: number; lichess?: ExplorerData; masters?: ExplorerData; inRep?: Set<string>; fitsRep?: Set<string>; max?: number }): GuideCandidate[] {
-  const { engineLines = [], engineDepth = 0, lichess, masters, inRep = new Set(), fitsRep = new Set(), max = 8 } = opts;
+export function guideCandidates(opts: { color: Color; engineLines?: EvalLine[]; engineDepth?: number; lichess?: ExplorerData; masters?: ExplorerData; inRep?: Set<string>; fitsRep?: Set<string>; mine?: Map<string, MyMoveStats>; max?: number }): GuideCandidate[] {
+  const { engineLines = [], engineDepth = 0, lichess, masters, inRep = new Set(), fitsRep = new Set(), mine = new Map(), max = 8 } = opts;
   const ranked = rankMoves({ color: opts.color, engineLines, lichess, masters, minGames: 10 });
+  const seen = new Set(ranked.map((r) => r.uci));
+  // A move you keep meeting (or playing) belongs on the list even when the databases barely know it.
+  for (const [uci, s] of mine) if (s.games >= 2 && !seen.has(uci)) ranked.push({ uci, practicalGames: 0, score: 0 });
+  const kept = (uci: string) => inRep.has(uci) || (mine.get(uci)?.games ?? 0) >= 2;
   const games = new Map((lichess?.moves ?? []).map((m) => [m.uci, m.total]));
   const lineOf = new Map<string, EvalLine>();
   for (const l of engineLines) if (l.moves[0] && !lineOf.has(l.moves[0])) lineOf.set(l.moves[0], l);
@@ -50,12 +61,12 @@ export function guideCandidates(opts: { color: Color; engineLines?: EvalLine[]; 
   // With a deep search in hand, a move the engine never looked at and few people play is a stab in the
   // dark: leave it out rather than show it without an eval.
   const deep = engineDepth >= GUIDE_MIN_DEPTH && engineLines.length > 0;
-  const shown = deep ? ranked.filter((s) => s.engine !== undefined || s.practicalGames >= GUIDE_MIN_GAMES || (s.masterShare ?? 0) >= 0.05 || inRep.has(s.uci)) : ranked;
+  const shown = deep ? ranked.filter((s) => s.engine !== undefined || s.practicalGames >= GUIDE_MIN_GAMES || (s.masterShare ?? 0) >= 0.05 || kept(s.uci)) : ranked;
   const picked = shown.slice(0, max);
-  // Your own moves always show, even when the numbers don't favour them.
-  for (const s of shown.slice(max)) if (inRep.has(s.uci) && picked.length < max + 3) picked.push(s);
+  // Your own moves (saved, or from your games) always show, even when the numbers don't favour them.
+  for (const s of shown.slice(max)) if (kept(s.uci) && picked.length < max + 3) picked.push(s);
 
-  const list: GuideCandidate[] = picked.map((s) => ({ ...s, line: lineOf.get(s.uci), games: games.get(s.uci) ?? 0, tags: [] }));
+  const list: GuideCandidate[] = picked.map((s) => ({ ...s, line: lineOf.get(s.uci), games: games.get(s.uci) ?? 0, mine: mine.get(s.uci), tags: [] }));
   // Every tag below is a claim about the data, so each one needs enough of it: a deep enough search,
   // enough master games for "rare" or "most played" to mean something, enough club games to beat luck.
   const sure = engineDepth >= GUIDE_MIN_DEPTH && list.some((c) => c.engine !== undefined);
@@ -88,6 +99,9 @@ export function guideCandidates(opts: { color: Color; engineLines?: EvalLine[]; 
     const d = drop(c);
     if (inRep.has(c.uci)) t.push('yours');
     else if (fitsRep.has(c.uci)) t.push('fits');
+    const m = c.mine;
+    if (m && m.games >= MINE_TROUBLE.games && m.score <= MINE_TROUBLE.score) t.push('trouble');
+    else if (m && m.games >= MINE_PROVEN.games && m.score >= MINE_PROVEN.score) t.push('proven');
     // A warning outranks the compliments: it's the tag you most need to see.
     if (sure && d !== undefined && d > DUBIOUS_MARGIN) t.push('dubious');
     if (c === book) t.push('book');

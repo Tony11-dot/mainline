@@ -4,7 +4,7 @@ import { useStore } from 'zustand';
 import type { DrawShape } from 'chessground/draw';
 import type { Key } from 'chessground/types';
 import { ArrowLeft, Compass, Crown, Lightbulb, Pencil, Sparkles, Star, Trash2, Waypoints } from 'lucide-react';
-import { addLine, buildGraph, bundleEngine, childPath, pathToUcis, findConflicts, guideCandidates, guideMoves, guideReply, GUIDE_MIN_DEPTH, type GuideCandidate, isOwnTurn, mergeEngine, mainMoveAt, nodeAt, parentPath, playUci, positionFromFen, uciToSan, epdToFen } from '@mainline/shared';
+import { addLine, buildGraph, myMovesByPosition, bundleEngine, childPath, pathToUcis, findConflicts, guideCandidates, guideMoves, guideReply, GUIDE_MIN_DEPTH, type GuideCandidate, isOwnTurn, mergeEngine, mainMoveAt, nodeAt, parentPath, playUci, positionFromFen, uciToSan, epdToFen } from '@mainline/shared';
 import { Board } from '../board/Board';
 import { BoardControls } from '../board/BoardControls';
 import { bindAnalysisKeys, createAnalysisStore, locate, useBoardView } from '../board/analysis';
@@ -17,6 +17,7 @@ import { useEngineEval } from '../panels/useEngineEval';
 import { folderPath, repMoves, useLibrary } from '../lib/library';
 import { pathToEpd, repertoireTree, validPrefix } from '../lib/repTree';
 import { usePrefs } from '../lib/prefs';
+import { useGames } from '../lib/games';
 import { Button, PanelNote } from '../ui/primitives';
 import { MoveStatsPanel } from '../panels/MoveStatsPanel';
 import { RepertoireStats } from '../panels/RepertoireStats';
@@ -72,7 +73,7 @@ export function RepertoireScreen() {
       if (at) path = pathToEpd(root, at) ?? path;
       if (params.get('guide') === '1') {
         usePrefs.getState().set({ guided: true });
-        kickReply.current = true;
+        kickReply.current = usePrefs.getState().autoReply;
       }
     }
     store.setState({ root, path, version: s.version + 1 });
@@ -89,6 +90,7 @@ export function RepertoireScreen() {
   const orientation = useStore(store, (s) => s.orientation);
   const engineOn = usePrefs((s) => s.engineOn);
   const guided = usePrefs((s) => s.guided);
+  const autoReplyOn = usePrefs((s) => s.autoReply);
   const ownHere = rep ? isOwnTurn(rep.color, view.node.epd) : false;
   const [replying, setReplying] = useState(false);
   const guideData = useGuide(view.node.fen, guided, true);
@@ -121,6 +123,11 @@ export function RepertoireScreen() {
     if (!rep || !own) return undefined;
     return findConflicts(lib.reps.filter((r) => !r.deleted && r.color === rep.color), lib.moves).find((c) => c.epd === view.node.epd);
   }, [lib.version, view.node.epd, own]); // eslint-disable-line react-hooks/exhaustive-deps
+  // Your imported games: what was played from each position and how you did after it, on both turns.
+  const games = useGames((g) => g.games);
+  useEffect(() => void useGames.getState().load(), []);
+  const myIndex = useMemo(() => (rep ? myMovesByPosition(games, rep.color) : undefined), [games, rep?.color]); // eslint-disable-line react-hooks/exhaustive-deps
+  const mineHere = myIndex?.get(view.node.epd);
   /** Positions your other repertoires of this colour already cover: candidates leading there "go with" them. */
   const otherEpds = useMemo(() => {
     const ids = new Set(lib.reps.filter((r) => !r.deleted && r.color === rep?.color && r.id !== rep?.id).map((r) => r.id));
@@ -143,8 +150,8 @@ export function RepertoireScreen() {
     const engine = localNeeded && ev.lines.length ? mergeEngine(fromBundle, { lines: ev.lines, depth: ev.depth }) : fromBundle;
     // "Engine's pick" means the best move overall, so engine tags need a search of this position itself.
     const searched = !!guideData.bundle?.eval?.lines.length || (localNeeded && ev.lines.length > 0);
-    return guideCandidates({ color: pos.turn, engineLines: engine.lines, engineDepth: searched ? engine.depth : 0, lichess: guideData.bundle?.lichess, masters: guideData.bundle?.masters, inRep: new Set(here.map((m) => m.uci)), fitsRep: fits, max: 8 });
-  }, [rep, guided, own, view.node.fen, view.dests, ev.lines, ev.depth, localNeeded, fromBundle, guideData.bundle, here, otherEpds]);
+    return guideCandidates({ color: pos.turn, engineLines: engine.lines, engineDepth: searched ? engine.depth : 0, lichess: guideData.bundle?.lichess, masters: guideData.bundle?.masters, inRep: new Set(here.map((m) => m.uci)), fitsRep: fits, mine: mineHere, max: 8 });
+  }, [rep, guided, own, view.node.fen, view.dests, ev.lines, ev.depth, localNeeded, fromBundle, guideData.bundle, here, otherEpds, mineHere]);
 
   // Fetch ahead along the arrow: the position after the top pick, then after the reply the guide will
   // play, so the next step shows at once.
@@ -221,7 +228,7 @@ export function RepertoireScreen() {
     const mine = positionFromFen(fen).turn === rep.color;
     if (node.children.some((c) => c.uci === played.uci)) {
       st.goto(childPath(base, played.uci), { sound: true });
-      if (mine && usePrefs.getState().guided) void autoReply(childPath(base, played.uci));
+      if (mine && wantsReply()) void autoReply(childPath(base, played.uci));
       return;
     }
     if (base !== st.path) st.goto(base);
@@ -229,7 +236,7 @@ export function RepertoireScreen() {
     // and the rebuild keeps this path because the node already exists.
     pendingPaths.current.add(childPath(base, played.uci));
     store.getState().play(played.uci);
-    if (mine && usePrefs.getState().guided) void autoReply(childPath(base, played.uci));
+    if (mine && wantsReply()) void autoReply(childPath(base, played.uci));
     const m = await lib.addMove(rep.id, fen, played.uci);
     const mainHere = useLibrary.getState().moves.find((x) => x.repertoireId === rep.id && !x.deleted && x.fromEpd === m.fromEpd && x.isMainline && x.uci !== m.uci);
     if (!m.isMainline && mainHere) {
@@ -237,8 +244,10 @@ export function RepertoireScreen() {
     }
   };
 
+  const wantsReply = () => usePrefs.getState().guided && usePrefs.getState().autoReply;
+
   /**
-   * Guided mode: the opponent answers at once — with the reply you already prepared, else what players
+   * Guided mode with auto-reply on: the opponent answers at once — with the reply you already prepared, else what players
    * at your level play most (or masters). Out of book, it waits for you to play their move.
    */
   async function autoReply(path: string) {
@@ -430,6 +439,11 @@ export function RepertoireScreen() {
         explorer={explorer}
         searching={guideData.loading || (localNeeded && (ev.searching || ev.depth < GUIDE_MIN_DEPTH))}
         replying={replying}
+        autoReply={autoReplyOn}
+        onAutoReply={(on) => {
+          usePrefs.getState().set({ autoReply: on });
+          if (on) void autoReply(store.getState().path);
+        }}
         onPlay={(u) => {
           setHoverUci(null);
           void addMove(u);
@@ -457,9 +471,10 @@ export function RepertoireScreen() {
             {status}
             {actions}
           </div>
-          {guide}
+          {/* The guide scrolls on its own so the panels below always keep room. */}
+          {guide && <div className="max-h-[45dvh] shrink-0 overflow-y-auto rounded-[var(--radius-l)]">{guide}</div>}
           <PaneTabs value={activePane} onChange={setPane} options={paneOptions} />
-          <div className="min-h-0 flex-1 overflow-auto rounded-[var(--radius-l)] border border-line bg-surface shadow-1">{panes[activePane]}</div>
+          <div className="min-h-[200px] flex-1 overflow-auto rounded-[var(--radius-l)] border border-line bg-surface shadow-1">{panes[activePane]}</div>
         </aside>
         {sheet}
       </div>

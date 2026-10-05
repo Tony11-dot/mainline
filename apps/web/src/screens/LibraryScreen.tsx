@@ -13,6 +13,7 @@ import {
   Pencil,
   Plus,
   Search,
+  Sparkles,
   Trash2,
   TriangleAlert,
 } from 'lucide-react';
@@ -30,6 +31,7 @@ import { MoveToSheet } from './library/MoveToSheet';
 import { PromptSheet } from './library/PromptSheet';
 import { ImportPgnSheet } from './library/ImportPgnSheet';
 import { ConflictsSheet } from './library/ConflictsSheet';
+import { TemplatesSheet } from './library/TemplatesSheet';
 import { onPendingImport, readSharedFromServiceWorker, takePendingImport } from '../lib/incoming';
 import { msg, t, tn } from '../lib/i18n';
 
@@ -45,6 +47,7 @@ type SheetState =
   | { kind: 'move'; item: { type: 'folder'; folder: Folder } | { type: 'rep'; rep: Repertoire } }
   | { kind: 'import'; repId?: string; text?: string }
   | { kind: 'conflicts' }
+  | { kind: 'templates'; color: Color }
   | null;
 
 export function LibraryScreen() {
@@ -103,6 +106,7 @@ export function LibraryScreen() {
             label={t('Add')}
             items={[
               { label: t('New repertoire'), icon: BookMarked, onSelect: () => setSheet({ kind: 'new-rep', folderId: roots.find((r) => r.color === 'white')?.id ?? null, color: 'white' }) },
+              { label: t('Ready-made repertoires'), icon: Sparkles, onSelect: () => setSheet({ kind: 'templates', color: 'white' }) },
               { label: t('New folder'), icon: FolderPlus, onSelect: () => setSheet({ kind: 'new-folder', parentId: roots[0]!.id, color: roots[0]!.color }) },
               { label: t('Import PGN'), icon: FileUp, onSelect: () => setSheet({ kind: 'import' }) },
             ]}
@@ -136,6 +140,9 @@ export function LibraryScreen() {
                 <Button variant="primary" onClick={() => setSheet({ kind: 'new-rep', folderId: roots.find((r) => r.color === 'white')?.id ?? null, color: 'white' })}>
                   {t('New repertoire')}
                 </Button>
+                <Button icon={Sparkles} onClick={() => setSheet({ kind: 'templates', color: 'white' })}>
+                  {t('Ready-made repertoires')}
+                </Button>
                 <Link to="/library/openings" className="inline-flex h-11 items-center rounded-[12px] border border-line bg-surface px-4 font-semibold shadow-1 hover:bg-surface-2">
                   {t('Browse openings')}
                 </Link>
@@ -163,11 +170,16 @@ export function LibraryScreen() {
                 depth={0}
                 ctx={ctx}
                 empty={
-                  <div className="flex items-center justify-between gap-3 py-2 ps-4 pe-2">
+                  <div className="flex flex-wrap items-center justify-between gap-x-3 gap-y-1 py-2 ps-4 pe-2">
                     <p className="text-sm text-ink-3">{t('None yet.')}</p>
-                    <Button variant="ghost" size="sm" icon={Plus} className="text-brand-ink" onClick={() => setSheet({ kind: 'new-rep', folderId: root.id, color: root.color })}>
-                      {root.color === 'white' ? t('New White repertoire') : t('New Black repertoire')}
-                    </Button>
+                    <div className="flex flex-wrap gap-1">
+                      <Button variant="ghost" size="sm" icon={Sparkles} className="text-brand-ink" onClick={() => setSheet({ kind: 'templates', color: root.color })}>
+                        {t('Ready-made')}
+                      </Button>
+                      <Button variant="ghost" size="sm" icon={Plus} className="text-brand-ink" onClick={() => setSheet({ kind: 'new-rep', folderId: root.id, color: root.color })}>
+                        {root.color === 'white' ? t('New White repertoire') : t('New Black repertoire')}
+                      </Button>
+                    </div>
                   </div>
                 }
               />
@@ -205,6 +217,7 @@ export function LibraryScreen() {
       <MoveToSheet open={sheet?.kind === 'move'} item={sheet?.kind === 'move' ? sheet.item : undefined} onClose={() => setSheet(null)} />
       <ImportPgnSheet open={sheet?.kind === 'import'} repId={sheet?.kind === 'import' ? sheet.repId : undefined} initialText={sheet?.kind === 'import' ? sheet.text : undefined} onClose={() => setSheet(null)} />
       <ConflictsSheet open={sheet?.kind === 'conflicts'} conflicts={conflicts} onClose={() => setSheet(null)} />
+      <TemplatesSheet open={sheet?.kind === 'templates'} color={sheet?.kind === 'templates' ? sheet.color : undefined} onClose={() => setSheet(null)} />
     </div>
   );
 }
@@ -305,6 +318,7 @@ function FolderMenu({ folder, ctx, isRoot }: { folder: Folder; ctx: TreeCtx; isR
     { label: t('New subfolder'), icon: FolderPlus, onSelect: () => ctx.setSheet({ kind: 'new-folder', parentId: folder.id, color: folder.color }) },
     { label: t('Rename'), icon: Pencil, onSelect: () => ctx.setSheet({ kind: 'rename-folder', folder }) },
   ];
+  if (isRoot) items.splice(1, 0, { label: t('Ready-made repertoires'), icon: Sparkles, onSelect: () => ctx.setSheet({ kind: 'templates', color: folder.color }) });
   if (!isRoot) {
     items.push({ label: t('Move to…'), icon: FolderInput, onSelect: () => ctx.setSheet({ kind: 'move', item: { type: 'folder', folder } }) });
     items.push({

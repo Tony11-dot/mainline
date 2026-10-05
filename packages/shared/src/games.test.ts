@@ -1,7 +1,7 @@
 import { describe, expect, it } from 'vitest';
 import { INITIAL_EPD } from './epd';
 import { importPgn, rootFromMoves, type Repertoire } from './repertoire';
-import { breakPoints, buildBook, firstDeviation, opponentMeets, resultsByLine, sanListToUcis, type PlayedGame } from './games';
+import { breakPoints, buildBook, firstDeviation, myMovesByPosition, opponentMeets, resultsByLine, sanListToUcis, type PlayedGame } from './games';
 
 const rep = (id: string, color: 'white' | 'black', rootMovesUci: string[] = []): Repertoire => ({
   id, folderId: null, name: id, color, rootEpd: rootMovesUci.length ? rootFromMoves(rootMovesUci).epd : INITIAL_EPD, rootMovesUci, sortIndex: 0, createdAt: 0, updatedAt: 0,
@@ -73,3 +73,17 @@ describe('opponent prep', () => {
     expect(meets.find((m) => m.theirMove === 'c7c5')!.prepared).toBe(true);
   });
 });
+
+describe('my moves by position', () => {
+  it('counts each move played from a position and your score after it, for your colour only', () => {
+    const idx = myMovesByPosition([g('1', 'white', 'e4 e5 Nf3', 'win'), g('2', 'white', 'e4 c5 Nf3', 'loss'), g('3', 'white', 'e4 e5 Bc4', 'draw'), g('4', 'black', 'e4 e5 Nf3', 'loss')], 'white');
+    expect(idx.get(INITIAL_EPD)!.get('e2e4')).toEqual({ games: 3, score: 0.5 });
+    const afterE4 = idx.get(sanEpd('e4'))!;
+    expect(afterE4.get('e7e5')).toEqual({ games: 2, score: 0.75 });
+    expect(afterE4.get('c7c5')).toEqual({ games: 1, score: 0 });
+  });
+});
+
+function sanEpd(sans: string) {
+  return importPgn(`${sans} *`, white).moves.at(-1)!.toEpd;
+}

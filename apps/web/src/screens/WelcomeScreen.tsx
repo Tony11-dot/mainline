@@ -4,7 +4,7 @@ import { ArrowRight, Check } from 'lucide-react';
 import { SPEEDS, type Speed } from '@mainline/shared';
 import { usePrefs } from '../lib/prefs';
 import { useLibrary } from '../lib/library';
-import { TEMPLATES } from '../lib/templates';
+import { TEMPLATES, addTemplate, templateMainLine } from '../lib/templates';
 import { Button } from '../ui/primitives';
 import { LogoMark, Wordmark } from '../ui/Logo';
 import { MiniBoard } from '../ui/MiniBoard';
@@ -34,11 +34,7 @@ export function WelcomeScreen() {
     setBusy(true);
     await lib.load();
     if (withTemplates) {
-      for (const tpl of TEMPLATES.filter((x) => picked.has(x.id))) {
-        const root = lib.folders.find((f) => !f.deleted && f.parentId === null && f.color === tpl.color) ?? useLibrary.getState().folders.find((f) => !f.deleted && f.parentId === null && f.color === tpl.color);
-        const rep = await useLibrary.getState().createRepertoire({ name: t(tpl.name), color: tpl.color, folderId: root?.id ?? null });
-        await useLibrary.getState().importPgn(rep.id, tpl.pgn);
-      }
+      for (const tpl of TEMPLATES.filter((x) => picked.has(x.id))) await addTemplate(tpl);
     }
     p.set({ onboarded: true });
     nav(withTemplates && picked.size ? '/train?mode=learn' : '/library', { replace: true });
@@ -131,9 +127,9 @@ export function WelcomeScreen() {
           </h1>
           <p className="mt-1 text-ink-2">{t('Short, mainstream lines to grow from. You can change everything later.')}</p>
           <div className="mt-5 grid gap-2 sm:grid-cols-2">
-            {TEMPLATES.map((tpl) => {
+            {TEMPLATES.filter((x) => x.starter).map((tpl) => {
               const on = picked.has(tpl.id);
-              const first = parseSanLine(tpl.pgn.replace(/\([^)]*\)/g, '').replace(/\*/, '').split(/\s+/).slice(0, 9).join(' '));
+              const first = parseSanLine(templateMainLine(tpl));
               return (
                 <button
                   key={tpl.id}
