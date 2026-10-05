@@ -19,7 +19,8 @@ test('guided: suggestions for both sides; their reply is yours to pick unless au
     },
   });
   await page.goto('/library');
-  await page.getByRole('button', { name: 'New repertoire' }).first().click();
+  await page.getByRole('button', { name: 'New', exact: true }).click();
+  await page.getByRole('menuitem', { name: 'New repertoire' }).click();
   const sheet = page.getByRole('dialog', { name: 'New repertoire' });
   await sheet.getByPlaceholder('e.g. London System').fill('Guided');
   await sheet.getByRole('button', { name: 'Create & open' }).click();

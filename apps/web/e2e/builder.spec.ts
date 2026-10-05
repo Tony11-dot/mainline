@@ -9,7 +9,8 @@ test('create a repertoire, add a line, alternates, delete + undo, PGN import', a
   const move = info.project.name === 'phone' ? tapMove : dragMove;
   await page.goto('/library');
   await expect(page.getByRole('heading', { name: 'Build your first repertoire' })).toBeVisible();
-  await page.getByRole('button', { name: 'New repertoire' }).first().click();
+  await page.getByRole('button', { name: 'New', exact: true }).click();
+  await page.getByRole('menuitem', { name: 'New repertoire' }).click();
   const sheet = page.getByRole('dialog', { name: 'New repertoire' });
   await sheet.getByPlaceholder('e.g. London System').fill('Italian');
   await sheet.getByPlaceholder('1.e4 c5').fill('1.e4 e5 2.Nf3 Nc6');
@@ -57,7 +58,7 @@ test('create a repertoire, add a line, alternates, delete + undo, PGN import', a
   // Library shows it
   await page.goto('/library');
   await expect(page.getByRole('link', { name: /Italian/ })).toBeVisible();
-  await expect(page.getByText(/positions? to know/)).toBeVisible();
+  await expect(page.getByText('Your line')).toBeVisible();
 
   // PGN import into a new repertoire
   await page.getByRole('button', { name: 'New', exact: true }).click();
@@ -79,16 +80,35 @@ test('opening library starts a repertoire', async ({ page }, info) => {
   await expectPiece(page, 'e3', 'white bishop');
 });
 
-test('ready-made repertoire: add a complete White 1.e4 repertoire from the library', async ({ page }, info) => {
+test('ready-made lines: added into White › 1.e4 › vs Sicilian, practised as is, walked through with moves shown', async ({ page }, info) => {
   test.skip(info.project.name === 'android');
+  const move = info.project.name === 'phone' ? tapMove : dragMove;
   await page.goto('/library');
-  await page.getByRole('button', { name: 'Ready-made repertoires' }).first().click();
-  const sheet = page.getByRole('dialog', { name: 'Ready-made repertoires' });
-  const card = sheet.getByRole('listitem').filter({ has: page.getByRole('heading', { name: 'Ruy Lopez & Open Sicilian' }) });
-  await expect(card.getByText('Open Sicilian', { exact: true })).toBeVisible();
+  await page.getByRole('button', { name: 'New', exact: true }).click();
+  await page.getByRole('menuitem', { name: 'Ready-made openings' }).click();
+  const card = page.getByRole('listitem').filter({ has: page.getByRole('heading', { name: 'Open Sicilian', exact: true }) });
+  await expect(card.getByText('vs Najdorf (5…a6)')).toBeVisible();
   await card.getByRole('button', { name: 'Add' }).click();
-  await expect(page.getByRole('heading', { name: 'Ruy Lopez & Open Sicilian' })).toBeVisible();
-  // Every main reply is already answered: after 1.e4 the tree branches into all of them.
-  const tree = page.getByRole('tree', { name: 'Moves' });
-  for (const reply of ['e5', 'c5', 'c6', 'e6', 'd5', 'Nf6']) await expect(tree.getByRole('treeitem', { name: reply }).first()).toBeVisible();
+
+  // Lands in the opening's folder, filed under the first move.
+  await expect(page.getByRole('heading', { name: 'vs Sicilian (1…c5)' })).toBeVisible();
+  await expect(page.getByRole('navigation', { name: 'Breadcrumb' })).toContainText('1.e4');
+  await expect(page.getByText('5 lines').first()).toBeVisible();
+  await page.getByRole('link', { name: /Open Sicilian: vs Najdorf/ }).click();
+
+  // A ready-made line is practised, not rebuilt: no guide, and only the line's own moves can be played.
+  await expect(page.getByRole('heading', { name: 'Open Sicilian: vs Najdorf (5…a6)' })).toBeVisible();
+  await expect(page.getByText('Ready-made', { exact: true })).toBeVisible();
+  await expect(page.getByRole('button', { name: 'Guided' })).toHaveCount(0);
+  await expectPiece(page, 'c5', 'black pawn');
+  await move(page, 'b1', 'c3');
+  await expectPiece(page, 'b1', 'white knight');
+  await move(page, 'g1', 'f3');
+  await expectPiece(page, 'f3', 'white knight');
+  await expect(page.getByRole('button', { name: 'Edit this line' })).toBeVisible();
+
+  // Walk the whole opening with the moves shown.
+  await page.goBack();
+  await page.getByRole('link', { name: 'Show me' }).first().click();
+  await expect(page.getByRole('heading', { name: 'You play Nf3' })).toBeVisible();
 });

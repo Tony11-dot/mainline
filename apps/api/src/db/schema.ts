@@ -64,6 +64,8 @@ export const folders = pgTable(
     name: text('name').notNull(),
     color: text('color').$type<'white' | 'black'>().notNull(),
     sortIndex: real('sort_index').default(0).notNull(),
+    /** The position the folder stands for (e.g. 1.e4 c6): new lines start there. Null for plain folders. */
+    rootMovesUci: text('root_moves_uci').array(),
     updatedAt: ts('updated_at').notNull(),
     deleted: boolean('deleted').default(false).notNull(),
     syncedAt: ts('synced_at').defaultNow().notNull(),
@@ -83,6 +85,8 @@ export const repertoires = pgTable(
     color: text('color').$type<'white' | 'black'>().notNull(),
     rootEpd: text('root_epd').notNull(),
     rootMovesUci: text('root_moves_uci').array().default([]).notNull(),
+    /** "pack:<id>:<line>" for a ready-made line (practice only); '' once the user takes it over; null for their own. */
+    source: text('source'),
     sortIndex: real('sort_index').default(0).notNull(),
     createdAt: ts('created_at').defaultNow().notNull(),
     updatedAt: ts('updated_at').notNull(),

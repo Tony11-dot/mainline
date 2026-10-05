@@ -4,7 +4,7 @@ import { ArrowRight, Check } from 'lucide-react';
 import { SPEEDS, type Speed } from '@mainline/shared';
 import { usePrefs } from '../lib/prefs';
 import { useLibrary } from '../lib/library';
-import { TEMPLATES, addTemplate, templateMainLine } from '../lib/templates';
+import { PACKS, addPack, mainLineText } from '../lib/packs';
 import { Button } from '../ui/primitives';
 import { LogoMark, Wordmark } from '../ui/Logo';
 import { MiniBoard } from '../ui/MiniBoard';
@@ -27,14 +27,14 @@ export function WelcomeScreen() {
   const p = usePrefs();
   const lib = useLibrary();
   const nav = useNavigate();
-  const [picked, setPicked] = useState<Set<string>>(new Set(['italian', 'caro']));
+  const [picked, setPicked] = useState<Set<string>>(new Set(['w-italian', 'b-caro']));
   const [busy, setBusy] = useState(false);
 
   const finish = async (withTemplates: boolean) => {
     setBusy(true);
     await lib.load();
     if (withTemplates) {
-      for (const tpl of TEMPLATES.filter((x) => picked.has(x.id))) await addTemplate(tpl);
+      for (const p of PACKS.filter((x) => picked.has(x.id))) await addPack(p);
     }
     p.set({ onboarded: true });
     nav(withTemplates && picked.size ? '/train?mode=learn' : '/library', { replace: true });
@@ -127,9 +127,9 @@ export function WelcomeScreen() {
           </h1>
           <p className="mt-1 text-ink-2">{t('Short, mainstream lines to grow from. You can change everything later.')}</p>
           <div className="mt-5 grid gap-2 sm:grid-cols-2">
-            {TEMPLATES.filter((x) => x.starter).map((tpl) => {
+            {PACKS.filter((x) => x.starter).map((tpl) => {
               const on = picked.has(tpl.id);
-              const first = parseSanLine(templateMainLine(tpl));
+              const first = parseSanLine(mainLineText(tpl.lines[0]!.pgn, 9));
               return (
                 <button
                   key={tpl.id}
@@ -152,9 +152,9 @@ export function WelcomeScreen() {
                       {on && <Check size={16} className="text-brand" aria-hidden />}
                     </span>
                     <span className="block text-xs font-semibold text-ink-3">
-                      {tpl.color === 'white' ? t('White') : t('Black')} · {tpl.color === 'white' ? tpl.vs : t('vs {move}', { move: tpl.vs })}
+                      {tpl.color === 'white' ? t('White') : t('Black')} · {tpl.color === 'white' ? `1.${tpl.first} ${tpl.reply}` : t('vs {move}', { move: `1.${tpl.first}` })}
                     </span>
-                    <span className="mt-1 block text-sm text-ink-2">{t(tpl.blurb)}</span>
+                    <span className="mt-1 block text-sm text-ink-2">{tpl.lines.map((l) => l.name).join(' · ')}</span>
                   </span>
                 </button>
               );

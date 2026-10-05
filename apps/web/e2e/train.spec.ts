@@ -80,6 +80,8 @@ test('a streak at risk, saved by a freeze', async ({ page }, info) => {
   test.skip(info.project.name !== 'desktop');
   // Seven days in a row ending the day before yesterday (earns a freeze), nothing since.
   await page.goto('/');
+  // Write only once the app has created its database (opening it first would create an empty one).
+  await expect.poll(() => page.evaluate(async () => (await indexedDB.databases()).some((d) => d.name === 'mainline'))).toBe(true);
   await page.evaluate(async () => {
     const day = 86_400_000;
     const req = indexedDB.open('mainline');

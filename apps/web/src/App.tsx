@@ -15,6 +15,7 @@ export const router = createBrowserRouter([
     children: [
       { index: true, element: <HomeScreen /> },
       { path: 'library', lazy: lazy(() => import('./screens/LibraryScreen'), 'LibraryScreen') },
+      { path: 'library/ready', lazy: lazy(() => import('./screens/ReadyScreen'), 'ReadyScreen') },
       { path: 'library/openings', lazy: lazy(() => import('./screens/OpeningsScreen'), 'OpeningsScreen') },
       { path: 'rep/:id', lazy: lazy(() => import('./screens/RepertoireScreen'), 'RepertoireScreen') },
       { path: 'train', lazy: lazy(() => import('./screens/TrainScreen'), 'TrainScreen') },

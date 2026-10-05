@@ -157,6 +157,8 @@ export interface PlanOpts {
   rng?: () => number;
   /** Opponent reply weights for drill: epd → uci → games. */
   replyWeights?: (epd: string) => Map<string, number> | undefined;
+  /** Learn only: walk every line with each of your moves shown, learned or not (no new-move limit). */
+  showAll?: boolean;
 }
 
 const cardIndex = (cards: TrainCard[]) => new Map(cards.filter((c) => !c.deleted && c.kind === 'repertoire').map((c) => [`${c.color}|${c.epd}`, c]));
@@ -196,6 +198,11 @@ export function planSession(o: PlanOpts): SessionLine[] {
           covered.add(key);
           lastUseful = i;
           return steps.push('review');
+        }
+        if (o.mode === 'learn' && o.showAll) {
+          covered.add(key);
+          lastUseful = i;
+          return steps.push('learn');
         }
         if (o.mode === 'learn' && !card && newBudget > 0) {
           covered.add(key);

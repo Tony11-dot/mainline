@@ -15,6 +15,7 @@ import { useLibrary } from '../lib/library';
 import { useTraining } from '../lib/training';
 import { usePrefs } from '../lib/prefs';
 import { peekReplyWeights } from '../lib/explorer';
+import { scopeRepIds } from '../lib/practice';
 import { Button, IconButton, PanelNote } from '../ui/primitives';
 import { CoachAnswer } from '../panels/CoachPanel';
 import type { StoreApi } from 'zustand';
@@ -26,7 +27,7 @@ const MODE_DONE: Record<TrainMode, string> = { learn: msg('Learn complete'), rev
 export function TrainScreen() {
   const [params] = useSearchParams();
   const mode = (params.get('mode') as TrainMode) ?? 'review';
-  const repIds = params.get('reps')?.split(',').filter(Boolean);
+  const showAll = mode === 'learn' && params.get('show') === '1';
   const lib = useLibrary();
   const training = useTraining();
   const newLimit = usePrefs((s) => s.dailyNewLimit);
@@ -42,6 +43,7 @@ export function TrainScreen() {
   useEffect(() => {
     if (!lib.loaded || !training.loaded) return;
     const data = { reps: lib.reps, moves: lib.moves };
+    const repIds = scopeRepIds(params, lib.folders, lib.reps);
     const learnedToday = training.reviews.filter((r) => r.mode === 'learn' && r.reviewedAt >= startOfDay()).length;
     const lines = planSession({
       mode,
@@ -50,8 +52,9 @@ export function TrainScreen() {
       now: Date.now(),
       newLimit: Math.max(0, newLimit - learnedToday),
       repIds,
-      maxLines: mode === 'drill' ? 8 : mode === 'quiz' ? 15 : undefined,
+      maxLines: mode === 'drill' ? (repIds ? Math.min(12, Math.max(6, repIds.length * 2)) : 8) : mode === 'quiz' ? 15 : undefined,
       replyWeights: peekReplyWeights,
+      showAll,
     });
     if (!lines.length) {
       setEmpty(true);
@@ -64,11 +67,11 @@ export function TrainScreen() {
     session.getState().start();
     // Plan once per session start; later library/card changes shouldn't reshuffle a running session.
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [lib.loaded, training.loaded, mode, params.get('reps'), run]);
+  }, [lib.loaded, training.loaded, mode, params.toString(), run]);
 
   if (empty) return <EmptySession mode={mode} />;
   if (!trainer) return null;
-  return <Session key={run} store={trainer} mode={mode} onAgain={() => setRun((r) => r + 1)} />;
+  return <Session key={run} store={trainer} mode={mode} showAll={showAll} onAgain={() => setRun((r) => r + 1)} />;
 }
 
 function startOfDay() {
@@ -77,7 +80,7 @@ function startOfDay() {
   return d.getTime();
 }
 
-function Session({ store, mode, onAgain }: { store: StoreApi<TrainerState>; mode: TrainMode; onAgain: () => void }) {
+function Session({ store, mode, showAll, onAgain }: { store: StoreApi<TrainerState>; mode: TrainMode; showAll?: boolean; onAgain: () => void }) {
   const s = useStore(store);
   const nav = useNavigate();
   const line = s.lines[s.lineIdx];
@@ -97,7 +100,7 @@ function Session({ store, mode, onAgain }: { store: StoreApi<TrainerState>; mode
     return () => window.removeEventListener('keydown', onKey);
   }, [nav, store]);
 
-  if (s.phase === 'done') return <Summary s={s} mode={mode} onAgain={onAgain} />;
+  if (s.phase === 'done') return <Summary s={s} mode={mode} showAll={showAll} onAgain={onAgain} />;
 
   const shapes: DrawShape[] = s.hint ? [{ orig: s.hint.slice(0, 2) as Key, dest: s.hint.slice(2, 4) as Key, brush: s.phase === 'wrong' ? 'green' : 'blue' }] : [];
   const expectedSan = s.expected[0] ? uciToSan(pos, s.expected[0]) : undefined;
@@ -132,11 +135,12 @@ function Session({ store, mode, onAgain }: { store: StoreApi<TrainerState>; mode
       </div>
       <div className="flex flex-col gap-3 px-4 pt-4 lg:w-[360px] lg:px-0 lg:pt-14">
         <p className="text-xs font-semibold text-ink-3">
-          {t(MODE_NAMES[mode])}
+          {showAll ? t('Moves shown') : mode === 'drill' ? t('From memory') : t(MODE_NAMES[mode])}
+          {line ? ` · ${repName(line.repId)}` : ''}
           {opening ? ` · ${opening.name}` : ''}
         </p>
         <div data-expected={s.expected[0] ?? ''} data-phase={s.phase}>
-          <Prompt phase={s.phase} expectedSan={expectedSan} message={s.message} color={color} />
+          <Prompt phase={s.phase} expectedSan={expectedSan} message={s.message} color={color} showAll={showAll} />
         </div>
         {note && <p className="rounded-[12px] bg-surface-2 px-3.5 py-2.5 text-sm text-ink-2">{note}</p>}
         <div className="flex flex-wrap gap-2">
@@ -159,15 +163,21 @@ function Session({ store, mode, onAgain }: { store: StoreApi<TrainerState>; mode
   );
 }
 
+function repName(repId: string) {
+  return useLibrary.getState().reps.find((r) => r.id === repId)?.name ?? '';
+}
+
 function moveNote(repId?: string, epd?: string, uci?: string) {
   if (!repId || !epd || !uci) return undefined;
   return useLibrary.getState().moves.find((m) => m.repertoireId === repId && m.fromEpd === epd && m.uci === uci)?.note ?? undefined;
 }
 
-function Prompt({ phase, expectedSan, message, color }: { phase: TrainerState['phase']; expectedSan?: string; message?: string; color: string }) {
+function Prompt({ phase, expectedSan, message, color, showAll }: { phase: TrainerState['phase']; expectedSan?: string; message?: string; color: string; showAll?: boolean }) {
   const text =
     phase === 'learn'
-      ? { title: t('New move: {move}', { move: expectedSan ?? '' }), sub: t('Play it on the board to learn it.'), tone: 'brand' }
+      ? showAll
+        ? { title: t('You play {move}', { move: expectedSan ?? '' }), sub: t('Play it on the board — the line continues.'), tone: 'brand' }
+        : { title: t('New move: {move}', { move: expectedSan ?? '' }), sub: t('Play it on the board to learn it.'), tone: 'brand' }
       : phase === 'await'
         ? { title: t('Your move'), sub: color === 'white' ? t('Find your repertoire move for White.') : t('Find your repertoire move for Black.'), tone: 'ink' }
         : phase === 'wrong'
@@ -184,7 +194,7 @@ function Prompt({ phase, expectedSan, message, color }: { phase: TrainerState['p
   );
 }
 
-function Summary({ s, mode, onAgain }: { s: TrainerState; mode: TrainMode; onAgain: () => void }) {
+function Summary({ s, mode, showAll, onAgain }: { s: TrainerState; mode: TrainMode; showAll?: boolean; onAgain: () => void }) {
   const [why, setWhy] = useState<number | null>(null);
   const reviews = useTraining((t) => t.reviews);
   const goal = usePrefs((p) => p.dailyGoal);
@@ -202,9 +212,9 @@ function Summary({ s, mode, onAgain }: { s: TrainerState; mode: TrainMode; onAga
   return (
     <div className="mx-auto max-w-lg px-4 py-10 text-center">
       <CheckCircle2 size={48} className="mx-auto text-good" aria-hidden />
-      <h1 className="mt-3 text-2xl font-bold">{t(MODE_DONE[mode])}</h1>
+      <h1 className="mt-3 text-2xl font-bold">{showAll ? t('Walkthrough complete') : t(MODE_DONE[mode])}</h1>
       <dl className="tnum mt-6 grid grid-cols-3 gap-2 rounded-[var(--radius-l)] border border-line bg-surface p-4 shadow-1">
-        <Stat label={mode === 'learn' ? t('Learned') : t('Reviewed')} value={mode === 'learn' ? s.stats.learned : s.stats.graded} />
+        <Stat label={showAll ? t('Moves played') : mode === 'learn' ? t('Learned') : t('Reviewed')} value={mode === 'learn' ? s.stats.learned : s.stats.graded} />
         <Stat label={t('Accuracy')} value={fmtPercent(acc / 100)} />
         <Stat label={t('Time')} value={secs >= 60 ? t('{min} min {sec} s', { min: Math.floor(secs / 60), sec: secs % 60 }) : t('{sec} s', { sec: secs })} />
       </dl>

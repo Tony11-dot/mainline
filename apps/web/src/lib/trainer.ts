@@ -157,7 +157,9 @@ export function createTrainer(mode: TrainMode, lines: SessionLine[], data: RepDa
         if (s.expected.includes(std)) {
           const lineMove = l.ucis[s.ply]!;
           if (s.phase === 'learn') {
-            void useTraining.getState().record({ color: l.color, epd, rating: 3, played: std, expected: s.expected, mode: 'learn', msTaken: ms });
+            // Walking through lines you already know shows the moves again without touching their schedule.
+            const known = useTraining.getState().cards.some((c) => c.color === l.color && c.epd === epd && c.kind === 'repertoire' && !c.deleted);
+            if (!known) void useTraining.getState().record({ color: l.color, epd, rating: 3, played: std, expected: s.expected, mode: 'learn', msTaken: ms });
             set({ stats: { ...s.stats, learned: s.stats.learned + 1 } });
           } else if (!s.failedHere) {
             const card = useTraining.getState().cards.find((c) => c.color === l.color && c.epd === epd);

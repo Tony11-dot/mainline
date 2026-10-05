@@ -39,6 +39,14 @@ describe('planSession', () => {
     for (const l of plan) expect(l.steps.at(-1)).toBe('learn');
   });
 
+  it('learn with every move shown: all lines, learned or not, no new-move limit', () => {
+    const cards = [card(INITIAL_EPD, now + 86_400_000 * 5)];
+    const plan = planSession({ mode: 'learn', data, cards, now, newLimit: 0, showAll: true });
+    // Every own position once: 1.e4, then 2.Nf3 and 3.Bb5 after 1…e5, then 2.Nf3 and 3.d4 after 1…c5.
+    expect(plan.flatMap((l) => l.steps).filter((s) => s === 'learn')).toHaveLength(5);
+    expect(plan).toHaveLength(2);
+  });
+
   it('review: only due positions are graded; others auto-played', () => {
     const graphs = graphsByRep(data);
     const afterE5 = playLine(INITIAL_FEN, ['e2e4', 'e7e5']).moves[1]!.epd;

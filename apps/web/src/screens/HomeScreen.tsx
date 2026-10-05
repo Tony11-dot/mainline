@@ -1,11 +1,16 @@
-import { useEffect, useMemo } from 'react';
+import { lazy, Suspense, useEffect, useMemo, useState } from 'react';
 import { Link, Navigate } from 'react-router';
-import { BarChart3, BookOpen, ChevronRight, Cpu, Dumbbell, Flame, GraduationCap, Play, Shuffle, Snowflake } from 'lucide-react';
+import { BarChart3, ChevronRight, Cpu, Dumbbell, Flame, GraduationCap, Play, Shuffle, Snowflake, Sparkles } from 'lucide-react';
 import { trainingSummary } from '@mainline/shared';
 import { StreakBadge, useStreak } from '../ui/streak';
 import { useLibrary } from '../lib/library';
 import { useTraining, reviewsToday } from '../lib/training';
 import { usePrefs } from '../lib/prefs';
+import { useGames } from '../lib/games';
+import type { weakSpots } from '../lib/packs';
+
+// The opening catalogue is big: Today loads it only once there are games to judge.
+const WeakSpotCard = lazy(async () => ({ default: (await import('./library/WeakSpotCard')).WeakSpotCard }));
 import { LogoMark } from '../ui/Logo';
 import { fmtPercent, t, tn } from '../lib/i18n';
 
@@ -17,7 +22,18 @@ export function HomeScreen() {
   useEffect(() => {
     void lib.load();
     void tr.load();
+    void useGames.getState().load();
   }, [lib, tr]);
+  const games = useGames((g) => g.games);
+  const [spot, setSpot] = useState<ReturnType<typeof weakSpots>[number]>();
+  useEffect(() => {
+    if (!games.length) return;
+    let live = true;
+    void import('../lib/packs').then((m) => live && setSpot(m.weakSpots(games)[0]));
+    return () => {
+      live = false;
+    };
+  }, [games]);
 
   const now = Date.now();
   const today = reviewsToday(tr.reviews, now);
@@ -58,8 +74,8 @@ export function HomeScreen() {
           <h2 className="text-xl font-bold">{t('Start your first repertoire')}</h2>
           <p className="mt-1 max-w-[52ch] text-ink-2">{t('Pick an opening, play the moves you want on the board, and MainLine turns every position into spaced-repetition training.')}</p>
           <div className="mt-5 flex flex-wrap gap-2">
-            <Link to="/library/openings" className="inline-flex h-12 items-center gap-2 rounded-[14px] bg-brand px-5 font-semibold text-on-brand">
-              <BookOpen size={18} aria-hidden /> {t('Browse openings')}
+            <Link to="/library/ready" className="inline-flex h-12 items-center gap-2 rounded-[14px] bg-brand px-5 font-semibold text-on-brand">
+              <Sparkles size={18} aria-hidden /> {t('Ready-made openings')}
             </Link>
             <Link to="/library" className="inline-flex h-12 items-center rounded-[14px] border border-line bg-surface px-5 font-semibold shadow-1">
               {t('Build from scratch')}
@@ -86,6 +102,14 @@ export function HomeScreen() {
               <p className="text-lg font-bold">{t('All caught up')}</p>
               <p className="text-ink-2">{t('Nothing is due. Drill a line or add moves to your repertoire.')}</p>
             </div>
+          )}
+
+          {spot && (
+            <Suspense>
+              <div className="mt-3">
+                <WeakSpotCard spot={spot} />
+              </div>
+            </Suspense>
           )}
 
           <Progress done={today.length} goal={goal} learned={sum.learned} positions={sum.positions} retention={sum.learned ? sum.retention : null} />

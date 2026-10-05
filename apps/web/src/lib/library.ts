@@ -40,12 +40,14 @@ interface LibraryState {
   /** bumps on every change so memoized graphs can recompute */
   version: number;
   load: () => Promise<void>;
-  createFolder: (name: string, color: Color, parentId: string | null) => Promise<Folder>;
+  createFolder: (name: string, color: Color, parentId: string | null, rootMovesUci?: string[]) => Promise<Folder>;
   renameFolder: (id: string, name: string) => Promise<void>;
   moveFolder: (id: string, parentId: string | null, sortIndex?: number) => Promise<void>;
   deleteFolder: (id: string) => Promise<() => Promise<void>>;
-  createRepertoire: (opts: { name: string; color: Color; folderId: string | null; rootMovesUci?: string[] }) => Promise<Repertoire>;
+  createRepertoire: (opts: { name: string; color: Color; folderId: string | null; rootMovesUci?: string[]; source?: string }) => Promise<Repertoire>;
   renameRepertoire: (id: string, name: string) => Promise<void>;
+  /** Makes a ready-made line your own, to edit freely. */
+  takeOver: (id: string) => Promise<void>;
   moveRepertoire: (id: string, folderId: string | null, sortIndex?: number) => Promise<void>;
   deleteRepertoire: (id: string) => Promise<() => Promise<void>>;
   addMove: (repId: string, fromFen: string, uci: string) => Promise<RepMove>;
@@ -125,9 +127,9 @@ export const useLibrary = create<LibraryState>((set, get) => {
       })().finally(() => (loading = undefined)));
     },
 
-    createFolder: async (name, color, parentId) => {
+    createFolder: async (name, color, parentId, rootMovesUci) => {
       const siblings = get().folders.filter((f) => !f.deleted && f.parentId === parentId);
-      const f: Folder = { id: uid(), parentId, name: name.trim() || tl('New folder'), color, sortIndex: nextIndex(siblings), updatedAt: now() };
+      const f: Folder = { id: uid(), parentId, name: name.trim() || tl('New folder'), color, sortIndex: nextIndex(siblings), ...(rootMovesUci ? { rootMovesUci } : {}), updatedAt: now() };
       await saveFolders([f]);
       return f;
     },
@@ -156,13 +158,17 @@ export const useLibrary = create<LibraryState>((set, get) => {
       };
     },
 
-    createRepertoire: async ({ name, color, folderId, rootMovesUci = [] }) => {
+    createRepertoire: async ({ name, color, folderId, rootMovesUci = [], source }) => {
       const root = rootFromMoves(rootMovesUci);
       const siblings = get().reps.filter((r) => !r.deleted && r.folderId === folderId);
       const t = now();
-      const r: Repertoire = { id: uid(), folderId, name: name.trim() || tl('New repertoire'), color, rootEpd: root.epd, rootMovesUci, sortIndex: nextIndex(siblings), createdAt: t, updatedAt: t };
+      const r: Repertoire = { id: uid(), folderId, name: name.trim() || tl('New repertoire'), color, rootEpd: root.epd, rootMovesUci, ...(source ? { source } : {}), sortIndex: nextIndex(siblings), createdAt: t, updatedAt: t };
       await saveReps([r]);
       return r;
+    },
+    takeOver: async (id) => {
+      const r = repOf(id);
+      if (r.source) await saveReps([{ ...r, source: '', updatedAt: now() }]);
     },
     renameRepertoire: async (id, name) => {
       const r = repOf(id);
@@ -308,6 +314,31 @@ export function descendants(folders: Folder[], id: string): string[] {
 
 function isDescendant(folders: Folder[], maybeChild: string | null, ancestor: string) {
   return !!maybeChild && descendants(folders, ancestor).includes(maybeChild);
+}
+
+/** Every live repertoire inside a folder, at any depth. */
+export function repsUnder(folders: Folder[], reps: Repertoire[], folderId: string): Repertoire[] {
+  const ids = new Set([folderId, ...descendants(folders, folderId)]);
+  return reps.filter((r) => !r.deleted && r.folderId !== null && ids.has(r.folderId));
+}
+
+/**
+ * The position a folder stands for. Folders made from the opening picker or a ready-made set carry it;
+ * for older ones it's the moves every repertoire inside shares, if any.
+ */
+export function folderMoves(folders: Folder[], reps: Repertoire[], folderId: string): string[] {
+  const f = folders.find((x) => x.id === folderId);
+  if (!f) return [];
+  if (f.rootMovesUci) return f.rootMovesUci;
+  const inside = repsUnder(folders, reps, folderId);
+  if (!inside.length || f.parentId === null) return [];
+  let common = inside[0]!.rootMovesUci;
+  for (const r of inside) {
+    let i = 0;
+    while (i < common.length && common[i] === r.rootMovesUci[i]) i++;
+    common = common.slice(0, i);
+  }
+  return common;
 }
 
 /** "White / vs 1.e4 / Najdorf" */

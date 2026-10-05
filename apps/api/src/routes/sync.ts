@@ -14,7 +14,7 @@ import { MissingConfigError } from '../env';
 const color = z.enum(['white', 'black']);
 const ms = z.number().int().nonnegative();
 
-const folder = z.object({ id: z.string().uuid(), parentId: z.string().uuid().nullable(), name: z.string().max(120), color, sortIndex: z.number(), updatedAt: ms, deleted: z.boolean().optional() });
+const folder = z.object({ id: z.string().uuid(), parentId: z.string().uuid().nullable(), name: z.string().max(120), color, sortIndex: z.number(), rootMovesUci: z.array(z.string().max(5)).max(60).nullable().optional(), updatedAt: ms, deleted: z.boolean().optional() });
 const repertoire = z.object({
   id: z.string().uuid(),
   folderId: z.string().uuid().nullable(),
@@ -22,6 +22,7 @@ const repertoire = z.object({
   color,
   rootEpd: z.string().max(100),
   rootMovesUci: z.array(z.string().max(5)).max(60),
+  source: z.string().max(120).nullable().optional(),
   sortIndex: z.number(),
   createdAt: ms,
   updatedAt: ms,
@@ -97,10 +98,11 @@ export async function syncRoutes(app: FastifyInstance) {
       for (const chunk of chunks(changes.folders)) {
         await tx
           .insert(T.folders)
-          .values(chunk.map((f) => ({ id: f.id, userId: uid, parentId: f.parentId, name: f.name, color: f.color, sortIndex: f.sortIndex, updatedAt: d(f.updatedAt), deleted: !!f.deleted, syncedAt: stamp })))
+          .values(chunk.map((f) => ({ id: f.id, userId: uid, parentId: f.parentId, name: f.name, color: f.color, sortIndex: f.sortIndex, rootMovesUci: f.rootMovesUci ?? null, updatedAt: d(f.updatedAt), deleted: !!f.deleted, syncedAt: stamp })))
           .onConflictDoUpdate({
             target: T.folders.id,
-            set: { parentId: sql`excluded.parent_id`, name: sql`excluded.name`, color: sql`excluded.color`, sortIndex: sql`excluded.sort_index`, updatedAt: sql`excluded.updated_at`, deleted: sql`excluded.deleted`, syncedAt: stamp },
+            // Clients from before a column existed send nothing for it: keep what's stored.
+            set: { parentId: sql`excluded.parent_id`, name: sql`excluded.name`, color: sql`excluded.color`, sortIndex: sql`excluded.sort_index`, rootMovesUci: sql`coalesce(excluded.root_moves_uci, ${T.folders.rootMovesUci})`, updatedAt: sql`excluded.updated_at`, deleted: sql`excluded.deleted`, syncedAt: stamp },
             setWhere: and(eq(T.folders.userId, uid), newer(T.folders.updatedAt)),
           });
       }
@@ -116,6 +118,7 @@ export async function syncRoutes(app: FastifyInstance) {
               color: r.color,
               rootEpd: r.rootEpd,
               rootMovesUci: r.rootMovesUci,
+              source: r.source ?? null,
               sortIndex: r.sortIndex,
               createdAt: d(r.createdAt),
               updatedAt: d(r.updatedAt),
@@ -131,6 +134,7 @@ export async function syncRoutes(app: FastifyInstance) {
               color: sql`excluded.color`,
               rootEpd: sql`excluded.root_epd`,
               rootMovesUci: sql`excluded.root_moves_uci`,
+              source: sql`coalesce(excluded.source, ${T.repertoires.source})`,
               sortIndex: sql`excluded.sort_index`,
               updatedAt: sql`excluded.updated_at`,
               deleted: sql`excluded.deleted`,
@@ -241,8 +245,8 @@ export async function syncRoutes(app: FastifyInstance) {
       // 30 s overlap: a concurrent write from another device may commit with a slightly earlier stamp.
       cursor: new Date(stamp.getTime() - 30_000).toISOString(),
       pull: {
-        folders: folders.map((f) => ({ id: f.id, parentId: f.parentId, name: f.name, color: f.color, sortIndex: f.sortIndex, updatedAt: t(f.updatedAt), deleted: f.deleted })),
-        repertoires: repertoires.map((r) => ({ id: r.id, folderId: r.folderId, name: r.name, color: r.color, rootEpd: r.rootEpd, rootMovesUci: r.rootMovesUci, sortIndex: r.sortIndex, createdAt: t(r.createdAt), updatedAt: t(r.updatedAt), deleted: r.deleted })),
+        folders: folders.map((f) => ({ id: f.id, parentId: f.parentId, name: f.name, color: f.color, sortIndex: f.sortIndex, rootMovesUci: f.rootMovesUci, updatedAt: t(f.updatedAt), deleted: f.deleted })),
+        repertoires: repertoires.map((r) => ({ id: r.id, folderId: r.folderId, name: r.name, color: r.color, rootEpd: r.rootEpd, rootMovesUci: r.rootMovesUci, source: r.source, sortIndex: r.sortIndex, createdAt: t(r.createdAt), updatedAt: t(r.updatedAt), deleted: r.deleted })),
         moves: moves.map((m) => ({ repertoireId: m.repertoireId, fromEpd: m.fromEpd, uci: m.uci, san: m.san, toEpd: m.toEpd, isMainline: m.isMainline, note: m.note, shapes: m.shapesJson, addedAt: t(m.addedAt), updatedAt: t(m.updatedAt), deleted: m.deleted })),
         cards: cards.map((c) => ({ color: c.color, epd: c.epd, kind: c.kind, fsrs: c.fsrsStateJson, due: t(c.due), lastReview: t(c.lastReview), updatedAt: t(c.updatedAt), deleted: c.deleted })),
         reviews: reviews.map((r) => ({ id: r.id, cardEpd: r.cardEpd, color: r.color, rating: r.rating, playedUci: r.playedUci, expectedUci: r.expectedUci, mode: r.mode, msTaken: r.msTaken, reviewedAt: t(r.reviewedAt), updatedAt: t(r.updatedAt), deleted: r.deleted })),

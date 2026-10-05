@@ -1,6 +1,7 @@
 import { useEffect, useMemo, useState } from 'react';
 import { Link, useNavigate, useSearchParams } from 'react-router';
 import {
+  ArrowLeft,
   BarChart3,
   BookMarked,
   ChevronRight,
@@ -9,17 +10,21 @@ import {
   Folder as FolderIcon,
   FolderInput,
   FolderPlus,
+  Hammer,
   MoreHorizontal,
   Pencil,
   Plus,
   Search,
   Sparkles,
+  Swords,
   Trash2,
   TriangleAlert,
 } from 'lucide-react';
-import { findConflicts, type Color, type Folder, type Repertoire } from '@mainline/shared';
-import { repMoves, repPreview, repStats, useLibrary } from '../lib/library';
+import { findConflicts, isReadyMade, type Color, type Folder, type Repertoire } from '@mainline/shared';
+import { folderMoves, repMoves, repPreview, repsUnder, useLibrary } from '../lib/library';
 import { useTraining } from '../lib/training';
+import { useGames } from '../lib/games';
+import { PACKS, openingRecords, recordFor, replySan, weakSpots, type FirstMove, type OpeningRecord } from '../lib/packs';
 import { MasteryStrip } from '../ui/MasteryStrip';
 import { MiniBoard } from '../ui/MiniBoard';
 import { platform } from '../platform';
@@ -31,7 +36,9 @@ import { MoveToSheet } from './library/MoveToSheet';
 import { PromptSheet } from './library/PromptSheet';
 import { ImportPgnSheet } from './library/ImportPgnSheet';
 import { ConflictsSheet } from './library/ConflictsSheet';
-import { TemplatesSheet } from './library/TemplatesSheet';
+import { OpeningPickerSheet } from './library/OpeningPickerSheet';
+import { PracticeButtons, ProgressText, RecordBadge, scopeProgress } from './library/practiceUi';
+import { WeakSpotCard } from './library/WeakSpotCard';
 import { onPendingImport, readSharedFromServiceWorker, takePendingImport } from '../lib/incoming';
 import { msg, t, tn } from '../lib/i18n';
 
@@ -47,18 +54,36 @@ type SheetState =
   | { kind: 'move'; item: { type: 'folder'; folder: Folder } | { type: 'rep'; rep: Repertoire } }
   | { kind: 'import'; repId?: string; text?: string }
   | { kind: 'conflicts' }
-  | { kind: 'templates'; color: Color }
+  | { kind: 'pick'; color: Color; first?: FirstMove }
   | null;
 
+const FIRSTS: Record<string, FirstMove> = { e2e4: 'e4', d2d4: 'd4', c2c4: 'c4' };
+
+/** Where a folder sits in the opening hierarchy, from the position it stands for. */
+function folderLevel(moves: string[]): { first?: FirstMove; reply?: string } {
+  const first = FIRSTS[moves[0] ?? ''];
+  if (!first) return {};
+  return { first, reply: moves.length >= 2 ? moves[1] : undefined };
+}
+
+/**
+ * The repertoire, organised as players think about it: White and Black, then each first move, then each
+ * opening, then its lines. Every level can be practised on its own — with the moves shown or from memory.
+ */
 export function LibraryScreen() {
   const lib = useLibrary();
+  const cards = useTraining((s) => s.cards);
+  const games = useGames((g) => g.games);
   const [sheet, setSheet] = useState<SheetState>(null);
-  const [open, setOpen] = useState<Set<string>>(() => new Set(JSON.parse(sessionStorage.getItem('ml.open') ?? '[]') as string[]));
-  useEffect(() => void lib.load(), [lib]);
-  useEffect(() => sessionStorage.setItem('ml.open', JSON.stringify([...open])), [open]);
+  const [params, setParams] = useSearchParams();
+  const folderId = params.get('f');
+  useEffect(() => {
+    void lib.load();
+    void useTraining.getState().load();
+    void useGames.getState().load();
+  }, [lib]);
 
   // PGNs shared/opened from other apps land in the import sheet.
-  const [params, setParams] = useSearchParams();
   useEffect(() => {
     const show = (text: string | null) => text && setSheet({ kind: 'import', text });
     if (params.get('import') === 'shared') {
@@ -69,124 +94,18 @@ export function LibraryScreen() {
     return onPendingImport(() => show(takePendingImport()));
   }, [params, setParams]);
 
-  const folders = lib.folders.filter((f) => !f.deleted);
-  const reps = lib.reps.filter((r) => !r.deleted);
+  const folders = useMemo(() => lib.folders.filter((f) => !f.deleted), [lib.folders]);
+  const reps = useMemo(() => lib.reps.filter((r) => !r.deleted), [lib.reps]);
   const roots = folders.filter((f) => f.parentId === null).sort((a, b) => a.sortIndex - b.sortIndex);
   const conflicts = useMemo(() => findConflicts(reps, lib.moves), [lib.version]); // eslint-disable-line react-hooks/exhaustive-deps
+  const records = useMemo(() => openingRecords(games), [games]);
+  const folder = folderId ? folders.find((f) => f.id === folderId) : undefined;
 
-  const toggle = (id: string) =>
-    setOpen((s) => {
-      const n = new Set(s);
-      if (n.has(id)) n.delete(id);
-      else n.add(id);
-      return n;
-    });
-
-  const ctx: TreeCtx = {
-    folders,
-    reps,
-    open,
-    toggle,
-    setSheet,
-    moves: lib.moves,
-  };
+  const ctx: Ctx = { folders, reps, moves: lib.moves, cards, records, setSheet };
 
   return (
     <div className="mx-auto max-w-3xl px-4 py-6 md:px-8 md:py-10">
-      <div className="flex items-center justify-between gap-3">
-        <h1 className="text-2xl font-bold">{t('Repertoire')}</h1>
-        <div className="flex items-center gap-1">
-          <Link to="/stats" aria-label={t('Statistics')} className="inline-flex h-11 items-center gap-2 rounded-[12px] px-3 text-base font-semibold text-ink-2 hover:bg-surface-3 hover:text-ink">
-            <BarChart3 size={18} aria-hidden /> <span className="hidden sm:inline">{t('Statistics')}</span>
-          </Link>
-          <Link to="/library/openings" className="inline-flex h-11 items-center gap-2 rounded-[12px] px-3 text-base font-semibold text-ink-2 hover:bg-surface-3 hover:text-ink">
-            <Search size={18} aria-hidden /> <span className="hidden sm:inline">{t('Openings')}</span>
-          </Link>
-          <Menu
-            label={t('Add')}
-            items={[
-              { label: t('New repertoire'), icon: BookMarked, onSelect: () => setSheet({ kind: 'new-rep', folderId: roots.find((r) => r.color === 'white')?.id ?? null, color: 'white' }) },
-              { label: t('Ready-made repertoires'), icon: Sparkles, onSelect: () => setSheet({ kind: 'templates', color: 'white' }) },
-              { label: t('New folder'), icon: FolderPlus, onSelect: () => setSheet({ kind: 'new-folder', parentId: roots[0]!.id, color: roots[0]!.color }) },
-              { label: t('Import PGN'), icon: FileUp, onSelect: () => setSheet({ kind: 'import' }) },
-            ]}
-            trigger={(p) => (
-              <Button variant="primary" icon={Plus} {...p}>
-                {t('New')}
-              </Button>
-            )}
-          />
-        </div>
-      </div>
-
-      {conflicts.length > 0 && (
-        <button type="button" onClick={() => setSheet({ kind: 'conflicts' })} className="mt-5 flex w-full items-center gap-3 rounded-[var(--radius-m)] bg-warn-soft px-4 py-3 text-start">
-          <TriangleAlert size={18} className="shrink-0 text-warn" aria-hidden />
-          <span className="flex-1 text-sm">
-            {tn(conflicts.length, '{n} position where your repertoires disagree on your move.', '{n} positions where your repertoires disagree on your move.')}{' '}
-            {t('Training uses one move per position.')}
-          </span>
-          <ChevronRight size={18} className="text-ink-3 rtl:rotate-180" aria-hidden />
-        </button>
-      )}
-
-      {!lib.loaded ? null : reps.length === 0 ? (
-        <div className="mt-8 rounded-[var(--radius-l)] border border-dashed border-line-strong">
-          <PanelNote
-            icon={BookMarked}
-            title={t('Build your first repertoire')}
-            action={
-              <div className="flex flex-wrap justify-center gap-2">
-                <Button variant="primary" onClick={() => setSheet({ kind: 'new-rep', folderId: roots.find((r) => r.color === 'white')?.id ?? null, color: 'white' })}>
-                  {t('New repertoire')}
-                </Button>
-                <Button icon={Sparkles} onClick={() => setSheet({ kind: 'templates', color: 'white' })}>
-                  {t('Ready-made repertoires')}
-                </Button>
-                <Link to="/library/openings" className="inline-flex h-11 items-center rounded-[12px] border border-line bg-surface px-4 font-semibold shadow-1 hover:bg-surface-2">
-                  {t('Browse openings')}
-                </Link>
-              </div>
-            }
-          >
-            {t('Pick a colour and start playing moves on the board — or start from any named opening.')}
-          </PanelNote>
-        </div>
-      ) : null}
-
-      <div className="mt-6 flex flex-col gap-6">
-        {roots.map((root) => (
-          <section key={root.id} aria-label={t(root.name)}>
-            <div className="mb-2 flex items-center justify-between px-1">
-              <h2 className="flex items-center gap-2 text-sm font-semibold text-ink-2">
-                <span className={`inline-block size-3 rounded-full ring-1 ring-line-strong ${root.color === 'white' ? 'bg-white' : 'bg-[oklch(0.25_0.015_262)]'}`} />
-                {t(root.name)}
-              </h2>
-              <FolderMenu folder={root} ctx={ctx} isRoot />
-            </div>
-            <div className="overflow-hidden rounded-[var(--radius-l)] border border-line bg-surface shadow-1" onDragOver={(e) => e.preventDefault()}>
-              <FolderChildren
-                parentId={root.id}
-                depth={0}
-                ctx={ctx}
-                empty={
-                  <div className="flex flex-wrap items-center justify-between gap-x-3 gap-y-1 py-2 ps-4 pe-2">
-                    <p className="text-sm text-ink-3">{t('None yet.')}</p>
-                    <div className="flex flex-wrap gap-1">
-                      <Button variant="ghost" size="sm" icon={Sparkles} className="text-brand-ink" onClick={() => setSheet({ kind: 'templates', color: root.color })}>
-                        {t('Ready-made')}
-                      </Button>
-                      <Button variant="ghost" size="sm" icon={Plus} className="text-brand-ink" onClick={() => setSheet({ kind: 'new-rep', folderId: root.id, color: root.color })}>
-                        {root.color === 'white' ? t('New White repertoire') : t('New Black repertoire')}
-                      </Button>
-                    </div>
-                  </div>
-                }
-              />
-            </div>
-          </section>
-        ))}
-      </div>
+      {folder ? <FolderView folder={folder} ctx={ctx} /> : <RootView roots={roots} ctx={ctx} conflicts={conflicts.length} hasGames={games.length > 0} loaded={lib.loaded} />}
 
       <NewRepertoireSheet open={sheet?.kind === 'new-rep'} initial={sheet?.kind === 'new-rep' ? sheet : undefined} onClose={() => setSheet(null)} />
       <PromptSheet
@@ -198,15 +117,14 @@ export function LibraryScreen() {
         onClose={() => setSheet(null)}
         onSubmit={async (name) => {
           if (sheet?.kind !== 'new-folder') return;
-          const f = await lib.createFolder(name, sheet.color, sheet.parentId);
-          setOpen((s) => new Set([...s, sheet.parentId, f.id]));
+          await lib.createFolder(name, sheet.color, sheet.parentId);
         }}
       />
       <PromptSheet
         open={sheet?.kind === 'rename-folder' || sheet?.kind === 'rename-rep'}
         title={t('Rename')}
         label={t('Name')}
-        initial={sheet?.kind === 'rename-folder' ? sheet.folder.name : sheet?.kind === 'rename-rep' ? sheet.rep.name : ''}
+        initial={sheet?.kind === 'rename-folder' ? t(sheet.folder.name) : sheet?.kind === 'rename-rep' ? sheet.rep.name : ''}
         confirm={t('Save')}
         onClose={() => setSheet(null)}
         onSubmit={async (name) => {
@@ -217,149 +135,340 @@ export function LibraryScreen() {
       <MoveToSheet open={sheet?.kind === 'move'} item={sheet?.kind === 'move' ? sheet.item : undefined} onClose={() => setSheet(null)} />
       <ImportPgnSheet open={sheet?.kind === 'import'} repId={sheet?.kind === 'import' ? sheet.repId : undefined} initialText={sheet?.kind === 'import' ? sheet.text : undefined} onClose={() => setSheet(null)} />
       <ConflictsSheet open={sheet?.kind === 'conflicts'} conflicts={conflicts} onClose={() => setSheet(null)} />
-      <TemplatesSheet open={sheet?.kind === 'templates'} color={sheet?.kind === 'templates' ? sheet.color : undefined} onClose={() => setSheet(null)} />
+      <OpeningPickerSheet open={sheet?.kind === 'pick'} color={sheet?.kind === 'pick' ? sheet.color : 'white'} first={sheet?.kind === 'pick' ? sheet.first : undefined} onClose={() => setSheet(null)} />
     </div>
   );
 }
 
-interface TreeCtx {
+interface Ctx {
   folders: Folder[];
   reps: Repertoire[];
   moves: ReturnType<typeof useLibrary.getState>['moves'];
-  open: Set<string>;
-  toggle: (id: string) => void;
+  cards: ReturnType<typeof useTraining.getState>['cards'];
+  records: OpeningRecord[];
   setSheet: (s: SheetState) => void;
 }
 
-function FolderChildren({ parentId, depth, ctx, empty }: { parentId: string; depth: number; ctx: TreeCtx; empty?: React.ReactNode }) {
-  const subs = ctx.folders.filter((f) => f.parentId === parentId).sort((a, b) => a.sortIndex - b.sortIndex);
-  const reps = ctx.reps.filter((r) => r.folderId === parentId).sort((a, b) => a.sortIndex - b.sortIndex);
-  if (!subs.length && !reps.length) return empty ? empty : <p className="py-2 text-sm text-ink-3" style={{ paddingInlineStart: 16 + (depth + 1) * 20 }}>{t('Empty folder')}</p>;
+/* ---------------- Top level: White and Black ---------------- */
+
+function RootView({ roots, ctx, conflicts, hasGames, loaded }: { roots: Folder[]; ctx: Ctx; conflicts: number; hasGames: boolean; loaded: boolean }) {
+  const nav = useNavigate();
+  const games = useGames((g) => g.games);
+  const spot = useMemo(() => weakSpots(games)[0], [games]);
+  const all = useMemo(() => scopeProgress(ctx.reps, ctx.moves, ctx.cards), [ctx.reps, ctx.moves, ctx.cards]);
   return (
-    <ul role="group" className="divide-y divide-line">
-      {subs.map((f) => (
-        <FolderRow key={f.id} folder={f} depth={depth} ctx={ctx} />
-      ))}
-      {reps.map((r) => (
-        <RepRow key={r.id} rep={r} depth={depth} ctx={ctx} />
-      ))}
-    </ul>
+    <>
+      <div className="flex items-center justify-between gap-3">
+        <h1 className="text-2xl font-bold">{t('Repertoire')}</h1>
+        <div className="flex items-center gap-1">
+          <Link to="/stats" aria-label={t('Statistics')} className="inline-flex h-11 items-center gap-2 rounded-[12px] px-3 text-base font-semibold text-ink-2 hover:bg-surface-3 hover:text-ink">
+            <BarChart3 size={18} aria-hidden /> <span className="hidden sm:inline">{t('Statistics')}</span>
+          </Link>
+          <Menu
+            label={t('New')}
+            items={[
+              { label: t('Ready-made openings'), icon: Sparkles, onSelect: () => nav('/library/ready') },
+              { label: t('New repertoire'), icon: BookMarked, onSelect: () => ctx.setSheet({ kind: 'new-rep', folderId: roots.find((r) => r.color === 'white')?.id ?? null, color: 'white' }) },
+              { label: t('Browse openings by name'), icon: Search, onSelect: () => nav('/library/openings') },
+              { label: t('Import PGN'), icon: FileUp, onSelect: () => ctx.setSheet({ kind: 'import' }) },
+            ]}
+            trigger={(p) => (
+              <Button variant="primary" icon={Plus} {...p}>
+                {t('New')}
+              </Button>
+            )}
+          />
+        </div>
+      </div>
+
+      {spot ? (
+        <div className="mt-5">
+          <WeakSpotCard spot={spot} />
+        </div>
+      ) : !hasGames && loaded ? (
+        <Link to="/games" className="mt-5 flex items-center gap-3 rounded-[var(--radius-l)] border border-dashed border-line-strong px-4 py-3 text-sm text-ink-2 hover:bg-surface-2">
+          <Swords size={18} className="shrink-0 text-brand" aria-hidden />
+          <span className="flex-1">{t('Import your games and MainLine finds the openings you lose most — then hands you ready-made lines for them.')}</span>
+          <ChevronRight size={18} className="shrink-0 text-ink-3 rtl:rotate-180" aria-hidden />
+        </Link>
+      ) : null}
+
+      {conflicts > 0 && (
+        <button type="button" onClick={() => ctx.setSheet({ kind: 'conflicts' })} className="mt-5 flex w-full items-center gap-3 rounded-[var(--radius-m)] bg-warn-soft px-4 py-3 text-start">
+          <TriangleAlert size={18} className="shrink-0 text-warn" aria-hidden />
+          <span className="flex-1 text-sm">
+            {tn(conflicts, '{n} position where your repertoires disagree on your move.', '{n} positions where your repertoires disagree on your move.')} {t('Training uses one move per position.')}
+          </span>
+          <ChevronRight size={18} className="text-ink-3 rtl:rotate-180" aria-hidden />
+        </button>
+      )}
+
+      {loaded && ctx.reps.length === 0 && (
+        <div className="mt-6 rounded-[var(--radius-l)] border border-dashed border-line-strong">
+          <PanelNote
+            icon={BookMarked}
+            title={t('Build your first repertoire')}
+            action={
+              <div className="flex flex-wrap justify-center gap-2">
+                <Link to="/library/ready" className="inline-flex h-11 items-center gap-2 rounded-[12px] bg-brand px-4 font-semibold text-on-brand">
+                  <Sparkles size={18} aria-hidden /> {t('Ready-made openings')}
+                </Link>
+                <Button onClick={() => ctx.setSheet({ kind: 'pick', color: 'white' })}>{t('Build my own')}</Button>
+              </div>
+            }
+          >
+            {t('Start from ready-made lines to practise straight away, or build your own move by move with suggestions.')}
+          </PanelNote>
+        </div>
+      )}
+
+      {ctx.reps.length > 0 && (
+        <div className="mt-5 flex flex-wrap items-center justify-between gap-3 rounded-[var(--radius-l)] border border-line bg-surface p-4 shadow-1">
+          <div>
+            <h2 className="font-bold">{t('Everything')}</h2>
+            <p className="tnum text-sm text-ink-2">
+              <ProgressText p={all} />
+            </p>
+          </div>
+          <PracticeButtons scope={{ kind: 'all' }} />
+        </div>
+      )}
+
+      <div className="mt-6 flex flex-col gap-6">
+        {roots.map((root) => (
+          <ColorSection key={root.id} root={root} ctx={ctx} />
+        ))}
+      </div>
+    </>
   );
 }
 
-function useDropTarget(folderId: string) {
-  const [over, setOver] = useState(false);
-  const lib = useLibrary();
-  return {
-    over,
-    props: {
-      onDragOver: (e: React.DragEvent) => {
-        if (!e.dataTransfer.types.includes('application/x-mainline')) return;
-        e.preventDefault();
-        e.stopPropagation();
-        setOver(true);
-      },
-      onDragLeave: () => setOver(false),
-      onDrop: (e: React.DragEvent) => {
-        e.preventDefault();
-        e.stopPropagation();
-        setOver(false);
-        const data = JSON.parse(e.dataTransfer.getData('application/x-mainline') || '{}') as { type?: string; id?: string };
-        if (data.type === 'rep' && data.id) void lib.moveRepertoire(data.id, folderId);
-        if (data.type === 'folder' && data.id) void lib.moveFolder(data.id, folderId);
-      },
-    },
-  };
+function ColorSection({ root, ctx }: { root: Folder; ctx: Ctx }) {
+  const inside = useMemo(() => ctx.reps.filter((r) => r.color === root.color), [ctx.reps, root.color]);
+  const progress = useMemo(() => scopeProgress(inside, ctx.moves, ctx.cards), [inside, ctx.moves, ctx.cards]);
+  const subs = ctx.folders.filter((f) => f.parentId === root.id).sort(byFirstMove);
+  const loose = ctx.reps.filter((r) => r.folderId === root.id).sort((a, b) => a.sortIndex - b.sortIndex);
+  return (
+    <section aria-label={t(root.name)}>
+      <div className="mb-2 flex flex-wrap items-end justify-between gap-2 px-1">
+        <div>
+          <h2 className="flex items-center gap-2 text-lg font-bold">
+            <span className={`inline-block size-3.5 rounded-full ring-1 ring-line-strong ${root.color === 'white' ? 'bg-white' : 'bg-[oklch(0.25_0.015_262)]'}`} />
+            {root.color === 'white' ? t('As White') : t('As Black')}
+          </h2>
+          <p className="tnum text-sm text-ink-2">
+            <ProgressText p={progress} />
+          </p>
+        </div>
+        {inside.length > 0 && <PracticeButtons scope={{ kind: 'color', color: root.color }} size="sm" />}
+      </div>
+      <ul className="divide-y divide-line overflow-hidden rounded-[var(--radius-l)] border border-line bg-surface shadow-1">
+        {subs.map((f) => (
+          <FolderRow key={f.id} folder={f} ctx={ctx} />
+        ))}
+        {loose.map((r) => (
+          <LineRow key={r.id} rep={r} ctx={ctx} />
+        ))}
+        <li>
+          <button type="button" onClick={() => ctx.setSheet({ kind: 'pick', color: root.color })} className="flex min-h-[52px] w-full items-center gap-2 px-4 text-start font-semibold text-brand-ink hover:bg-surface-2">
+            <Plus size={18} aria-hidden /> {root.color === 'white' ? t('Add a first move') : t('Add a first move to answer')}
+          </button>
+        </li>
+      </ul>
+    </section>
+  );
 }
 
-const dragProps = (type: 'rep' | 'folder', id: string) => ({
-  draggable: true,
-  onDragStart: (e: React.DragEvent) => {
-    e.dataTransfer.setData('application/x-mainline', JSON.stringify({ type, id }));
-    e.dataTransfer.effectAllowed = 'move';
-  },
-});
+const ORDER = ['e2e4', 'd2d4', 'c2c4'];
+function byFirstMove(a: Folder, b: Folder) {
+  const ia = ORDER.indexOf(a.rootMovesUci?.[0] ?? '');
+  const ib = ORDER.indexOf(b.rootMovesUci?.[0] ?? '');
+  return (ia < 0 ? 9 : ia) - (ib < 0 ? 9 : ib) || a.sortIndex - b.sortIndex;
+}
 
-function FolderRow({ folder, depth, ctx }: { folder: Folder; depth: number; ctx: TreeCtx }) {
-  const isOpen = ctx.open.has(folder.id);
-  const { over, props } = useDropTarget(folder.id);
-  const count = countReps(ctx, folder.id);
+/* ---------------- Inside a folder: openings, then lines ---------------- */
+
+function FolderView({ folder, ctx }: { folder: Folder; ctx: Ctx }) {
+  const nav = useNavigate();
+  const lib = useLibrary();
+  const trail = useMemo(() => {
+    const out: Folder[] = [];
+    let cur = ctx.folders.find((f) => f.id === folder.parentId);
+    while (cur) {
+      out.unshift(cur);
+      cur = ctx.folders.find((f) => f.id === cur!.parentId);
+    }
+    return out;
+  }, [ctx.folders, folder.parentId]);
+  const inside = useMemo(() => repsUnder(ctx.folders, ctx.reps, folder.id), [ctx.folders, ctx.reps, folder.id]);
+  const progress = useMemo(() => scopeProgress(inside, ctx.moves, ctx.cards), [inside, ctx.moves, ctx.cards]);
+  const subs = ctx.folders.filter((f) => f.parentId === folder.id).sort((a, b) => a.sortIndex - b.sortIndex);
+  const lines = ctx.reps.filter((r) => r.folderId === folder.id).sort((a, b) => Number(isReadyMade(b)) - Number(isReadyMade(a)) || a.sortIndex - b.sortIndex);
+  const at = folderMoves(ctx.folders, ctx.reps, folder.id);
+  const { first, reply } = folderLevel(at);
+  const isOpening = !!(first && reply && at.length === 2);
+  const isFirst = !!(first && at.length === 1);
+  const rec = first && reply ? recordFor(ctx.records, folder.color, first, replySan(first, reply)) : undefined;
+  const packs = isOpening ? PACKS.filter((p) => p.color === folder.color && p.first === first && replySan(first!, reply!) === p.reply) : [];
+  const parent = trail.at(-1);
+
+  const buildOwn = async () => {
+    const n = lines.filter((r) => !isReadyMade(r)).length + 1;
+    const rep = await lib.createRepertoire({ name: t('My line {n}', { n }), color: folder.color, folderId: folder.id, rootMovesUci: at });
+    nav(`/rep/${rep.id}?guide=1`);
+  };
+
+  const menu: MenuItem[] = [
+    { label: t('Rename'), icon: Pencil, onSelect: () => ctx.setSheet({ kind: 'rename-folder', folder }) },
+    { label: t('New subfolder'), icon: FolderPlus, onSelect: () => ctx.setSheet({ kind: 'new-folder', parentId: folder.id, color: folder.color }) },
+    { label: t('Move to…'), icon: FolderInput, onSelect: () => ctx.setSheet({ kind: 'move', item: { type: 'folder', folder } }) },
+    {
+      label: t('Delete folder'),
+      icon: Trash2,
+      danger: true,
+      onSelect: async () => {
+        const undo = await lib.deleteFolder(folder.id);
+        nav(parent && parent.parentId !== null ? `/library?f=${parent.id}` : '/library', { replace: true });
+        undoToast(t('Deleted “{name}”', { name: t(folder.name) }), undo);
+      },
+    },
+  ];
+
   return (
-    <li role="treeitem" aria-expanded={isOpen}>
-      <div
-        {...dragProps('folder', folder.id)}
-        {...props}
-        className={`group flex min-h-[52px] items-center gap-2 pe-2 transition-colors ${over ? 'bg-brand-soft' : 'hover:bg-surface-2'}`}
-        style={{ paddingInlineStart: 12 + depth * 20 }}
-      >
-        <button type="button" onClick={() => ctx.toggle(folder.id)} className="flex min-w-0 flex-1 items-center gap-2 py-3 text-start">
-          <ChevronRight size={16} className={`shrink-0 text-ink-3 transition-transform duration-150 ${isOpen ? 'rotate-90' : 'rtl:rotate-180'}`} aria-hidden />
-          <FolderIcon size={18} className="shrink-0 text-brand" aria-hidden />
-          <span className="truncate font-semibold">{t(folder.name)}</span>
-          <span className="tnum text-sm text-ink-3">{count}</span>
-        </button>
-        <FolderMenu folder={folder} ctx={ctx} />
+    <>
+      <div className="flex items-center gap-2">
+        <Link to={parent && parent.parentId !== null ? `/library?f=${parent.id}` : '/library'} className="-ms-2 flex size-10 shrink-0 items-center justify-center rounded-full text-ink-2 hover:bg-surface-3" aria-label={t('Back')}>
+          <ArrowLeft size={20} className="rtl:rotate-180" />
+        </Link>
+        <nav aria-label={t('Breadcrumb')} className="min-w-0 flex-1 truncate text-sm text-ink-3">
+          {trail.map((f, i) => (
+            <span key={f.id}>
+              {i > 0 && ' › '}
+              <Link to={f.parentId === null ? '/library' : `/library?f=${f.id}`} className="hover:text-ink hover:underline">
+                {f.parentId === null ? (f.color === 'white' ? t('As White') : t('As Black')) : t(f.name)}
+              </Link>
+            </span>
+          ))}
+        </nav>
+        <Menu label={t('{name} actions', { name: t(folder.name) })} items={menu} trigger={(p) => <IconButton icon={MoreHorizontal} label={t('{name} actions', { name: t(folder.name) })} size={40} {...p} />} />
       </div>
-      {isOpen && <FolderChildren parentId={folder.id} depth={depth + 1} ctx={ctx} />}
+      <h1 className="mt-1 text-2xl font-bold">{t(folder.name)}</h1>
+      <p className="tnum mt-0.5 flex flex-wrap items-center gap-2 text-sm text-ink-2">
+        <ProgressText p={progress} />
+        <RecordBadge rec={rec} />
+      </p>
+      {inside.length > 0 && (
+        <div className="mt-4">
+          <PracticeButtons scope={{ kind: 'folder', id: folder.id }} />
+        </div>
+      )}
+
+      {subs.length > 0 && (
+        <>
+          <h2 className="mt-7 mb-2 px-1 text-sm font-semibold text-ink-2">{isFirst ? t('Openings') : t('Folders')}</h2>
+          <ul className="divide-y divide-line overflow-hidden rounded-[var(--radius-l)] border border-line bg-surface shadow-1">
+            {subs.map((f) => (
+              <FolderRow key={f.id} folder={f} ctx={ctx} />
+            ))}
+          </ul>
+        </>
+      )}
+      {isFirst && (
+        <button type="button" onClick={() => ctx.setSheet({ kind: 'pick', color: folder.color, first })} className="mt-2 flex min-h-[52px] w-full items-center gap-2 rounded-[var(--radius-l)] border border-dashed border-line-strong px-4 text-start font-semibold text-brand-ink hover:bg-surface-2">
+          <Plus size={18} aria-hidden /> {folder.color === 'white' ? t('Add a reply to prepare for') : t('Add your answer')}
+        </button>
+      )}
+
+      {(lines.length > 0 || !isFirst) && <h2 className="mt-7 mb-2 px-1 text-sm font-semibold text-ink-2">{t('Lines')}</h2>}
+      {lines.length > 0 && (
+        <ul className="divide-y divide-line overflow-hidden rounded-[var(--radius-l)] border border-line bg-surface shadow-1">
+          {lines.map((r) => (
+            <LineRow key={r.id} rep={r} ctx={ctx} />
+          ))}
+        </ul>
+      )}
+      {!isFirst && (
+        <div className="mt-2 grid gap-2 sm:grid-cols-2">
+          {packs.length > 0 && (
+            <Link to={`/library/ready?color=${folder.color}&first=${first}&reply=${encodeURIComponent(replySan(first!, reply!))}`} className="flex min-h-[64px] items-center gap-3 rounded-[var(--radius-l)] border border-line bg-surface px-4 py-3 shadow-1 hover:bg-surface-2">
+              <Sparkles size={20} className="shrink-0 text-brand" aria-hidden />
+              <span className="min-w-0 flex-1">
+                <span className="block font-semibold">{t('Add ready-made lines')}</span>
+                <span className="block text-sm text-ink-2">{tn(packs.length, '{n} set to choose from', '{n} sets to choose from')}</span>
+              </span>
+            </Link>
+          )}
+          <button type="button" onClick={() => void (isOpening || at.length ? buildOwn() : ctx.setSheet({ kind: 'new-rep', folderId: folder.id, color: folder.color }))} className="flex min-h-[64px] items-center gap-3 rounded-[var(--radius-l)] border border-dashed border-line-strong px-4 py-3 text-start hover:bg-surface-2">
+            <Hammer size={20} className="shrink-0 text-brand" aria-hidden />
+            <span className="min-w-0 flex-1">
+              <span className="block font-semibold">{t('Build a line myself')}</span>
+              <span className="block text-sm text-ink-2">{t('Play the moves, with suggestions for both sides.')}</span>
+            </span>
+          </button>
+        </div>
+      )}
+    </>
+  );
+}
+
+function FolderRow({ folder, ctx }: { folder: Folder; ctx: Ctx }) {
+  const inside = useMemo(() => repsUnder(ctx.folders, ctx.reps, folder.id), [ctx.folders, ctx.reps, folder.id]);
+  const progress = useMemo(() => scopeProgress(inside, ctx.moves, ctx.cards), [inside, ctx.moves, ctx.cards]);
+  const at = folder.rootMovesUci ?? [];
+  const { first, reply } = folderLevel(at);
+  const rec = first && reply && at.length === 2 ? recordFor(ctx.records, folder.color, first, replySan(first, reply)) : undefined;
+  const openings = ctx.folders.filter((f) => f.parentId === folder.id).length;
+  return (
+    <li>
+      <Link to={`/library?f=${folder.id}`} className="flex min-h-[60px] items-center gap-3 px-4 py-2.5 hover:bg-surface-2">
+        <FolderIcon size={20} className="shrink-0 text-brand" aria-hidden />
+        <span className="min-w-0 flex-1">
+          <span className="block font-semibold">{t(folder.name)}</span>
+          <span className="tnum block text-sm text-ink-2">
+            {openings > 0 && `${tn(openings, '{n} opening', '{n} openings')} · `}
+            <ProgressText p={progress} />
+          </span>
+        </span>
+        <RecordBadge rec={rec} />
+        <ChevronRight size={18} className="shrink-0 text-ink-3 rtl:rotate-180" aria-hidden />
+      </Link>
     </li>
   );
 }
 
-function countReps(ctx: TreeCtx, folderId: string): number {
-  let n = ctx.reps.filter((r) => r.folderId === folderId).length;
-  for (const f of ctx.folders.filter((x) => x.parentId === folderId)) n += countReps(ctx, f.id);
-  return n;
-}
-
-function FolderMenu({ folder, ctx, isRoot }: { folder: Folder; ctx: TreeCtx; isRoot?: boolean }) {
-  const lib = useLibrary();
-  const items: MenuItem[] = [
-    { label: t('New repertoire here'), icon: BookMarked, onSelect: () => ctx.setSheet({ kind: 'new-rep', folderId: folder.id, color: folder.color }) },
-    { label: t('New subfolder'), icon: FolderPlus, onSelect: () => ctx.setSheet({ kind: 'new-folder', parentId: folder.id, color: folder.color }) },
-    { label: t('Rename'), icon: Pencil, onSelect: () => ctx.setSheet({ kind: 'rename-folder', folder }) },
-  ];
-  if (isRoot) items.splice(1, 0, { label: t('Ready-made repertoires'), icon: Sparkles, onSelect: () => ctx.setSheet({ kind: 'templates', color: folder.color }) });
-  if (!isRoot) {
-    items.push({ label: t('Move to…'), icon: FolderInput, onSelect: () => ctx.setSheet({ kind: 'move', item: { type: 'folder', folder } }) });
-    items.push({
-      label: t('Delete folder'),
-      icon: Trash2,
-      onSelect: async () => {
-        const undo = await lib.deleteFolder(folder.id);
-        undoToast(t('Deleted “{name}”', { name: folder.name }), undo);
-      },
-      danger: true,
-    });
-  }
-  return <Menu label={t('{name} actions', { name: t(folder.name) })} items={items} trigger={(p) => <IconButton icon={MoreHorizontal} label={t('{name} actions', { name: t(folder.name) })} size={40} {...p} />} />;
-}
-
-function RepRow({ rep, depth, ctx }: { rep: Repertoire; depth: number; ctx: TreeCtx }) {
+function LineRow({ rep, ctx }: { rep: Repertoire; ctx: Ctx }) {
   const lib = useLibrary();
   const nav = useNavigate();
-  const stats = useMemo(() => repStats(ctx.moves, rep), [ctx.moves, rep]);
   const preview = useMemo(() => repPreview(ctx.moves, rep), [ctx.moves, rep]);
-  const cards = useTraining((t) => t.cards);
+  const ready = isReadyMade(rep);
   return (
-    <li role="treeitem" aria-selected={false}>
-      <div {...dragProps('rep', rep.id)} className="flex min-h-[60px] items-center gap-2 pe-2 hover:bg-surface-2" style={{ paddingInlineStart: 12 + depth * 20 }}>
-        <Link to={`/rep/${rep.id}`} className="flex min-w-0 flex-1 items-center gap-3.5 py-3" style={{ paddingInlineStart: depth ? 24 : 4 }}>
+    <li>
+      <div className="flex min-h-[64px] items-center gap-2 pe-2">
+        <Link to={`/rep/${rep.id}`} className="flex min-w-0 flex-1 items-center gap-3.5 py-2.5 ps-3">
           <MiniBoard fen={preview.epd} lastMove={preview.lastUci} orientation={rep.color} size={52} className="rounded-[7px]" decorative />
           <span className="min-w-0">
             <span className="block truncate font-semibold">{rep.name}</span>
-            <span className="tnum block text-sm text-ink-2">
-              {tn(stats.positions, '{n} position to know', '{n} positions to know')} · {tn(stats.moves, '{n} move', '{n} moves')}
+            <span className="flex items-center gap-1.5 text-xs text-ink-3">
+              {ready ? (
+                <>
+                  <Sparkles size={12} aria-hidden /> {t('Ready-made')}
+                </>
+              ) : (
+                <>
+                  <Hammer size={12} aria-hidden /> {t('Your line')}
+                </>
+              )}
             </span>
-            <MasteryStrip rep={rep} moves={repMoves(ctx.moves, rep.id)} cards={cards} now={Date.now()} />
+            <MasteryStrip rep={rep} moves={repMoves(ctx.moves, rep.id)} cards={ctx.cards} now={Date.now()} />
           </span>
         </Link>
         <Menu
           label={t('{name} actions', { name: rep.name })}
           items={[
-            { label: t('Open builder'), icon: BookMarked, onSelect: () => nav(`/rep/${rep.id}`) },
+            { label: t('Show me'), icon: BookMarked, onSelect: () => nav(`/train?mode=learn&show=1&reps=${rep.id}`) },
             { label: t('Rename'), icon: Pencil, onSelect: () => ctx.setSheet({ kind: 'rename-rep', rep }) },
             { label: t('Move to…'), icon: FolderInput, onSelect: () => ctx.setSheet({ kind: 'move', item: { type: 'rep', rep } }) },
-            { label: t('Import PGN into this'), icon: FileUp, onSelect: () => ctx.setSheet({ kind: 'import', repId: rep.id }) },
+            ...(ready ? [] : [{ label: t('Import PGN into this'), icon: FileUp, onSelect: () => ctx.setSheet({ kind: 'import', repId: rep.id }) }]),
             {
               label: t('Export PGN'),
               icon: Download,

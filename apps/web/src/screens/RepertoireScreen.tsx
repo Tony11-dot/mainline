@@ -3,8 +3,8 @@ import { Link, useNavigate, useParams, useSearchParams } from 'react-router';
 import { useStore } from 'zustand';
 import type { DrawShape } from 'chessground/draw';
 import type { Key } from 'chessground/types';
-import { ArrowLeft, Compass, Crown, Lightbulb, Pencil, Sparkles, Star, Trash2, Waypoints } from 'lucide-react';
-import { addLine, buildGraph, myMovesByPosition, bundleEngine, childPath, pathToUcis, findConflicts, guideCandidates, guideMoves, guideReply, GUIDE_MIN_DEPTH, type GuideCandidate, isOwnTurn, mergeEngine, mainMoveAt, nodeAt, parentPath, playUci, positionFromFen, uciToSan, epdToFen } from '@mainline/shared';
+import { ArrowLeft, Compass, Crown, Lightbulb, Pencil, Sparkles, Star, Trash2, Unlock, Waypoints } from 'lucide-react';
+import { addLine, buildGraph, isReadyMade, myMovesByPosition, bundleEngine, childPath, pathToUcis, findConflicts, guideCandidates, guideMoves, guideReply, GUIDE_MIN_DEPTH, type GuideCandidate, isOwnTurn, mergeEngine, mainMoveAt, nodeAt, parentPath, playUci, positionFromFen, uciToSan, epdToFen } from '@mainline/shared';
 import { Board } from '../board/Board';
 import { BoardControls } from '../board/BoardControls';
 import { bindAnalysisKeys, createAnalysisStore, locate, useBoardView } from '../board/analysis';
@@ -30,6 +30,7 @@ import { SuggestPanel } from './builder/SuggestPanel';
 import { NotesPanel } from './builder/NotesPanel';
 import { GuidePanel, TAG_PIN } from './builder/GuidePanel';
 import { fetchGuide, prefetchGuide, useGuide } from '../lib/guide';
+import { PracticeButtons } from './library/practiceUi';
 import { t, tn } from '../lib/i18n';
 
 type Pane = 'tree' | 'explorer' | 'engine' | 'stats' | 'coach' | 'notes' | 'suggest' | 'insights';
@@ -89,7 +90,9 @@ export function RepertoireScreen() {
   const view = useBoardView(store);
   const orientation = useStore(store, (s) => s.orientation);
   const engineOn = usePrefs((s) => s.engineOn);
-  const guided = usePrefs((s) => s.guided);
+  /** Ready-made lines are practised as they are: no guide, no adding, until you take one over. */
+  const ready = !!rep && isReadyMade(rep);
+  const guided = usePrefs((s) => s.guided) && !ready;
   const autoReplyOn = usePrefs((s) => s.autoReply);
   const ownHere = rep ? isOwnTurn(rep.color, view.node.epd) : false;
   const [replying, setReplying] = useState(false);
@@ -226,6 +229,7 @@ export function RepertoireScreen() {
       return;
     }
     const mine = positionFromFen(fen).turn === rep.color;
+    if (ready && !node.children.some((c) => c.uci === played.uci)) return;
     if (node.children.some((c) => c.uci === played.uci)) {
       st.goto(childPath(base, played.uci), { sound: true });
       if (mine && wantsReply()) void autoReply(childPath(base, played.uci));
@@ -244,7 +248,7 @@ export function RepertoireScreen() {
     }
   };
 
-  const wantsReply = () => usePrefs.getState().guided && usePrefs.getState().autoReply;
+  const wantsReply = () => !ready && usePrefs.getState().guided && usePrefs.getState().autoReply;
 
   /**
    * Guided mode with auto-reply on: the opponent answers at once — with the reply you already prepared, else what players
@@ -284,13 +288,13 @@ export function RepertoireScreen() {
       orientation={orientation}
       turnColor={view.turn}
       movable="both"
-      dests={view.dests}
+      dests={ready ? lineDests(view.node.children.map((c) => c.uci)) : view.dests}
       lastMove={view.lastMove}
       check={view.check}
       shapes={view.node.shapes as DrawShape[] | undefined}
       autoShapes={autoShapes}
       onShapesChange={(sh) => {
-        if (currentMove) void lib.setShapes(rep.id, currentMove.fromEpd, currentMove.uci, sh);
+        if (currentMove && !ready) void lib.setShapes(rep.id, currentMove.fromEpd, currentMove.uci, sh);
       }}
       onMove={(u, f) => void addMove(u, f)}
       drawMode={drawMode}
@@ -324,7 +328,25 @@ export function RepertoireScreen() {
     </div>
   );
 
-  const actions = (
+  const actions = ready ? (
+    <div className="flex flex-col gap-2.5">
+      <p className="text-sm text-ink-2">{t('A ready-made line: play through it here, then practise it. Its moves are already decided.')}</p>
+      <div className="flex flex-wrap items-center gap-2">
+        <PracticeButtons scope={{ kind: 'rep', id: rep.id }} size="sm" />
+        <Button
+          size="sm"
+          variant="ghost"
+          icon={Unlock}
+          onClick={() => {
+            void lib.takeOver(rep.id);
+            toast(t('This line is yours now — add or change moves freely.'), { kind: 'success' });
+          }}
+        >
+          {t('Edit this line')}
+        </Button>
+      </div>
+    </div>
+  ) : (
     <div className="flex flex-wrap gap-2">
       {own && !guided && (
         <Button size="sm" icon={Sparkles} onClick={() => setPane('suggest')}>
@@ -380,15 +402,15 @@ export function RepertoireScreen() {
     { value: 'engine' as const, label: t('Engine') },
     { value: 'stats' as const, label: t('Stats') },
     { value: 'coach' as const, label: t('Coach') },
-    ...(own ? [{ value: 'suggest' as const, label: t('Suggest') }] : []),
+    ...(own && !ready ? [{ value: 'suggest' as const, label: t('Suggest') }] : []),
     { value: 'notes' as const, label: t('Notes') },
     { value: 'insights' as const, label: t('Coverage') },
   ];
-  const activePane = pane === 'suggest' && !own ? 'tree' : pane;
+  const activePane = pane === 'suggest' && (!own || ready) ? 'tree' : pane;
 
   const header = (
     <div className="flex min-h-[44px] items-center gap-2 px-4 lg:px-0">
-      <Link to="/library" className="-ms-2 flex size-10 items-center justify-center rounded-full text-ink-2 hover:bg-surface-3" aria-label={t('Back to repertoire')}>
+      <Link to={backTo(lib.folders, rep.folderId)} className="-ms-2 flex size-10 items-center justify-center rounded-full text-ink-2 hover:bg-surface-3" aria-label={t('Back to repertoire')}>
         <ArrowLeft size={20} className="rtl:rotate-180" />
       </Link>
       <div className="min-w-0 flex-1">
@@ -418,6 +440,12 @@ export function RepertoireScreen() {
           {opening ? ` · ${opening.eco} ${opening.name}` : ''}
         </p>
       </div>
+      {ready ? (
+        <span className="inline-flex h-9 shrink-0 items-center gap-1.5 rounded-full bg-brand-soft px-3 text-sm font-semibold text-brand-ink">
+          <Sparkles size={16} aria-hidden />
+          {t('Ready-made')}
+        </span>
+      ) : (
       <button
         type="button"
         aria-pressed={guided}
@@ -427,6 +455,7 @@ export function RepertoireScreen() {
         <Compass size={16} aria-hidden />
         {t('Guided')}
       </button>
+      )}
     </div>
   );
 
@@ -501,6 +530,22 @@ export function RepertoireScreen() {
       {sheet}
     </div>
   );
+}
+
+/** Back goes to the line's folder (its opening), not the top of the library. */
+function backTo(folders: { id: string; parentId: string | null }[], folderId: string | null) {
+  const f = folders.find((x) => x.id === folderId);
+  return f && f.parentId !== null ? `/library?f=${f.id}` : '/library';
+}
+
+/** On a ready-made line the board only takes the line's own moves: playing through it, not adding to it. */
+function lineDests(ucis: string[]): Map<Key, Key[]> {
+  const out = new Map<Key, Key[]>();
+  for (const u of ucis) {
+    const from = u.slice(0, 2) as Key;
+    out.set(from, [...(out.get(from) ?? []), u.slice(2, 4) as Key]);
+  }
+  return out;
 }
 
 function Chip({ tone, icon: Icon, children }: { tone: 'brand' | 'warn' | 'neutral'; icon?: typeof Crown; children: React.ReactNode }) {

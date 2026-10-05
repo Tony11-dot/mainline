@@ -17,6 +17,8 @@ export interface Folder extends SyncMeta {
   name: string;
   color: Color;
   sortIndex: number;
+  /** The position this folder stands for, as moves from the start (e.g. 1.e4 c6); new lines start there. */
+  rootMovesUci?: string[] | null;
 }
 
 export interface Repertoire extends SyncMeta {
@@ -27,9 +29,14 @@ export interface Repertoire extends SyncMeta {
   /** Starting position (after rootMovesUci from the initial position). */
   rootEpd: string;
   rootMovesUci: string[];
+  /** "pack:<pack>:<line>" for a ready-made line, practised as is; '' once taken over; absent for your own. */
+  source?: string | null;
   sortIndex: number;
   createdAt: number;
 }
+
+/** A ready-made line not yet taken over: you practise it, you don't edit it. */
+export const isReadyMade = (r: Pick<Repertoire, 'source'>) => !!r.source?.startsWith('pack:');
 
 export interface Shape {
   orig: string;

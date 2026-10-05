@@ -18,8 +18,13 @@ test('first run: level → starter repertoires → learning', async ({ page }, i
   const phase = page.locator('[data-phase]');
   const uci = (await phase.getAttribute('data-expected'))!;
   await move(page, uci.slice(0, 2), uci.slice(2, 4));
+  // Filed by colour → first move → opening, each line ready-made.
   await page.goto('/library');
-  for (const name of ['Italian Game', 'London System', 'Caro-Kann Defence']) await expect(page.getByRole('link', { name: new RegExp(name) })).toBeVisible();
+  for (const name of ['1.e4', '1.d4', 'vs 1.e4']) await expect(page.getByRole('link', { name: new RegExp(`^${name.replace('.', '\\.')}`) })).toBeVisible();
+  await page.getByRole('link', { name: /^1\.e4/ }).click();
+  await page.getByRole('link', { name: /vs Open Games/ }).click();
+  await expect(page.getByRole('link', { name: /Italian Game: Giuoco Piano/ })).toBeVisible();
+  await expect(page.getByText('Ready-made').first()).toBeVisible();
   // Rating chosen during onboarding is kept.
   await page.goto('/settings');
   await expect(page.getByLabel('Rating', { exact: true })).toHaveValue('2000');
