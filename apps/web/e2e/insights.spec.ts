@@ -74,6 +74,7 @@ test('why was I wrong, from the session summary', async ({ page }, info) => {
   await page.goto('/train?mode=quiz');
   const { dragMove } = await import('./helpers');
   const phase = page.locator('[data-phase]');
+  await expect(phase).toHaveAttribute('data-phase', 'await');
   for (let i = 0; i < 20 && (await phase.count()); i++) {
     const p = await phase.getAttribute('data-phase', { timeout: 500 }).catch(() => null);
     if (p === null) break;

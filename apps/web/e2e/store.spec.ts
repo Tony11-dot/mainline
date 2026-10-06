@@ -96,7 +96,7 @@ for (const [device, use] of Object.entries(devices)) {
 
       // 1. Build: the repertoire builder with real-game stats.
       await page.goto('/library');
-      await page.getByRole('link', { name: /Italian Game/ }).first().click();
+      await page.getByRole('option', { name: /Italian Game/ }).first().dblclick();
       const tree = page.getByRole('tree', { name: 'Moves' });
       await tree.getByRole('treeitem', { name: 'Bc4' }).first().click();
       await page.getByRole('tab', { name: 'Explorer' }).click();
@@ -123,7 +123,7 @@ for (const [device, use] of Object.entries(devices)) {
 
       // 4. Library: every repertoire, with mastery at a glance.
       await page.goto('/library');
-      await expect(page.getByRole('link', { name: /Queen's Gambit Declined/ }).first()).toBeVisible();
+      await expect(page.getByRole('option', { name: /Queen's Gambit Declined/ }).first()).toBeVisible();
       await shot(page, device, '04-repertoires');
 
       // 5. Themes: the same builder in a dark theme.
@@ -133,7 +133,7 @@ for (const [device, use] of Object.entries(devices)) {
         localStorage.setItem('mainline.prefs', JSON.stringify({ ...p, appTheme: 'midnight' }));
       });
       await page.goto('/library');
-      await page.getByRole('link', { name: /Caro-Kann/ }).first().click();
+      await page.getByRole('option', { name: /Caro-Kann/ }).first().dblclick();
       await page.getByRole('tree', { name: 'Moves' }).getByRole('treeitem', { name: 'Nd7' }).first().click();
       await shot(page, device, '05-dark');
     });

@@ -1,5 +1,5 @@
 import { expect, test } from '@playwright/test';
-import { dragMove, expectPiece, tapMove } from './helpers';
+import { dragMove, expectPiece, item, openItem, tapMove } from './helpers';
 import { stubApi } from './stubs';
 
 test.beforeEach(async ({ page }) => stubApi(page));
@@ -57,7 +57,7 @@ test('create a repertoire, add a line, alternates, delete + undo, PGN import', a
 
   // Library shows it
   await page.goto('/library');
-  await expect(page.getByRole('link', { name: /Italian/ })).toBeVisible();
+  await expect(item(page, /Italian/)).toBeVisible();
   await expect(page.getByText('Your line')).toBeVisible();
 
   // PGN import into a new repertoire
@@ -90,14 +90,15 @@ test('ready-made lines: added into White › 1.e4 › vs Sicilian, practised as 
   await expect(card.getByText('vs Najdorf (5…a6)')).toBeVisible();
   await card.getByRole('button', { name: 'Add' }).click();
 
-  // Lands in the opening's folder, filed under the first move.
-  await expect(page.getByRole('heading', { name: 'vs Sicilian (1…c5)' })).toBeVisible();
+  // Lands in the system's own folder: White › 1.e4 › Sicilian (1…c5) › Open Sicilian.
+  await expect(page.getByRole('heading', { name: 'Open Sicilian', exact: true })).toBeVisible();
   await expect(page.getByRole('navigation', { name: 'Breadcrumb' })).toContainText('1.e4');
+  await expect(page.getByRole('navigation', { name: 'Breadcrumb' })).toContainText('Sicilian (1…c5)');
   await expect(page.getByText('5 lines').first()).toBeVisible();
-  await page.getByRole('link', { name: /Open Sicilian: vs Najdorf/ }).click();
+  await openItem(page, 'vs Najdorf (5…a6)');
 
   // A ready-made line is practised, not rebuilt: no guide, and only the line's own moves can be played.
-  await expect(page.getByRole('heading', { name: 'Open Sicilian: vs Najdorf (5…a6)' })).toBeVisible();
+  await expect(page.getByRole('heading', { name: 'vs Najdorf (5…a6)' })).toBeVisible();
   await expect(page.getByText('Ready-made', { exact: true })).toBeVisible();
   await expect(page.getByRole('button', { name: 'Guided' })).toHaveCount(0);
   await expectPiece(page, 'c5', 'black pawn');

@@ -48,13 +48,14 @@ export function Sheet({ open, onClose, title, children, footer, wide }: { open: 
   );
 }
 
-export function Field({ label, children, hint }: { label: string; children: ReactNode; hint?: string }) {
+export function Field({ label, children, hint, group }: { label: string; children: ReactNode; hint?: string; /** A set of buttons: a <label> would pass its clicks to the first one. */ group?: boolean }) {
+  const Tag = group ? 'div' : 'label';
   return (
-    <label className="mt-4 block first:mt-1">
+    <Tag className="mt-4 block first:mt-1" {...(group ? { role: 'group', 'aria-label': label } : {})}>
       <span className="mb-1.5 block text-sm font-semibold text-ink-2">{label}</span>
       {children}
       {hint && <span className="mt-1 block text-xs text-ink-3">{hint}</span>}
-    </label>
+    </Tag>
   );
 }
 

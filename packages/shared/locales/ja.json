@@ -101,7 +101,6 @@
  "Couldn’t load the explorer": "エクスプローラーを読み込めませんでした",
  "Couldn’t reach the server. Check your connection and try again — nothing was deleted.": "サーバーに接続できませんでした。接続を確認して再試行してください — 何も削除されていません。",
  "Coverage": "カバー率",
- "Create": "作成",
  "Create & open": "作成して開く",
  "D": "分",
  "Daily": "デイリー",
@@ -117,7 +116,6 @@
  "Default": "デフォルト",
  "Delete": "削除",
  "Delete account": "アカウントを削除",
- "Delete folder": "フォルダを削除",
  "Delete from here": "ここから削除",
  "Delete my account & data": "アカウントとデータを削除",
  "Delete permanently": "完全に削除",
@@ -261,7 +259,6 @@
  "New move: {move}": "新しい手：{move}",
  "New moves per day": "1日の新しい手",
  "New repertoire": "新しいレパートリー",
- "New subfolder": "新しいサブフォルダ",
  "New to openings": "オープニング初心者",
  "Next line…": "次のライン…",
  "Next move (→)": "次の手（→）",
@@ -397,7 +394,6 @@
  "Rook": "ルーク",
  "Rosé": "ロゼ",
  "Sand": "サンド",
- "Save": "保存",
  "Saved": "保存しました",
  "Saving…": "保存中…",
  "Scan again": "再スキャン",
@@ -584,7 +580,6 @@
  "depth {n}": "深さ {n}",
  "e.g. London System": "例：ロンドン・システム",
  "e.g. Najdorf": "例：Najdorf",
- "e.g. vs 1.e4": "例：1.e4に対して",
  "from {square}": "{square}から",
  "has a note": "メモあり",
  "in": "内",
@@ -879,13 +874,110 @@
  "{n} lines": {
   "other": "{n} ライン"
  },
- "{n} openings": {
-  "other": "{n} オープニング"
- },
  "{n} ready-made sets": {
   "other": "用意済みセット {n} 件"
  },
  "{n} sets to choose from": {
   "other": "選べるセット {n} 件"
+ },
+ "A few days of sessions, built around your focus": "目標に合わせた数日分の練習",
+ "A strength": "得意",
+ "About usual": "いつもどおり",
+ "Actions": "操作",
+ "After": "次の手の後：",
+ "All weak spots": "すべての弱点",
+ "Both": "両方",
+ "Chosen": "選択中",
+ "Collapse": "折りたたむ",
+ "Create plan": "プランを作成",
+ "Day {day} of {days}": "{days} 日中 {day} 日目",
+ "Day {day} of {days} · {done} of {total} sessions done": "{days} 日中 {day} 日目 · {total} 件中 {done} 件完了",
+ "Day {n}": "{n} 日目",
+ "Days": "日数",
+ "Empty folder — drag lines or folders here.": "空のフォルダー — ラインやフォルダーをここにドラッグ。",
+ "Empty folder.": "空のフォルダー。",
+ "End plan": "プランを終了",
+ "End this plan?": "このプランを終了しますか？",
+ "Everything after the move counts: if the lines that answer it go badly, the move shows here.": "その手の後すべてが対象です。応手のラインがうまくいかないと、その手がここに表示されます。",
+ "Expand": "展開",
+ "Forward": "進む",
+ "MainLine needs a few sessions of answers or some imported games before it can spot a pattern. Test yourself a few times, or import your games.": "パターンを見つけるには、何回かの練習の解答か取り込んだ対局が必要です。何度かテストするか、対局を取り込んでください。",
+ "Make a plan": "プランを作る",
+ "Make a plan for my weakest spot": "一番の弱点のプラン",
+ "Make a plan…": "プランを作る…",
+ "Minutes a day": "1日の分数",
+ "Move {n} items to": "{n} 件の移動先",
+ "Moves that lead to trouble": "トラブルにつながる手",
+ "Much weaker than usual": "いつもよりかなり弱い",
+ "New folder inside": "中に新規フォルダー",
+ "New plan": "新しいプラン",
+ "No answers yet": "まだ解答がありません",
+ "No games in your lines yet": "あなたのラインの対局はまだありません",
+ "No plan yet": "まだプランがありません",
+ "Not learned yet": "未習得",
+ "Nothing stands out yet": "まだ目立つものはありません",
+ "Nothing to practise here yet.": "ここで練習できるものはまだありません。",
+ "Pick what to work on, for how many days and how long each day. MainLine lays out the sessions — showing the moves first, then testing the weakest parts, then an exam.": "何を、何日間、1日どれくらい練習するか選んでください。MainLine が練習を組み立てます — まず手を見せ、次に弱い部分をテストし、最後に試験です。",
+ "Plan": "プラン",
+ "Plan a few days on your whole repertoire, one colour, an opening, a line or the answers to one move.": "レパートリー全体、片方の色、オープニング、ライン、またはある手への応手について数日のプランを作ります。",
+ "Plan finished": "プラン完了",
+ "Plan finished — {done} of {total} sessions done.": "プラン完了 — {total} 件中 {done} 件完了。",
+ "Plan for my weakest spot": "一番の弱点のプラン",
+ "Plan progress": "プランの進捗",
+ "Remove": "削除",
+ "Select": "選択",
+ "Sessions to include": "含める練習",
+ "Side": "サイド",
+ "Study plan": "学習プラン",
+ "Suggested": "おすすめ",
+ "Suggested from your weak spots": "弱点からのおすすめ",
+ "Weak spots": "弱点",
+ "Weaker than usual": "いつもより弱い",
+ "Weakest lines": "弱いライン",
+ "Weakest openings": "弱いオープニング",
+ "Where you go wrong most — by move, by opening and by line — from your training answers (last 90 days) and your imported games.": "手・オープニング・ラインごとに一番間違えているところ — 練習の解答（直近90日）と取り込んだ対局から。",
+ "White and Black keep separate folders.": "白と黒のフォルダーは分かれています。",
+ "Whole repertoire": "レパートリー全体",
+ "Work on": "取り組む対象",
+ "Work on this": "これに取り組む",
+ "You miss {pct} of your moves ({misses} of {n})": "自分の手の {pct} を間違えています（{n} 回中 {misses} 回）",
+ "Your weakest moves, openings and lines": "一番弱い手・オープニング・ライン",
+ "{learned} of {total} positions learned": "{total} 局面中 {learned} 習得",
+ "{pct} of your moves right": "自分の手の {pct} が正解",
+ "Covers the {n} positions you must know after it.": {
+  "other": "その後に覚えるべき {n} 局面を含みます。"
+ },
+ "Delete {n} items": {
+  "other": "{n} 件を削除"
+ },
+ "Deleted {n} items": {
+  "other": "{n} 件を削除しました"
+ },
+ "Move {n} items to…": {
+  "other": "{n} 件を移動…"
+ },
+ "Moved {n} items to {name}": {
+  "other": "{n} 件を {name} に移動しました"
+ },
+ "Score {score} in {n} games in your lines": {
+  "other": "あなたのラインの {n} 局で {score}"
+ },
+ "you score {score} in {n} games": {
+  "other": "{n} 局で {score}"
+ },
+ "{n} folders": {
+  "other": "{n} フォルダー"
+ },
+ "{n} items": {
+  "other": "{n} 件"
+ },
+ "{n} min a day": {
+  "other": "1日 {n} 分"
+ },
+ "{n} selected": {
+  "other": "{n} 件選択中"
+ },
+ "{n}-day plan": {
+  "other": "{n} 日間プラン"
  }
 }

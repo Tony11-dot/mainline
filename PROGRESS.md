@@ -374,3 +374,27 @@ Visual checks: `VISUAL=1 pnpm e2e visual` (add `--update-snapshots` after an int
 - **Ready-made lines are practised, not rebuilt.** Each one is tagged (`repertoires.source = pack:<set>:<line>`). Its page has no guide, the board only accepts the line's own moves, and Show me / Test me buttons are on it. An explicit **Edit this line** takes it over.
 - **Your weakest opening.** Imported games are scored per colour × first move × reply. The opening that costs the most points (at least 5 games, under 50%) shows on Today, at the top of the library and on the ready-made page. It offers the matching set in one tap, or a test once you already have it. Each folder also shows your score there.
 - **Sync.** Migration 0008 adds two nullable columns. The server keeps a stored value whenever an older client sends nothing for it.
+
+## A Finder for openings, weak spots by move/opening/line, and study plans (2026-10-06)
+
+- **Deeper tree.** White ready-made sets now get their own folder under the reply they answer: White › 1.e4 › Open Games (1…e5) › Vienna Game / King's Gambit / Ruy Lopez › lines, and White › 1.d4 › Closed Games (1…d5) › Queen's Gambit / Catalan.
+  - New sets: Catalan, Refuting the Englund (1.d4 e5), 1.Nf3 (Réti / KIA against 1…d5 and 1…Nf6) and 1.Nc3 (into 2.e4).
+  - Folder names drop "vs".
+  - Lines added by the previous version are moved into their system's folder once (`tidyPackLines`).
+  - Ready-made systems that differ on purpose (Vienna and Spanish side by side) no longer raise the "repertoires disagree" banner. Only your own lines do.
+- **Finder-style library.** On wide screens there's a sidebar folder tree, back/forward buttons and a path bar.
+  - Click selects, ⌘-click toggles and ⇧-click extends. Double-click or ⌘O opens, ⌘↑ goes to the parent, and Enter renames inline.
+  - ⌘⌫ / Delete deletes with undo, ⌘A selects all and ⌘⇧N makes a new folder.
+  - Drag any selection onto a folder in the list, the sidebar or the path bar; White and Black stay separate, and Undo is offered.
+  - Right-click has Open, Show me, Test me, Make a plan, New folder inside, Rename, Move to (a folder tree sheet), Export and Delete.
+  - On phones a tap opens a folder, and a long press (or Select) starts multi-select with a bottom bar.
+- **Weak spots (`/focus`, `lib/weakness.ts`).** Training answers (misses in the last 90 days) and imported games are rated with priors (20% misses, 50% score) and weighted by how much evidence there is.
+  - Each game is credited to the line it followed longest.
+  - The report ranks lines, folders and moves. A move covers everything after it, and when all the answers to a move go wrong it lifts to that move ("After 1.e4 e5 2.Nc3").
+  - Practice can now be scoped to a position (`at=`): lines through it, with your earlier moves auto-played, plus drills and quizzes from it.
+- **Study plans (`/plan`, `lib/plan.ts`).** Pick a focus (suggested weak spots, everything, a colour, any folder or line), 3–14 days, 10–45 minutes a day, and which session kinds to include.
+  - Day 1 shows and teaches the moves. The middle days rotate through the weakest parts with quizzes. The last day is an exam.
+  - Finished sessions tick their task off automatically. Tasks can also be ticked or removed by hand.
+  - Today shows today's sessions, or the one thing to work on.
+  - Plans are kept on this device.
+- `Field group` fixes button sets inside a `<label>`, where clicking the label text used to press the first button.

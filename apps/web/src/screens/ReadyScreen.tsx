@@ -4,7 +4,7 @@ import { ArrowLeft, Check } from 'lucide-react';
 import type { Color } from '@mainline/shared';
 import { useLibrary } from '../lib/library';
 import { useGames } from '../lib/games';
-import { FIRST_MOVES, PACKS, addPack, mainLineText, openingFolderName, openingRecords, packFolderName, packLinesIn, recordFor, weakSpots, type FirstMove, type Pack } from '../lib/packs';
+import { FIRST_MOVES, PACKS, addPack, mainLineText, openingFolderName, openingRecords, packLinesIn, recordFor, weakSpots, type FirstMove, type Pack } from '../lib/packs';
 import { practiceHref } from '../lib/practice';
 import { Button, Segmented } from '../ui/primitives';
 import { MiniBoard } from '../ui/MiniBoard';
@@ -64,7 +64,7 @@ export function ReadyScreen() {
           label={t('First move')}
           value={first}
           onChange={(f) => set({ first: f, reply: null })}
-          options={FIRST_MOVES.map((f) => ({ value: f, label: <span className="whitespace-nowrap px-1">{color === 'white' ? `1.${f}` : t('vs {move}', { move: `1.${f}` })}</span> }))}
+          options={FIRST_MOVES.filter((f) => PACKS.some((p) => p.color === color && p.first === f)).map((f) => ({ value: f, label: <span className="whitespace-nowrap px-1">{color === 'white' ? `1.${f}` : t('vs {move}', { move: `1.${f}` })}</span> }))}
         />
       </div>
       {only && (
@@ -99,7 +99,7 @@ function PackCard({ pack }: { pack: Pack }) {
   const folders = useLibrary((s) => s.folders);
   const have = packLinesIn(reps, pack).length;
   const complete = have === pack.lines.length;
-  const folder = folders.find((f) => !f.deleted && f.name === packFolderName(pack));
+  const folder = folders.find((f) => !f.deleted && f.id === packLinesIn(reps, pack)[0]?.folderId);
   const [busy, setBusy] = useState(false);
   const fen = parseSanLine(mainLineText(pack.lines[0]!.pgn, 8)).fen;
 

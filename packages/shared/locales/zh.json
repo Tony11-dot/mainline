@@ -101,7 +101,6 @@
  "Couldn’t load the explorer": "无法加载开局浏览器",
  "Couldn’t reach the server. Check your connection and try again — nothing was deleted.": "无法连接服务器。请检查网络后重试——没有任何内容被删除。",
  "Coverage": "覆盖率",
- "Create": "创建",
  "Create & open": "创建并打开",
  "D": "和",
  "Daily": "每日",
@@ -117,7 +116,6 @@
  "Default": "默认",
  "Delete": "删除",
  "Delete account": "删除账户",
- "Delete folder": "删除文件夹",
  "Delete from here": "从这里删除",
  "Delete my account & data": "删除我的账户和数据",
  "Delete permanently": "永久删除",
@@ -261,7 +259,6 @@
  "New move: {move}": "新着法：{move}",
  "New moves per day": "每天新着法",
  "New repertoire": "新建开局库",
- "New subfolder": "新建子文件夹",
  "New to openings": "开局新手",
  "Next line…": "下一条变化…",
  "Next move (→)": "下一步（→）",
@@ -397,7 +394,6 @@
  "Rook": "车",
  "Rosé": "玫瑰",
  "Sand": "沙色",
- "Save": "保存",
  "Saved": "已保存",
  "Saving…": "正在保存…",
  "Scan again": "重新扫描",
@@ -584,7 +580,6 @@
  "depth {n}": "深度 {n}",
  "e.g. London System": "例如 伦敦体系",
  "e.g. Najdorf": "例如 Najdorf",
- "e.g. vs 1.e4": "例如 对 1.e4",
  "from {square}": "从 {square}",
  "has a note": "有笔记",
  "in": "于",
@@ -879,13 +874,110 @@
  "{n} lines": {
   "other": "{n} 条变例"
  },
- "{n} openings": {
-  "other": "{n} 个开局"
- },
  "{n} ready-made sets": {
   "other": "{n} 套现成变例"
  },
  "{n} sets to choose from": {
   "other": "{n} 套可选"
+ },
+ "A few days of sessions, built around your focus": "围绕你的重点安排的几天练习",
+ "A strength": "强项",
+ "About usual": "正常水平",
+ "Actions": "操作",
+ "After": "在此之后：",
+ "All weak spots": "所有弱点",
+ "Both": "双方",
+ "Chosen": "已选",
+ "Collapse": "收起",
+ "Create plan": "创建计划",
+ "Day {day} of {days}": "第 {day} 天，共 {days} 天",
+ "Day {day} of {days} · {done} of {total} sessions done": "第 {day} 天，共 {days} 天 · 已完成 {done}/{total} 次练习",
+ "Day {n}": "第 {n} 天",
+ "Days": "天数",
+ "Empty folder — drag lines or folders here.": "空文件夹——把变例或文件夹拖到这里。",
+ "Empty folder.": "空文件夹。",
+ "End plan": "结束计划",
+ "End this plan?": "结束这个计划？",
+ "Everything after the move counts: if the lines that answer it go badly, the move shows here.": "这一步之后的一切都算：如果应对它的变例表现不好，这一步就会出现在这里。",
+ "Expand": "展开",
+ "Forward": "前进",
+ "MainLine needs a few sessions of answers or some imported games before it can spot a pattern. Test yourself a few times, or import your games.": "MainLine 需要几次练习的回答或一些导入的对局才能发现规律。先自测几次，或导入你的对局。",
+ "Make a plan": "制定计划",
+ "Make a plan for my weakest spot": "为我最弱的地方制定计划",
+ "Make a plan…": "制定计划…",
+ "Minutes a day": "每天分钟数",
+ "Move {n} items to": "将 {n} 项移到",
+ "Moves that lead to trouble": "惹麻烦的着法",
+ "Much weaker than usual": "明显弱于平常",
+ "New folder inside": "在里面新建文件夹",
+ "New plan": "新计划",
+ "No answers yet": "还没有回答",
+ "No games in your lines yet": "你的变例里还没有对局",
+ "No plan yet": "还没有计划",
+ "Not learned yet": "尚未学会",
+ "Nothing stands out yet": "暂时没有突出的问题",
+ "Nothing to practise here yet.": "这里还没有可练习的内容。",
+ "Pick what to work on, for how many days and how long each day. MainLine lays out the sessions — showing the moves first, then testing the weakest parts, then an exam.": "选择练什么、练几天、每天多久。MainLine 会安排练习——先演示着法，再测试最弱的部分，最后考试。",
+ "Plan": "计划",
+ "Plan a few days on your whole repertoire, one colour, an opening, a line or the answers to one move.": "为整个开局库、一方、一个开局、一条变例或对某步棋的应对安排几天计划。",
+ "Plan finished": "计划已完成",
+ "Plan finished — {done} of {total} sessions done.": "计划已完成——完成了 {done}/{total} 次练习。",
+ "Plan for my weakest spot": "为我最弱的地方制定计划",
+ "Plan progress": "计划进度",
+ "Remove": "移除",
+ "Select": "选择",
+ "Sessions to include": "包含的练习",
+ "Side": "执子方",
+ "Study plan": "学习计划",
+ "Suggested": "推荐",
+ "Suggested from your weak spots": "根据你的弱点推荐",
+ "Weak spots": "弱点",
+ "Weaker than usual": "弱于平常",
+ "Weakest lines": "最弱的变例",
+ "Weakest openings": "最弱的开局",
+ "Where you go wrong most — by move, by opening and by line — from your training answers (last 90 days) and your imported games.": "按着法、开局和变例找出你最常出错的地方——依据你的训练回答（最近 90 天）和导入的对局。",
+ "White and Black keep separate folders.": "白方和黑方的文件夹是分开的。",
+ "Whole repertoire": "整个开局库",
+ "Work on": "练习内容",
+ "Work on this": "练这个",
+ "You miss {pct} of your moves ({misses} of {n})": "你有 {pct} 的着法走错（{n} 次中 {misses} 次）",
+ "Your weakest moves, openings and lines": "你最弱的着法、开局和变例",
+ "{learned} of {total} positions learned": "已学会 {learned}/{total} 个局面",
+ "{pct} of your moves right": "你的着法 {pct} 正确",
+ "Covers the {n} positions you must know after it.": {
+  "other": "包含之后需要掌握的 {n} 个局面。"
+ },
+ "Delete {n} items": {
+  "other": "删除 {n} 项"
+ },
+ "Deleted {n} items": {
+  "other": "已删除 {n} 项"
+ },
+ "Move {n} items to…": {
+  "other": "将 {n} 项移到…"
+ },
+ "Moved {n} items to {name}": {
+  "other": "已将 {n} 项移到 {name}"
+ },
+ "Score {score} in {n} games in your lines": {
+  "other": "你的变例中 {n} 局得分 {score}"
+ },
+ "you score {score} in {n} games": {
+  "other": "你在 {n} 局中得分 {score}"
+ },
+ "{n} folders": {
+  "other": "{n} 个文件夹"
+ },
+ "{n} items": {
+  "other": "{n} 项"
+ },
+ "{n} min a day": {
+  "other": "每天 {n} 分钟"
+ },
+ "{n} selected": {
+  "other": "已选 {n} 项"
+ },
+ "{n}-day plan": {
+  "other": "{n} 天计划"
  }
 }

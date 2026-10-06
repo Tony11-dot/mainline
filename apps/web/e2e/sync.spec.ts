@@ -51,7 +51,7 @@ test('repertoire and training progress sync between devices', async ({ browser }
 
   const b = await device();
   await b.goto('/library');
-  await expect(b.getByRole('link', { name: /Synced London/ })).toBeVisible({ timeout: 10_000 });
+  await expect(b.getByRole('option', { name: /Synced London/ })).toBeVisible({ timeout: 10_000 });
   await b.goto('/');
   await expect(b.getByText('Learned', { exact: true }).locator('..')).toContainText('2/2', { timeout: 10_000 });
 });

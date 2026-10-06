@@ -101,7 +101,6 @@
  "Couldn’t load the explorer": "탐색기를 불러오지 못했어요",
  "Couldn’t reach the server. Check your connection and try again — nothing was deleted.": "서버에 연결할 수 없어요. 연결을 확인하고 다시 시도하세요 — 아무것도 삭제되지 않았어요.",
  "Coverage": "커버리지",
- "Create": "만들기",
  "Create & open": "만들고 열기",
  "D": "무",
  "Daily": "데일리",
@@ -117,7 +116,6 @@
  "Default": "기본값",
  "Delete": "삭제",
  "Delete account": "계정 삭제",
- "Delete folder": "폴더 삭제",
  "Delete from here": "여기서부터 삭제",
  "Delete my account & data": "내 계정과 데이터 삭제",
  "Delete permanently": "영구 삭제",
@@ -261,7 +259,6 @@
  "New move: {move}": "새 수: {move}",
  "New moves per day": "하루 새 수",
  "New repertoire": "새 레퍼토리",
- "New subfolder": "새 하위 폴더",
  "New to openings": "오프닝 입문",
  "Next line…": "다음 라인…",
  "Next move (→)": "다음 수 (→)",
@@ -397,7 +394,6 @@
  "Rook": "룩",
  "Rosé": "로제",
  "Sand": "샌드",
- "Save": "저장",
  "Saved": "저장됨",
  "Saving…": "저장 중…",
  "Scan again": "다시 스캔",
@@ -584,7 +580,6 @@
  "depth {n}": "깊이 {n}",
  "e.g. London System": "예: 런던 시스템",
  "e.g. Najdorf": "예: Najdorf",
- "e.g. vs 1.e4": "예: 1.e4 상대",
  "from {square}": "{square}에서",
  "has a note": "메모 있음",
  "in": "안",
@@ -879,13 +874,110 @@
  "{n} lines": {
   "other": "라인 {n}개"
  },
- "{n} openings": {
-  "other": "오프닝 {n}개"
- },
  "{n} ready-made sets": {
   "other": "준비된 세트 {n}개"
  },
  "{n} sets to choose from": {
   "other": "고를 수 있는 세트 {n}개"
+ },
+ "A few days of sessions, built around your focus": "목표에 맞춘 며칠간의 연습",
+ "A strength": "강점",
+ "About usual": "평소 수준",
+ "Actions": "작업",
+ "After": "다음 수 이후:",
+ "All weak spots": "모든 약점",
+ "Both": "둘 다",
+ "Chosen": "선택됨",
+ "Collapse": "접기",
+ "Create plan": "계획 만들기",
+ "Day {day} of {days}": "{days}일 중 {day}일째",
+ "Day {day} of {days} · {done} of {total} sessions done": "{days}일 중 {day}일째 · {total}개 중 {done}개 완료",
+ "Day {n}": "{n}일째",
+ "Days": "일수",
+ "Empty folder — drag lines or folders here.": "빈 폴더 — 라인이나 폴더를 여기로 끌어오세요.",
+ "Empty folder.": "빈 폴더.",
+ "End plan": "계획 끝내기",
+ "End this plan?": "이 계획을 끝낼까요?",
+ "Everything after the move counts: if the lines that answer it go badly, the move shows here.": "그 수 이후 모든 것이 포함됩니다. 그 수에 응하는 라인이 잘 안 되면 여기에 표시됩니다.",
+ "Expand": "펼치기",
+ "Forward": "앞으로",
+ "MainLine needs a few sessions of answers or some imported games before it can spot a pattern. Test yourself a few times, or import your games.": "패턴을 찾으려면 몇 번의 연습 답이나 가져온 대국이 필요합니다. 몇 번 테스트하거나 대국을 가져오세요.",
+ "Make a plan": "계획 만들기",
+ "Make a plan for my weakest spot": "가장 약한 곳을 위한 계획",
+ "Make a plan…": "계획 만들기…",
+ "Minutes a day": "하루 분",
+ "Move {n} items to": "{n}개 항목 이동 위치",
+ "Moves that lead to trouble": "문제로 이어지는 수",
+ "Much weaker than usual": "평소보다 훨씬 약함",
+ "New folder inside": "안에 새 폴더",
+ "New plan": "새 계획",
+ "No answers yet": "아직 답이 없습니다",
+ "No games in your lines yet": "내 라인에 대국이 아직 없습니다",
+ "No plan yet": "아직 계획이 없습니다",
+ "Not learned yet": "아직 안 배움",
+ "Nothing stands out yet": "아직 눈에 띄는 것이 없습니다",
+ "Nothing to practise here yet.": "아직 연습할 것이 없습니다.",
+ "Pick what to work on, for how many days and how long each day. MainLine lays out the sessions — showing the moves first, then testing the weakest parts, then an exam.": "무엇을, 며칠 동안, 하루 얼마나 할지 고르세요. MainLine이 세션을 짜 줍니다 — 먼저 수를 보여 주고, 약한 부분을 테스트하고, 마지막에 시험을 봅니다.",
+ "Plan": "계획",
+ "Plan a few days on your whole repertoire, one colour, an opening, a line or the answers to one move.": "레퍼토리 전체, 한 색, 오프닝, 라인 또는 한 수에 대한 응수로 며칠 계획을 세우세요.",
+ "Plan finished": "계획 완료",
+ "Plan finished — {done} of {total} sessions done.": "계획 완료 — {total}개 중 {done}개 완료.",
+ "Plan for my weakest spot": "가장 약한 곳을 위한 계획",
+ "Plan progress": "계획 진행률",
+ "Remove": "삭제",
+ "Select": "선택",
+ "Sessions to include": "포함할 세션",
+ "Side": "진영",
+ "Study plan": "학습 계획",
+ "Suggested": "추천",
+ "Suggested from your weak spots": "약점 기반 추천",
+ "Weak spots": "약점",
+ "Weaker than usual": "평소보다 약함",
+ "Weakest lines": "가장 약한 라인",
+ "Weakest openings": "가장 약한 오프닝",
+ "Where you go wrong most — by move, by opening and by line — from your training answers (last 90 days) and your imported games.": "수·오프닝·라인별로 가장 많이 틀리는 곳 — 연습 답(최근 90일)과 가져온 대국 기준.",
+ "White and Black keep separate folders.": "백과 흑은 폴더가 따로입니다.",
+ "Whole repertoire": "레퍼토리 전체",
+ "Work on": "연습 대상",
+ "Work on this": "이것을 연습",
+ "You miss {pct} of your moves ({misses} of {n})": "내 수의 {pct}를 틀립니다 ({n}번 중 {misses}번)",
+ "Your weakest moves, openings and lines": "가장 약한 수, 오프닝, 라인",
+ "{learned} of {total} positions learned": "{total}개 중 {learned}개 포지션 학습",
+ "{pct} of your moves right": "내 수의 {pct} 정답",
+ "Covers the {n} positions you must know after it.": {
+  "other": "그 이후 알아야 할 포지션 {n}개를 포함합니다."
+ },
+ "Delete {n} items": {
+  "other": "항목 {n}개 삭제"
+ },
+ "Deleted {n} items": {
+  "other": "항목 {n}개 삭제됨"
+ },
+ "Move {n} items to…": {
+  "other": "항목 {n}개 이동…"
+ },
+ "Moved {n} items to {name}": {
+  "other": "항목 {n}개를 {name}(으)로 이동함"
+ },
+ "Score {score} in {n} games in your lines": {
+  "other": "내 라인 {n}판에서 {score}"
+ },
+ "you score {score} in {n} games": {
+  "other": "{n}판에서 {score}"
+ },
+ "{n} folders": {
+  "other": "폴더 {n}개"
+ },
+ "{n} items": {
+  "other": "항목 {n}개"
+ },
+ "{n} min a day": {
+  "other": "하루 {n}분"
+ },
+ "{n} selected": {
+  "other": "{n}개 선택됨"
+ },
+ "{n}-day plan": {
+  "other": "{n}일 계획"
  }
 }

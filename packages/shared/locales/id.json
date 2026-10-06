@@ -101,7 +101,6 @@
  "Couldn’t load the explorer": "Tidak dapat memuat penjelajah",
  "Couldn’t reach the server. Check your connection and try again — nothing was deleted.": "Tidak dapat menghubungi server. Periksa koneksimu dan coba lagi — tidak ada yang dihapus.",
  "Coverage": "Cakupan",
- "Create": "Buat",
  "Create & open": "Buat & buka",
  "D": "R",
  "Daily": "Harian",
@@ -117,7 +116,6 @@
  "Default": "Bawaan",
  "Delete": "Hapus",
  "Delete account": "Hapus akun",
- "Delete folder": "Hapus folder",
  "Delete from here": "Hapus dari sini",
  "Delete my account & data": "Hapus akun & data saya",
  "Delete permanently": "Hapus permanen",
@@ -261,7 +259,6 @@
  "New move: {move}": "Langkah baru: {move}",
  "New moves per day": "Langkah baru per hari",
  "New repertoire": "Repertoar baru",
- "New subfolder": "Subfolder baru",
  "New to openings": "Baru mengenal pembukaan",
  "Next line…": "Variasi berikutnya…",
  "Next move (→)": "Langkah berikutnya (→)",
@@ -397,7 +394,6 @@
  "Rook": "Benteng",
  "Rosé": "Rosé",
  "Sand": "Pasir",
- "Save": "Simpan",
  "Saved": "Tersimpan",
  "Saving…": "Menyimpan…",
  "Scan again": "Pindai lagi",
@@ -584,7 +580,6 @@
  "depth {n}": "kedalaman {n}",
  "e.g. London System": "mis. Sistem London",
  "e.g. Najdorf": "mis. Najdorf",
- "e.g. vs 1.e4": "mis. vs 1.e4",
  "from {square}": "dari {square}",
  "has a note": "ada catatan",
  "in": "di",
@@ -879,13 +874,110 @@
  "{n} lines": {
   "other": "{n} variasi"
  },
- "{n} openings": {
-  "other": "{n} pembukaan"
- },
  "{n} ready-made sets": {
   "other": "{n} set siap pakai"
  },
  "{n} sets to choose from": {
   "other": "{n} set untuk dipilih"
+ },
+ "A few days of sessions, built around your focus": "Beberapa hari sesi, disusun di sekitar fokusmu",
+ "A strength": "Kekuatan",
+ "About usual": "Seperti biasa",
+ "Actions": "Tindakan",
+ "After": "Setelah",
+ "All weak spots": "Semua titik lemah",
+ "Both": "Keduanya",
+ "Chosen": "Dipilih",
+ "Collapse": "Ciutkan",
+ "Create plan": "Buat rencana",
+ "Day {day} of {days}": "Hari {day} dari {days}",
+ "Day {day} of {days} · {done} of {total} sessions done": "Hari {day} dari {days} · {done} dari {total} sesi selesai",
+ "Day {n}": "Hari {n}",
+ "Days": "Hari",
+ "Empty folder — drag lines or folders here.": "Folder kosong — seret variasi atau folder ke sini.",
+ "Empty folder.": "Folder kosong.",
+ "End plan": "Akhiri rencana",
+ "End this plan?": "Akhiri rencana ini?",
+ "Everything after the move counts: if the lines that answer it go badly, the move shows here.": "Semua setelah langkah itu dihitung: jika variasi yang menjawabnya buruk, langkahnya muncul di sini.",
+ "Expand": "Bentangkan",
+ "Forward": "Maju",
+ "MainLine needs a few sessions of answers or some imported games before it can spot a pattern. Test yourself a few times, or import your games.": "MainLine butuh beberapa sesi jawaban atau partai yang diimpor sebelum bisa melihat pola. Uji dirimu beberapa kali, atau impor partaimu.",
+ "Make a plan": "Buat rencana",
+ "Make a plan for my weakest spot": "Rencana untuk titik terlemahku",
+ "Make a plan…": "Buat rencana…",
+ "Minutes a day": "Menit per hari",
+ "Move {n} items to": "Pindahkan {n} item ke",
+ "Moves that lead to trouble": "Langkah yang berujung masalah",
+ "Much weaker than usual": "Jauh lebih lemah dari biasanya",
+ "New folder inside": "Folder baru di dalam",
+ "New plan": "Rencana baru",
+ "No answers yet": "Belum ada jawaban",
+ "No games in your lines yet": "Belum ada partai di variasimu",
+ "No plan yet": "Belum ada rencana",
+ "Not learned yet": "Belum dipelajari",
+ "Nothing stands out yet": "Belum ada yang menonjol",
+ "Nothing to practise here yet.": "Belum ada yang bisa dilatih di sini.",
+ "Pick what to work on, for how many days and how long each day. MainLine lays out the sessions — showing the moves first, then testing the weakest parts, then an exam.": "Pilih apa yang dikerjakan, berapa hari, dan berapa lama per hari. MainLine menyusun sesinya — tunjukkan langkah dulu, lalu uji bagian terlemah, lalu ujian.",
+ "Plan": "Rencana",
+ "Plan a few days on your whole repertoire, one colour, an opening, a line or the answers to one move.": "Rencanakan beberapa hari untuk seluruh repertoar, satu warna, satu pembukaan, satu variasi, atau jawaban atas satu langkah.",
+ "Plan finished": "Rencana selesai",
+ "Plan finished — {done} of {total} sessions done.": "Rencana selesai — {done} dari {total} sesi selesai.",
+ "Plan for my weakest spot": "Rencana untuk titik terlemahku",
+ "Plan progress": "Kemajuan rencana",
+ "Remove": "Hapus",
+ "Select": "Pilih",
+ "Sessions to include": "Sesi yang disertakan",
+ "Side": "Sisi",
+ "Study plan": "Rencana belajar",
+ "Suggested": "Disarankan",
+ "Suggested from your weak spots": "Saran dari titik lemahmu",
+ "Weak spots": "Titik lemah",
+ "Weaker than usual": "Lebih lemah dari biasanya",
+ "Weakest lines": "Variasi terlemah",
+ "Weakest openings": "Pembukaan terlemah",
+ "Where you go wrong most — by move, by opening and by line — from your training answers (last 90 days) and your imported games.": "Tempat kamu paling sering salah — per langkah, per pembukaan, dan per variasi — dari jawaban latihanmu (90 hari terakhir) dan partai yang kamu impor.",
+ "White and Black keep separate folders.": "Putih dan Hitam punya folder terpisah.",
+ "Whole repertoire": "Seluruh repertoar",
+ "Work on": "Kerjakan",
+ "Work on this": "Kerjakan ini",
+ "You miss {pct} of your moves ({misses} of {n})": "Kamu meleset {pct} langkahmu ({misses} dari {n})",
+ "Your weakest moves, openings and lines": "Langkah, pembukaan, dan variasi terlemahmu",
+ "{learned} of {total} positions learned": "{learned} dari {total} posisi dipelajari",
+ "{pct} of your moves right": "{pct} langkahmu benar",
+ "Covers the {n} positions you must know after it.": {
+  "other": "Mencakup {n} posisi yang harus kamu ketahui setelahnya."
+ },
+ "Delete {n} items": {
+  "other": "Hapus {n} item"
+ },
+ "Deleted {n} items": {
+  "other": "{n} item dihapus"
+ },
+ "Move {n} items to…": {
+  "other": "Pindahkan {n} item ke…"
+ },
+ "Moved {n} items to {name}": {
+  "other": "{n} item dipindahkan ke {name}"
+ },
+ "Score {score} in {n} games in your lines": {
+  "other": "Skor {score} dalam {n} partai di variasimu"
+ },
+ "you score {score} in {n} games": {
+  "other": "skormu {score} dalam {n} partai"
+ },
+ "{n} folders": {
+  "other": "{n} folder"
+ },
+ "{n} items": {
+  "other": "{n} item"
+ },
+ "{n} min a day": {
+  "other": "{n} menit per hari"
+ },
+ "{n} selected": {
+  "other": "{n} dipilih"
+ },
+ "{n}-day plan": {
+  "other": "Rencana {n} hari"
  }
 }

@@ -101,7 +101,6 @@
  "Couldn’t load the explorer": "بارگیری کاوشگر ممکن نشد",
  "Couldn’t reach the server. Check your connection and try again — nothing was deleted.": "دسترسی به سرور ممکن نشد. اتصال را بررسی کنید و دوباره تلاش کنید — چیزی حذف نشد.",
  "Coverage": "پوشش",
- "Create": "ایجاد",
  "Create & open": "ایجاد و باز کردن",
  "D": "م",
  "Daily": "روزانه",
@@ -117,7 +116,6 @@
  "Default": "پیش‌فرض",
  "Delete": "حذف",
  "Delete account": "حذف حساب",
- "Delete folder": "حذف پوشه",
  "Delete from here": "حذف از اینجا",
  "Delete my account & data": "حذف حساب و داده‌های من",
  "Delete permanently": "حذف همیشگی",
@@ -261,7 +259,6 @@
  "New move: {move}": "حرکت جدید: {move}",
  "New moves per day": "حرکت‌های جدید در روز",
  "New repertoire": "رپرتوار جدید",
- "New subfolder": "زیرپوشهٔ جدید",
  "New to openings": "تازه‌کار در گشایش‌ها",
  "Next line…": "خط بعدی…",
  "Next move (→)": "حرکت بعدی (→)",
@@ -397,7 +394,6 @@
  "Rook": "رخ",
  "Rosé": "رُزه",
  "Sand": "شنی",
- "Save": "ذخیره",
  "Saved": "ذخیره شد",
  "Saving…": "در حال ذخیره…",
  "Scan again": "بررسی دوباره",
@@ -584,7 +580,6 @@
  "depth {n}": "عمق {n}",
  "e.g. London System": "مثلاً سیستم لندن",
  "e.g. Najdorf": "مثلاً نایدورف",
- "e.g. vs 1.e4": "مثلاً در برابر 1.e4",
  "from {square}": "از {square}",
  "has a note": "یادداشت دارد",
  "in": "در",
@@ -926,10 +921,6 @@
   "one": "{n} خط",
   "other": "{n} خط"
  },
- "{n} openings": {
-  "one": "{n} گشایش",
-  "other": "{n} گشایش"
- },
  "{n} ready-made sets": {
   "one": "{n} مجموعهٔ آماده",
   "other": "{n} مجموعهٔ آماده"
@@ -937,5 +928,117 @@
  "{n} sets to choose from": {
   "one": "{n} مجموعه برای انتخاب",
   "other": "{n} مجموعه برای انتخاب"
+ },
+ "A few days of sessions, built around your focus": "چند روز جلسه، حول تمرکز شما",
+ "A strength": "نقطهٔ قوت",
+ "About usual": "در حد معمول",
+ "Actions": "کارها",
+ "After": "پس از",
+ "All weak spots": "همهٔ نقاط ضعف",
+ "Both": "هر دو",
+ "Chosen": "انتخاب‌شده",
+ "Collapse": "جمع کردن",
+ "Create plan": "ساخت برنامه",
+ "Day {day} of {days}": "روز {day} از {days}",
+ "Day {day} of {days} · {done} of {total} sessions done": "روز {day} از {days} · {done} از {total} جلسه انجام شد",
+ "Day {n}": "روز {n}",
+ "Days": "روزها",
+ "Empty folder — drag lines or folders here.": "پوشهٔ خالی — خط‌ها یا پوشه‌ها را اینجا بکشید.",
+ "Empty folder.": "پوشهٔ خالی.",
+ "End plan": "پایان برنامه",
+ "End this plan?": "این برنامه پایان یابد؟",
+ "Everything after the move counts: if the lines that answer it go badly, the move shows here.": "هر چه پس از این حرکت است حساب می‌شود: اگر خط‌هایی که به آن پاسخ می‌دهند بد پیش بروند، حرکت اینجا نشان داده می‌شود.",
+ "Expand": "باز کردن",
+ "Forward": "جلو",
+ "MainLine needs a few sessions of answers or some imported games before it can spot a pattern. Test yourself a few times, or import your games.": "MainLine پیش از یافتن الگو به چند جلسه پاسخ یا بازی‌های واردشده نیاز دارد. چند بار خودتان را امتحان کنید یا بازی‌هایتان را وارد کنید.",
+ "Make a plan": "ساخت برنامه",
+ "Make a plan for my weakest spot": "برنامه برای ضعیف‌ترین نقطه‌ام",
+ "Make a plan…": "ساخت برنامه…",
+ "Minutes a day": "دقیقه در روز",
+ "Move {n} items to": "انتقال {n} مورد به",
+ "Moves that lead to trouble": "حرکت‌هایی که به دردسر می‌رسند",
+ "Much weaker than usual": "خیلی ضعیف‌تر از معمول",
+ "New folder inside": "پوشهٔ جدید در داخل",
+ "New plan": "برنامهٔ جدید",
+ "No answers yet": "هنوز پاسخی نیست",
+ "No games in your lines yet": "هنوز بازی‌ای در خط‌های شما نیست",
+ "No plan yet": "هنوز برنامه‌ای نیست",
+ "Not learned yet": "هنوز یاد گرفته نشده",
+ "Nothing stands out yet": "هنوز چیزی برجسته نیست",
+ "Nothing to practise here yet.": "هنوز چیزی برای تمرین اینجا نیست.",
+ "Pick what to work on, for how many days and how long each day. MainLine lays out the sessions — showing the moves first, then testing the weakest parts, then an exam.": "انتخاب کنید روی چه کار کنید، چند روز و روزی چقدر. MainLine جلسه‌ها را می‌چیند — اول حرکت‌ها را نشان می‌دهد، بعد ضعیف‌ترین بخش‌ها را می‌سنجد، در آخر آزمون.",
+ "Plan": "برنامه",
+ "Plan a few days on your whole repertoire, one colour, an opening, a line or the answers to one move.": "برای کل رپرتوار، یک رنگ، یک گشایش، یک خط یا پاسخ‌ها به یک حرکت چند روز برنامه بریزید.",
+ "Plan finished": "برنامه تمام شد",
+ "Plan finished — {done} of {total} sessions done.": "برنامه تمام شد — {done} از {total} جلسه انجام شد.",
+ "Plan for my weakest spot": "برنامه برای ضعیف‌ترین نقطه‌ام",
+ "Plan progress": "پیشرفت برنامه",
+ "Remove": "حذف",
+ "Select": "انتخاب",
+ "Sessions to include": "جلسه‌های شامل",
+ "Side": "طرف",
+ "Study plan": "برنامهٔ مطالعه",
+ "Suggested": "پیشنهادی",
+ "Suggested from your weak spots": "پیشنهادها بر اساس نقاط ضعف شما",
+ "Weak spots": "نقاط ضعف",
+ "Weaker than usual": "ضعیف‌تر از معمول",
+ "Weakest lines": "ضعیف‌ترین خط‌ها",
+ "Weakest openings": "ضعیف‌ترین گشایش‌ها",
+ "Where you go wrong most — by move, by opening and by line — from your training answers (last 90 days) and your imported games.": "جایی که بیشتر اشتباه می‌کنید — بر اساس حرکت، گشایش و خط — از پاسخ‌های تمرینی (۹۰ روز اخیر) و بازی‌های واردشده.",
+ "White and Black keep separate folders.": "سفید و سیاه پوشه‌های جدا دارند.",
+ "Whole repertoire": "کل رپرتوار",
+ "Work on": "کار روی",
+ "Work on this": "روی این کار کنید",
+ "You miss {pct} of your moves ({misses} of {n})": "{pct} از حرکت‌هایتان را اشتباه می‌زنید ({misses} از {n})",
+ "Your weakest moves, openings and lines": "ضعیف‌ترین حرکت‌ها، گشایش‌ها و خط‌های شما",
+ "{learned} of {total} positions learned": "{learned} از {total} موقعیت یاد گرفته شد",
+ "{pct} of your moves right": "{pct} از حرکت‌هایتان درست",
+ "Covers the {n} positions you must know after it.": {
+  "one": "{n} موقعیتی را که پس از آن باید بدانید در بر دارد.",
+  "other": "{n} موقعیتی را که پس از آن باید بدانید در بر دارد."
+ },
+ "Delete {n} items": {
+  "one": "حذف {n} مورد",
+  "other": "حذف {n} مورد"
+ },
+ "Deleted {n} items": {
+  "one": "{n} مورد حذف شد",
+  "other": "{n} مورد حذف شد"
+ },
+ "Move {n} items to…": {
+  "one": "انتقال {n} مورد به…",
+  "other": "انتقال {n} مورد به…"
+ },
+ "Moved {n} items to {name}": {
+  "one": "{n} مورد به {name} منتقل شد",
+  "other": "{n} مورد به {name} منتقل شد"
+ },
+ "Score {score} in {n} games in your lines": {
+  "one": "{score} در {n} بازی در خط‌های شما",
+  "other": "{score} در {n} بازی در خط‌های شما"
+ },
+ "you score {score} in {n} games": {
+  "one": "امتیاز شما {score} در {n} بازی",
+  "other": "امتیاز شما {score} در {n} بازی"
+ },
+ "{n} folders": {
+  "one": "{n} پوشه",
+  "other": "{n} پوشه"
+ },
+ "{n} items": {
+  "one": "{n} مورد",
+  "other": "{n} مورد"
+ },
+ "{n} min a day": {
+  "one": "روزی {n} دقیقه",
+  "other": "روزی {n} دقیقه"
+ },
+ "{n} selected": {
+  "one": "{n} انتخاب شد",
+  "other": "{n} انتخاب شد"
+ },
+ "{n}-day plan": {
+  "one": "برنامهٔ {n} روزه",
+  "other": "برنامهٔ {n} روزه"
  }
 }

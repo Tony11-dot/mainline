@@ -142,3 +142,13 @@ export async function moveSettled(page: Page, from: string, before: string | nul
     .toBe(true)
     .catch(() => undefined); // illegal moves never flip — that's fine
 }
+
+/** A folder or line in the repertoire browser. */
+export const item = (page: Page, name: string | RegExp) => page.getByRole('option', { name, exact: typeof name === 'string' });
+
+/** Opens it the way people do: double-click on wide screens (Finder), tap on phones. */
+export async function openItem(page: Page, name: string | RegExp) {
+  const wide = (page.viewportSize()?.width ?? 0) >= 1024;
+  if (wide) await item(page, name).dblclick();
+  else await item(page, name).click();
+}

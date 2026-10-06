@@ -47,6 +47,15 @@ describe('planSession', () => {
     expect(plan).toHaveLength(2);
   });
 
+  it('through a position: only the lines that pass it, and only your moves after it', () => {
+    const afterC5 = playLine(INITIAL_FEN, ['e2e4', 'c7c5']).moves[1]!.epd;
+    const plan = planSession({ mode: 'learn', data, cards: [], now, showAll: true, throughEpd: afterC5 });
+    expect(plan).toHaveLength(1);
+    expect(plan[0]!.steps).toEqual(['auto', 'auto', 'learn', 'auto', 'learn']);
+    const drill = planSession({ mode: 'drill', data, cards: [], now, maxLines: 3, rng: () => 0.5, throughEpd: afterC5 });
+    for (const l of drill) expect(l.epds[0]).toBe(afterC5);
+  });
+
   it('review: only due positions are graded; others auto-played', () => {
     const graphs = graphsByRep(data);
     const afterE5 = playLine(INITIAL_FEN, ['e2e4', 'e7e5']).moves[1]!.epd;

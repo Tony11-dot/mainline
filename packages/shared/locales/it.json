@@ -101,7 +101,6 @@
  "Couldn’t load the explorer": "Impossibile caricare l’explorer",
  "Couldn’t reach the server. Check your connection and try again — nothing was deleted.": "Impossibile raggiungere il server. Controlla la connessione e riprova — non è stato eliminato nulla.",
  "Coverage": "Copertura",
- "Create": "Crea",
  "Create & open": "Crea e apri",
  "D": "P",
  "Daily": "Giornaliera",
@@ -117,7 +116,6 @@
  "Default": "Predefinito",
  "Delete": "Elimina",
  "Delete account": "Elimina account",
- "Delete folder": "Elimina cartella",
  "Delete from here": "Elimina da qui",
  "Delete my account & data": "Elimina il mio account e i dati",
  "Delete permanently": "Elimina definitivamente",
@@ -261,7 +259,6 @@
  "New move: {move}": "Nuova mossa: {move}",
  "New moves per day": "Nuove mosse al giorno",
  "New repertoire": "Nuovo repertorio",
- "New subfolder": "Nuova sottocartella",
  "New to openings": "Nuovo alle aperture",
  "Next line…": "Prossima linea…",
  "Next move (→)": "Mossa successiva (→)",
@@ -397,7 +394,6 @@
  "Rook": "Torre",
  "Rosé": "Rosé",
  "Sand": "Sabbia",
- "Save": "Salva",
  "Saved": "Salvato",
  "Saving…": "Salvataggio…",
  "Scan again": "Scansiona di nuovo",
@@ -584,7 +580,6 @@
  "depth {n}": "profondità {n}",
  "e.g. London System": "es. Sistema Londra",
  "e.g. Najdorf": "es. Najdorf",
- "e.g. vs 1.e4": "es. contro 1.e4",
  "from {square}": "da {square}",
  "has a note": "ha una nota",
  "in": "in",
@@ -926,10 +921,6 @@
   "one": "{n} linea",
   "other": "{n} linee"
  },
- "{n} openings": {
-  "one": "{n} apertura",
-  "other": "{n} aperture"
- },
  "{n} ready-made sets": {
   "one": "{n} set pronto",
   "other": "{n} set pronti"
@@ -937,5 +928,117 @@
  "{n} sets to choose from": {
   "one": "{n} set tra cui scegliere",
   "other": "{n} set tra cui scegliere"
+ },
+ "A few days of sessions, built around your focus": "Qualche giorno di sessioni, costruite attorno al tuo obiettivo",
+ "A strength": "Un punto di forza",
+ "About usual": "Nella norma",
+ "Actions": "Azioni",
+ "After": "Dopo",
+ "All weak spots": "Tutti i punti deboli",
+ "Both": "Entrambi",
+ "Chosen": "Scelto",
+ "Collapse": "Comprimi",
+ "Create plan": "Crea piano",
+ "Day {day} of {days}": "Giorno {day} di {days}",
+ "Day {day} of {days} · {done} of {total} sessions done": "Giorno {day} di {days} · {done} sessioni su {total} fatte",
+ "Day {n}": "Giorno {n}",
+ "Days": "Giorni",
+ "Empty folder — drag lines or folders here.": "Cartella vuota — trascina qui linee o cartelle.",
+ "Empty folder.": "Cartella vuota.",
+ "End plan": "Termina piano",
+ "End this plan?": "Terminare questo piano?",
+ "Everything after the move counts: if the lines that answer it go badly, the move shows here.": "Conta tutto ciò che segue la mossa: se le linee che le rispondono vanno male, la mossa compare qui.",
+ "Expand": "Espandi",
+ "Forward": "Avanti",
+ "MainLine needs a few sessions of answers or some imported games before it can spot a pattern. Test yourself a few times, or import your games.": "MainLine ha bisogno di qualche sessione di risposte o di partite importate prima di notare uno schema. Mettiti alla prova qualche volta, o importa le tue partite.",
+ "Make a plan": "Fai un piano",
+ "Make a plan for my weakest spot": "Piano per il mio punto più debole",
+ "Make a plan…": "Fai un piano…",
+ "Minutes a day": "Minuti al giorno",
+ "Move {n} items to": "Sposta {n} elementi in",
+ "Moves that lead to trouble": "Mosse che portano guai",
+ "Much weaker than usual": "Molto peggio del solito",
+ "New folder inside": "Nuova cartella dentro",
+ "New plan": "Nuovo piano",
+ "No answers yet": "Ancora nessuna risposta",
+ "No games in your lines yet": "Ancora nessuna partita nelle tue linee",
+ "No plan yet": "Ancora nessun piano",
+ "Not learned yet": "Non ancora imparato",
+ "Nothing stands out yet": "Ancora niente spicca",
+ "Nothing to practise here yet.": "Ancora niente da allenare qui.",
+ "Pick what to work on, for how many days and how long each day. MainLine lays out the sessions — showing the moves first, then testing the weakest parts, then an exam.": "Scegli su cosa lavorare, per quanti giorni e quanto ogni giorno. MainLine organizza le sessioni: prima mostra le mosse, poi mette alla prova le parti più deboli, infine un esame.",
+ "Plan": "Piano",
+ "Plan a few days on your whole repertoire, one colour, an opening, a line or the answers to one move.": "Pianifica qualche giorno su tutto il repertorio, un colore, un’apertura, una linea o le risposte a una mossa.",
+ "Plan finished": "Piano finito",
+ "Plan finished — {done} of {total} sessions done.": "Piano finito — {done} sessioni su {total} fatte.",
+ "Plan for my weakest spot": "Piano per il mio punto più debole",
+ "Plan progress": "Avanzamento del piano",
+ "Remove": "Rimuovi",
+ "Select": "Seleziona",
+ "Sessions to include": "Sessioni da includere",
+ "Side": "Lato",
+ "Study plan": "Piano di studio",
+ "Suggested": "Suggerito",
+ "Suggested from your weak spots": "Suggerimenti dai tuoi punti deboli",
+ "Weak spots": "Punti deboli",
+ "Weaker than usual": "Peggio del solito",
+ "Weakest lines": "Linee più deboli",
+ "Weakest openings": "Aperture più deboli",
+ "Where you go wrong most — by move, by opening and by line — from your training answers (last 90 days) and your imported games.": "Dove sbagli di più — per mossa, per apertura e per linea — dalle tue risposte in allenamento (ultimi 90 giorni) e dalle partite importate.",
+ "White and Black keep separate folders.": "Bianco e Nero hanno cartelle separate.",
+ "Whole repertoire": "Tutto il repertorio",
+ "Work on": "Lavora su",
+ "Work on this": "Lavora su questo",
+ "You miss {pct} of your moves ({misses} of {n})": "Sbagli il {pct} delle tue mosse ({misses} su {n})",
+ "Your weakest moves, openings and lines": "Le tue mosse, aperture e linee più deboli",
+ "{learned} of {total} positions learned": "{learned} posizioni imparate su {total}",
+ "{pct} of your moves right": "{pct} delle tue mosse giuste",
+ "Covers the {n} positions you must know after it.": {
+  "one": "Copre {n} posizione da sapere dopo.",
+  "other": "Copre le {n} posizioni da sapere dopo."
+ },
+ "Delete {n} items": {
+  "one": "Elimina {n} elemento",
+  "other": "Elimina {n} elementi"
+ },
+ "Deleted {n} items": {
+  "one": "{n} elemento eliminato",
+  "other": "{n} elementi eliminati"
+ },
+ "Move {n} items to…": {
+  "one": "Sposta {n} elemento in…",
+  "other": "Sposta {n} elementi in…"
+ },
+ "Moved {n} items to {name}": {
+  "one": "{n} elemento spostato in {name}",
+  "other": "{n} elementi spostati in {name}"
+ },
+ "Score {score} in {n} games in your lines": {
+  "one": "{score} in {n} partita nelle tue linee",
+  "other": "{score} in {n} partite nelle tue linee"
+ },
+ "you score {score} in {n} games": {
+  "one": "fai {score} in {n} partita",
+  "other": "fai {score} in {n} partite"
+ },
+ "{n} folders": {
+  "one": "{n} cartella",
+  "other": "{n} cartelle"
+ },
+ "{n} items": {
+  "one": "{n} elemento",
+  "other": "{n} elementi"
+ },
+ "{n} min a day": {
+  "one": "{n} min al giorno",
+  "other": "{n} min al giorno"
+ },
+ "{n} selected": {
+  "one": "{n} selezionato",
+  "other": "{n} selezionati"
+ },
+ "{n}-day plan": {
+  "one": "Piano di {n} giorno",
+  "other": "Piano di {n} giorni"
  }
 }

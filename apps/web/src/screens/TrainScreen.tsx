@@ -16,6 +16,7 @@ import { useTraining } from '../lib/training';
 import { usePrefs } from '../lib/prefs';
 import { peekReplyWeights } from '../lib/explorer';
 import { scopeRepIds } from '../lib/practice';
+import { usePlan } from '../lib/plan';
 import { Button, IconButton, PanelNote } from '../ui/primitives';
 import { CoachAnswer } from '../panels/CoachPanel';
 import type { StoreApi } from 'zustand';
@@ -43,7 +44,7 @@ export function TrainScreen() {
   useEffect(() => {
     if (!lib.loaded || !training.loaded) return;
     const data = { reps: lib.reps, moves: lib.moves };
-    const repIds = scopeRepIds(params, lib.folders, lib.reps);
+    const repIds = scopeRepIds(params, lib.folders, lib.reps, lib.moves);
     const learnedToday = training.reviews.filter((r) => r.mode === 'learn' && r.reviewedAt >= startOfDay()).length;
     const lines = planSession({
       mode,
@@ -55,6 +56,7 @@ export function TrainScreen() {
       maxLines: mode === 'drill' ? (repIds ? Math.min(12, Math.max(6, repIds.length * 2)) : 8) : mode === 'quiz' ? 15 : undefined,
       replyWeights: peekReplyWeights,
       showAll,
+      throughEpd: params.get('at') ?? undefined,
     });
     if (!lines.length) {
       setEmpty(true);
@@ -90,6 +92,12 @@ function Session({ store, mode, showAll, onAgain }: { store: StoreApi<TrainerSta
   const yourTurn = s.phase === 'await' || s.phase === 'learn' || s.phase === 'wrong';
   const totalSteps = s.lines.reduce((n, l) => n + l.steps.filter((x) => x !== 'auto').length, 0);
   const doneSteps = s.lines.slice(0, s.lineIdx).reduce((n, l) => n + l.steps.filter((x) => x !== 'auto').length, 0) + (line ? line.steps.slice(0, s.ply).filter((x) => x !== 'auto').length : 0);
+
+  const [params] = useSearchParams();
+  // A finished session ticks off the matching task of your plan.
+  useEffect(() => {
+    if (s.phase === 'done') usePlan.getState().completed(params);
+  }, [s.phase]); // eslint-disable-line react-hooks/exhaustive-deps
 
   useEffect(() => {
     const onKey = (e: KeyboardEvent) => {

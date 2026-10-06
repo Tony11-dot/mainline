@@ -101,7 +101,6 @@
  "Couldn’t load the explorer": "לא ניתן היה לטעון את הסייר",
  "Couldn’t reach the server. Check your connection and try again — nothing was deleted.": "לא ניתן היה להגיע לשרת. בדקו את החיבור ונסו שוב — שום דבר לא נמחק.",
  "Coverage": "כיסוי",
- "Create": "יצירה",
  "Create & open": "יצירה ופתיחה",
  "D": "ת",
  "Daily": "יומי",
@@ -117,7 +116,6 @@
  "Default": "ברירת מחדל",
  "Delete": "מחיקה",
  "Delete account": "מחיקת החשבון",
- "Delete folder": "מחיקת תיקייה",
  "Delete from here": "מחיקה מכאן",
  "Delete my account & data": "מחיקת החשבון והנתונים שלי",
  "Delete permanently": "מחיקה לצמיתות",
@@ -261,7 +259,6 @@
  "New move: {move}": "מסע חדש: {move}",
  "New moves per day": "מסעים חדשים ביום",
  "New repertoire": "רפרטואר חדש",
- "New subfolder": "תת־תיקייה חדשה",
  "New to openings": "חדש בפתיחות",
  "Next line…": "השורה הבאה…",
  "Next move (→)": "המסע הבא (→)",
@@ -397,7 +394,6 @@
  "Rook": "צריח",
  "Rosé": "רוזה",
  "Sand": "חול",
- "Save": "שמירה",
  "Saved": "נשמר",
  "Saving…": "שומר…",
  "Scan again": "סריקה חוזרת",
@@ -584,7 +580,6 @@
  "depth {n}": "עומק {n}",
  "e.g. London System": "למשל מערך לונדון",
  "e.g. Najdorf": "למשל נאידורף",
- "e.g. vs 1.e4": "למשל נגד 1.e4",
  "from {square}": "מ־{square}",
  "has a note": "יש הערה",
  "in": "ב־",
@@ -973,11 +968,6 @@
   "two": "{n} שורות",
   "other": "{n} שורות"
  },
- "{n} openings": {
-  "one": "פתיחה אחת",
-  "two": "{n} פתיחות",
-  "other": "{n} פתיחות"
- },
  "{n} ready-made sets": {
   "one": "סט מוכן אחד",
   "two": "{n} סטים מוכנים",
@@ -987,5 +977,129 @@
   "one": "סט אחד לבחירה",
   "two": "{n} סטים לבחירה",
   "other": "{n} סטים לבחירה"
+ },
+ "A few days of sessions, built around your focus": "כמה ימים של אימונים סביב המיקוד שלך",
+ "A strength": "נקודת חוזק",
+ "About usual": "כרגיל",
+ "Actions": "פעולות",
+ "After": "אחרי",
+ "All weak spots": "כל נקודות התורפה",
+ "Both": "שניהם",
+ "Chosen": "נבחר",
+ "Collapse": "כיווץ",
+ "Create plan": "יצירת תוכנית",
+ "Day {day} of {days}": "יום {day} מתוך {days}",
+ "Day {day} of {days} · {done} of {total} sessions done": "יום {day} מתוך {days} · {done} מתוך {total} אימונים בוצעו",
+ "Day {n}": "יום {n}",
+ "Days": "ימים",
+ "Empty folder — drag lines or folders here.": "תיקייה ריקה — גררו לכאן שורות או תיקיות.",
+ "Empty folder.": "תיקייה ריקה.",
+ "End plan": "סיום התוכנית",
+ "End this plan?": "לסיים את התוכנית?",
+ "Everything after the move counts: if the lines that answer it go badly, the move shows here.": "כל מה שאחרי המסע נספר: אם השורות שעונות עליו הולכות רע, המסע מופיע כאן.",
+ "Expand": "הרחבה",
+ "Forward": "קדימה",
+ "MainLine needs a few sessions of answers or some imported games before it can spot a pattern. Test yourself a few times, or import your games.": "MainLine צריך כמה אימונים עם תשובות או משחקים מיובאים לפני שיזהה דפוס. בחנו את עצמכם כמה פעמים או ייבאו משחקים.",
+ "Make a plan": "תכנון",
+ "Make a plan for my weakest spot": "תוכנית לנקודה החלשה ביותר שלי",
+ "Make a plan…": "תכנון…",
+ "Minutes a day": "דקות ביום",
+ "Move {n} items to": "העברת {n} פריטים אל",
+ "Moves that lead to trouble": "מסעים שמובילים לצרות",
+ "Much weaker than usual": "חלש בהרבה מהרגיל",
+ "New folder inside": "תיקייה חדשה בפנים",
+ "New plan": "תוכנית חדשה",
+ "No answers yet": "אין עדיין תשובות",
+ "No games in your lines yet": "אין עדיין משחקים בשורות שלך",
+ "No plan yet": "אין עדיין תוכנית",
+ "Not learned yet": "עוד לא נלמד",
+ "Nothing stands out yet": "עדיין שום דבר לא בולט",
+ "Nothing to practise here yet.": "אין כאן עדיין מה לתרגל.",
+ "Pick what to work on, for how many days and how long each day. MainLine lays out the sessions — showing the moves first, then testing the weakest parts, then an exam.": "בחרו על מה לעבוד, כמה ימים וכמה זמן ביום. MainLine יסדר את האימונים — קודם מראה את המסעים, אחר כך בוחן את החלקים החלשים, ובסוף מבחן.",
+ "Plan": "תוכנית",
+ "Plan a few days on your whole repertoire, one colour, an opening, a line or the answers to one move.": "תכננו כמה ימים לכל הרפרטואר, צבע אחד, פתיחה, שורה או התשובות למסע אחד.",
+ "Plan finished": "התוכנית הסתיימה",
+ "Plan finished — {done} of {total} sessions done.": "התוכנית הסתיימה — {done} מתוך {total} אימונים בוצעו.",
+ "Plan for my weakest spot": "תוכנית לנקודה החלשה ביותר שלי",
+ "Plan progress": "התקדמות התוכנית",
+ "Remove": "הסרה",
+ "Select": "בחירה",
+ "Sessions to include": "אימונים לכלול",
+ "Side": "צד",
+ "Study plan": "תוכנית לימוד",
+ "Suggested": "מוצע",
+ "Suggested from your weak spots": "הצעות לפי נקודות התורפה שלך",
+ "Weak spots": "נקודות תורפה",
+ "Weaker than usual": "חלש מהרגיל",
+ "Weakest lines": "השורות החלשות ביותר",
+ "Weakest openings": "הפתיחות החלשות ביותר",
+ "Where you go wrong most — by move, by opening and by line — from your training answers (last 90 days) and your imported games.": "איפה אתם טועים הכי הרבה — לפי מסע, פתיחה ושורה — מתשובות האימון (90 הימים האחרונים) והמשחקים המיובאים.",
+ "White and Black keep separate folders.": "ללבן ולשחור יש תיקיות נפרדות.",
+ "Whole repertoire": "כל הרפרטואר",
+ "Work on": "לעבוד על",
+ "Work on this": "לעבוד על זה",
+ "You miss {pct} of your moves ({misses} of {n})": "אתם מחטיאים {pct} מהמסעים ({misses} מתוך {n})",
+ "Your weakest moves, openings and lines": "המסעים, הפתיחות והשורות החלשים ביותר שלך",
+ "{learned} of {total} positions learned": "{learned} מתוך {total} עמדות נלמדו",
+ "{pct} of your moves right": "{pct} מהמסעים שלך נכונים",
+ "Covers the {n} positions you must know after it.": {
+  "one": "כולל עמדה אחת שצריך לדעת אחריו.",
+  "two": "כולל את {n} העמדות שצריך לדעת אחריו.",
+  "other": "כולל את {n} העמדות שצריך לדעת אחריו."
+ },
+ "Delete {n} items": {
+  "one": "מחיקת פריט אחד",
+  "two": "מחיקת {n} פריטים",
+  "other": "מחיקת {n} פריטים"
+ },
+ "Deleted {n} items": {
+  "one": "פריט אחד נמחק",
+  "two": "{n} פריטים נמחקו",
+  "other": "{n} פריטים נמחקו"
+ },
+ "Move {n} items to…": {
+  "one": "העברת פריט אחד אל…",
+  "two": "העברת {n} פריטים אל…",
+  "other": "העברת {n} פריטים אל…"
+ },
+ "Moved {n} items to {name}": {
+  "one": "פריט אחד הועבר אל {name}",
+  "two": "{n} פריטים הועברו אל {name}",
+  "other": "{n} פריטים הועברו אל {name}"
+ },
+ "Score {score} in {n} games in your lines": {
+  "one": "{score} במשחק אחד בשורות שלך",
+  "two": "{score} ב-{n} משחקים בשורות שלך",
+  "other": "{score} ב-{n} משחקים בשורות שלך"
+ },
+ "you score {score} in {n} games": {
+  "one": "התוצאה שלך {score} במשחק אחד",
+  "two": "התוצאה שלך {score} ב-{n} משחקים",
+  "other": "התוצאה שלך {score} ב-{n} משחקים"
+ },
+ "{n} folders": {
+  "one": "תיקייה אחת",
+  "two": "{n} תיקיות",
+  "other": "{n} תיקיות"
+ },
+ "{n} items": {
+  "one": "פריט אחד",
+  "two": "{n} פריטים",
+  "other": "{n} פריטים"
+ },
+ "{n} min a day": {
+  "one": "דקה ביום",
+  "two": "{n} דקות ביום",
+  "other": "{n} דקות ביום"
+ },
+ "{n} selected": {
+  "one": "נבחר אחד",
+  "two": "{n} נבחרו",
+  "other": "{n} נבחרו"
+ },
+ "{n}-day plan": {
+  "one": "תוכנית ליום אחד",
+  "two": "תוכנית ל-{n} ימים",
+  "other": "תוכנית ל-{n} ימים"
  }
 }

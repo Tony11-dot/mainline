@@ -1,5 +1,5 @@
 import { createEmptyCard, fsrs, generatorParameters, Rating, type Card as FsrsCard, type Grade } from 'ts-fsrs';
-import { buildGraph, isOwnTurn, lines, mainMoveAt, rootFromMoves, type Graph, type RepMove, type Repertoire, type SyncMeta } from './repertoire';
+import { buildGraph, isOwnTurn, lines, mainMoveAt, reachable, rootFromMoves, type Graph, type RepMove, type Repertoire, type SyncMeta } from './repertoire';
 import type { Color } from './chess';
 import { epdToFen } from './epd';
 
@@ -159,6 +159,8 @@ export interface PlanOpts {
   replyWeights?: (epd: string) => Map<string, number> | undefined;
   /** Learn only: walk every line with each of your moves shown, learned or not (no new-move limit). */
   showAll?: boolean;
+  /** Only what follows this position: lines through it (your moves before it are played for you), drills and quizzes from it. */
+  throughEpd?: string;
 }
 
 const cardIndex = (cards: TrainCard[]) => new Map(cards.filter((c) => !c.deleted && c.kind === 'repertoire').map((c) => [`${c.color}|${c.epd}`, c]));
@@ -176,6 +178,7 @@ export function planSession(o: PlanOpts): SessionLine[] {
   const newLimit = o.newLimit ?? 10;
 
   if (o.mode === 'drill') return planDrill(reps, graphs, o, rng);
+  const through = o.throughEpd;
   if (o.mode === 'quiz') return planQuiz(reps, graphs, cards, o, rng);
 
   const out: SessionLine[] = [];
@@ -188,9 +191,11 @@ export function planSession(o: PlanOpts): SessionLine[] {
       const steps: StepKind[] = [];
       const epds: string[] = [];
       let lastUseful = -1;
+      const from = through ? line.moves.findIndex((m) => m.fromEpd === through) : 0;
+      if (from < 0) continue;
       line.moves.forEach((m, i) => {
         epds.push(m.fromEpd);
-        if (!isOwnTurn(rep.color, m.fromEpd)) return steps.push('auto');
+        if (!isOwnTurn(rep.color, m.fromEpd) || i < from) return steps.push('auto');
         const key = `${rep.color}|${m.fromEpd}`;
         const card = cards.get(key);
         if (covered.has(key)) return steps.push('auto');
@@ -234,13 +239,14 @@ function safeRoot(rep: Repertoire): string {
 function planDrill(reps: Repertoire[], graphs: Map<string, Graph>, o: PlanOpts, rng: () => number): SessionLine[] {
   const out: SessionLine[] = [];
   const count = o.maxLines ?? 5;
-  const pool = reps.filter((r) => (graphs.get(r.id)?.get(r.rootEpd) ?? []).length);
+  const pool = reps.filter((r) => (graphs.get(r.id)?.get(o.throughEpd ?? r.rootEpd) ?? []).length);
   if (!pool.length) return out;
   for (let n = 0; n < count; n++) {
     const rep = pool[Math.floor(rng() * pool.length)]!;
     const g = graphs.get(rep.id)!;
     const line: SessionLine = { repId: rep.id, color: rep.color, rootFen: safeRoot(rep), ucis: [], steps: [], epds: [] };
-    let epd = rep.rootEpd;
+    let epd = o.throughEpd ?? rep.rootEpd;
+    if (o.throughEpd) line.rootFen = epdToFen(o.throughEpd);
     const seen = new Set<string>();
     while (!seen.has(epd)) {
       seen.add(epd);
@@ -285,7 +291,9 @@ function planQuiz(reps: Repertoire[], graphs: Map<string, Graph>, cards: Map<str
   const seen = new Set<string>();
   for (const rep of reps) {
     const g = graphs.get(rep.id)!;
+    const within = o.throughEpd ? reachable(g, o.throughEpd) : undefined;
     for (const [epd, list] of g) {
+      if (within && !within.has(epd)) continue;
       const key = `${rep.color}|${epd}`;
       if (seen.has(key) || !isOwnTurn(rep.color, epd) || !list.some((m) => m.isMainline)) continue;
       const card = cards.get(key);

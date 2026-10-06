@@ -93,7 +93,7 @@ export function ImportPgnSheet({ open, repId, initialText, onClose }: { open: bo
       </Field>
       {target === 'new' && (
         <>
-          <Field label={t('I play')}>
+          <Field label={t('I play')} group>
             <Segmented<Color> label={t('Colour')} value={color} onChange={setColor} options={[{ value: 'white', label: t('White') }, { value: 'black', label: t('Black') }]} />
           </Field>
           <Field label={t('Name')}>

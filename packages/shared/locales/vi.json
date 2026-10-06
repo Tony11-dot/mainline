@@ -101,7 +101,6 @@
  "Couldn’t load the explorer": "Không tải được trình khám phá",
  "Couldn’t reach the server. Check your connection and try again — nothing was deleted.": "Không kết nối được máy chủ. Kiểm tra kết nối rồi thử lại — chưa có gì bị xóa.",
  "Coverage": "Độ bao phủ",
- "Create": "Tạo",
  "Create & open": "Tạo & mở",
  "D": "H",
  "Daily": "Hằng ngày",
@@ -117,7 +116,6 @@
  "Default": "Mặc định",
  "Delete": "Xóa",
  "Delete account": "Xóa tài khoản",
- "Delete folder": "Xóa thư mục",
  "Delete from here": "Xóa từ đây",
  "Delete my account & data": "Xóa tài khoản & dữ liệu của tôi",
  "Delete permanently": "Xóa vĩnh viễn",
@@ -261,7 +259,6 @@
  "New move: {move}": "Nước mới: {move}",
  "New moves per day": "Số nước mới mỗi ngày",
  "New repertoire": "Bộ khai cuộc mới",
- "New subfolder": "Thư mục con mới",
  "New to openings": "Mới làm quen khai cuộc",
  "Next line…": "Biến tiếp theo…",
  "Next move (→)": "Nước tiếp (→)",
@@ -397,7 +394,6 @@
  "Rook": "Xe",
  "Rosé": "Rosé",
  "Sand": "Cát",
- "Save": "Lưu",
  "Saved": "Đã lưu",
  "Saving…": "Đang lưu…",
  "Scan again": "Quét lại",
@@ -584,7 +580,6 @@
  "depth {n}": "độ sâu {n}",
  "e.g. London System": "ví dụ Hệ thống London",
  "e.g. Najdorf": "ví dụ Najdorf",
- "e.g. vs 1.e4": "ví dụ gặp 1.e4",
  "from {square}": "từ {square}",
  "has a note": "có ghi chú",
  "in": "trong",
@@ -879,13 +874,110 @@
  "{n} lines": {
   "other": "{n} biến"
  },
- "{n} openings": {
-  "other": "{n} khai cuộc"
- },
  "{n} ready-made sets": {
   "other": "{n} bộ soạn sẵn"
  },
  "{n} sets to choose from": {
   "other": "{n} bộ để chọn"
+ },
+ "A few days of sessions, built around your focus": "Vài ngày luyện tập, xoay quanh trọng tâm của bạn",
+ "A strength": "Điểm mạnh",
+ "About usual": "Bình thường",
+ "Actions": "Thao tác",
+ "After": "Sau",
+ "All weak spots": "Mọi điểm yếu",
+ "Both": "Cả hai",
+ "Chosen": "Đã chọn",
+ "Collapse": "Thu gọn",
+ "Create plan": "Tạo kế hoạch",
+ "Day {day} of {days}": "Ngày {day} / {days}",
+ "Day {day} of {days} · {done} of {total} sessions done": "Ngày {day} / {days} · xong {done} / {total} buổi",
+ "Day {n}": "Ngày {n}",
+ "Days": "Số ngày",
+ "Empty folder — drag lines or folders here.": "Thư mục trống — kéo biến hoặc thư mục vào đây.",
+ "Empty folder.": "Thư mục trống.",
+ "End plan": "Kết thúc kế hoạch",
+ "End this plan?": "Kết thúc kế hoạch này?",
+ "Everything after the move counts: if the lines that answer it go badly, the move shows here.": "Mọi thứ sau nước đi đều được tính: nếu các biến đáp lại nó đi xấu, nước đi sẽ hiện ở đây.",
+ "Expand": "Mở rộng",
+ "Forward": "Tiếp",
+ "MainLine needs a few sessions of answers or some imported games before it can spot a pattern. Test yourself a few times, or import your games.": "MainLine cần vài buổi trả lời hoặc ván đấu đã nhập trước khi nhận ra quy luật. Hãy tự kiểm tra vài lần, hoặc nhập ván đấu của bạn.",
+ "Make a plan": "Lập kế hoạch",
+ "Make a plan for my weakest spot": "Kế hoạch cho điểm yếu nhất của tôi",
+ "Make a plan…": "Lập kế hoạch…",
+ "Minutes a day": "Phút mỗi ngày",
+ "Move {n} items to": "Chuyển {n} mục tới",
+ "Moves that lead to trouble": "Nước đi dẫn tới rắc rối",
+ "Much weaker than usual": "Yếu hơn hẳn bình thường",
+ "New folder inside": "Thư mục mới bên trong",
+ "New plan": "Kế hoạch mới",
+ "No answers yet": "Chưa có câu trả lời",
+ "No games in your lines yet": "Chưa có ván nào trong biến của bạn",
+ "No plan yet": "Chưa có kế hoạch",
+ "Not learned yet": "Chưa học",
+ "Nothing stands out yet": "Chưa có gì nổi bật",
+ "Nothing to practise here yet.": "Chưa có gì để luyện ở đây.",
+ "Pick what to work on, for how many days and how long each day. MainLine lays out the sessions — showing the moves first, then testing the weakest parts, then an exam.": "Chọn nội dung, số ngày và thời lượng mỗi ngày. MainLine sắp xếp các buổi — xem nước đi trước, rồi kiểm tra phần yếu nhất, cuối cùng là bài thi.",
+ "Plan": "Kế hoạch",
+ "Plan a few days on your whole repertoire, one colour, an opening, a line or the answers to one move.": "Lập kế hoạch vài ngày cho cả bộ khai cuộc, một màu, một khai cuộc, một biến hoặc các nước đáp cho một nước đi.",
+ "Plan finished": "Kế hoạch đã xong",
+ "Plan finished — {done} of {total} sessions done.": "Kế hoạch đã xong — hoàn thành {done} / {total} buổi.",
+ "Plan for my weakest spot": "Kế hoạch cho điểm yếu nhất của tôi",
+ "Plan progress": "Tiến độ kế hoạch",
+ "Remove": "Bỏ",
+ "Select": "Chọn",
+ "Sessions to include": "Các buổi đưa vào",
+ "Side": "Bên",
+ "Study plan": "Kế hoạch học",
+ "Suggested": "Gợi ý",
+ "Suggested from your weak spots": "Gợi ý từ điểm yếu của bạn",
+ "Weak spots": "Điểm yếu",
+ "Weaker than usual": "Yếu hơn bình thường",
+ "Weakest lines": "Biến yếu nhất",
+ "Weakest openings": "Khai cuộc yếu nhất",
+ "Where you go wrong most — by move, by opening and by line — from your training answers (last 90 days) and your imported games.": "Nơi bạn sai nhiều nhất — theo nước đi, khai cuộc và biến — từ câu trả lời khi luyện tập (90 ngày qua) và các ván đã nhập.",
+ "White and Black keep separate folders.": "Trắng và Đen có thư mục riêng.",
+ "Whole repertoire": "Cả bộ khai cuộc",
+ "Work on": "Luyện",
+ "Work on this": "Luyện điều này",
+ "You miss {pct} of your moves ({misses} of {n})": "Bạn sai {pct} nước đi ({misses} / {n})",
+ "Your weakest moves, openings and lines": "Nước đi, khai cuộc và biến yếu nhất của bạn",
+ "{learned} of {total} positions learned": "Đã học {learned} / {total} thế cờ",
+ "{pct} of your moves right": "Đúng {pct} nước đi",
+ "Covers the {n} positions you must know after it.": {
+  "other": "Bao gồm {n} thế cờ bạn cần biết sau nó."
+ },
+ "Delete {n} items": {
+  "other": "Xoá {n} mục"
+ },
+ "Deleted {n} items": {
+  "other": "Đã xoá {n} mục"
+ },
+ "Move {n} items to…": {
+  "other": "Chuyển {n} mục tới…"
+ },
+ "Moved {n} items to {name}": {
+  "other": "Đã chuyển {n} mục tới {name}"
+ },
+ "Score {score} in {n} games in your lines": {
+  "other": "{score} trong {n} ván thuộc biến của bạn"
+ },
+ "you score {score} in {n} games": {
+  "other": "bạn đạt {score} trong {n} ván"
+ },
+ "{n} folders": {
+  "other": "{n} thư mục"
+ },
+ "{n} items": {
+  "other": "{n} mục"
+ },
+ "{n} min a day": {
+  "other": "{n} phút mỗi ngày"
+ },
+ "{n} selected": {
+  "other": "Đã chọn {n}"
+ },
+ "{n}-day plan": {
+  "other": "Kế hoạch {n} ngày"
  }
 }

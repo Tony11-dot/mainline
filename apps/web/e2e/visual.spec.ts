@@ -24,12 +24,14 @@ async function seed(page: Page) {
 
 const screens: { name: string; path: string | ((page: Page) => Promise<void>); ready: (page: Page) => Promise<void> }[] = [
   { name: 'today', path: '/', ready: (p) => expect(p.getByRole('link', { name: /Learn new moves/ })).toBeVisible() },
-  { name: 'library', path: '/library', ready: (p) => expect(p.getByRole('link', { name: /Italian/ }).first()).toBeVisible() },
+  { name: 'library', path: '/library', ready: (p) => expect(p.getByRole('option', { name: /1\.e4|Italian/ }).first()).toBeVisible() },
   {
     name: 'builder',
     path: async (p) => {
       await p.goto('/library');
-      await p.getByRole('link', { name: /Italian/ }).first().click();
+      const it = p.getByRole('option', { name: /Italian/ }).first();
+      if ((p.viewportSize()?.width ?? 0) >= 1024) await it.dblclick();
+      else await it.click();
     },
     ready: (p) => expect(p.getByRole('tree', { name: 'Moves' })).toBeVisible(),
   },

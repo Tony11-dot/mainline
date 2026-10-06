@@ -1,6 +1,6 @@
 import { lazy, Suspense, useEffect, useMemo, useState } from 'react';
 import { Link, Navigate } from 'react-router';
-import { BarChart3, ChevronRight, Cpu, Dumbbell, Flame, GraduationCap, Play, Shuffle, Snowflake, Sparkles } from 'lucide-react';
+import { BarChart3, CalendarDays, ChevronRight, Cpu, Target, Dumbbell, Flame, GraduationCap, Play, Shuffle, Snowflake, Sparkles } from 'lucide-react';
 import { trainingSummary } from '@mainline/shared';
 import { StreakBadge, useStreak } from '../ui/streak';
 import { useLibrary } from '../lib/library';
@@ -11,6 +11,7 @@ import type { weakSpots } from '../lib/packs';
 
 // The opening catalogue is big: Today loads it only once there are games to judge.
 const WeakSpotCard = lazy(async () => ({ default: (await import('./library/WeakSpotCard')).WeakSpotCard }));
+const HomePlanCard = lazy(async () => ({ default: (await import('./focus/HomePlanCard')).HomePlanCard }));
 import { LogoMark } from '../ui/Logo';
 import { fmtPercent, t, tn } from '../lib/i18n';
 
@@ -104,6 +105,9 @@ export function HomeScreen() {
             </div>
           )}
 
+          <Suspense>
+            <HomePlanCard />
+          </Suspense>
           {spot && (
             <Suspense>
               <div className="mt-3">
@@ -124,6 +128,8 @@ export function HomeScreen() {
       )}
       <h2 className="mt-8 mb-2 px-1 text-sm font-semibold text-ink-2">{t('Tools')}</h2>
       <ListGroup>
+        <ModeLink to="/focus" icon={Target} title={t('Weak spots')} sub={t('Your weakest moves, openings and lines')} />
+        <ModeLink to="/plan" icon={CalendarDays} title={t('Study plan')} sub={t('A few days of sessions, built around your focus')} />
         <ModeLink to="/stats" icon={BarChart3} title={t('Statistics')} sub={t('Accuracy, repertoires, openings, games')} />
         <ModeLink to="/setup" icon={Cpu} title={t('Analysis board')} sub={t('Set up any position, run Stockfish')} />
       </ListGroup>

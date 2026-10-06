@@ -60,10 +60,10 @@ export function AutoBuildSheet({ open, onClose, repId, color, startFen }: { open
       <p className="text-sm text-ink-2">
         From this position, add every opponent reply played in at least the chosen share of games by players around <b className="tnum">{rating}</b>. Where it's your turn, your main move is followed; positions without one are left for you to decide.
       </p>
-      <Field label={t('Include replies played in at least')}>
+      <Field label={t('Include replies played in at least')} group>
         <Segmented label={t('Minimum share')} value={share} onChange={setShare} options={[0.05, 0.1, 0.15, 0.25].map((v) => ({ value: String(v) as typeof share, label: fmtPercent(v) }))} />
       </Field>
-      <Field label={t('How deep (moves from here)')}>
+      <Field label={t('How deep (moves from here)')} group>
         <Segmented label={t('Depth')} value={depth} onChange={setDepth} options={[{ value: '4', label: '2' }, { value: '8', label: '4' }, { value: '12', label: '6' }, { value: '16', label: '8' }]} />
       </Field>
       {progress && (

@@ -2,7 +2,7 @@ import { useState } from 'react';
 import { Link, useNavigate } from 'react-router';
 import { TrendingDown } from 'lucide-react';
 import { useLibrary } from '../../lib/library';
-import { addPack, openingFolderName, packFolderName, packLinesIn, type OpeningRecord, type Pack } from '../../lib/packs';
+import { addPack, openingFolderName, packLinesIn, type OpeningRecord, type Pack } from '../../lib/packs';
 import { practiceHref } from '../../lib/practice';
 import { Button } from '../../ui/primitives';
 import { toast } from '../../ui/toast';
@@ -18,7 +18,7 @@ export function WeakSpotCard({ spot }: { spot: OpeningRecord & { packs: Pack[] }
   const folders = useLibrary((s) => s.folders);
   const [busy, setBusy] = useState(false);
   const owned = spot.packs.find((p) => packLinesIn(reps, p).length === p.lines.length);
-  const ownedFolder = owned && folders.find((f) => !f.deleted && f.name === packFolderName(owned));
+  const ownedFolder = owned && folders.find((f) => !f.deleted && f.id === packLinesIn(reps, owned)[0]?.folderId);
   const single = spot.packs.length === 1 ? spot.packs[0] : undefined;
   const name = openingFolderName(spot.color, spot.first, spot.reply);
 

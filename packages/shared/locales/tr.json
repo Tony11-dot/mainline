@@ -101,7 +101,6 @@
  "Couldn’t load the explorer": "Açılış gezgini yüklenemedi",
  "Couldn’t reach the server. Check your connection and try again — nothing was deleted.": "Sunucuya ulaşılamadı. Bağlantını kontrol edip tekrar dene — hiçbir şey silinmedi.",
  "Coverage": "Kapsam",
- "Create": "Oluştur",
  "Create & open": "Oluştur ve aç",
  "D": "B",
  "Daily": "Günlük",
@@ -117,7 +116,6 @@
  "Default": "Varsayılan",
  "Delete": "Sil",
  "Delete account": "Hesabı sil",
- "Delete folder": "Klasörü sil",
  "Delete from here": "Buradan itibaren sil",
  "Delete my account & data": "Hesabımı ve verilerimi sil",
  "Delete permanently": "Kalıcı olarak sil",
@@ -261,7 +259,6 @@
  "New move: {move}": "Yeni hamle: {move}",
  "New moves per day": "Günlük yeni hamle",
  "New repertoire": "Yeni repertuvar",
- "New subfolder": "Yeni alt klasör",
  "New to openings": "Açılışlarda yeniyim",
  "Next line…": "Sonraki varyant…",
  "Next move (→)": "Sonraki hamle (→)",
@@ -397,7 +394,6 @@
  "Rook": "Kale",
  "Rosé": "Rosé",
  "Sand": "Kum",
- "Save": "Kaydet",
  "Saved": "Kaydedildi",
  "Saving…": "Kaydediliyor…",
  "Scan again": "Yeniden tara",
@@ -584,7 +580,6 @@
  "depth {n}": "derinlik {n}",
  "e.g. London System": "ör. Londra Sistemi",
  "e.g. Najdorf": "ör. Najdorf",
- "e.g. vs 1.e4": "ör. 1.e4’e karşı",
  "from {square}": "{square} karesinden",
  "has a note": "notu var",
  "in": "içinde",
@@ -926,10 +921,6 @@
   "one": "{n} varyant",
   "other": "{n} varyant"
  },
- "{n} openings": {
-  "one": "{n} açılış",
-  "other": "{n} açılış"
- },
  "{n} ready-made sets": {
   "one": "{n} hazır set",
   "other": "{n} hazır set"
@@ -937,5 +928,117 @@
  "{n} sets to choose from": {
   "one": "Seçilecek {n} set",
   "other": "Seçilecek {n} set"
+ },
+ "A few days of sessions, built around your focus": "Odağına göre kurulmuş birkaç günlük çalışma",
+ "A strength": "Güçlü yan",
+ "About usual": "Her zamanki gibi",
+ "Actions": "Eylemler",
+ "After": "Sonra",
+ "All weak spots": "Tüm zayıf noktalar",
+ "Both": "İkisi de",
+ "Chosen": "Seçilen",
+ "Collapse": "Daralt",
+ "Create plan": "Plan oluştur",
+ "Day {day} of {days}": "Gün {day} / {days}",
+ "Day {day} of {days} · {done} of {total} sessions done": "Gün {day} / {days} · {total} oturumdan {done} tamamlandı",
+ "Day {n}": "Gün {n}",
+ "Days": "Gün sayısı",
+ "Empty folder — drag lines or folders here.": "Boş klasör — varyantları veya klasörleri buraya sürükle.",
+ "Empty folder.": "Boş klasör.",
+ "End plan": "Planı bitir",
+ "End this plan?": "Bu plan bitirilsin mi?",
+ "Everything after the move counts: if the lines that answer it go badly, the move shows here.": "Hamleden sonraki her şey sayılır: ona yanıt veren varyantlar kötü giderse hamle burada görünür.",
+ "Expand": "Genişlet",
+ "Forward": "İleri",
+ "MainLine needs a few sessions of answers or some imported games before it can spot a pattern. Test yourself a few times, or import your games.": "MainLine'ın bir örüntü görebilmesi için birkaç oturumluk yanıt ya da içe aktarılmış oyun gerekir. Kendini birkaç kez sına ya da oyunlarını içe aktar.",
+ "Make a plan": "Plan yap",
+ "Make a plan for my weakest spot": "En zayıf noktam için plan",
+ "Make a plan…": "Plan yap…",
+ "Minutes a day": "Günde dakika",
+ "Move {n} items to": "{n} öğeyi taşı:",
+ "Moves that lead to trouble": "Soruna götüren hamleler",
+ "Much weaker than usual": "Her zamankinden çok daha zayıf",
+ "New folder inside": "İçinde yeni klasör",
+ "New plan": "Yeni plan",
+ "No answers yet": "Henüz yanıt yok",
+ "No games in your lines yet": "Varyantlarında henüz oyun yok",
+ "No plan yet": "Henüz plan yok",
+ "Not learned yet": "Henüz öğrenilmedi",
+ "Nothing stands out yet": "Henüz öne çıkan bir şey yok",
+ "Nothing to practise here yet.": "Burada henüz çalışılacak bir şey yok.",
+ "Pick what to work on, for how many days and how long each day. MainLine lays out the sessions — showing the moves first, then testing the weakest parts, then an exam.": "Neye çalışacağını, kaç gün ve günde ne kadar süre seçeceğini belirle. MainLine oturumları düzenler — önce hamleleri gösterir, sonra en zayıf kısımları sınar, sonunda bir sınav yapar.",
+ "Plan": "Plan",
+ "Plan a few days on your whole repertoire, one colour, an opening, a line or the answers to one move.": "Tüm repertuvarın, bir renk, bir açılış, bir varyant ya da bir hamleye verilen yanıtlar için birkaç günlük plan yap.",
+ "Plan finished": "Plan bitti",
+ "Plan finished — {done} of {total} sessions done.": "Plan bitti — {total} oturumdan {done} tamamlandı.",
+ "Plan for my weakest spot": "En zayıf noktam için plan",
+ "Plan progress": "Plan ilerlemesi",
+ "Remove": "Kaldır",
+ "Select": "Seç",
+ "Sessions to include": "Dahil edilecek oturumlar",
+ "Side": "Taraf",
+ "Study plan": "Çalışma planı",
+ "Suggested": "Önerilen",
+ "Suggested from your weak spots": "Zayıf noktalarına göre öneriler",
+ "Weak spots": "Zayıf noktalar",
+ "Weaker than usual": "Her zamankinden zayıf",
+ "Weakest lines": "En zayıf varyantlar",
+ "Weakest openings": "En zayıf açılışlar",
+ "Where you go wrong most — by move, by opening and by line — from your training answers (last 90 days) and your imported games.": "En çok nerede hata yaptığın — hamleye, açılışa ve varyanta göre — antrenman yanıtların (son 90 gün) ve içe aktardığın oyunlardan.",
+ "White and Black keep separate folders.": "Beyaz ve Siyah ayrı klasörlerde durur.",
+ "Whole repertoire": "Tüm repertuvar",
+ "Work on": "Üzerinde çalış",
+ "Work on this": "Buna çalış",
+ "You miss {pct} of your moves ({misses} of {n})": "Hamlelerinin {pct}'ini kaçırıyorsun ({n} içinde {misses})",
+ "Your weakest moves, openings and lines": "En zayıf hamlelerin, açılışların ve varyantların",
+ "{learned} of {total} positions learned": "{total} konumdan {learned} öğrenildi",
+ "{pct} of your moves right": "Hamlelerinin {pct}'i doğru",
+ "Covers the {n} positions you must know after it.": {
+  "one": "Sonrasında bilmen gereken {n} konumu kapsar.",
+  "other": "Sonrasında bilmen gereken {n} konumu kapsar."
+ },
+ "Delete {n} items": {
+  "one": "{n} öğeyi sil",
+  "other": "{n} öğeyi sil"
+ },
+ "Deleted {n} items": {
+  "one": "{n} öğe silindi",
+  "other": "{n} öğe silindi"
+ },
+ "Move {n} items to…": {
+  "one": "{n} öğeyi taşı…",
+  "other": "{n} öğeyi taşı…"
+ },
+ "Moved {n} items to {name}": {
+  "one": "{n} öğe {name} klasörüne taşındı",
+  "other": "{n} öğe {name} klasörüne taşındı"
+ },
+ "Score {score} in {n} games in your lines": {
+  "one": "Varyantlarındaki {n} oyunda {score}",
+  "other": "Varyantlarındaki {n} oyunda {score}"
+ },
+ "you score {score} in {n} games": {
+  "one": "{n} oyunda {score} puan alıyorsun",
+  "other": "{n} oyunda {score} puan alıyorsun"
+ },
+ "{n} folders": {
+  "one": "{n} klasör",
+  "other": "{n} klasör"
+ },
+ "{n} items": {
+  "one": "{n} öğe",
+  "other": "{n} öğe"
+ },
+ "{n} min a day": {
+  "one": "Günde {n} dk",
+  "other": "Günde {n} dk"
+ },
+ "{n} selected": {
+  "one": "{n} seçildi",
+  "other": "{n} seçildi"
+ },
+ "{n}-day plan": {
+  "one": "{n} günlük plan",
+  "other": "{n} günlük plan"
  }
 }

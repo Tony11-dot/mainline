@@ -12,7 +12,7 @@ import { useLibrary } from './library';
  * Each line becomes its own repertoire rooted at the opening, marked ready-made: practised as is, not
  * rebuilt. Lines of one pack never disagree on your move, even where they transpose.
  */
-export type FirstMove = 'e4' | 'd4' | 'c4';
+export type FirstMove = 'e4' | 'd4' | 'c4' | 'Nf3' | 'Nc3';
 
 export interface PackLine {
   id: string;
@@ -25,7 +25,7 @@ export interface Pack {
   id: string;
   color: Color;
   first: FirstMove;
-  /** Black's first move, in SAN: the opening folder this pack fills. */
+  /** Black's first move, in SAN: the opening folder this pack fills (White packs get their own folder inside it). */
   reply: string;
   name: string;
   /** Black only: the defence's name, which names the folder (two defences can share a reply). */
@@ -35,13 +35,15 @@ export interface Pack {
   starter?: boolean;
 }
 
-export const FIRST_MOVES: FirstMove[] = ['e4', 'd4', 'c4'];
+export const FIRST_MOVES: FirstMove[] = ['e4', 'd4', 'c4', 'Nf3', 'Nc3'];
 
 /** What each reply is called, for the folder names: "vs Caro-Kann (1…c6)". */
 export const REPLY_NAMES: Record<FirstMove, Record<string, string>> = {
   e4: { e5: 'Open Games', c5: 'Sicilian', c6: 'Caro-Kann', e6: 'French', d5: 'Scandinavian', Nf6: 'Alekhine', d6: 'Pirc', g6: 'Modern' },
-  d4: { d5: 'Closed Games', Nf6: 'Indian Defences', f5: 'Dutch', c5: 'Benoni', e6: 'Horwitz', d6: 'Old Indian', g6: 'Modern' },
+  d4: { d5: 'Closed Games', Nf6: 'Indian Defences', f5: 'Dutch', c5: 'Benoni', e5: 'Englund Gambit', e6: 'Horwitz', d6: 'Old Indian', g6: 'Modern' },
   c4: { e5: 'Reversed Sicilian', c5: 'Symmetrical English', Nf6: 'Anglo-Indian', e6: 'Agincourt', c6: 'Caro-Kann setup', g6: 'Modern' },
+  Nf3: { d5: 'Queen’s Pawn', Nf6: 'Indian setup', c5: 'Symmetrical', g6: 'Modern' },
+  Nc3: { d5: 'Queen’s Pawn', e5: 'King’s Pawn', c5: 'Sicilian setup', Nf6: 'Indian setup' },
 };
 
 const REPLY_BY_UCI = new Map<string, string>();
@@ -330,6 +332,70 @@ const WHITE_D4: Pack[] = [
   },
 ];
 
+const WHITE_MORE: Pack[] = [
+  {
+    id: 'w-catalan',
+    color: 'white',
+    first: 'd4',
+    reply: 'd5',
+    name: 'Catalan',
+    lines: [
+      line('open', 'QGD & Open Catalan (2…e6)', '1. d4 d5 2. c4 e6 3. Nf3 Nf6 4. g3 Be7 (4... dxc4 5. Bg2 a6 6. O-O) (4... Bb4+ 5. Bd2 Be7 6. Bg2 O-O 7. O-O) 5. Bg2 O-O 6. O-O dxc4 (6... c6 7. Qc2 Nbd7 8. Nbd2 b6 9. e4 Bb7 10. b3) 7. Qc2 a6 8. Qxc4 b5 9. Qc2 Bb7 10. Bd2'),
+      line('slav', 'Slav & Accepted (2…c6, 2…dxc4)', '1. d4 d5 2. c4 c6 (2... dxc4 3. Nf3 Nf6 4. e3 e6 5. Bxc4 c5 6. O-O a6 7. a4) 3. Nf3 Nf6 4. e3 Bf5 5. Nc3 e6 6. Nh4 Bg6 7. Nxg6 hxg6'),
+      line('others', 'Chigorin & Albin (2…Nc6, 2…e5)', '1. d4 d5 2. c4 Nc6 (2... e5 3. dxe5 d4 4. Nf3 Nc6 5. g3) 3. Nf3 Bg4 4. cxd5 Bxf3 5. gxf3 Qxd5 6. e3'),
+    ],
+  },
+  {
+    id: 'w-englund',
+    color: 'white',
+    first: 'd4',
+    reply: 'e5',
+    name: 'Refuting the Englund',
+    lines: [
+      line('nc6', '2…Nc6 3.Nf3', '1. d4 e5 2. dxe5 Nc6 3. Nf3 Qe7 (3... d6 4. exd6 Bxd6 5. Nc3 Nf6 6. g3) (3... Nge7 4. Bf4 Ng6 5. Bg3 Qe7 6. Nc3) 4. Qd5 f6 5. exf6 Nxf6 6. Qb3 d5 7. Nc3'),
+      line('others', '2…d6 & 2…f6', '1. d4 e5 2. dxe5 d6 (2... f6 3. exf6 Nxf6 4. Nf3) 3. exd6 Bxd6 4. Nf3 Nf6 5. g3'),
+    ],
+  },
+  {
+    id: 'w-reti-d5',
+    color: 'white',
+    first: 'Nf3',
+    reply: 'd5',
+    name: 'Réti & King’s Indian Attack',
+    lines: [
+      line('nf6', '2…Nf6', '1. Nf3 d5 2. g3 Nf6 3. Bg2 e6 (3... c6 4. O-O Bg4 5. d3 Nbd7 6. Nbd2 e5 7. e4) (3... g6 4. O-O Bg7 5. d3 O-O 6. Nbd2 c5 7. e4) 4. O-O Be7 5. d3 O-O 6. Nbd2 c5 7. e4 Nc6 8. Re1'),
+      line('c5', '2…c5 & 2…Bg4', '1. Nf3 d5 2. g3 c5 (2... Bg4 3. Bg2 Nd7 4. O-O c6 5. d3) 3. Bg2 Nc6 4. O-O e5 5. d3'),
+    ],
+  },
+  {
+    id: 'w-reti-nf6',
+    color: 'white',
+    first: 'Nf3',
+    reply: 'Nf6',
+    name: 'King’s Indian Attack',
+    lines: [line('main', '1…Nf6', '1. Nf3 Nf6 2. g3 g6 (2... d5 3. Bg2 e6 4. O-O Be7 5. d3 O-O 6. Nbd2 c5 7. e4 Nc6 8. Re1) (2... b6 3. Bg2 Bb7 4. O-O e6 5. d3) 3. Bg2 Bg7 4. O-O O-O 5. d3 d6 6. e4 e5 7. Nc3')],
+  },
+  {
+    id: 'w-nc3-d5',
+    color: 'white',
+    first: 'Nc3',
+    reply: 'd5',
+    name: 'Van Geet with 2.e4',
+    lines: [
+      line('dxe4', '2…dxe4 & 2…c6', '1. Nc3 d5 2. e4 dxe4 (2... c6 3. d4 dxe4 4. Nxe4 Bf5 5. Ng3 Bg6 6. h4) 3. Nxe4 Bf5 (3... Nf6 4. Nxf6+ exf6 5. Nf3) 4. Ng3 Bg6 5. h4 h6 6. Nf3'),
+      line('d4', '2…d4 & 2…e6', '1. Nc3 d5 2. e4 d4 (2... e6 3. d4 Nf6 4. e5 Nfd7 5. f4 c5 6. Nf3 Nc6 7. Be3) 3. Nce2 e5 4. Ng3 Be6 5. Nf3 f6 6. Bb5+'),
+    ],
+  },
+  {
+    id: 'w-nc3-e5',
+    color: 'white',
+    first: 'Nc3',
+    reply: 'e5',
+    name: 'Into the Vienna',
+    lines: [line('main', '1…e5 2.e4', '1. Nc3 e5 2. e4 Nf6 (2... Nc6 3. Bc4 Nf6 4. d3 Bc5 5. f4 d6 6. Nf3) 3. f4 d5 4. fxe5 Nxe4 5. Nf3 Be7 6. d4 O-O 7. Bd3 f5 8. exf6 Bxf6 9. O-O')],
+  },
+];
+
 /* ---------------- White, 1.c4 ---------------- */
 
 const WHITE_C4: Pack[] = [
@@ -524,7 +590,7 @@ const BLACK: Pack[] = [
   },
 ];
 
-export const PACKS: Pack[] = [...WHITE_E4, ...WHITE_D4, ...WHITE_C4, ...BLACK];
+export const PACKS: Pack[] = [...WHITE_E4, ...WHITE_D4, ...WHITE_MORE, ...WHITE_C4, ...BLACK];
 
 /* ---------------- Positions and names ---------------- */
 
@@ -533,16 +599,17 @@ export const packMoves = (p: Pick<Pack, 'first' | 'reply'>) => sanListToUcis([p.
 
 export const firstFolderName = (color: Color, first: FirstMove) => (color === 'white' ? `1.${first}` : t('vs {move}', { move: `1.${first}` }));
 
-/** "vs Caro-Kann (1…c6)" for White; "Sicilian (1…c5)" for Black, after the defence you play. */
+/** "Caro-Kann (1…c6)": for White the reply you meet, for Black the defence you play. */
 export function openingFolderName(color: Color, first: FirstMove, reply: string, opening?: string) {
-  const name = opening ?? REPLY_NAMES[first][reply] ?? reply;
-  return color === 'white' ? t('vs {move}', { move: `${name} (1…${reply})` }) : `${name} (1…${reply})`;
+  return `${opening ?? REPLY_NAMES[first][reply] ?? reply} (1…${reply})`;
 }
 
-export const packFolderName = (p: Pack) => openingFolderName(p.color, p.first, p.reply, p.opening);
+/** What the first versions called White's opening folders, to tidy them up. */
+const oldWhiteFolderName = (first: FirstMove, reply: string) => t('vs {move}', { move: `${REPLY_NAMES[first][reply] ?? reply} (1…${reply})` });
 
-/** What a line is called in the library: White lines carry their system, Black lines sit under their defence. */
-export const lineName = (p: Pack, l: PackLine) => (p.color === 'white' ? `${t(p.name)}: ${l.name}` : l.name);
+
+/** A line is named for what it answers; its folder already says which system or defence it belongs to. */
+export const lineName = (_p: Pack, l: PackLine) => l.name;
 
 export const lineSource = (p: Pack, l: PackLine) => `pack:${p.id}:${l.id}`;
 
@@ -579,9 +646,32 @@ export async function ensureOpeningFolders(color: Color, first: FirstMove, reply
   return find(l1.id, name, ucis, color === 'white' || !opening) ?? (await useLibrary.getState().createFolder(name, color, l1.id, ucis));
 }
 
-/** Adds a pack's lines (any not already there) into their opening folder; returns the folder. */
+/** The moves every line of a pack shares (its system), e.g. 1.e4 e5 2.Nc3 for the Vienna. */
+export function packCommonMoves(p: Pack): string[] {
+  const all = p.lines.map((l) => sanListToUcis(mainLineText(l.pgn, 40).replace(/\d+\.\s*/g, '').split(/\s+/).filter(Boolean)));
+  let common = all[0] ?? [];
+  for (const u of all) {
+    let i = 0;
+    while (i < common.length && common[i] === u[i]) i++;
+    common = common.slice(0, i);
+  }
+  return common.length >= 2 ? common : packMoves(p);
+}
+
+/** Where a pack's lines live: the opening folder for Black; for White a folder for the system inside the reply's folder. */
+export async function packFolder(p: Pack): Promise<Folder> {
+  const opening = await ensureOpeningFolders(p.color, p.first, p.reply, p.opening);
+  if (p.color === 'black') return opening;
+  const name = t(p.name);
+  return (
+    useLibrary.getState().folders.find((f) => !f.deleted && f.parentId === opening.id && f.name === name) ??
+    (await useLibrary.getState().createFolder(name, p.color, opening.id, packCommonMoves(p)))
+  );
+}
+
+/** Adds a pack's lines (any not already there) into their folder; returns the folder. */
 export async function addPack(p: Pack): Promise<Folder> {
-  const folder = await ensureOpeningFolders(p.color, p.first, p.reply, p.opening);
+  const folder = await packFolder(p);
   const have = new Set(packLinesIn(useLibrary.getState().reps, p).map((r) => r.source));
   const root = packMoves(p);
   for (const l of p.lines) {
@@ -619,7 +709,7 @@ export interface OpeningRecord {
   loss: number;
 }
 
-const firstOf = (u: string): FirstMove | undefined => ({ e2e4: 'e4', d2d4: 'd4', c2c4: 'c4' })[u] as FirstMove | undefined;
+const firstOf = (u: string): FirstMove | undefined => ({ e2e4: 'e4', d2d4: 'd4', c2c4: 'c4', g1f3: 'Nf3', b1c3: 'Nc3' })[u] as FirstMove | undefined;
 
 /** Your score in each opening (your colour × 1st move × reply) across imported games. */
 export function openingRecords(games: PlayedGame[]): OpeningRecord[] {
@@ -654,3 +744,39 @@ export function weakSpots(games: PlayedGame[]): (OpeningRecord & { packs: Pack[]
 }
 
 export const recordFor = (records: OpeningRecord[], color: Color, first: FirstMove, reply: string) => records.find((r) => r.color === color && r.first === first && r.reply === reply);
+
+/**
+ * Lines added by the first version of ready-made openings sat straight in a "vs …" folder with the system in
+ * their name. Moves them into their system's folder and drops the prefix — only where they were left as added.
+ */
+export async function tidyPackLines() {
+  try {
+    if (localStorage.getItem('ml.tidy.packs') === '1') return;
+  } catch {
+    return;
+  }
+  const lib = useLibrary.getState();
+  await lib.load();
+  for (const p of PACKS) {
+    const old = oldWhiteFolderName(p.first, p.reply);
+    for (const rep of packLinesIn(useLibrary.getState().reps, p)) {
+      const folder = useLibrary.getState().folders.find((f) => f.id === rep.folderId);
+      if (p.color !== 'white' || !folder || folder.name !== old) continue;
+      const target = await packFolder(p);
+      await useLibrary.getState().moveRepertoire(rep.id, target.id);
+      const l = packOf(rep.source)?.line;
+      if (l && rep.name === `${t(p.name)}: ${l.name}`) await useLibrary.getState().renameRepertoire(rep.id, l.name);
+    }
+  }
+  for (const f of useLibrary.getState().folders) {
+    if (f.deleted || f.color !== 'white' || f.rootMovesUci?.length !== 2) continue;
+    const first = ({ e2e4: 'e4', d2d4: 'd4', c2c4: 'c4', g1f3: 'Nf3', b1c3: 'Nc3' } as Record<string, FirstMove>)[f.rootMovesUci[0]!];
+    const reply = first && replySan(first, f.rootMovesUci[1]!);
+    if (first && reply && f.name === oldWhiteFolderName(first, reply)) await useLibrary.getState().renameFolder(f.id, openingFolderName('white', first, reply));
+  }
+  try {
+    localStorage.setItem('ml.tidy.packs', '1');
+  } catch {
+    /* tidies again next time */
+  }
+}

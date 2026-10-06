@@ -101,7 +101,6 @@
  "Couldn’t load the explorer": "एक्सप्लोरर लोड नहीं हो सका",
  "Couldn’t reach the server. Check your connection and try again — nothing was deleted.": "सर्वर तक नहीं पहुँच सके। अपना कनेक्शन जाँचें और फिर कोशिश करें — कुछ भी हटाया नहीं गया।",
  "Coverage": "कवरेज",
- "Create": "बनाएँ",
  "Create & open": "बनाएँ और खोलें",
  "D": "ड्र",
  "Daily": "दैनिक",
@@ -117,7 +116,6 @@
  "Default": "डिफ़ॉल्ट",
  "Delete": "हटाएँ",
  "Delete account": "खाता हटाएँ",
- "Delete folder": "फ़ोल्डर हटाएँ",
  "Delete from here": "यहाँ से हटाएँ",
  "Delete my account & data": "मेरा खाता और डेटा हटाएँ",
  "Delete permanently": "हमेशा के लिए हटाएँ",
@@ -261,7 +259,6 @@
  "New move: {move}": "नई चाल: {move}",
  "New moves per day": "प्रति दिन नई चालें",
  "New repertoire": "नया रिपर्टरी",
- "New subfolder": "नया सबफ़ोल्डर",
  "New to openings": "ओपनिंग्स में नया",
  "Next line…": "अगली लाइन…",
  "Next move (→)": "अगली चाल (→)",
@@ -397,7 +394,6 @@
  "Rook": "हाथी",
  "Rosé": "रोज़े",
  "Sand": "रेत",
- "Save": "सेव करें",
  "Saved": "सेव हुआ",
  "Saving…": "सेव हो रहा है…",
  "Scan again": "फिर से स्कैन करें",
@@ -584,7 +580,6 @@
  "depth {n}": "गहराई {n}",
  "e.g. London System": "जैसे लंदन सिस्टम",
  "e.g. Najdorf": "जैसे Najdorf",
- "e.g. vs 1.e4": "जैसे 1.e4 के ख़िलाफ़",
  "from {square}": "{square} से",
  "has a note": "नोट है",
  "in": "में",
@@ -926,10 +921,6 @@
   "one": "{n} लाइन",
   "other": "{n} लाइनें"
  },
- "{n} openings": {
-  "one": "{n} ओपनिंग",
-  "other": "{n} ओपनिंग"
- },
  "{n} ready-made sets": {
   "one": "{n} तैयार सेट",
   "other": "{n} तैयार सेट"
@@ -937,5 +928,117 @@
  "{n} sets to choose from": {
   "one": "चुनने के लिए {n} सेट",
   "other": "चुनने के लिए {n} सेट"
+ },
+ "A few days of sessions, built around your focus": "आपके फ़ोकस के इर्द-गिर्द कुछ दिनों के सत्र",
+ "A strength": "मज़बूती",
+ "About usual": "सामान्य",
+ "Actions": "क्रियाएँ",
+ "After": "इसके बाद",
+ "All weak spots": "सभी कमज़ोर जगहें",
+ "Both": "दोनों",
+ "Chosen": "चुना गया",
+ "Collapse": "समेटें",
+ "Create plan": "योजना बनाएँ",
+ "Day {day} of {days}": "दिन {day} / {days}",
+ "Day {day} of {days} · {done} of {total} sessions done": "दिन {day} / {days} · {total} में से {done} सत्र पूरे",
+ "Day {n}": "दिन {n}",
+ "Days": "दिन",
+ "Empty folder — drag lines or folders here.": "खाली फ़ोल्डर — लाइनें या फ़ोल्डर यहाँ खींचें।",
+ "Empty folder.": "खाली फ़ोल्डर।",
+ "End plan": "योजना समाप्त करें",
+ "End this plan?": "यह योजना समाप्त करें?",
+ "Everything after the move counts: if the lines that answer it go badly, the move shows here.": "चाल के बाद का सब कुछ गिना जाता है: अगर उसका जवाब देने वाली लाइनें ख़राब जाती हैं, तो चाल यहाँ दिखती है।",
+ "Expand": "फैलाएँ",
+ "Forward": "आगे",
+ "MainLine needs a few sessions of answers or some imported games before it can spot a pattern. Test yourself a few times, or import your games.": "पैटर्न पहचानने से पहले MainLine को कुछ सत्रों के जवाब या इम्पोर्ट किए गेम चाहिए। ख़ुद को कुछ बार परखें या अपने गेम इम्पोर्ट करें।",
+ "Make a plan": "योजना बनाएँ",
+ "Make a plan for my weakest spot": "मेरी सबसे कमज़ोर जगह के लिए योजना",
+ "Make a plan…": "योजना बनाएँ…",
+ "Minutes a day": "रोज़ मिनट",
+ "Move {n} items to": "{n} आइटम यहाँ ले जाएँ",
+ "Moves that lead to trouble": "मुश्किल में ले जाने वाली चालें",
+ "Much weaker than usual": "सामान्य से बहुत कमज़ोर",
+ "New folder inside": "अंदर नया फ़ोल्डर",
+ "New plan": "नई योजना",
+ "No answers yet": "अभी कोई जवाब नहीं",
+ "No games in your lines yet": "आपकी लाइनों में अभी कोई गेम नहीं",
+ "No plan yet": "अभी कोई योजना नहीं",
+ "Not learned yet": "अभी नहीं सीखा",
+ "Nothing stands out yet": "अभी कुछ ख़ास नहीं दिखता",
+ "Nothing to practise here yet.": "यहाँ अभी अभ्यास के लिए कुछ नहीं।",
+ "Pick what to work on, for how many days and how long each day. MainLine lays out the sessions — showing the moves first, then testing the weakest parts, then an exam.": "चुनें किस पर काम करना है, कितने दिन और रोज़ कितनी देर। MainLine सत्र तय करता है — पहले चालें दिखाता है, फिर सबसे कमज़ोर हिस्सों की परीक्षा, आख़िर में इम्तिहान।",
+ "Plan": "योजना",
+ "Plan a few days on your whole repertoire, one colour, an opening, a line or the answers to one move.": "पूरे रेपर्टॉयर, एक रंग, एक ओपनिंग, एक लाइन या किसी चाल के जवाबों के लिए कुछ दिनों की योजना बनाएँ।",
+ "Plan finished": "योजना पूरी",
+ "Plan finished — {done} of {total} sessions done.": "योजना पूरी — {total} में से {done} सत्र पूरे।",
+ "Plan for my weakest spot": "मेरी सबसे कमज़ोर जगह के लिए योजना",
+ "Plan progress": "योजना की प्रगति",
+ "Remove": "हटाएँ",
+ "Select": "चुनें",
+ "Sessions to include": "शामिल सत्र",
+ "Side": "पक्ष",
+ "Study plan": "अध्ययन योजना",
+ "Suggested": "सुझाया गया",
+ "Suggested from your weak spots": "आपकी कमज़ोर जगहों से सुझाव",
+ "Weak spots": "कमज़ोर जगहें",
+ "Weaker than usual": "सामान्य से कमज़ोर",
+ "Weakest lines": "सबसे कमज़ोर लाइनें",
+ "Weakest openings": "सबसे कमज़ोर ओपनिंग",
+ "Where you go wrong most — by move, by opening and by line — from your training answers (last 90 days) and your imported games.": "आप सबसे ज़्यादा कहाँ ग़लती करते हैं — चाल, ओपनिंग और लाइन के हिसाब से — आपके अभ्यास के जवाबों (पिछले 90 दिन) और इम्पोर्ट किए गेमों से।",
+ "White and Black keep separate folders.": "सफ़ेद और काले के फ़ोल्डर अलग रहते हैं।",
+ "Whole repertoire": "पूरा रेपर्टॉयर",
+ "Work on": "किस पर काम",
+ "Work on this": "इस पर काम करें",
+ "You miss {pct} of your moves ({misses} of {n})": "आप अपनी {pct} चालें चूकते हैं ({n} में से {misses})",
+ "Your weakest moves, openings and lines": "आपकी सबसे कमज़ोर चालें, ओपनिंग और लाइनें",
+ "{learned} of {total} positions learned": "{total} में से {learned} पोज़िशन सीखी",
+ "{pct} of your moves right": "आपकी {pct} चालें सही",
+ "Covers the {n} positions you must know after it.": {
+  "one": "इसके बाद जानने लायक़ {n} पोज़िशन शामिल है।",
+  "other": "इसके बाद जानने लायक़ {n} पोज़िशन शामिल हैं।"
+ },
+ "Delete {n} items": {
+  "one": "{n} आइटम हटाएँ",
+  "other": "{n} आइटम हटाएँ"
+ },
+ "Deleted {n} items": {
+  "one": "{n} आइटम हटाया गया",
+  "other": "{n} आइटम हटाए गए"
+ },
+ "Move {n} items to…": {
+  "one": "{n} आइटम ले जाएँ…",
+  "other": "{n} आइटम ले जाएँ…"
+ },
+ "Moved {n} items to {name}": {
+  "one": "{n} आइटम {name} में ले जाया गया",
+  "other": "{n} आइटम {name} में ले जाए गए"
+ },
+ "Score {score} in {n} games in your lines": {
+  "one": "आपकी लाइनों में {n} गेम में {score}",
+  "other": "आपकी लाइनों में {n} गेम में {score}"
+ },
+ "you score {score} in {n} games": {
+  "one": "{n} गेम में आपका स्कोर {score}",
+  "other": "{n} गेम में आपका स्कोर {score}"
+ },
+ "{n} folders": {
+  "one": "{n} फ़ोल्डर",
+  "other": "{n} फ़ोल्डर"
+ },
+ "{n} items": {
+  "one": "{n} आइटम",
+  "other": "{n} आइटम"
+ },
+ "{n} min a day": {
+  "one": "रोज़ {n} मिनट",
+  "other": "रोज़ {n} मिनट"
+ },
+ "{n} selected": {
+  "one": "{n} चुना गया",
+  "other": "{n} चुने गए"
+ },
+ "{n}-day plan": {
+  "one": "{n} दिन की योजना",
+  "other": "{n} दिन की योजना"
  }
 }

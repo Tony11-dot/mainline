@@ -1,6 +1,6 @@
 import { useEffect, useMemo, useState } from 'react';
 import { Link } from 'react-router';
-import { BarChart3, ChevronRight, Swords } from 'lucide-react';
+import { BarChart3, ChevronRight, Swords, Target } from 'lucide-react';
 import { epdToFen } from '@mainline/shared';
 import { useTraining } from '../lib/training';
 import { useLibrary } from '../lib/library';
@@ -47,6 +47,14 @@ export function StatsScreen() {
     <div className="mx-auto max-w-3xl px-4 py-6 md:px-8 md:py-10">
       <h1 className="text-2xl font-bold">{t('Statistics')}</h1>
       <p className="mt-1 text-ink-2">{t('Your training, repertoires, openings and games — all computed on this device.')}</p>
+      <Link to="/focus" className="mt-4 flex items-center gap-3 rounded-[var(--radius-l)] border border-line bg-surface px-4 py-3 shadow-1 hover:bg-surface-2">
+        <Target size={20} className="shrink-0 text-brand" aria-hidden />
+        <span className="min-w-0 flex-1">
+          <span className="block font-semibold">{t('Weak spots')}</span>
+          <span className="block text-sm text-ink-2">{t('Your weakest moves, openings and lines')}</span>
+        </span>
+        <ChevronRight size={18} className="shrink-0 text-ink-3 rtl:rotate-180" aria-hidden />
+      </Link>
 
       <div className="mt-6">
         <StatSection title={t('Training')}>

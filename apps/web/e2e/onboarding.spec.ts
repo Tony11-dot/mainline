@@ -1,5 +1,5 @@
 import { expect, test } from '@playwright/test';
-import { dragMove, tapMove } from './helpers';
+import { dragMove, item, openItem, tapMove } from './helpers';
 
 test('first run: level → starter repertoires → learning', async ({ page }, info) => {
   test.skip(info.project.name === 'android');
@@ -20,10 +20,11 @@ test('first run: level → starter repertoires → learning', async ({ page }, i
   await move(page, uci.slice(0, 2), uci.slice(2, 4));
   // Filed by colour → first move → opening, each line ready-made.
   await page.goto('/library');
-  for (const name of ['1.e4', '1.d4', 'vs 1.e4']) await expect(page.getByRole('link', { name: new RegExp(`^${name.replace('.', '\\.')}`) })).toBeVisible();
-  await page.getByRole('link', { name: /^1\.e4/ }).click();
-  await page.getByRole('link', { name: /vs Open Games/ }).click();
-  await expect(page.getByRole('link', { name: /Italian Game: Giuoco Piano/ })).toBeVisible();
+  for (const name of ['1.e4', '1.d4', 'vs 1.e4']) await expect(item(page, name)).toBeVisible();
+  await openItem(page, '1.e4');
+  await openItem(page, 'Open Games (1…e5)');
+  await openItem(page, 'Italian Game');
+  await expect(item(page, 'Giuoco Piano (3…Bc5)')).toBeVisible();
   await expect(page.getByText('Ready-made').first()).toBeVisible();
   // Rating chosen during onboarding is kept.
   await page.goto('/settings');

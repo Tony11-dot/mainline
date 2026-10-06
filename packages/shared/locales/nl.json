@@ -101,7 +101,6 @@
  "Couldn’t load the explorer": "Kan de explorer niet laden",
  "Couldn’t reach the server. Check your connection and try again — nothing was deleted.": "Kan de server niet bereiken. Controleer je verbinding en probeer het opnieuw — er is niets verwijderd.",
  "Coverage": "Dekking",
- "Create": "Maken",
  "Create & open": "Maken en openen",
  "D": "R",
  "Daily": "Dagelijks",
@@ -117,7 +116,6 @@
  "Default": "Standaard",
  "Delete": "Verwijderen",
  "Delete account": "Account verwijderen",
- "Delete folder": "Map verwijderen",
  "Delete from here": "Vanaf hier verwijderen",
  "Delete my account & data": "Mijn account en gegevens verwijderen",
  "Delete permanently": "Definitief verwijderen",
@@ -261,7 +259,6 @@
  "New move: {move}": "Nieuwe zet: {move}",
  "New moves per day": "Nieuwe zetten per dag",
  "New repertoire": "Nieuw repertoire",
- "New subfolder": "Nieuwe submap",
  "New to openings": "Nieuw met openingen",
  "Next line…": "Volgende variant…",
  "Next move (→)": "Volgende zet (→)",
@@ -397,7 +394,6 @@
  "Rook": "Toren",
  "Rosé": "Rosé",
  "Sand": "Zand",
- "Save": "Opslaan",
  "Saved": "Opgeslagen",
  "Saving…": "Opslaan…",
  "Scan again": "Opnieuw scannen",
@@ -584,7 +580,6 @@
  "depth {n}": "diepte {n}",
  "e.g. London System": "bijv. Londen-systeem",
  "e.g. Najdorf": "bijv. Najdorf",
- "e.g. vs 1.e4": "bijv. tegen 1.e4",
  "from {square}": "van {square}",
  "has a note": "heeft een notitie",
  "in": "in",
@@ -926,10 +921,6 @@
   "one": "{n} variant",
   "other": "{n} varianten"
  },
- "{n} openings": {
-  "one": "{n} opening",
-  "other": "{n} openingen"
- },
  "{n} ready-made sets": {
   "one": "{n} kant-en-klare set",
   "other": "{n} kant-en-klare sets"
@@ -937,5 +928,117 @@
  "{n} sets to choose from": {
   "one": "{n} set om uit te kiezen",
   "other": "{n} sets om uit te kiezen"
+ },
+ "A few days of sessions, built around your focus": "Een paar dagen sessies, rond je focus gebouwd",
+ "A strength": "Een sterk punt",
+ "About usual": "Zoals gewoonlijk",
+ "Actions": "Acties",
+ "After": "Na",
+ "All weak spots": "Alle zwakke plekken",
+ "Both": "Beide",
+ "Chosen": "Gekozen",
+ "Collapse": "Inklappen",
+ "Create plan": "Plan maken",
+ "Day {day} of {days}": "Dag {day} van {days}",
+ "Day {day} of {days} · {done} of {total} sessions done": "Dag {day} van {days} · {done} van {total} sessies gedaan",
+ "Day {n}": "Dag {n}",
+ "Days": "Dagen",
+ "Empty folder — drag lines or folders here.": "Lege map — sleep varianten of mappen hierheen.",
+ "Empty folder.": "Lege map.",
+ "End plan": "Plan beëindigen",
+ "End this plan?": "Dit plan beëindigen?",
+ "Everything after the move counts: if the lines that answer it go badly, the move shows here.": "Alles na de zet telt: als de varianten die erop antwoorden slecht gaan, verschijnt de zet hier.",
+ "Expand": "Uitklappen",
+ "Forward": "Vooruit",
+ "MainLine needs a few sessions of answers or some imported games before it can spot a pattern. Test yourself a few times, or import your games.": "MainLine heeft een paar sessies met antwoorden of geïmporteerde partijen nodig voordat het een patroon ziet. Test jezelf een paar keer of importeer je partijen.",
+ "Make a plan": "Plan maken",
+ "Make a plan for my weakest spot": "Plan voor mijn zwakste plek",
+ "Make a plan…": "Plan maken…",
+ "Minutes a day": "Minuten per dag",
+ "Move {n} items to": "{n} items verplaatsen naar",
+ "Moves that lead to trouble": "Zetten die tot problemen leiden",
+ "Much weaker than usual": "Veel zwakker dan gewoonlijk",
+ "New folder inside": "Nieuwe map erin",
+ "New plan": "Nieuw plan",
+ "No answers yet": "Nog geen antwoorden",
+ "No games in your lines yet": "Nog geen partijen in je varianten",
+ "No plan yet": "Nog geen plan",
+ "Not learned yet": "Nog niet geleerd",
+ "Nothing stands out yet": "Er valt nog niets op",
+ "Nothing to practise here yet.": "Hier valt nog niets te oefenen.",
+ "Pick what to work on, for how many days and how long each day. MainLine lays out the sessions — showing the moves first, then testing the weakest parts, then an exam.": "Kies waaraan je werkt, hoeveel dagen en hoe lang per dag. MainLine plant de sessies — eerst de zetten tonen, dan de zwakste delen testen, dan een examen.",
+ "Plan": "Plan",
+ "Plan a few days on your whole repertoire, one colour, an opening, a line or the answers to one move.": "Plan een paar dagen voor je hele repertoire, één kleur, een opening, een variant of de antwoorden op één zet.",
+ "Plan finished": "Plan afgerond",
+ "Plan finished — {done} of {total} sessions done.": "Plan afgerond — {done} van {total} sessies gedaan.",
+ "Plan for my weakest spot": "Plan voor mijn zwakste plek",
+ "Plan progress": "Voortgang van het plan",
+ "Remove": "Verwijderen",
+ "Select": "Selecteren",
+ "Sessions to include": "Sessies in het plan",
+ "Side": "Kant",
+ "Study plan": "Studieplan",
+ "Suggested": "Voorgesteld",
+ "Suggested from your weak spots": "Voorstellen op basis van je zwakke plekken",
+ "Weak spots": "Zwakke plekken",
+ "Weaker than usual": "Zwakker dan gewoonlijk",
+ "Weakest lines": "Zwakste varianten",
+ "Weakest openings": "Zwakste openingen",
+ "Where you go wrong most — by move, by opening and by line — from your training answers (last 90 days) and your imported games.": "Waar je het vaakst de mist in gaat — per zet, per opening en per variant — op basis van je trainingsantwoorden (laatste 90 dagen) en je geïmporteerde partijen.",
+ "White and Black keep separate folders.": "Wit en zwart hebben aparte mappen.",
+ "Whole repertoire": "Hele repertoire",
+ "Work on": "Werken aan",
+ "Work on this": "Werk hieraan",
+ "You miss {pct} of your moves ({misses} of {n})": "Je mist {pct} van je zetten ({misses} van {n})",
+ "Your weakest moves, openings and lines": "Je zwakste zetten, openingen en varianten",
+ "{learned} of {total} positions learned": "{learned} van {total} stellingen geleerd",
+ "{pct} of your moves right": "{pct} van je zetten goed",
+ "Covers the {n} positions you must know after it.": {
+  "one": "Omvat {n} stelling die je daarna moet kennen.",
+  "other": "Omvat de {n} stellingen die je daarna moet kennen."
+ },
+ "Delete {n} items": {
+  "one": "{n} item verwijderen",
+  "other": "{n} items verwijderen"
+ },
+ "Deleted {n} items": {
+  "one": "{n} item verwijderd",
+  "other": "{n} items verwijderd"
+ },
+ "Move {n} items to…": {
+  "one": "{n} item verplaatsen naar…",
+  "other": "{n} items verplaatsen naar…"
+ },
+ "Moved {n} items to {name}": {
+  "one": "{n} item verplaatst naar {name}",
+  "other": "{n} items verplaatst naar {name}"
+ },
+ "Score {score} in {n} games in your lines": {
+  "one": "{score} in {n} partij in je varianten",
+  "other": "{score} in {n} partijen in je varianten"
+ },
+ "you score {score} in {n} games": {
+  "one": "je scoort {score} in {n} partij",
+  "other": "je scoort {score} in {n} partijen"
+ },
+ "{n} folders": {
+  "one": "{n} map",
+  "other": "{n} mappen"
+ },
+ "{n} items": {
+  "one": "{n} item",
+  "other": "{n} items"
+ },
+ "{n} min a day": {
+  "one": "{n} min per dag",
+  "other": "{n} min per dag"
+ },
+ "{n} selected": {
+  "one": "{n} geselecteerd",
+  "other": "{n} geselecteerd"
+ },
+ "{n}-day plan": {
+  "one": "Plan van {n} dag",
+  "other": "Plan van {n} dagen"
  }
 }
