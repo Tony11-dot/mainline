@@ -77,4 +77,38 @@ describe('library store', () => {
     await L.moveFolder(sub.id, child.id);
     expect(useLibrary.getState().folders.find((f) => f.id === sub.id)!.parentId).toBe(white.id);
   });
+
+  it('ends a line at a position and branches lines off it', async () => {
+    const L = useLibrary.getState();
+    await L.load();
+    const white = useLibrary.getState().folders.find((f) => f.parentId === null && f.color === 'white')!;
+    const rep = await L.createRepertoire({ name: 'Italian', color: 'white', folderId: white.id });
+    const ucis = ['e2e4', 'e7e5', 'g1f3', 'b8c6', 'f1c4'];
+    const { moves } = playLine(INITIAL_FEN, ucis);
+    let fen = INITIAL_FEN;
+    for (const [i, u] of ucis.entries()) {
+      await L.addMove(rep.id, fen, u);
+      fen = moves[i]!.fen;
+    }
+    // 2...Nf6 as a branch inside the line
+    await L.addMove(rep.id, moves[2]!.fen, 'g8f6');
+    const live = (id: string) => useLibrary.getState().moves.filter((m) => m.repertoireId === id && !m.deleted).map((m) => m.san);
+    const epd = (f: string) => f.split(' ').slice(0, 4).join(' ');
+
+    // Branch the Nf6 branch out into its own line: it leaves this one.
+    const petrov = await L.branchLine(rep.id, ['e2e4', 'e7e5', 'g1f3'], { name: 'Petrov', take: 'g8f6' });
+    expect(petrov.folderId).toBe(white.id);
+    expect(live(petrov.id)).toEqual(['e4', 'e5', 'Nf3', 'Nf6']);
+    expect(live(rep.id)).toEqual(['e4', 'e5', 'Nf3', 'Nc6', 'Bc4']);
+
+    // A fresh branch shares the moves so far and nothing after.
+    const fresh = await L.branchLine(rep.id, ['e2e4', 'e7e5'], { name: 'Other' });
+    expect(live(fresh.id)).toEqual(['e4', 'e5']);
+
+    // End the line after 2.Nf3: Nc6 and Bc4 go; undo brings them back.
+    const undo = await L.cutAfter(rep.id, epd(moves[2]!.fen));
+    expect(live(rep.id)).toEqual(['e4', 'e5', 'Nf3']);
+    await undo();
+    expect(live(rep.id)).toHaveLength(5);
+  });
 });

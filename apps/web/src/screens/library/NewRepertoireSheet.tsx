@@ -31,11 +31,15 @@ export function NewRepertoireSheet({ open, initial, onClose }: { open: boolean; 
     setFolderId(folders.find((f) => f.parentId === null)?.id ?? null);
   }, [color]); // eslint-disable-line react-hooks/exhaustive-deps
 
+  /** A repertoire is a folder: it holds lines and repertoires of its own, all starting from its moves. */
   const create = async () => {
     if (parsed.error) return;
-    const rep = await lib.createRepertoire({ name: name || parsed.sans.join(' ') || (color === 'white' ? t('White repertoire') : t('Black repertoire')), color, folderId, rootMovesUci: parsed.ucis });
+    const parent = folders.find((f) => f.id === folderId) ?? folders.find((f) => f.parentId === null);
+    if (!parent) return;
+    const at = parsed.ucis.length ? parsed.ucis : (parent.rootMovesUci ?? undefined);
+    const f = await lib.createFolder(name || parsed.sans.join(' ') || t('New repertoire'), color, parent.id, at);
     onClose();
-    nav(`/rep/${rep.id}`);
+    nav(`/library?f=${f.id}`);
   };
 
   return (
@@ -49,7 +53,7 @@ export function NewRepertoireSheet({ open, initial, onClose }: { open: boolean; 
             {t('Cancel')}
           </Button>
           <Button variant="primary" onClick={() => void create()} disabled={!!parsed.error}>
-            {t('Create & open')}
+            {t('Create')}
           </Button>
         </>
       }
@@ -60,7 +64,7 @@ export function NewRepertoireSheet({ open, initial, onClose }: { open: boolean; 
       <Field label={t('Name')}>
         <input className={inputCls} value={name} onChange={(e) => setName(e.target.value)} placeholder={color === 'white' ? t('e.g. London System') : t('e.g. Najdorf')} maxLength={80} />
       </Field>
-      <Field label={t('Folder')}>
+      <Field label={t('Inside')}>
         <select className={inputCls} value={folderId ?? ''} onChange={(e) => setFolderId(e.target.value || null)}>
           {folders.map((f) => (
             <option key={f.id} value={f.id}>
@@ -69,7 +73,7 @@ export function NewRepertoireSheet({ open, initial, onClose }: { open: boolean; 
           ))}
         </select>
       </Field>
-      <Field label={t('Starting moves (optional)')} hint={t('The repertoire starts after these moves, e.g. 1.e4 c5 for a Sicilian.')}>
+      <Field label={t('Starting moves (optional)')} hint={t('Lines you make inside start after these moves, e.g. 1.e4 c5 for a Sicilian.')}>
         <div className="flex gap-3">
           <input className={`${inputCls} ${parsed.error ? 'border-bad' : ''}`} value={moves} onChange={(e) => setMoves(e.target.value)} placeholder="1.e4 c5" autoCapitalize="off" autoCorrect="off" spellCheck={false} aria-invalid={!!parsed.error} />
           <MiniBoard fen={parsed.fen} size={64} orientation={color} />

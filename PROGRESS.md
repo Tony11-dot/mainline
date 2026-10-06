@@ -398,3 +398,14 @@ Visual checks: `VISUAL=1 pnpm e2e visual` (add `--update-snapshots` after an int
   - Today shows today's sessions, or the one thing to work on.
   - Plans are kept on this device.
 - `Field group` fixes button sets inside a `<label>`, where clicking the label text used to press the first button.
+
+## Repertoires hold lines; lines are edited move by move (2026-10-06)
+
+- **A repertoire is a folder.** "New repertoire…" makes a folder with an optional starting position (and a parent to sit in). Inside it you make lines, sub-repertoires or plain folders: from the New menu, the right-click menu ("New line inside", "New repertoire inside…") or the buttons under the list. New lines start from the repertoire's moves. Folder rows count their lines.
+- **The line editor (`builder/LinePanel.tsx`).** The builder now leads with the line itself: its starting moves greyed, then every move as a tappable chip, the way on from where you stand, and fork marks where it splits. For the selected move:
+  - *End the line here*: everything after it goes (`cutAfter`).
+  - *Change {move}*: it and what follows go, and the board waits for the replacement.
+  - *Delete {move}*.
+  - *New line from here* (`branchLine`): a sibling line with the moves so far, opened at that point. On a ready-made line this makes a line of your own.
+  - Every action can be undone.
+- **Branching while playing.** A reply played where the line already has one shows "{move} branches off this line — Make it a new line". The new line takes that move and everything after it (`branchLine` with `take`), and the original line is left as it was.

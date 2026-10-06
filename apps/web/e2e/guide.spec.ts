@@ -20,10 +20,11 @@ test('guided: suggestions for both sides; their reply is yours to pick unless au
   });
   await page.goto('/library');
   await page.getByRole('button', { name: 'New', exact: true }).click();
-  await page.getByRole('menuitem', { name: 'New repertoire' }).click();
+  await page.getByRole('menuitem', { name: 'New repertoire…' }).click();
   const sheet = page.getByRole('dialog', { name: 'New repertoire' });
   await sheet.getByPlaceholder('e.g. London System').fill('Guided');
-  await sheet.getByRole('button', { name: 'Create & open' }).click();
+  await sheet.getByRole('button', { name: 'Create', exact: true }).click();
+  await page.getByRole('button', { name: /^New line/ }).click();
 
   const panel = page.getByRole('region', { name: 'Your move' });
   await expect(panel.getByRole('button', { name: /^e4/ })).toBeVisible();

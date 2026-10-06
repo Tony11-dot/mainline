@@ -3,7 +3,7 @@ import { Link, useNavigate, useParams, useSearchParams } from 'react-router';
 import { useStore } from 'zustand';
 import type { DrawShape } from 'chessground/draw';
 import type { Key } from 'chessground/types';
-import { ArrowLeft, Compass, Crown, Lightbulb, Pencil, Sparkles, Star, Trash2, Unlock, Waypoints } from 'lucide-react';
+import { ArrowLeft, Compass, Crown, Lightbulb, Pencil, Sparkles, Star, Unlock, Waypoints } from 'lucide-react';
 import { addLine, buildGraph, isReadyMade, myMovesByPosition, bundleEngine, childPath, pathToUcis, findConflicts, guideCandidates, guideMoves, guideReply, GUIDE_MIN_DEPTH, type GuideCandidate, isOwnTurn, mergeEngine, mainMoveAt, nodeAt, parentPath, playUci, positionFromFen, uciToSan, epdToFen } from '@mainline/shared';
 import { Board } from '../board/Board';
 import { BoardControls } from '../board/BoardControls';
@@ -29,14 +29,20 @@ import { AutoBuildSheet } from './builder/AutoBuildSheet';
 import { SuggestPanel } from './builder/SuggestPanel';
 import { NotesPanel } from './builder/NotesPanel';
 import { GuidePanel, TAG_PIN } from './builder/GuidePanel';
+import { LinePanel } from './builder/LinePanel';
 import { fetchGuide, prefetchGuide, useGuide } from '../lib/guide';
 import { PracticeButtons } from './library/practiceUi';
 import { t, tn } from '../lib/i18n';
 
 type Pane = 'tree' | 'explorer' | 'engine' | 'stats' | 'coach' | 'notes' | 'suggest' | 'insights';
 
+/** One line: a fresh editor per line, so branching to a new line starts clean. */
 export function RepertoireScreen() {
   const { id = '' } = useParams();
+  return <LineEditor key={id} id={id} />;
+}
+
+function LineEditor({ id }: { id: string }) {
   const [params] = useSearchParams();
   const nav = useNavigate();
   const lib = useLibrary();
@@ -235,6 +241,8 @@ export function RepertoireScreen() {
       if (mine && wantsReply()) void autoReply(childPath(base, played.uci));
       return;
     }
+    // Before the optimistic play below adds it: was there already a move here, so this one branches?
+    const branching = node.children.length > 0;
     if (base !== st.path) st.goto(base);
     // Optimistic: the board advances immediately (with sound); IndexedDB catches up in the background
     // and the rebuild keeps this path because the node already exists.
@@ -242,6 +250,9 @@ export function RepertoireScreen() {
     store.getState().play(played.uci);
     if (mine && wantsReply()) void autoReply(childPath(base, played.uci));
     const m = await lib.addMove(rep.id, fen, played.uci);
+    if (branching && !mine) {
+      toast(t('{move} branches off this line', { move: m.san }), { action: { label: t('Make it a new line'), run: () => void splitOff(base, m.uci, m.san) } });
+    }
     const mainHere = useLibrary.getState().moves.find((x) => x.repertoireId === rep.id && !x.deleted && x.fromEpd === m.fromEpd && x.isMainline && x.uci !== m.uci);
     if (!m.isMainline && mainHere) {
       toast(t('Added {move} as an alternate — you play {main} here', { move: m.san, main: mainHere.san }), { action: { label: t('Make main'), run: () => lib.makeMain(rep.id, m.fromEpd, m.uci) } });
@@ -281,6 +292,32 @@ export function RepertoireScreen() {
     const undo = await lib.deleteBranch(rep.id, currentMove.fromEpd, currentMove.uci);
     undoToast(t('Deleted {move} and everything after it', { move: currentMove.san }), undo);
   };
+  const cutHere = async () => {
+    const undo = await lib.cutAfter(rep.id, view.node.epd);
+    undoToast(view.path ? t('The line now ends after {move}', { move: view.node.san }) : t('Line cleared'), undo);
+  };
+  /** Change a move: it and what follows go, and the board waits on the position before it for the new one. */
+  const changeHere = async () => {
+    if (!currentMove) return;
+    const back = parentPath(view.path);
+    const undo = await lib.deleteBranch(rep.id, currentMove.fromEpd, currentMove.uci);
+    store.getState().goto(back);
+    undoToast(t('Play the move that replaces {move}', { move: currentMove.san }), undo);
+  };
+  /** A new line next to this one with the moves so far; you carry on from here in it. */
+  const branchHere = async () => {
+    const name = opening?.name && opening.name !== rep.name ? opening.name : t('{name} (branch)', { name: rep.name });
+    const nr = await lib.branchLine(rep.id, pathToUcis(view.path), { name });
+    nav(`/rep/${nr.id}?at=${encodeURIComponent(view.node.epd)}`);
+    toast(t('New line “{name}” — play its next move', { name: nr.name }), { kind: 'success' });
+  };
+  /** A move just played off the line becomes a line of its own, taking what follows it along. */
+  async function splitOff(base: string, uci: string, san: string) {
+    const nr = await lib.branchLine(rep!.id, pathToUcis(base), { name: `${rep!.name} · ${san}`, take: uci });
+    const st = store.getState();
+    const at = nodeAt(st.root, childPath(base, uci))?.epd;
+    nav(`/rep/${nr.id}${at ? `?at=${encodeURIComponent(at)}` : ''}`);
+  }
 
   const board = (
     <Board
@@ -361,12 +398,21 @@ export function RepertoireScreen() {
           {t('Make main move')}
         </Button>
       )}
-      {currentMove && (
-        <Button size="sm" variant="ghost" icon={Trash2} onClick={() => void deleteHere()} className="text-bad hover:text-bad">
-          {t('Delete from here')}
-        </Button>
-      )}
     </div>
+  );
+
+  const line = (
+    <LinePanel
+      root={view.root}
+      path={view.path}
+      rootUcis={rep.rootMovesUci}
+      ready={ready}
+      onGoto={(p) => store.getState().goto(p)}
+      onCut={() => void cutHere()}
+      onChange={() => void changeHere()}
+      onDelete={() => void deleteHere()}
+      onBranch={() => void branchHere()}
+    />
   );
 
   const repUcis = new Set(here.map((m) => m.uci));
@@ -496,8 +542,9 @@ export function RepertoireScreen() {
           <BoardControls store={store} onTypedMove={(u) => void addMove(u)} />
         </div>
         <aside className="flex max-h-[calc(100dvh-2.5rem)] min-w-[360px] max-w-[480px] flex-1 flex-col gap-3">
-          <div className="flex flex-col gap-3 rounded-[var(--radius-l)] border border-line bg-surface p-3.5 shadow-1">
-            {status}
+          <div className="flex shrink-0 flex-col gap-3 rounded-[var(--radius-l)] border border-line bg-surface p-3.5 shadow-1">
+            {line}
+            <div className="border-t border-line pt-3">{status}</div>
             {actions}
           </div>
           {/* The guide scrolls on its own so the panels below always keep room. */}
@@ -518,6 +565,9 @@ export function RepertoireScreen() {
         {board}
       </div>
       <BoardControls store={store} drawMode={drawMode} onToggleDraw={() => setDrawMode((d) => !d)} onTypedMove={(u) => void addMove(u)} />
+      <div className="px-3 pb-3">
+        <div className="rounded-[var(--radius-l)] border border-line bg-surface p-3 shadow-1">{line}</div>
+      </div>
       {guide && <div className="px-3 pb-3">{guide}</div>}
       <div className="flex flex-col gap-2.5 px-3 pb-3">
         {status}

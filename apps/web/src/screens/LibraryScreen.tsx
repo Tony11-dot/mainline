@@ -16,6 +16,7 @@ import {
   FolderInput,
   FolderPlus,
   Hammer,
+  ListPlus,
   Pencil,
   Plus,
   Search,
@@ -222,6 +223,16 @@ export function LibraryScreen() {
   };
   const here = folder ?? roots[0];
 
+  /** A new, empty line in a folder, starting from the position the folder stands for; it opens to be played. */
+  const newLine = async (folderId: string) => {
+    const f = folders.find((x) => x.id === folderId);
+    if (!f) return;
+    const n = reps.filter((r) => r.folderId === f.id).length + 1;
+    const rep = await lib.createRepertoire({ name: t('Line {n}', { n }), color: f.color, folderId: f.id, rootMovesUci: folderMoves(folders, reps, f.id) });
+    nav(`/rep/${rep.id}?guide=1`);
+  };
+  const newRepertoire = (parent?: Folder) => setSheet({ kind: 'new-rep', folderId: parent?.id ?? roots.find((r) => r.color === 'white')?.id ?? null, color: parent?.color ?? 'white' });
+
   // Selection by click: plain replaces, ⌘ toggles, ⇧ extends from the anchor.
   const select = (key: string, e: { metaKey?: boolean; ctrlKey?: boolean; shiftKey?: boolean }) => {
     if (e.shiftKey && anchor.current) {
@@ -291,7 +302,11 @@ export function LibraryScreen() {
       out.push({ label: t('Make a plan…'), icon: CalendarDays, onSelect: () => nav(planHref(scope, one ? itemName(one) : tn(its.length, '{n} item', '{n} items'))) });
     }
     out.push('sep');
-    if (one?.type === 'folder') out.push({ label: t('New folder inside'), icon: FolderPlus, onSelect: () => void newFolder(one.folder.id) });
+    if (one?.type === 'folder') {
+      out.push({ label: t('New line inside'), icon: ListPlus, onSelect: () => void newLine(one.folder.id) });
+      out.push({ label: t('New repertoire inside…'), icon: BookMarked, onSelect: () => newRepertoire(one.folder) });
+      out.push({ label: t('New folder inside'), icon: FolderPlus, onSelect: () => void newFolder(one.folder.id) });
+    }
     if (one && !(one.type === 'folder' && one.folder.parentId === null)) out.push({ label: t('Rename'), icon: Pencil, onSelect: () => setRenaming(one.key) });
     if (its.some((i) => !(i.type === 'folder' && i.folder.parentId === null))) out.push({ label: its.length > 1 ? tn(its.length, 'Move {n} item to…', 'Move {n} items to…') : t('Move to…'), icon: FolderInput, onSelect: () => setSheet({ kind: 'move', keys }) });
     if (one?.type === 'rep') {
@@ -407,9 +422,10 @@ export function LibraryScreen() {
     <Menu
       label={t('New')}
       items={[
+        ...(parent ? [{ label: t('New line'), icon: ListPlus, onSelect: () => void newLine(parent.id) }] : []),
+        { label: parent ? t('New repertoire inside…') : t('New repertoire…'), icon: BookMarked, onSelect: () => newRepertoire(parent) },
         ...(parent ? [{ label: t('New folder'), icon: FolderPlus, onSelect: () => void newFolder(parent.id) }] : []),
         { label: t('Ready-made openings'), icon: Sparkles, onSelect: () => nav('/library/ready') },
-        { label: t('New repertoire'), icon: BookMarked, onSelect: () => setSheet({ kind: 'new-rep', folderId: parent?.id ?? roots.find((r) => r.color === 'white')?.id ?? null, color: parent?.color ?? 'white' }) },
         { label: t('Browse openings by name'), icon: Search, onSelect: () => nav('/library/openings') },
         { label: t('Import PGN'), icon: FileUp, onSelect: () => setSheet({ kind: 'import' }) },
       ]}
@@ -542,7 +558,8 @@ function FinderRow({ it, finder }: { it: Item; finder: FinderCtx }) {
     const { first, reply } = folderLevel(at);
     const rec = first && reply && at.length === 2 ? recordFor(finder.records, it.folder.color, first, reply) : undefined;
     const subs = finder.folders.filter((f) => f.parentId === it.folder.id).length;
-    return { progress, rec, subs };
+    const lines = finder.reps.filter((r) => r.folderId === it.folder.id).length;
+    return { progress, rec, subs, lines };
   }, [it, finder.folders, finder.reps, finder.moves, finder.cards, finder.records]);
   const preview = useMemo(() => (it.type === 'rep' ? repPreview(finder.moves, it.rep) : null), [it, finder.moves]);
 
@@ -623,6 +640,7 @@ function FinderRow({ it, finder }: { it: Item; finder: FinderCtx }) {
         {it.type === 'folder' ? (
           <span className="tnum block text-sm text-ink-2">
             {meta!.subs > 0 && `${tn(meta!.subs, '{n} folder', '{n} folders')} · `}
+            {meta!.lines > 0 && `${tn(meta!.lines, '{n} line', '{n} lines')} · `}
             <ProgressText p={meta!.progress} />
           </span>
         ) : (
@@ -910,8 +928,8 @@ function FolderView({ folder, finder, items, setSheet, newFolder, planHref, pare
   const { over, props } = useDrop(folder.id, finder.drop);
 
   const buildOwn = async () => {
-    const n = finder.reps.filter((r) => r.folderId === folder.id && !isReadyMade(r)).length + 1;
-    const rep = await lib.createRepertoire({ name: t('My line {n}', { n }), color: folder.color, folderId: folder.id, rootMovesUci: at });
+    const n = finder.reps.filter((r) => r.folderId === folder.id).length + 1;
+    const rep = await lib.createRepertoire({ name: t('Line {n}', { n }), color: folder.color, folderId: folder.id, rootMovesUci: at });
     nav(`/rep/${rep.id}?guide=1`);
   };
 
@@ -990,15 +1008,20 @@ function FolderView({ folder, finder, items, setSheet, newFolder, planHref, pare
             </span>
           </Link>
         )}
-        {!isFirst && (
-          <button type="button" onClick={() => void (at.length ? buildOwn() : setSheet({ kind: 'new-rep', folderId: folder.id, color: folder.color }))} className="flex min-h-[56px] items-center gap-3 rounded-[var(--radius-l)] border border-dashed border-line-strong px-4 py-2.5 text-start hover:bg-surface-2">
-            <Hammer size={20} className="shrink-0 text-brand" aria-hidden />
-            <span className="min-w-0 flex-1">
-              <span className="block font-semibold">{t('Build a line myself')}</span>
-              <span className="block text-sm text-ink-2">{t('Play the moves, with suggestions for both sides.')}</span>
-            </span>
-          </button>
-        )}
+        <button type="button" onClick={() => void buildOwn()} className="flex min-h-[56px] items-center gap-3 rounded-[var(--radius-l)] border border-dashed border-line-strong px-4 py-2.5 text-start hover:bg-surface-2">
+          <ListPlus size={20} className="shrink-0 text-brand" aria-hidden />
+          <span className="min-w-0 flex-1">
+            <span className="block font-semibold">{t('New line')}</span>
+            <span className="block text-sm text-ink-2">{t('Pick its moves yourself — where it goes, where it stops, where it branches.')}</span>
+          </span>
+        </button>
+        <button type="button" onClick={() => setSheet({ kind: 'new-rep', folderId: folder.id, color: folder.color })} className="flex min-h-[56px] items-center gap-3 rounded-[var(--radius-l)] border border-dashed border-line-strong px-4 py-2.5 text-start hover:bg-surface-2">
+          <BookMarked size={20} className="shrink-0 text-brand" aria-hidden />
+          <span className="min-w-0 flex-1">
+            <span className="block font-semibold">{t('New repertoire inside')}</span>
+            <span className="block text-sm text-ink-2">{t('A sub-repertoire with lines of its own, e.g. one system against this opening.')}</span>
+          </span>
+        </button>
       </div>
     </div>
   );

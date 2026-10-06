@@ -12,6 +12,7 @@ import {
   makeMove,
   moveKey,
   orphanedMoves,
+  reachable,
   rootFromMoves,
   type Color,
   type Folder,
@@ -52,6 +53,13 @@ interface LibraryState {
   deleteRepertoire: (id: string) => Promise<() => Promise<void>>;
   addMove: (repId: string, fromFen: string, uci: string) => Promise<RepMove>;
   deleteBranch: (repId: string, fromEpd: string, uci: string) => Promise<() => Promise<void>>;
+  /** Ends the line at a position: every move from there on goes (undoable). */
+  cutAfter: (repId: string, epd: string) => Promise<() => Promise<void>>;
+  /**
+   * A new line next to this one that shares its moves up to a point (`pathUcis`, from the line's start).
+   * With `take`, the move played there and everything after it moves across from this line.
+   */
+  branchLine: (repId: string, pathUcis: string[], opts: { name: string; take?: string }) => Promise<Repertoire>;
   makeMain: (repId: string, fromEpd: string, uci: string) => Promise<void>;
   setNote: (repId: string, fromEpd: string, uci: string, note: string) => Promise<void>;
   setShapes: (repId: string, fromEpd: string, uci: string, shapes: Shape[]) => Promise<void>;
@@ -104,6 +112,29 @@ export const useLibrary = create<LibraryState>((set, get) => {
   };
   const movesOf = (repId: string) => get().moves.filter((m) => m.repertoireId === repId && !m.deleted);
   const findMove = (repId: string, fromEpd: string, uci: string) => get().moves.find((m) => m.repertoireId === repId && m.fromEpd === fromEpd && m.uci === uci);
+
+  /** Deletes moves played at one position and everything only they lead to; returns the undo. */
+  const removeFrom = async (repId: string, fromEpd: string, ucis: string[]) => {
+    const r = repOf(repId);
+    const live = movesOf(repId);
+    const targets = live.filter((m) => m.fromEpd === fromEpd && ucis.includes(m.uci));
+    if (!targets.length) return async () => undefined;
+    const t = now();
+    const after = live.map((m) => (targets.includes(m) ? { ...m, deleted: true } : m));
+    const orphanKeys = new Set(orphanedMoves(after, r.rootEpd).map(moveKey));
+    const removed = [...targets, ...live.filter((m) => orphanKeys.has(moveKey(m)))];
+    // If the main own move went and an alternate stays, the alternate becomes main.
+    const promote: RepMove[] = [];
+    if (targets.some((m) => m.isMainline)) {
+      const alt = after.find((m) => !m.deleted && m.fromEpd === fromEpd && !m.isMainline);
+      if (alt) promote.push({ ...alt, isMainline: true, updatedAt: t });
+    }
+    await saveMoves([...removed.map((m) => ({ ...m, deleted: true, updatedAt: t })), ...promote]);
+    return async () => {
+      const t2 = now();
+      await saveMoves([...removed.map((m) => ({ ...m, deleted: false, updatedAt: t2 })), ...promote.map((p) => ({ ...p, isMainline: false, updatedAt: t2 }))]);
+    };
+  };
 
   return {
     loaded: false,
@@ -194,25 +225,38 @@ export const useLibrary = create<LibraryState>((set, get) => {
       await saveMoves([row]);
       return row;
     },
-    deleteBranch: async (repId, fromEpd, uci) => {
+    deleteBranch: async (repId, fromEpd, uci) => removeFrom(repId, fromEpd, [uci]),
+    cutAfter: async (repId, epd) => removeFrom(repId, epd, movesOf(repId).filter((m) => m.fromEpd === epd).map((m) => m.uci)),
+    branchLine: async (repId, pathUcis, { name, take }) => {
       const r = repOf(repId);
-      const target = findMove(repId, fromEpd, uci);
-      if (!target) return async () => undefined;
+      const mine = movesOf(repId);
+      const g = buildGraph(mine);
       const t = now();
-      const after = movesOf(repId).map((m) => (m === target ? { ...m, deleted: true } : m));
-      const orphans = orphanedMoves(after, r.rootEpd);
-      const removed = [target, ...orphans.map((o) => movesOf(repId).find((m) => moveKey(m) === moveKey(o))!)];
-      // If the removed move was the main own move, promote the next alternate.
-      const promote: RepMove[] = [];
-      if (target.isMainline) {
-        const alt = after.find((m) => !m.deleted && m.fromEpd === fromEpd && m.uci !== uci && !m.isMainline);
-        if (alt) promote.push({ ...alt, isMainline: true, updatedAt: t });
+      const copy: RepMove[] = [];
+      let epd = r.rootEpd;
+      for (const u of pathUcis) {
+        const m = g.get(epd)?.find((x) => x.uci === u);
+        if (!m) break;
+        copy.push(m);
+        epd = m.toEpd;
       }
-      await saveMoves([...removed.map((m) => ({ ...m, deleted: true, updatedAt: t })), ...promote]);
-      return async () => {
-        const t2 = now();
-        await saveMoves([...removed.map((m) => ({ ...m, deleted: false, updatedAt: t2 })), ...promote.map((p) => ({ ...p, isMainline: false, updatedAt: t2 }))]);
-      };
+      if (take) {
+        const first = g.get(epd)?.find((x) => x.uci === take);
+        if (first) {
+          copy.push(first);
+          const under = reachable(g, first.toEpd);
+          // Positions the line still reaches some other way stay where they are.
+          for (const m of mine) if (under.has(m.fromEpd) && m !== first) copy.push(m);
+        }
+      }
+      const siblings = get().reps.filter((x) => !x.deleted && x.folderId === r.folderId);
+      const nr: Repertoire = { id: uid(), folderId: r.folderId, name: name.trim() || r.name, color: r.color, rootEpd: r.rootEpd, rootMovesUci: r.rootMovesUci, sortIndex: nextIndex(siblings), createdAt: t, updatedAt: t };
+      await saveReps([nr]);
+      // The branch is your own line: whatever it came from, its moves are yours to change.
+      const rows = copy.map((m) => ({ ...m, repertoireId: nr.id, deleted: false, isMainline: m.isMainline || (m.fromEpd === epd && m.uci === take), updatedAt: t }));
+      await saveMoves([...new Map(rows.map((m) => [moveKey(m), m])).values()]);
+      if (take) await removeFrom(repId, epd, [take]);
+      return nr;
     },
     makeMain: async (repId, fromEpd, uci) => {
       const t = now();
