@@ -5,7 +5,7 @@ import { usePrefs } from '../lib/prefs';
 import { NAV } from './nav';
 import { LogoMark, Wordmark } from './Logo';
 import { Toaster } from './toast';
-import { AssistantFab, AssistantNavButton, AssistantSheet } from './Assistant';
+import { AssistantNavButton, AssistantSheet, AssistantTabButton } from './Assistant';
 import { t } from '../lib/i18n';
 
 export function AppShell() {
@@ -19,7 +19,6 @@ export function AppShell() {
         <Outlet />
       </main>
       <TabBar />
-      <AssistantFab />
       <AssistantSheet />
       <Toaster />
     </div>
@@ -94,12 +93,12 @@ function TabBar() {
     void navigate(NAV[i]!.to);
   };
 
+  // Ask AI sits beside the bar as its own circle, so it never floats over the page.
   return (
+    <div data-web-tabbar className="fixed inset-x-3 z-[var(--z-chrome)] flex h-[var(--tabbar-h)] gap-2 md:hidden" style={{ bottom: 'calc(var(--safe-bottom) + 10px)' }}>
     <nav
       aria-label={t('Main')}
-      data-web-tabbar
-      className="glass fixed inset-x-3 z-[var(--z-chrome)] flex h-[var(--tabbar-h)] touch-none items-stretch justify-around rounded-[26px] px-1 select-none md:hidden"
-      style={{ bottom: 'calc(var(--safe-bottom) + 10px)' }}
+      className="glass flex min-w-0 flex-1 touch-none items-stretch justify-around rounded-[26px] px-1 select-none"
       onPointerDown={onPointerDown}
       onPointerMove={onPointerMove}
       onPointerUp={onPointerUp}
@@ -120,7 +119,7 @@ function TabBar() {
           draggable={false}
           className={({ isActive }) => {
             const lit = hover === null ? isActive : hover === i;
-            return `relative flex min-w-[56px] flex-1 flex-col items-center justify-center gap-1 rounded-[20px] text-[10.5px] font-semibold transition-[color,background-color,transform] duration-150 ${
+            return `relative flex min-w-0 flex-1 flex-col items-center justify-center gap-1 rounded-[20px] text-[10.5px] font-semibold transition-[color,background-color,transform] duration-150 ${
               lit ? 'text-brand' : 'text-ink-3'
             } ${hover === i ? 'scale-[1.06] bg-brand-soft' : ''}`;
           }}
@@ -130,5 +129,7 @@ function TabBar() {
         </NavLink>
       ))}
     </nav>
+    <AssistantTabButton />
+    </div>
   );
 }

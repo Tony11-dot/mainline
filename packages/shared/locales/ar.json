@@ -1334,5 +1334,11 @@
  "You decide how they play: pick a reply, or play any move for them on the board.": "أنت من يقرّر كيف يلعب الخصم: اختر ردًّا، أو العب أي نقلة نيابةً عنه على الرقعة.",
  "Your question": "سؤالك",
  "e.g. I like quiet positional lines, I hate theory-heavy gambits, I have little time to study.": "مثلًا: أحب الخطوط الموضعية الهادئة، وأكره الغامبيتات المليئة بالنظرية، ووقتي للدراسة قليل.",
- "Ask anything…": "اسأل عن أي شيء…"
+ "Ask anything…": "اسأل عن أي شيء…",
+ "Folder settings": "إعدادات المجلد",
+ "Folder settings…": "إعدادات المجلد…",
+ "Save": "حفظ",
+ "From the start": "من البداية",
+ "Its lines and folders are built on these moves, so they stay as they are. To start from other moves, make a new folder.": "خطوطه ومجلداته مبنية على هذه النقلات، لذا تبقى كما هي. لتبدأ من نقلات أخرى، أنشئ مجلدًا جديدًا.",
+ "Lines you make inside start from here.": "الخطوط التي تنشئها هنا تبدأ من هذه النقطة."
 }

@@ -1,5 +1,4 @@
 import { useEffect, useRef, useState } from 'react';
-import { useLocation } from 'react-router';
 import { ArrowUp, Sparkles, Trash2, UserRound } from 'lucide-react';
 import { INITIAL_FEN } from '@mainline/shared';
 import { useAssistant } from '../lib/assistant';
@@ -117,20 +116,17 @@ export function AssistantSheet() {
   );
 }
 
-/** The floating "Ask AI" button on phones (the sidebar has its own). */
-export function AssistantFab() {
-  const path = useLocation().pathname;
+/** Ask AI on phones: a round glass button docked beside the tab bar (the sidebar has its own). */
+export function AssistantTabButton() {
   const setOpen = useAssistant((s) => s.setOpen);
-  if (path.startsWith('/train') || path.startsWith('/welcome') || path.startsWith('/setup')) return null;
   return (
     <button
       type="button"
       onClick={() => setOpen(true)}
       aria-label={t('Ask AI')}
-      className="fixed end-4 z-[var(--z-chrome)] flex size-12 items-center justify-center rounded-full bg-brand text-on-brand shadow-3 active:scale-95 md:hidden"
-      style={{ bottom: 'calc(var(--safe-bottom) + var(--tabbar-h) + 22px)' }}
+      className="glass flex aspect-square h-full shrink-0 items-center justify-center rounded-full text-brand active:scale-95"
     >
-      <Sparkles size={22} aria-hidden />
+      <Sparkles size={22} strokeWidth={2} aria-hidden />
     </button>
   );
 }

@@ -43,6 +43,8 @@ interface LibraryState {
   load: () => Promise<void>;
   createFolder: (name: string, color: Color, parentId: string | null, rootMovesUci?: string[]) => Promise<Folder>;
   renameFolder: (id: string, name: string) => Promise<void>;
+  /** Changes a folder's moves (the position its lines start from). Only for folders with nothing inside. */
+  setFolderMoves: (id: string, rootMovesUci: string[]) => Promise<void>;
   moveFolder: (id: string, parentId: string | null, sortIndex?: number) => Promise<void>;
   deleteFolder: (id: string) => Promise<() => Promise<void>>;
   createRepertoire: (opts: { name: string; color: Color; folderId: string | null; rootMovesUci?: string[]; source?: string }) => Promise<Repertoire>;
@@ -167,6 +169,12 @@ export const useLibrary = create<LibraryState>((set, get) => {
     renameFolder: async (id, name) => {
       const f = get().folders.find((x) => x.id === id);
       if (f && name.trim()) await saveFolders([{ ...f, name: name.trim(), updatedAt: now() }]);
+    },
+    setFolderMoves: async (id, rootMovesUci) => {
+      const f = get().folders.find((x) => x.id === id);
+      if (!f || f.parentId === null) return;
+      if (repsUnder(get().folders, get().reps, id).length || descendants(get().folders, id).length) return;
+      await saveFolders([{ ...f, rootMovesUci, updatedAt: now() }]);
     },
     moveFolder: async (id, parentId, sortIndex) => {
       const f = get().folders.find((x) => x.id === id);

@@ -182,4 +182,12 @@ test('a line: pick where it stops, change a move, branch a new line off it', asy
   await openItem(page, /Open games/);
   await expect(item(page, /Line 1/)).toBeVisible();
   await expect(page.getByRole('option')).toHaveCount(3);
+
+  // Folder settings: rename it; its moves are fixed once lines are built on them.
+  await page.getByRole('button', { name: 'Folder settings' }).click();
+  const settings = page.getByRole('dialog', { name: 'Folder settings' });
+  await expect(settings.getByText(/stay as they are/)).toBeVisible();
+  await settings.getByLabel('Name').fill('Open games (e5)');
+  await settings.getByRole('button', { name: 'Save' }).click();
+  await expect(page.getByRole('heading', { name: 'Open games (e5)' })).toBeVisible();
 });

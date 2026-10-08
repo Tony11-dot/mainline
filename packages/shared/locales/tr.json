@@ -1082,5 +1082,11 @@
  "You decide how they play: pick a reply, or play any move for them on the board.": "Nasıl oynayacaklarına sen karar verirsin: bir yanıt seç ya da tahtada onlar için herhangi bir hamle oyna.",
  "Your question": "Sorun",
  "e.g. I like quiet positional lines, I hate theory-heavy gambits, I have little time to study.": "ör. Sakin pozisyonel varyantları severim, teorisi ağır gambitlerden nefret ederim, çalışmaya az vaktim var.",
- "Ask anything…": "Ne istersen sor…"
+ "Ask anything…": "Ne istersen sor…",
+ "Folder settings": "Klasör ayarları",
+ "Folder settings…": "Klasör ayarları…",
+ "Save": "Kaydet",
+ "From the start": "Baştan",
+ "Its lines and folders are built on these moves, so they stay as they are. To start from other moves, make a new folder.": "İçindeki varyantlar ve klasörler bu hamlelere dayanıyor, bu yüzden oldukları gibi kalır. Başka hamlelerden başlamak için yeni bir klasör oluştur.",
+ "Lines you make inside start from here.": "Burada oluşturduğun varyantlar bu noktadan başlar."
 }

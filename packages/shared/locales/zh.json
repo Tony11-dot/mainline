@@ -1019,5 +1019,11 @@
  "You decide how they play: pick a reply, or play any move for them on the board.": "对手怎么走由你决定：选一个应着，或在棋盘上替他们走任意一步。",
  "Your question": "你的问题",
  "e.g. I like quiet positional lines, I hate theory-heavy gambits, I have little time to study.": "例如：我喜欢平稳的局面型变化，讨厌理论繁重的弃兵，学习时间不多。",
- "Ask anything…": "随便问…"
+ "Ask anything…": "随便问…",
+ "Folder settings": "文件夹设置",
+ "Folder settings…": "文件夹设置…",
+ "Save": "保存",
+ "From the start": "从开局",
+ "Its lines and folders are built on these moves, so they stay as they are. To start from other moves, make a new folder.": "其中的线路和文件夹都建立在这些着法之上，因此保持不变。要从其他着法开始，请新建文件夹。",
+ "Lines you make inside start from here.": "在这里创建的线路从此局面开始。"
 }

@@ -32,7 +32,8 @@ export function createWebPlatform(): Platform {
       }
     },
     async scheduleReminders(plan) {
-      const { registerWebPush } = await import('../lib/push');
+      const { clearShownReminders, registerWebPush } = await import('../lib/push');
+      void clearShownReminders();
       return registerWebPush(plan);
     },
     async share(data) {

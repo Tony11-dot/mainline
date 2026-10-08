@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { decide, localParts } from './push';
+import { decide, localParts, tzOffsetMin, withSyncedStreak } from './push';
 
 // Practised yesterday with a 4-day streak and no freezes.
 const base = { timezone: 'Asia/Jerusalem', reminderTime: '19:00', dueCount: 12, streak: 4, freezes: 0, lastReviewDay: '2026-09-23', lastNotifiedOn: null, lastNudgeOn: null, lastWeeklyOn: null, lastLateOn: null };
@@ -58,5 +58,26 @@ describe('push schedule', () => {
   });
   it('survives unknown timezones', () => {
     expect(localParts(REMIND, 'Not/AZone').date).toBe('2026-09-24');
+  });
+
+  it('reads the streak from practice synced from any device', () => {
+    expect(tzOffsetMin(REMIND, 'Asia/Jerusalem')).toBe(-180);
+    // The browser last reported a 4-day streak on the 23rd, but the phone practised on the 24th: no reminder.
+    const noon = (d: string) => new Date(`${d}T09:00:00Z`).getTime();
+    const days = ['2026-09-19', '2026-09-20', '2026-09-21', '2026-09-22', '2026-09-23', '2026-09-24'];
+    const synced = withSyncedStreak(base, days.map(noon), REMIND);
+    expect(synced).toMatchObject({ lastReviewDay: '2026-09-24', streak: 6 });
+    expect(decide(synced, REMIND)).toBeNull();
+  });
+  it('drops a lost streak even when the browser still remembers it', () => {
+    // The browser says 12 days as of the 23rd; the synced log shows the last practice on the 20th.
+    const stale = { ...base, streak: 12, lastReviewDay: '2026-09-23' };
+    const noon = (d: string) => new Date(`${d}T09:00:00Z`).getTime();
+    const synced = withSyncedStreak({ ...stale, lastReviewDay: '2026-09-20' }, ['2026-09-18', '2026-09-19', '2026-09-20'].map(noon), REMIND);
+    expect(synced.streak).toBe(0);
+    const m = decide(synced, REMIND);
+    expect(`${m?.title} ${m?.body}`).not.toMatch(/12|3-day/);
+    // A newer report from the device itself (practice not synced yet) wins.
+    expect(withSyncedStreak(stale, ['2026-09-20'].map(noon), REMIND).streak).toBe(12);
   });
 });

@@ -2,14 +2,15 @@ import { Capacitor, registerPlugin, type PluginListenerHandle } from '@capacitor
 import { NAV } from '../ui/nav';
 import { useLaunch } from '../launch/LaunchScreen';
 import { useOverlays } from '../ui/overlay';
+import { useAssistant } from '../lib/assistant';
 import { t, useI18n } from '../lib/i18n';
 
 interface NativeChromePlugin {
-  setTabs(o: { tabs: { id: string; label: string; sfSymbol: string }[]; selected?: string }): Promise<void>;
+  setTabs(o: { tabs: { id: string; label: string; sfSymbol: string }[]; action?: { id: string; label: string; sfSymbol: string }; selected?: string }): Promise<void>;
   select(o: { id: string }): Promise<void>;
   setVisible(o: { visible: boolean }): Promise<void>;
   setTheme(o: { accent: string; dark: boolean }): Promise<void>;
-  addListener(event: 'tabSelected', cb: (e: { id: string }) => void): Promise<PluginListenerHandle>;
+  addListener(event: 'tabSelected' | 'actionTapped', cb: (e: { id: string }) => void): Promise<PluginListenerHandle>;
 }
 
 const NativeChrome = registerPlugin<NativeChromePlugin>('NativeChrome');
@@ -26,10 +27,16 @@ export async function startNativeChrome(router: { navigate: (to: string) => unkn
   // Sub-screens light up their parent tab.
   const ALIAS: [string, string][] = [['/setup', '/explore'], ['/rep/', '/library']];
   const idFor = (path: string) => ALIAS.find(([p]) => path.startsWith(p))?.[1] ?? NAV.slice(1).find((n) => path.startsWith(n.to))?.to ?? '/';
+  // Ask AI rides beside the bar as its own glass circle instead of floating over the page.
+  const tabsFor = (path: string) => ({
+    tabs: NAV.map((n) => ({ id: n.to, label: t(n.label), sfSymbol: n.sfSymbol })),
+    action: { id: 'assistant', label: t('Ask AI'), sfSymbol: 'sparkles' },
+    selected: idFor(path),
+  });
   try {
     // Just the animation while it plays: hide the bar before it's first installed.
     if (useLaunch.getState().active) await NativeChrome.setVisible({ visible: false });
-    await NativeChrome.setTabs({ tabs: NAV.map((n) => ({ id: n.to, label: t(n.label), sfSymbol: n.sfSymbol })), selected: idFor(router.state.location.pathname) });
+    await NativeChrome.setTabs(tabsFor(router.state.location.pathname));
   } catch (e) {
     console.warn('NativeChrome unavailable, keeping the web tab bar:', (e as Error).message);
     return; // plugin missing (e.g. an older native shell): keep the web tab bar
@@ -37,9 +44,10 @@ export async function startNativeChrome(router: { navigate: (to: string) => unkn
   document.documentElement.dataset.nativeChrome = '';
   // Tab titles follow the app language.
   useI18n.subscribe((s, p) => {
-    if (s.lang !== p.lang) void NativeChrome.setTabs({ tabs: NAV.map((n) => ({ id: n.to, label: t(n.label), sfSymbol: n.sfSymbol })), selected: idFor(router.state.location.pathname) });
+    if (s.lang !== p.lang) void NativeChrome.setTabs(tabsFor(router.state.location.pathname));
   });
   await NativeChrome.addListener('tabSelected', ({ id }) => void router.navigate(id));
+  await NativeChrome.addListener('actionTapped', () => useAssistant.getState().setOpen(true));
   // iPad (and wide split view): the web sidebar is the navigation, so the bottom bar stays hidden.
   const wide = matchMedia('(min-width: 768px)');
   const sync = (path: string) => {

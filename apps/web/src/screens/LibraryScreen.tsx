@@ -20,6 +20,7 @@ import {
   Pencil,
   Plus,
   Search,
+  Settings2,
   Sparkles,
   Swords,
   Target,
@@ -42,6 +43,7 @@ import { ContextMenu } from '../ui/ContextMenu';
 import { undoToast, toast } from '../ui/toast';
 import { useMediaQuery } from '../ui/useMediaQuery';
 import { NewFolderSheet } from './library/NewFolderSheet';
+import { FolderSettingsSheet } from './library/FolderSettingsSheet';
 import { ImportPgnSheet } from './library/ImportPgnSheet';
 import { ConflictsSheet } from './library/ConflictsSheet';
 import { OpeningPickerSheet } from './library/OpeningPickerSheet';
@@ -56,7 +58,7 @@ msg('White');
 msg('Black');
 
 type Item = { key: string; type: 'folder'; folder: Folder; color: Color } | { key: string; type: 'rep'; rep: Repertoire; color: Color };
-type SheetState = { kind: 'new-folder'; folderId: string | null; color: Color } | { kind: 'import'; repId?: string; text?: string } | { kind: 'conflicts' } | { kind: 'pick'; color: Color; first?: FirstMove } | { kind: 'move'; keys: string[] } | null;
+type SheetState = { kind: 'new-folder'; folderId: string | null; color: Color } | { kind: 'folder-settings'; id: string } | { kind: 'import'; repId?: string; text?: string } | { kind: 'conflicts' } | { kind: 'pick'; color: Color; first?: FirstMove } | { kind: 'move'; keys: string[] } | null;
 
 const FIRSTS: Record<string, FirstMove> = { e2e4: 'e4', d2d4: 'd4', c2c4: 'c4', g1f3: 'Nf3', b1c3: 'Nc3' };
 const ORDER = ['e2e4', 'd2d4', 'c2c4', 'g1f3', 'b1c3'];
@@ -301,6 +303,7 @@ export function LibraryScreen() {
       out.push({ label: t('New folder inside…'), icon: FolderPlus, onSelect: () => newFolder(one.folder) });
     }
     if (one && !(one.type === 'folder' && one.folder.parentId === null)) out.push({ label: t('Rename'), icon: Pencil, onSelect: () => setRenaming(one.key) });
+    if (one?.type === 'folder' && one.folder.parentId !== null) out.push({ label: t('Folder settings…'), icon: Settings2, onSelect: () => setSheet({ kind: 'folder-settings', id: one.folder.id }) });
     if (its.some((i) => !(i.type === 'folder' && i.folder.parentId === null))) out.push({ label: its.length > 1 ? tn(its.length, 'Move {n} item to…', 'Move {n} items to…') : t('Move to…'), icon: FolderInput, onSelect: () => setSheet({ kind: 'move', keys }) });
     if (one?.type === 'rep') {
       if (!isReadyMade(one.rep)) out.push({ label: t('Import PGN into this'), icon: FileUp, onSelect: () => setSheet({ kind: 'import', repId: one.rep.id }) });
@@ -391,10 +394,21 @@ export function LibraryScreen() {
     </div>
   );
 
+  // Deleting the folder you're in takes you up to its parent; undo brings it back.
+  const deleteFromSettings = async (id: string) => {
+    const f = folders.find((x) => x.id === id);
+    if (!f) return;
+    setSheet(null);
+    if (folder && (folder.id === id || descendants(folders, id).includes(folder.id))) nav(parentHref(f));
+    const restore = await lib.deleteFolder(id);
+    undoToast(t('Deleted “{name}”', { name: t(f.name) }), restore);
+  };
+
   const moveColor = sheet?.kind === 'move' ? byKey.get(sheet.keys[0]!)?.color ?? 'white' : 'white';
   const sheets = (
     <>
       <NewFolderSheet open={sheet?.kind === 'new-folder'} initial={sheet?.kind === 'new-folder' ? sheet : undefined} onClose={() => setSheet(null)} />
+      <FolderSettingsSheet folderId={sheet?.kind === 'folder-settings' ? sheet.id : null} onClose={() => setSheet(null)} onDelete={(id) => void deleteFromSettings(id)} />
       <ImportPgnSheet open={sheet?.kind === 'import'} repId={sheet?.kind === 'import' ? sheet.repId : undefined} initialText={sheet?.kind === 'import' ? sheet.text : undefined} onClose={() => setSheet(null)} />
       <ConflictsSheet open={sheet?.kind === 'conflicts'} conflicts={conflicts} onClose={() => setSheet(null)} />
       <OpeningPickerSheet open={sheet?.kind === 'pick'} color={sheet?.kind === 'pick' ? sheet.color : 'white'} first={sheet?.kind === 'pick' ? sheet.first : undefined} onClose={() => setSheet(null)} />
@@ -962,7 +976,7 @@ function FolderView({ folder, finder, items, setSheet, newFolder, planHref, pare
           </p>
         </div>
         <div className="flex shrink-0 items-center gap-1">
-          <IconButton icon={Pencil} label={t('Rename')} size={40} onClick={() => setRenaming(true)} />
+          <IconButton icon={Settings2} label={t('Folder settings')} size={40} onClick={() => setSheet({ kind: 'folder-settings', id: folder.id })} />
           {toolbarNew}
         </div>
       </div>

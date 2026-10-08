@@ -1145,5 +1145,11 @@
  "You decide how they play: pick a reply, or play any move for them on the board.": "אתה מחליט איך הם משחקים: בחר תשובה, או שחק בשבילם כל מסע על הלוח.",
  "Your question": "השאלה שלך",
  "e.g. I like quiet positional lines, I hate theory-heavy gambits, I have little time to study.": "למשל: אני אוהב קווים פוזיציוניים שקטים, שונא גמביטים עמוסי תאוריה, ויש לי מעט זמן ללמוד.",
- "Ask anything…": "שאל כל דבר…"
+ "Ask anything…": "שאל כל דבר…",
+ "Folder settings": "הגדרות תיקייה",
+ "Folder settings…": "הגדרות תיקייה…",
+ "Save": "שמירה",
+ "From the start": "מההתחלה",
+ "Its lines and folders are built on these moves, so they stay as they are. To start from other moves, make a new folder.": "הקווים והתיקיות שבה בנויים על המסעים האלה, ולכן הם נשארים כפי שהם. כדי להתחיל ממסעים אחרים, צור תיקייה חדשה.",
+ "Lines you make inside start from here.": "קווים שתיצור כאן מתחילים מנקודה זו."
 }

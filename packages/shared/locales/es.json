@@ -1082,5 +1082,11 @@
  "You decide how they play: pick a reply, or play any move for them on the board.": "Tú decides cómo juegan: elige una respuesta o juega cualquier jugada por ellos en el tablero.",
  "Your question": "Tu pregunta",
  "e.g. I like quiet positional lines, I hate theory-heavy gambits, I have little time to study.": "p. ej. Me gustan las líneas posicionales tranquilas, odio los gambitos con mucha teoría, tengo poco tiempo para estudiar.",
- "Ask anything…": "Pregunta lo que quieras…"
+ "Ask anything…": "Pregunta lo que quieras…",
+ "Folder settings": "Ajustes de la carpeta",
+ "Folder settings…": "Ajustes de la carpeta…",
+ "Save": "Guardar",
+ "From the start": "Desde el inicio",
+ "Its lines and folders are built on these moves, so they stay as they are. To start from other moves, make a new folder.": "Sus líneas y carpetas se basan en estas jugadas, así que se quedan como están. Para empezar desde otras jugadas, crea una carpeta nueva.",
+ "Lines you make inside start from here.": "Las líneas que crees aquí empiezan desde este punto."
 }

@@ -80,6 +80,13 @@ export function createCapacitorPlatform(kind: 'ios' | 'android'): Platform {
 
     async scheduleReminders(plan: ReminderPlan) {
       await LocalNotifications.cancel({ notifications: REMINDER_IDS.map((id) => ({ id })) }).catch(() => undefined);
+      // Reminders already shown were written for an older streak: once the app is open they've done their job.
+      await LocalNotifications.getDeliveredNotifications()
+        .then(({ notifications }) => {
+          const old = notifications.filter((n) => REMINDER_IDS.includes(Number(n.id)));
+          return old.length ? LocalNotifications.removeDeliveredNotifications({ notifications: old }) : undefined;
+        })
+        .catch(() => undefined);
       if (!plan.enabled) return 'scheduled';
       let perm = await LocalNotifications.checkPermissions();
       if (perm.display === 'prompt' || perm.display === 'prompt-with-rationale') perm = await LocalNotifications.requestPermissions();

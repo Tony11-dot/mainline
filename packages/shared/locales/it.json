@@ -1082,5 +1082,11 @@
  "You decide how they play: pick a reply, or play any move for them on the board.": "Decidi tu come giocano: scegli una risposta o gioca una mossa qualsiasi per loro sulla scacchiera.",
  "Your question": "La tua domanda",
  "e.g. I like quiet positional lines, I hate theory-heavy gambits, I have little time to study.": "ad es. Mi piacciono le linee posizionali tranquille, odio i gambetti pieni di teoria, ho poco tempo per studiare.",
- "Ask anything…": "Chiedi qualsiasi cosa…"
+ "Ask anything…": "Chiedi qualsiasi cosa…",
+ "Folder settings": "Impostazioni cartella",
+ "Folder settings…": "Impostazioni cartella…",
+ "Save": "Salva",
+ "From the start": "Dall’inizio",
+ "Its lines and folders are built on these moves, so they stay as they are. To start from other moves, make a new folder.": "Le sue linee e cartelle si basano su queste mosse, quindi restano come sono. Per partire da altre mosse, crea una nuova cartella.",
+ "Lines you make inside start from here.": "Le linee che crei qui partono da questo punto."
 }

@@ -1208,5 +1208,11 @@
  "You decide how they play: pick a reply, or play any move for them on the board.": "Ви вирішуєте, як грає суперник: виберіть відповідь або зробіть за нього будь-який хід на дошці.",
  "Your question": "Ваше питання",
  "e.g. I like quiet positional lines, I hate theory-heavy gambits, I have little time to study.": "наприклад: люблю спокійні позиційні лінії, не терплю гамбітів із купою теорії, маю мало часу на навчання.",
- "Ask anything…": "Запитайте будь-що…"
+ "Ask anything…": "Запитайте будь-що…",
+ "Folder settings": "Налаштування папки",
+ "Folder settings…": "Налаштування папки…",
+ "Save": "Зберегти",
+ "From the start": "Від початку",
+ "Its lines and folders are built on these moves, so they stay as they are. To start from other moves, make a new folder.": "Її лінії та папки побудовано на цих ходах, тому вони лишаються як є. Щоб почати з інших ходів, створіть нову папку.",
+ "Lines you make inside start from here.": "Лінії, створені тут, починаються з цієї позиції."
 }

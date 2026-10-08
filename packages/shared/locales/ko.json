@@ -1019,5 +1019,11 @@
  "You decide how they play: pick a reply, or play any move for them on the board.": "상대가 어떻게 둘지는 당신이 정합니다: 응수를 고르거나 보드에서 상대의 수를 아무거나 두세요.",
  "Your question": "질문",
  "e.g. I like quiet positional lines, I hate theory-heavy gambits, I have little time to study.": "예: 조용한 포지셔널 라인을 좋아하고, 이론이 많은 갬빗은 싫고, 공부할 시간이 적어요.",
- "Ask anything…": "무엇이든 물어보세요…"
+ "Ask anything…": "무엇이든 물어보세요…",
+ "Folder settings": "폴더 설정",
+ "Folder settings…": "폴더 설정…",
+ "Save": "저장",
+ "From the start": "처음부터",
+ "Its lines and folders are built on these moves, so they stay as they are. To start from other moves, make a new folder.": "안의 라인과 폴더가 이 수들을 바탕으로 만들어져 있어 그대로 유지됩니다. 다른 수에서 시작하려면 새 폴더를 만드세요.",
+ "Lines you make inside start from here.": "여기서 만드는 라인은 이 지점에서 시작합니다."
 }

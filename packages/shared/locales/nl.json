@@ -1082,5 +1082,11 @@
  "You decide how they play: pick a reply, or play any move for them on the board.": "Jij bepaalt hoe zij spelen: kies een antwoord of speel een willekeurige zet voor hen op het bord.",
  "Your question": "Je vraag",
  "e.g. I like quiet positional lines, I hate theory-heavy gambits, I have little time to study.": "bijv. Ik hou van rustige positionele lijnen, ik haat gambieten met veel theorie, ik heb weinig tijd om te studeren.",
- "Ask anything…": "Vraag maar raak…"
+ "Ask anything…": "Vraag maar raak…",
+ "Folder settings": "Mapinstellingen",
+ "Folder settings…": "Mapinstellingen…",
+ "Save": "Opslaan",
+ "From the start": "Vanaf het begin",
+ "Its lines and folders are built on these moves, so they stay as they are. To start from other moves, make a new folder.": "De lijnen en mappen erin bouwen op deze zetten, dus die blijven zoals ze zijn. Wil je vanaf andere zetten beginnen, maak dan een nieuwe map.",
+ "Lines you make inside start from here.": "Lijnen die je hier maakt beginnen vanaf dit punt."
 }

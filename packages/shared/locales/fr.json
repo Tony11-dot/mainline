@@ -1082,5 +1082,11 @@
  "You decide how they play: pick a reply, or play any move for them on the board.": "C’est toi qui décides comment ils jouent : choisis une réponse ou joue n’importe quel coup pour eux sur l’échiquier.",
  "Your question": "Ta question",
  "e.g. I like quiet positional lines, I hate theory-heavy gambits, I have little time to study.": "p. ex. J’aime les lignes positionnelles calmes, je déteste les gambits très théoriques, j’ai peu de temps pour étudier.",
- "Ask anything…": "Pose ta question…"
+ "Ask anything…": "Pose ta question…",
+ "Folder settings": "Réglages du dossier",
+ "Folder settings…": "Réglages du dossier…",
+ "Save": "Enregistrer",
+ "From the start": "Depuis le début",
+ "Its lines and folders are built on these moves, so they stay as they are. To start from other moves, make a new folder.": "Ses lignes et dossiers reposent sur ces coups, ils restent donc tels quels. Pour partir d’autres coups, crée un nouveau dossier.",
+ "Lines you make inside start from here.": "Les lignes que tu crées ici partent de ce point."
 }

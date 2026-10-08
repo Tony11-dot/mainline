@@ -1,4 +1,4 @@
-import { lazy, Suspense, useMemo, useState } from 'react';
+import { lazy, Suspense, useEffect, useMemo, useState } from 'react';
 import { Flame } from 'lucide-react';
 import { streakInfo, type StreakInfo } from '@mainline/shared';
 import { useTraining } from '../lib/training';
@@ -8,15 +8,34 @@ import { t, tn } from '../lib/i18n';
 const StreakSheet = lazy(() => import('./streakViews').then((m) => ({ default: m.StreakSheet })));
 
 const tz = () => new Date().getTimezoneOffset();
+const dayKey = () => new Date().toDateString();
 
-/** The live streak, recomputed whenever reviews change. `before` limits it to reviews older than a time. */
+/** The local day, kept current: an app left open overnight (or brought back next morning) moves on with it. */
+function useToday() {
+  const [day, setDay] = useState(dayKey);
+  useEffect(() => {
+    const check = () => setDay(dayKey());
+    const id = setInterval(check, 60_000);
+    document.addEventListener('visibilitychange', check);
+    window.addEventListener('focus', check);
+    return () => {
+      clearInterval(id);
+      document.removeEventListener('visibilitychange', check);
+      window.removeEventListener('focus', check);
+    };
+  }, []);
+  return day;
+}
+
+/** The live streak, recomputed whenever reviews change and when the day turns. `before` limits it to reviews older than a time. */
 export function useStreak(before?: number): StreakInfo {
   const reviews = useTraining((s) => s.reviews);
   const version = useTraining((s) => s.version);
+  const today = useToday();
   return useMemo(
     () => streakInfo(reviews.filter((r) => before === undefined || r.reviewedAt < before).map((r) => r.reviewedAt), before ?? Date.now(), tz()),
     // eslint-disable-next-line react-hooks/exhaustive-deps
-    [version, before],
+    [version, before, today],
   );
 }
 

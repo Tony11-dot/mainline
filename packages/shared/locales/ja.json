@@ -1019,5 +1019,11 @@
  "You decide how they play: pick a reply, or play any move for them on the board.": "相手の指し方はあなたが決めます：応手を選ぶか、盤上で相手の手を自由に指してください。",
  "Your question": "質問",
  "e.g. I like quiet positional lines, I hate theory-heavy gambits, I have little time to study.": "例：静かなポジショナルなラインが好き、理論だらけのギャンビットは苦手、勉強時間は少なめ。",
- "Ask anything…": "何でも質問…"
+ "Ask anything…": "何でも質問…",
+ "Folder settings": "フォルダの設定",
+ "Folder settings…": "フォルダの設定…",
+ "Save": "保存",
+ "From the start": "最初から",
+ "Its lines and folders are built on these moves, so they stay as they are. To start from other moves, make a new folder.": "中のラインとフォルダはこの手順の上に作られているため、変更できません。別の手順から始めるには新しいフォルダを作成してください。",
+ "Lines you make inside start from here.": "ここで作るラインはこの局面から始まります。"
 }

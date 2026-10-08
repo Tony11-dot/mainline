@@ -5,6 +5,8 @@ import UIKit
 /// Native chrome for the iOS app: a SwiftUI tab bar drawn with Apple's real Liquid Glass
 /// (`.glassEffect()` on iOS 26+, `.ultraThinMaterial` before), overlaid on the Capacitor web view.
 /// Routing stays in the web app: JS sets the tabs and selection, and gets `tabSelected` back.
+/// An optional action (Ask AI) sits beside the bar as its own glass circle, like iOS 26's search tab,
+/// so it never floats over the page; tapping it sends `actionTapped`.
 @objc(NativeChromePlugin)
 public class NativeChromePlugin: CAPPlugin, CAPBridgedPlugin {
     public let identifier = "NativeChromePlugin"
@@ -25,8 +27,13 @@ public class NativeChromePlugin: CAPPlugin, CAPBridgedPlugin {
             guard let id = t["id"] as? String, let label = t["label"] as? String else { return nil }
             return TabItem(id: id, label: label, symbol: (t["sfSymbol"] as? String) ?? "circle")
         }
+        let action = call.getObject("action").flatMap { a -> TabItem? in
+            guard let id = a["id"] as? String, let label = a["label"] as? String else { return nil }
+            return TabItem(id: id, label: label, symbol: (a["sfSymbol"] as? String) ?? "sparkles")
+        }
         DispatchQueue.main.async {
             self.model.tabs = tabs
+            self.model.action = action
             if let selected = call.getString("selected") { self.model.selected = selected }
             self.installIfNeeded()
             call.resolve()
@@ -65,6 +72,10 @@ public class NativeChromePlugin: CAPPlugin, CAPBridgedPlugin {
             UISelectionFeedbackGenerator().selectionChanged()
             self?.notifyListeners("tabSelected", data: ["id": id])
         }
+        model.onAction = { [weak self] id in
+            UIImpactFeedbackGenerator(style: .light).impactOccurred()
+            self?.notifyListeners("actionTapped", data: ["id": id])
+        }
         let hosting = UIHostingController(rootView: GlassTabBar(model: model))
         hosting.view.backgroundColor = .clear
         hosting.view.translatesAutoresizingMaskIntoConstraints = false
@@ -88,10 +99,12 @@ struct TabItem: Identifiable, Equatable {
 
 final class TabBarModel: ObservableObject {
     @Published var tabs: [TabItem] = []
+    @Published var action: TabItem?
     @Published var selected: String = ""
     @Published var visible = true
     @Published var accent: Color = Color(hex: "#072EB8")
     var onSelect: (String) -> Void = { _ in }
+    var onAction: (String) -> Void = { _ in }
 }
 
 struct GlassTabBar: View {
@@ -101,6 +114,30 @@ struct GlassTabBar: View {
     @Namespace private var pill
 
     var body: some View {
+        HStack(spacing: 10) {
+            bar
+            if let action = model.action {
+                Image(systemName: action.symbol)
+                    .font(.system(size: 21, weight: .semibold))
+                    .foregroundStyle(model.accent)
+                    .frame(width: 62, height: 62)
+                    .contentShape(Circle())
+                    .onTapGesture { model.onAction(action.id) }
+                    .modifier(GlassBackground())
+                    .accessibilityElement(children: .ignore)
+                    .accessibilityLabel(action.label)
+                    .accessibilityAddTraits(.isButton)
+                    .accessibilityAction { model.onAction(action.id) }
+            }
+        }
+        .frame(height: 62)
+        .padding(.horizontal, 14)
+        .padding(.bottom, 6)
+        .offset(y: model.visible ? 0 : 140)
+        .opacity(model.visible ? 1 : 0)
+    }
+
+    private var bar: some View {
         GeometryReader { geo in
             let inner = geo.size.width - 16
             HStack(spacing: 0) {
@@ -151,11 +188,6 @@ struct GlassTabBar: View {
             )
             .modifier(GlassBackground())
         }
-        .frame(height: 62)
-        .padding(.horizontal, 14)
-        .padding(.bottom, 6)
-        .offset(y: model.visible ? 0 : 140)
-        .opacity(model.visible ? 1 : 0)
     }
 
     private func tabAt(_ x: CGFloat, width: CGFloat) -> String? {

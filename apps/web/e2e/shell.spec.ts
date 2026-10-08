@@ -11,7 +11,7 @@ test('tab bar: slide a finger across the tabs and lift to switch (Android)', asy
   test.skip(info.project.name !== 'android');
   await page.addInitScript(() => localStorage.setItem('mainline.prefs', JSON.stringify({ onboarded: true })));
   await page.goto('/');
-  const bar = (await page.locator('[data-web-tabbar]').boundingBox())!;
+  const bar = (await page.locator('[data-web-tabbar] nav').boundingBox())!;
   const y = bar.y + bar.height / 2;
   const x = (i: number) => bar.x + (bar.width / 5) * (i + 0.5);
   const cdp = await page.context().newCDPSession(page);

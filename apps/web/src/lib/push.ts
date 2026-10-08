@@ -25,6 +25,17 @@ const state = (plan: ReminderPlan) => ({
   lang: useI18n.getState().lang,
 });
 
+/** Closes reminders still showing: they were worded for an older streak, and the app is open now. */
+export async function clearShownReminders() {
+  if (!pushSupported()) return;
+  try {
+    const reg = await navigator.serviceWorker.getRegistration();
+    for (const n of (await reg?.getNotifications()) ?? []) if (['due', 'streak', 'weekly'].includes(n.tag)) n.close();
+  } catch {
+    /* not available */
+  }
+}
+
 /** Subscribes (asking permission when needed) or updates the server with the latest due count. */
 export async function registerWebPush(plan: ReminderPlan): Promise<'scheduled' | 'denied' | 'unsupported'> {
   if (!pushSupported()) return 'unsupported';
