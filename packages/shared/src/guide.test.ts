@@ -42,6 +42,17 @@ describe('guideCandidates', () => {
     expect(c.find((x) => x.uci === 'd2d4')!.tags[0]).toBe('fits');
   });
 
+  it('orders: your other lines here, then the best moves, then moves into your repertoire, then gems, then the rest', () => {
+    const c = guideCandidates({ color: 'white', engineLines, engineDepth: 30, lichess, masters, family: new Set(['e2e4']), fitsRep: new Set(['b2b3']) });
+    expect(c.map((x) => x.uci)).toEqual(['e2e4', 'd2d4', 'b2b3', 'g2g4']);
+    expect(c[0]!.tags[0]).toBe('family');
+    // What your other lines play goes below the good moves when the engine calls it dubious.
+    const bad = guideCandidates({ color: 'white', engineLines, engineDepth: 30, lichess, masters, family: new Set(['g2g4']) });
+    expect(bad[0]!.uci).not.toBe('g2g4');
+    expect(bad.at(-1)!.uci).toBe('g2g4');
+    expect(bad.at(-1)!.tags).toContain('family');
+  });
+
   it('holds engine tags back until the search is deep enough', () => {
     const c = guideCandidates({ color: 'white', engineLines, engineDepth: 10, lichess, masters });
     const all = c.flatMap((x) => x.tags);

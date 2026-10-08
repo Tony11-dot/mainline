@@ -5,6 +5,7 @@ import { usePrefs } from '../lib/prefs';
 import { NAV } from './nav';
 import { LogoMark, Wordmark } from './Logo';
 import { Toaster } from './toast';
+import { AssistantFab, AssistantNavButton, AssistantSheet } from './Assistant';
 import { t } from '../lib/i18n';
 
 export function AppShell() {
@@ -18,6 +19,8 @@ export function AppShell() {
         <Outlet />
       </main>
       <TabBar />
+      <AssistantFab />
+      <AssistantSheet />
       <Toaster />
     </div>
   );
@@ -51,6 +54,7 @@ function Sidebar() {
             {t(label)}
           </NavLink>
         ))}
+        <AssistantNavButton />
       </nav>
     </aside>
   );

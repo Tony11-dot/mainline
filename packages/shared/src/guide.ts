@@ -4,7 +4,7 @@ import type { MyMoveStats } from './games';
 import { rankMoves, type MoveSuggestion } from './suggest';
 
 /** Why a candidate is worth a look. Each maps to a short, friendly label in the app. */
-export type GuideTag = 'yours' | 'fits' | 'proven' | 'trouble' | 'book' | 'engine' | 'gem' | 'club' | 'crowd' | 'surprise' | 'dubious';
+export type GuideTag = 'yours' | 'family' | 'fits' | 'proven' | 'trouble' | 'book' | 'engine' | 'gem' | 'club' | 'crowd' | 'surprise' | 'dubious';
 
 export interface GuideCandidate extends MoveSuggestion {
   /** Engine line that starts with this move (eval after it, White POV). */
@@ -41,14 +41,20 @@ export function scoreLowerBound(p: number, n: number): number {
  * your repertoires (same colour) already covers. `engineDepth`: the shallowest search behind `engineLines`;
  * engine-based tags are held back until it reaches GUIDE_MIN_DEPTH. `mine`: what was played here in your own
  * games and how you scored after each move; moves from at least two of your games always show.
+ * `family`: moves your other lines in the same folder play here, so the lines stay alike and easy to remember.
+ *
+ * The list comes back in the order you'd want to pick from: what your other lines here play (unless the
+ * engine calls it dubious), then the best moves, then moves into positions your repertoire already covers,
+ * then hidden gems and surprise weapons, then the rest.
  */
-export function guideCandidates(opts: { color: Color; engineLines?: EvalLine[]; engineDepth?: number; lichess?: ExplorerData; masters?: ExplorerData; inRep?: Set<string>; fitsRep?: Set<string>; mine?: Map<string, MyMoveStats>; max?: number }): GuideCandidate[] {
-  const { engineLines = [], engineDepth = 0, lichess, masters, inRep = new Set(), fitsRep = new Set(), mine = new Map(), max = 8 } = opts;
+export function guideCandidates(opts: { color: Color; engineLines?: EvalLine[]; engineDepth?: number; lichess?: ExplorerData; masters?: ExplorerData; inRep?: Set<string>; family?: Set<string>; fitsRep?: Set<string>; mine?: Map<string, MyMoveStats>; max?: number }): GuideCandidate[] {
+  const { engineLines = [], engineDepth = 0, lichess, masters, inRep = new Set(), family = new Set(), fitsRep = new Set(), mine = new Map(), max = 8 } = opts;
   const ranked = rankMoves({ color: opts.color, engineLines, lichess, masters, minGames: 10 });
   const seen = new Set(ranked.map((r) => r.uci));
   // A move you keep meeting (or playing) belongs on the list even when the databases barely know it.
   for (const [uci, s] of mine) if (s.games >= 2 && !seen.has(uci)) ranked.push({ uci, practicalGames: 0, score: 0 });
-  const kept = (uci: string) => inRep.has(uci) || (mine.get(uci)?.games ?? 0) >= 2;
+  for (const uci of [...inRep, ...family]) if (!seen.has(uci) && !ranked.some((r) => r.uci === uci)) ranked.push({ uci, practicalGames: 0, score: 0 });
+  const kept = (uci: string) => inRep.has(uci) || family.has(uci) || (mine.get(uci)?.games ?? 0) >= 2;
   const games = new Map((lichess?.moves ?? []).map((m) => [m.uci, m.total]));
   const lineOf = new Map<string, EvalLine>();
   for (const l of engineLines) if (l.moves[0] && !lineOf.has(l.moves[0])) lineOf.set(l.moves[0], l);
@@ -98,6 +104,7 @@ export function guideCandidates(opts: { color: Color; engineLines?: EvalLine[]; 
     const t = c.tags;
     const d = drop(c);
     if (inRep.has(c.uci)) t.push('yours');
+    else if (family.has(c.uci)) t.push('family');
     else if (fitsRep.has(c.uci)) t.push('fits');
     const m = c.mine;
     if (m && m.games >= MINE_TROUBLE.games && m.score <= MINE_TROUBLE.score) t.push('trouble');
@@ -112,7 +119,17 @@ export function guideCandidates(opts: { color: Color; engineLines?: EvalLine[]; 
     const lb = clubLb(c);
     if (c !== gem && c !== club && sound(c) && mastersTotal >= 100 && (c.masterShare ?? 0) < 0.03 && lb !== undefined && lb >= 0.52) t.push('surprise');
   }
-  return list;
+  // Stable sort by group; within a group the quality order above stands.
+  const group = (c: GuideCandidate) => {
+    const has = (g: GuideTag) => c.tags.includes(g);
+    if (has('dubious')) return 5;
+    if (inRep.has(c.uci) || family.has(c.uci)) return 0;
+    if (has('engine') || has('book') || has('club') || has('proven')) return 1;
+    if (fitsRep.has(c.uci)) return 2;
+    if (has('gem') || has('surprise')) return 3;
+    return 4;
+  };
+  return list.map((c, i) => ({ c, i, g: group(c) })).sort((a, b) => a.g - b.g || a.i - b.i).map((x) => x.c);
 }
 
 /** Everything the guide needs for one position, as the server bundles it. */

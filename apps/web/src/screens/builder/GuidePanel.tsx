@@ -13,7 +13,8 @@ export interface ExplorerPair {
 
 /** Each tag, and the exact rule behind it (shown in the panel's "What the tags mean"). */
 const TAGS: Record<GuideTag, { icon: string; label: string; rule: string; tone: string }> = {
-  yours: { icon: '✅', label: msg('In your repertoire'), rule: msg('Already saved in this repertoire.'), tone: 'bg-brand-soft text-brand-ink' },
+  yours: { icon: '✅', label: msg('In this line'), rule: msg('Already saved in this line.'), tone: 'bg-brand-soft text-brand-ink' },
+  family: { icon: '🔁', label: msg('In your other lines'), rule: msg('Another line in this folder plays it here — keeping your lines alike makes them easier to remember.'), tone: 'bg-brand-soft text-brand-ink' },
   proven: { icon: '🎯', label: msg('Works for you'), rule: msg('In your own games from this position, you scored 60% or more after this move (at least 5 games).'), tone: 'bg-good-soft text-good' },
   trouble: { icon: '🩹', label: msg('Trouble for you'), rule: msg('In your own games from this position, you scored 40% or less after this move (at least 3 games).'), tone: 'bg-bad-soft text-bad' },
   fits: { icon: '🧩', label: msg('Goes with your repertoire'), rule: msg('Leads to a position another of your repertoires already covers.'), tone: 'bg-brand-soft text-brand-ink' },
@@ -36,14 +37,10 @@ export function GuidePanel(props: {
   candidates: GuideCandidate[];
   explorer: ExplorerPair;
   searching: boolean;
-  replying: boolean;
-  /** The opponent's reply is played for you (else you pick it from their suggestions). */
-  autoReply: boolean;
-  onAutoReply: (on: boolean) => void;
   onPlay: (uci: string) => void;
   onHover: (uci: string | null) => void;
 }) {
-  const { fen, own, candidates, explorer, searching, replying, autoReply, onAutoReply, onPlay, onHover } = props;
+  const { fen, own, candidates, explorer, searching, onPlay, onHover } = props;
   const pos = positionFromFen(fen);
   const [all, setAll] = useState(false);
   const [legend, setLegend] = useState(false);
@@ -65,8 +62,8 @@ export function GuidePanel(props: {
     <section className="flex flex-col" aria-label={own ? t('Your move') : t('Their move')}>
       <Header
         title={own ? t('Your move') : t('Their move')}
-        hint={own ? (candidates.length ? t('The arrow shows the top pick. Play it, drag another piece, or tap a row.') : undefined) : replying ? t('Opponent is moving…') : candidates.length ? t('Pick a reply to prepare for it.') : undefined}
-        busy={replying || searching || explorer.loading}
+        hint={own ? (candidates.length ? t('The arrow shows the top pick. Play it, drag another piece, or tap a row.') : undefined) : candidates.length ? t('You decide how they play: pick a reply, or play any move for them on the board.') : undefined}
+        busy={searching || explorer.loading}
         action={
           <button type="button" onClick={() => setLegend((v) => !v)} aria-expanded={legend} aria-label={t('What the tags mean')} title={t('What the tags mean')} className="-me-1 ms-auto flex size-8 items-center justify-center rounded-full text-ink-3 hover:bg-surface-3 hover:text-ink">
             <CircleHelp size={17} aria-hidden />
@@ -74,16 +71,6 @@ export function GuidePanel(props: {
         }
       />
       {legend && <Legend />}
-      {!own && (
-        <label className="mx-3 mb-2 flex cursor-pointer items-center justify-between gap-3 text-xs text-ink-2">
-          <span>{t('Play their most likely reply for me')}</span>
-          <span className="relative inline-flex shrink-0 items-center">
-            <input type="checkbox" className="peer sr-only" checked={autoReply} onChange={(e) => onAutoReply(e.target.checked)} />
-            <span className="h-[22px] w-[38px] rounded-full bg-surface-3 transition-colors duration-200 peer-checked:bg-good peer-focus-visible:ring-2 peer-focus-visible:ring-brand" />
-            <span className="absolute start-[2px] top-[2px] size-[18px] rounded-full bg-white shadow-2 transition-transform duration-200 peer-checked:translate-x-[16px] rtl:peer-checked:-translate-x-[16px]" />
-          </span>
-        </label>
-      )}
       {candidates.length === 0 ? (
         explorer.loading || searching ? (
           <Rows />

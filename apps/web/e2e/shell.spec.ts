@@ -30,3 +30,29 @@ test('tab bar: slide a finger across the tabs and lift to switch (Android)', asy
   await page.locator('[data-web-tabbar]').getByRole('link', { name: 'Explore' }).tap();
   await expect(page).toHaveURL(/\/explore$/);
 });
+
+test('Ask AI: knows your folders and lines, and what you tell it about yourself', async ({ page }, info) => {
+  test.skip(info.project.name === 'android');
+  let sent: { question: string; context: string } | undefined;
+  await page.route('**/api/assistant', async (r) => {
+    sent = r.request().postDataJSON();
+    await r.fulfill({ json: { text: 'Add **2…Nc6 3.Bb5** next — it matches your other lines.' } });
+  });
+  await page.route('**/api/me', (r) => r.fulfill({ json: { me: null } }));
+  await page.addInitScript(() => {
+    if (!localStorage.getItem('mainline.prefs')) localStorage.setItem('mainline.prefs', JSON.stringify({ engineOn: false, onboarded: true }));
+  });
+  await page.goto('/library');
+  await page.getByRole('button', { name: 'Ask AI' }).first().click();
+  const chat = page.getByRole('dialog', { name: 'Ask AI' });
+  await chat.getByRole('button', { name: 'About me' }).click();
+  await chat.getByPlaceholder(/I like quiet positional lines/).fill('I like sharp lines');
+  await chat.getByRole('button', { name: 'Which line should I add next?' }).click();
+  await expect(chat.getByText('it matches your other lines')).toBeVisible();
+  expect(sent!.question).toBe('Which line should I add next?');
+  expect(sent!.context).toContain('I like sharp lines');
+  expect(sent!.context).toContain('REPERTOIRE');
+  await chat.getByLabel('Your question').fill('And for Black?');
+  await chat.getByLabel('Your question').press('Enter');
+  await expect(chat.getByText('And for Black?')).toBeVisible();
+});

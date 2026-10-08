@@ -30,10 +30,12 @@ test('the library works like Finder: systems nest under the reply, select, new f
   await page.keyboard.press('Escape');
   await expect(page.getByText('2 selected')).toHaveCount(0);
 
-  // New folder starts renaming, like Finder.
-  await page.getByRole('button', { name: 'New folder', exact: true }).click();
-  await page.getByRole('textbox', { name: 'Rename' }).fill('Sharp stuff');
-  await page.keyboard.press('Enter');
+  // A new folder: name it, it opens; back out and it's in the list.
+  await page.getByRole('button', { name: /^New folder/ }).click();
+  await page.getByRole('dialog', { name: 'New folder' }).getByLabel(/^Name/).fill('Sharp stuff');
+  await page.getByRole('dialog', { name: 'New folder' }).getByRole('button', { name: 'Create', exact: true }).click();
+  await expect(page.getByRole('heading', { name: 'Sharp stuff' })).toBeVisible();
+  await page.goBack();
   await expect(item(page, 'Sharp stuff')).toBeVisible();
 
   // Drag a system into it; undo puts it back.

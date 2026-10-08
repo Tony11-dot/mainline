@@ -41,7 +41,7 @@ import { Menu, type MenuItem } from '../ui/Menu';
 import { ContextMenu } from '../ui/ContextMenu';
 import { undoToast, toast } from '../ui/toast';
 import { useMediaQuery } from '../ui/useMediaQuery';
-import { NewRepertoireSheet } from './library/NewRepertoireSheet';
+import { NewFolderSheet } from './library/NewFolderSheet';
 import { ImportPgnSheet } from './library/ImportPgnSheet';
 import { ConflictsSheet } from './library/ConflictsSheet';
 import { OpeningPickerSheet } from './library/OpeningPickerSheet';
@@ -56,7 +56,7 @@ msg('White');
 msg('Black');
 
 type Item = { key: string; type: 'folder'; folder: Folder; color: Color } | { key: string; type: 'rep'; rep: Repertoire; color: Color };
-type SheetState = { kind: 'new-rep'; folderId: string | null; color: Color } | { kind: 'import'; repId?: string; text?: string } | { kind: 'conflicts' } | { kind: 'pick'; color: Color; first?: FirstMove } | { kind: 'move'; keys: string[] } | null;
+type SheetState = { kind: 'new-folder'; folderId: string | null; color: Color } | { kind: 'import'; repId?: string; text?: string } | { kind: 'conflicts' } | { kind: 'pick'; color: Color; first?: FirstMove } | { kind: 'move'; keys: string[] } | null;
 
 const FIRSTS: Record<string, FirstMove> = { e2e4: 'e4', d2d4: 'd4', c2c4: 'c4', g1f3: 'Nf3', b1c3: 'Nc3' };
 const ORDER = ['e2e4', 'd2d4', 'c2c4', 'g1f3', 'b1c3'];
@@ -214,13 +214,8 @@ export function LibraryScreen() {
   };
   const planHref = (scope: Scope, label: string) => `/plan?new=1&scope=${encodeURIComponent(JSON.stringify(scope))}&label=${encodeURIComponent(label)}`;
 
-  const newFolder = async (parentId: string) => {
-    const parent = folders.find((f) => f.id === parentId);
-    if (!parent) return;
-    const f = await lib.createFolder(t('New folder'), parent.color, parentId, parent.rootMovesUci ?? undefined);
-    setSelected([`f:${f.id}`]);
-    setRenaming(`f:${f.id}`);
-  };
+  /** Folders are the one container: each stands for a position, and holds lines and folders of its own. */
+  const newFolder = (parent?: Folder) => setSheet({ kind: 'new-folder', folderId: parent?.id ?? null, color: parent?.color ?? 'white' });
   const here = folder ?? roots[0];
 
   /** A new, empty line in a folder, starting from the position the folder stands for; it opens to be played. */
@@ -231,7 +226,6 @@ export function LibraryScreen() {
     const rep = await lib.createRepertoire({ name: t('Line {n}', { n }), color: f.color, folderId: f.id, rootMovesUci: folderMoves(folders, reps, f.id) });
     nav(`/rep/${rep.id}?guide=1`);
   };
-  const newRepertoire = (parent?: Folder) => setSheet({ kind: 'new-rep', folderId: parent?.id ?? roots.find((r) => r.color === 'white')?.id ?? null, color: parent?.color ?? 'white' });
 
   // Selection by click: plain replaces, ⌘ toggles, ⇧ extends from the anchor.
   const select = (key: string, e: { metaKey?: boolean; ctrlKey?: boolean; shiftKey?: boolean }) => {
@@ -280,7 +274,7 @@ export function LibraryScreen() {
         setSelected(visible.map((i) => i.key));
       } else if (mod && e.shiftKey && e.key.toLowerCase() === 'n') {
         e.preventDefault();
-        if (here) void newFolder(here.id);
+        newFolder(folder ?? undefined);
       } else if (e.key === 'Escape') {
         setSelected([]);
         setSelecting(false);
@@ -304,8 +298,7 @@ export function LibraryScreen() {
     out.push('sep');
     if (one?.type === 'folder') {
       out.push({ label: t('New line inside'), icon: ListPlus, onSelect: () => void newLine(one.folder.id) });
-      out.push({ label: t('New repertoire inside…'), icon: BookMarked, onSelect: () => newRepertoire(one.folder) });
-      out.push({ label: t('New folder inside'), icon: FolderPlus, onSelect: () => void newFolder(one.folder.id) });
+      out.push({ label: t('New folder inside…'), icon: FolderPlus, onSelect: () => newFolder(one.folder) });
     }
     if (one && !(one.type === 'folder' && one.folder.parentId === null)) out.push({ label: t('Rename'), icon: Pencil, onSelect: () => setRenaming(one.key) });
     if (its.some((i) => !(i.type === 'folder' && i.folder.parentId === null))) out.push({ label: its.length > 1 ? tn(its.length, 'Move {n} item to…', 'Move {n} items to…') : t('Move to…'), icon: FolderInput, onSelect: () => setSheet({ kind: 'move', keys }) });
@@ -401,7 +394,7 @@ export function LibraryScreen() {
   const moveColor = sheet?.kind === 'move' ? byKey.get(sheet.keys[0]!)?.color ?? 'white' : 'white';
   const sheets = (
     <>
-      <NewRepertoireSheet open={sheet?.kind === 'new-rep'} initial={sheet?.kind === 'new-rep' ? sheet : undefined} onClose={() => setSheet(null)} />
+      <NewFolderSheet open={sheet?.kind === 'new-folder'} initial={sheet?.kind === 'new-folder' ? sheet : undefined} onClose={() => setSheet(null)} />
       <ImportPgnSheet open={sheet?.kind === 'import'} repId={sheet?.kind === 'import' ? sheet.repId : undefined} initialText={sheet?.kind === 'import' ? sheet.text : undefined} onClose={() => setSheet(null)} />
       <ConflictsSheet open={sheet?.kind === 'conflicts'} conflicts={conflicts} onClose={() => setSheet(null)} />
       <OpeningPickerSheet open={sheet?.kind === 'pick'} color={sheet?.kind === 'pick' ? sheet.color : 'white'} first={sheet?.kind === 'pick' ? sheet.first : undefined} onClose={() => setSheet(null)} />
@@ -423,8 +416,7 @@ export function LibraryScreen() {
       label={t('New')}
       items={[
         ...(parent ? [{ label: t('New line'), icon: ListPlus, onSelect: () => void newLine(parent.id) }] : []),
-        { label: parent ? t('New repertoire inside…') : t('New repertoire…'), icon: BookMarked, onSelect: () => newRepertoire(parent) },
-        ...(parent ? [{ label: t('New folder'), icon: FolderPlus, onSelect: () => void newFolder(parent.id) }] : []),
+        { label: t('New folder…'), icon: FolderPlus, onSelect: () => newFolder(parent) },
         { label: t('Ready-made openings'), icon: Sparkles, onSelect: () => nav('/library/ready') },
         { label: t('Browse openings by name'), icon: Search, onSelect: () => nav('/library/openings') },
         { label: t('Import PGN'), icon: FileUp, onSelect: () => setSheet({ kind: 'import' }) },
@@ -914,7 +906,7 @@ function ColorSection({ root, finder, items, setSheet, single, planHref }: { roo
   );
 }
 
-function FolderView({ folder, finder, items, setSheet, newFolder, planHref, parentHref, wide, toolbarNew }: { folder: Folder; finder: FinderCtx; items: Item[]; setSheet: (s: SheetState) => void; newFolder: (parentId: string) => Promise<void>; planHref: (s: Scope, label: string) => string; parentHref: string; wide: boolean; toolbarNew: React.ReactNode }) {
+function FolderView({ folder, finder, items, setSheet, newFolder, planHref, parentHref, wide, toolbarNew }: { folder: Folder; finder: FinderCtx; items: Item[]; setSheet: (s: SheetState) => void; newFolder: (parent?: Folder) => void; planHref: (s: Scope, label: string) => string; parentHref: string; wide: boolean; toolbarNew: React.ReactNode }) {
   const nav = useNavigate();
   const lib = useLibrary();
   const inside = useMemo(() => repsUnder(finder.folders, finder.reps, folder.id), [finder.folders, finder.reps, folder.id]);
@@ -971,7 +963,6 @@ function FolderView({ folder, finder, items, setSheet, newFolder, planHref, pare
         </div>
         <div className="flex shrink-0 items-center gap-1">
           <IconButton icon={Pencil} label={t('Rename')} size={40} onClick={() => setRenaming(true)} />
-          <IconButton icon={FolderPlus} label={t('New folder')} size={40} onClick={() => void newFolder(folder.id)} />
           {toolbarNew}
         </div>
       </div>
@@ -1015,11 +1006,11 @@ function FolderView({ folder, finder, items, setSheet, newFolder, planHref, pare
             <span className="block text-sm text-ink-2">{t('Pick its moves yourself — where it goes, where it stops, where it branches.')}</span>
           </span>
         </button>
-        <button type="button" onClick={() => setSheet({ kind: 'new-rep', folderId: folder.id, color: folder.color })} className="flex min-h-[56px] items-center gap-3 rounded-[var(--radius-l)] border border-dashed border-line-strong px-4 py-2.5 text-start hover:bg-surface-2">
-          <BookMarked size={20} className="shrink-0 text-brand" aria-hidden />
+        <button type="button" onClick={() => newFolder(folder)} className="flex min-h-[56px] items-center gap-3 rounded-[var(--radius-l)] border border-dashed border-line-strong px-4 py-2.5 text-start hover:bg-surface-2">
+          <FolderPlus size={20} className="shrink-0 text-brand" aria-hidden />
           <span className="min-w-0 flex-1">
-            <span className="block font-semibold">{t('New repertoire inside')}</span>
-            <span className="block text-sm text-ink-2">{t('A sub-repertoire with lines of its own, e.g. one system against this opening.')}</span>
+            <span className="block font-semibold">{t('New folder')}</span>
+            <span className="block text-sm text-ink-2">{t('One step deeper, e.g. an opening or a variation — its lines start from its moves.')}</span>
           </span>
         </button>
       </div>

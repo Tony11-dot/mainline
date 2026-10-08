@@ -14,9 +14,10 @@ import { EnginePanel } from '../panels/EnginePanel';
 import { ExplorerPanel } from '../panels/ExplorerPanel';
 import { MoveTree } from '../panels/MoveTree';
 import { useEngineEval } from '../panels/useEngineEval';
-import { folderPath, repMoves, useLibrary } from '../lib/library';
+import { folderPath, repMoves, repsUnder, useLibrary } from '../lib/library';
 import { pathToEpd, repertoireTree, validPrefix } from '../lib/repTree';
 import { usePrefs } from '../lib/prefs';
+import { useAssistant } from '../lib/assistant';
 import { useGames } from '../lib/games';
 import { Button, PanelNote } from '../ui/primitives';
 import { MoveStatsPanel } from '../panels/MoveStatsPanel';
@@ -30,7 +31,7 @@ import { SuggestPanel } from './builder/SuggestPanel';
 import { NotesPanel } from './builder/NotesPanel';
 import { GuidePanel, TAG_PIN } from './builder/GuidePanel';
 import { LinePanel } from './builder/LinePanel';
-import { fetchGuide, prefetchGuide, useGuide } from '../lib/guide';
+import { prefetchGuide, useGuide } from '../lib/guide';
 import { PracticeButtons } from './library/practiceUi';
 import { t, tn } from '../lib/i18n';
 
@@ -50,9 +51,6 @@ function LineEditor({ id }: { id: string }) {
   const rep = lib.reps.find((r) => r.id === id && !r.deleted);
   const store = useMemo(() => createAnalysisStore(), []);
   const initialised = useRef(false);
-  /** Opened from "Play as …": let the opponent answer the opening's last move straight away. */
-  const kickReply = useRef(false);
-  const autoReplyRef = useRef<((path: string) => void) | null>(null);
   /** Paths played optimistically whose IndexedDB write hasn't been reflected in a rebuild yet. */
   const pendingPaths = useRef(new Set<string>());
 
@@ -78,30 +76,25 @@ function LineEditor({ id }: { id: string }) {
       store.getState().setOrientation(rep.color);
       const at = params.get('at');
       if (at) path = pathToEpd(root, at) ?? path;
-      if (params.get('guide') === '1') {
-        usePrefs.getState().set({ guided: true });
-        kickReply.current = usePrefs.getState().autoReply;
-      }
+      if (params.get('guide') === '1') usePrefs.getState().set({ guided: true });
     }
     store.setState({ root, path, version: s.version + 1 });
   }, [lib.version, rep?.id]); // eslint-disable-line react-hooks/exhaustive-deps
 
   useEffect(() => bindAnalysisKeys(store), [store]);
-  useEffect(() => {
-    if (!kickReply.current || !autoReplyRef.current || !store.getState().version) return;
-    kickReply.current = false;
-    autoReplyRef.current(store.getState().path);
-  });
 
   const view = useBoardView(store);
+  // The AI knows which line you're on and where.
+  useEffect(() => {
+    if (rep) useAssistant.getState().setFocus({ lineId: rep.id, ucis: [...rep.rootMovesUci, ...pathToUcis(view.path)] });
+  }, [rep, view.path]);
+  useEffect(() => () => useAssistant.getState().setFocus(undefined), []);
   const orientation = useStore(store, (s) => s.orientation);
   const engineOn = usePrefs((s) => s.engineOn);
   /** Ready-made lines are practised as they are: no guide, no adding, until you take one over. */
   const ready = !!rep && isReadyMade(rep);
   const guided = usePrefs((s) => s.guided) && !ready;
-  const autoReplyOn = usePrefs((s) => s.autoReply);
   const ownHere = rep ? isOwnTurn(rep.color, view.node.epd) : false;
-  const [replying, setReplying] = useState(false);
   const guideData = useGuide(view.node.fen, guided, true);
   const explorer = { lichess: guideData.bundle?.lichess, masters: guideData.bundle?.masters, loading: guideData.loading && !guideData.bundle };
   const fromBundle = useMemo(() => bundleEngine(guideData.bundle), [guideData.bundle]);
@@ -109,7 +102,6 @@ function LineEditor({ id }: { id: string }) {
   // moves (needed before anything can be called the engine's pick) or popular moves nobody has analysed.
   const localNeeded =
     guided &&
-    !replying &&
     !guideData.loading &&
     (!guideData.bundle?.eval?.lines.length || guideMoves(guideData.bundle?.lichess, guideData.bundle?.masters, 8).some((u) => !fromBundle.lines.some((l) => l.moves[0] === u) && guideData.bundle?.children?.[u] !== null));
   const ev = useEngineEval(view.node.fen, engineOn || localNeeded, localNeeded ? 8 : 3);
@@ -138,6 +130,14 @@ function LineEditor({ id }: { id: string }) {
   const myIndex = useMemo(() => (rep ? myMovesByPosition(games, rep.color) : undefined), [games, rep?.color]); // eslint-disable-line react-hooks/exhaustive-deps
   const mineHere = myIndex?.get(view.node.epd);
   /** Positions your other repertoires of this colour already cover: candidates leading there "go with" them. */
+  /** What your other lines in this folder (and the folders inside it) play here: lines alike are easier to remember. */
+  const family = useMemo(() => {
+    const out = new Set<string>();
+    if (!rep?.folderId) return out;
+    const ids = new Set(repsUnder(lib.folders, lib.reps, rep.folderId).filter((r) => r.id !== rep.id).map((r) => r.id));
+    for (const m of lib.moves) if (!m.deleted && ids.has(m.repertoireId) && m.fromEpd === view.node.epd) out.add(m.uci);
+    return out;
+  }, [lib.version, rep?.id, rep?.folderId, view.node.epd]); // eslint-disable-line react-hooks/exhaustive-deps
   const otherEpds = useMemo(() => {
     const ids = new Set(lib.reps.filter((r) => !r.deleted && r.color === rep?.color && r.id !== rep?.id).map((r) => r.id));
     const out = new Set<string>();
@@ -159,8 +159,8 @@ function LineEditor({ id }: { id: string }) {
     const engine = localNeeded && ev.lines.length ? mergeEngine(fromBundle, { lines: ev.lines, depth: ev.depth }) : fromBundle;
     // "Engine's pick" means the best move overall, so engine tags need a search of this position itself.
     const searched = !!guideData.bundle?.eval?.lines.length || (localNeeded && ev.lines.length > 0);
-    return guideCandidates({ color: pos.turn, engineLines: engine.lines, engineDepth: searched ? engine.depth : 0, lichess: guideData.bundle?.lichess, masters: guideData.bundle?.masters, inRep: new Set(here.map((m) => m.uci)), fitsRep: fits, mine: mineHere, max: 8 });
-  }, [rep, guided, own, view.node.fen, view.dests, ev.lines, ev.depth, localNeeded, fromBundle, guideData.bundle, here, otherEpds, mineHere]);
+    return guideCandidates({ color: pos.turn, engineLines: engine.lines, engineDepth: searched ? engine.depth : 0, lichess: guideData.bundle?.lichess, masters: guideData.bundle?.masters, inRep: new Set(here.map((m) => m.uci)), family, fitsRep: fits, mine: mineHere, max: 8 });
+  }, [rep, guided, own, view.node.fen, view.dests, ev.lines, ev.depth, localNeeded, fromBundle, guideData.bundle, here, family, otherEpds, mineHere]);
 
   // Fetch ahead along the arrow: the position after the top pick, then after the reply the guide will
   // play, so the next step shows at once.
@@ -238,7 +238,6 @@ function LineEditor({ id }: { id: string }) {
     if (ready && !node.children.some((c) => c.uci === played.uci)) return;
     if (node.children.some((c) => c.uci === played.uci)) {
       st.goto(childPath(base, played.uci), { sound: true });
-      if (mine && wantsReply()) void autoReply(childPath(base, played.uci));
       return;
     }
     // Before the optimistic play below adds it: was there already a move here, so this one branches?
@@ -248,7 +247,6 @@ function LineEditor({ id }: { id: string }) {
     // and the rebuild keeps this path because the node already exists.
     pendingPaths.current.add(childPath(base, played.uci));
     store.getState().play(played.uci);
-    if (mine && wantsReply()) void autoReply(childPath(base, played.uci));
     const m = await lib.addMove(rep.id, fen, played.uci);
     if (branching && !mine) {
       toast(t('{move} branches off this line', { move: m.san }), { action: { label: t('Make it a new line'), run: () => void splitOff(base, m.uci, m.san) } });
@@ -258,34 +256,6 @@ function LineEditor({ id }: { id: string }) {
       toast(t('Added {move} as an alternate — you play {main} here', { move: m.san, main: mainHere.san }), { action: { label: t('Make main'), run: () => lib.makeMain(rep.id, m.fromEpd, m.uci) } });
     }
   };
-
-  const wantsReply = () => !ready && usePrefs.getState().guided && usePrefs.getState().autoReply;
-
-  /**
-   * Guided mode with auto-reply on: the opponent answers at once — with the reply you already prepared, else what players
-   * at your level play most (or masters). Out of book, it waits for you to play their move.
-   */
-  async function autoReply(path: string) {
-    const node = nodeAt(store.getState().root, path);
-    if (!node || isOwnTurn(rep!.color, node.epd)) return;
-    setReplying(true);
-    try {
-      let uci = node.children[0]?.uci;
-      if (!uci) uci = guideReply(await fetchGuide(node.fen, false));
-      // Let the move animation finish first, so the reply reads as a reply.
-      await new Promise((r) => setTimeout(r, Math.max(280, usePrefs.getState().animationMs + 160)));
-      const st = store.getState();
-      if (!uci || st.path !== path) return;
-      const live = nodeAt(st.root, path);
-      if (live?.children.some((c) => c.uci === uci)) st.goto(childPath(path, uci), { sound: true });
-      else await addMove(uci, node.fen);
-    } catch {
-      /* offline or no data: the panel says what to do */
-    } finally {
-      setReplying(false);
-    }
-  }
-  autoReplyRef.current = (p) => void autoReply(p);
 
   const deleteHere = async () => {
     if (!currentMove) return;
@@ -513,12 +483,6 @@ function LineEditor({ id }: { id: string }) {
         candidates={candidates}
         explorer={explorer}
         searching={guideData.loading || (localNeeded && (ev.searching || ev.depth < GUIDE_MIN_DEPTH))}
-        replying={replying}
-        autoReply={autoReplyOn}
-        onAutoReply={(on) => {
-          usePrefs.getState().set({ autoReply: on });
-          if (on) void autoReply(store.getState().path);
-        }}
         onPlay={(u) => {
           setHoverUci(null);
           void addMove(u);

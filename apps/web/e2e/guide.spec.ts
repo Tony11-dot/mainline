@@ -8,7 +8,7 @@ const ex = (moves: [string, string, number][]) => {
   return { source: 'lichess', epd: '', white: t / 2, draws: 0, black: t / 2, total: t, moves: ms, topGames: [], opening: null, fetchedAt: '', cached: true };
 };
 
-test('guided: suggestions for both sides; their reply is yours to pick unless auto-reply is on', async ({ page }, info) => {
+test('guided: suggestions for both sides; their reply is always yours to pick; your other lines come first', async ({ page }, info) => {
   test.skip(info.project.name === 'android');
   await stubApi(page, {
     explorer: (url) => {
@@ -20,9 +20,9 @@ test('guided: suggestions for both sides; their reply is yours to pick unless au
   });
   await page.goto('/library');
   await page.getByRole('button', { name: 'New', exact: true }).click();
-  await page.getByRole('menuitem', { name: 'New repertoire…' }).click();
-  const sheet = page.getByRole('dialog', { name: 'New repertoire' });
-  await sheet.getByPlaceholder('e.g. London System').fill('Guided');
+  await page.getByRole('menuitem', { name: 'New folder…' }).click();
+  const sheet = page.getByRole('dialog', { name: 'New folder' });
+  await sheet.getByLabel(/^Name/).fill('Guided');
   await sheet.getByRole('button', { name: 'Create', exact: true }).click();
   await page.getByRole('button', { name: /^New line/ }).click();
 
@@ -40,15 +40,22 @@ test('guided: suggestions for both sides; their reply is yours to pick unless au
   const tree = page.getByRole('tree', { name: 'Moves' });
   await expect(tree.getByRole('treeitem', { name: 'e5' })).toHaveAttribute('aria-selected', 'true');
 
-  // With auto-reply on, the guide answers for them: here, the reply you already prepared.
+  // Nothing plays for them: back on e4, their move waits for you.
   await tree.getByRole('treeitem', { name: 'e4' }).click();
-  await theirs.getByText('Play their most likely reply for me').click();
-  await expect(theirs.getByRole('checkbox', { name: 'Play their most likely reply for me' })).toBeChecked();
-  await expect(tree.getByRole('treeitem', { name: 'e5' })).toHaveAttribute('aria-selected', 'true');
+  await page.waitForTimeout(800);
+  await expect(tree.getByRole('treeitem', { name: 'e4' })).toHaveAttribute('aria-selected', 'true');
 
   // Rename from the header.
   await page.getByRole('button', { name: /^Rename/ }).click();
   await page.getByRole('textbox', { name: 'Rename' }).fill('Sicilian prep');
   await page.keyboard.press('Enter');
   await expect(page.getByRole('heading', { name: 'Sicilian prep' })).toBeVisible();
+
+  // A second line in the folder: what the first line plays is suggested first.
+  await page.getByRole('link', { name: 'Back to repertoire' }).click();
+  await page.getByRole('button', { name: /^New line/ }).click();
+  await expect(page.getByRole('heading', { name: 'Line 2' })).toBeVisible();
+  const first = page.getByRole('region', { name: 'Your move' }).getByRole('listitem').first();
+  await expect(first.getByRole('button', { name: /^e4/ })).toBeVisible();
+  await expect(first).toContainText('In your other lines');
 });

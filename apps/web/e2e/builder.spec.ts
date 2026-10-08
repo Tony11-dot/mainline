@@ -4,19 +4,19 @@ import { stubApi } from './stubs';
 
 test.beforeEach(async ({ page }) => stubApi(page));
 
-test('a repertoire holds lines; build one, alternates, delete + undo, PGN import', async ({ page }, info) => {
+test('a folder holds lines; build one, alternates, delete + undo, PGN import', async ({ page }, info) => {
   test.skip(info.project.name === 'android');
   const move = info.project.name === 'phone' ? tapMove : dragMove;
   await page.goto('/library');
   await expect(page.getByRole('heading', { name: 'Build your first repertoire' })).toBeVisible();
   await page.getByRole('button', { name: 'New', exact: true }).click();
-  await page.getByRole('menuitem', { name: 'New repertoire…' }).click();
-  const sheet = page.getByRole('dialog', { name: 'New repertoire' });
-  await sheet.getByPlaceholder('e.g. London System').fill('Italian');
-  await sheet.getByPlaceholder('1.e4 c5').fill('1.e4 e5 2.Nf3 Nc6');
+  await page.getByRole('menuitem', { name: 'New folder…' }).click();
+  const sheet = page.getByRole('dialog', { name: 'New folder' });
+  await sheet.getByPlaceholder('1.e4').fill('1.e4 e5 2.Nf3 Nc6');
+  await sheet.getByLabel(/^Name/).fill('Italian');
   await sheet.getByRole('button', { name: 'Create', exact: true }).click();
 
-  // The repertoire opens like a folder; its lines start from its moves.
+  // The folder opens; its lines start from its moves.
   await expect(page.getByRole('heading', { name: 'Italian' })).toBeVisible();
   await page.getByRole('button', { name: /^New line/ }).click();
   await expect(page.getByRole('heading', { name: 'Line 1' })).toBeVisible();
@@ -122,10 +122,17 @@ test('a line: pick where it stops, change a move, branch a new line off it', asy
   test.skip(info.project.name !== 'desktop');
   await page.goto('/library');
   await page.getByRole('button', { name: 'New', exact: true }).click();
-  await page.getByRole('menuitem', { name: 'New repertoire…' }).click();
-  const sheet = page.getByRole('dialog', { name: 'New repertoire' });
-  await sheet.getByPlaceholder('e.g. London System').fill('Open games');
-  await sheet.getByPlaceholder('1.e4 c5').fill('1.e4 e5');
+  await page.getByRole('menuitem', { name: 'New folder…' }).click();
+  const sheet = page.getByRole('dialog', { name: 'New folder' });
+  await sheet.getByPlaceholder('1.e4').fill('1.e4');
+  await sheet.getByLabel(/^Name/).fill('e4 games');
+  await sheet.getByRole('button', { name: 'Create', exact: true }).click();
+  // A folder inside it continues from its moves, and is named after the opening when you leave the name empty.
+  await page.getByRole('button', { name: /^New folder/ }).click();
+  await expect(sheet.getByText('1.e4 …')).toBeVisible();
+  await sheet.getByPlaceholder('Nf3').fill('e5');
+  await expect(sheet.getByLabel(/^Name/)).toHaveAttribute('placeholder', /King's Pawn|Open Game|e5/);
+  await sheet.getByLabel(/^Name/).fill('Open games');
   await sheet.getByRole('button', { name: 'Create', exact: true }).click();
   await page.getByRole('button', { name: /^New line/ }).click();
   await expect(page.getByRole('heading', { name: 'Line 1' })).toBeVisible();
@@ -171,6 +178,7 @@ test('a line: pick where it stops, change a move, branch a new line off it', asy
   await expect(line.getByRole('button', { name: 'Nc6' })).toHaveCount(0);
 
   await page.goto('/library');
+  await openItem(page, 'e4 games');
   await openItem(page, /Open games/);
   await expect(item(page, /Line 1/)).toBeVisible();
   await expect(page.getByRole('option')).toHaveCount(3);

@@ -1,9 +1,10 @@
 import { INITIAL_FEN, playUci, positionFromFen, sanToUci, toFen } from '@mainline/shared';
 import { t } from '../../lib/i18n';
 
-/** Parses "1.e4 c5 2.Nf3" (move numbers optional) into UCI moves; reports the first bad token. */
-export function parseSanLine(text: string): { ucis: string[]; sans: string[]; fen: string; error?: string } {
+/** Parses "1.e4 c5 2.Nf3" (move numbers optional) into UCI moves, after `startUcis`; reports the first bad token. */
+export function parseSanLine(text: string, startUcis: string[] = []): { ucis: string[]; sans: string[]; fen: string; error?: string } {
   let pos = positionFromFen(INITIAL_FEN);
+  for (const u of startUcis) pos = playUci(pos, u).pos;
   const ucis: string[] = [];
   const sans: string[] = [];
   const tokens = text.replace(/\d+\.(\.\.)?/g, ' ').split(/\s+/).filter(Boolean);
