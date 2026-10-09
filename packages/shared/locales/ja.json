@@ -1025,5 +1025,6 @@
  "Save": "保存",
  "From the start": "最初から",
  "Its lines and folders are built on these moves, so they stay as they are. To start from other moves, make a new folder.": "中のラインとフォルダはこの手順の上に作られているため、変更できません。別の手順から始めるには新しいフォルダを作成してください。",
- "Lines you make inside start from here.": "ここで作るラインはこの局面から始まります。"
+ "Lines you make inside start from here.": "ここで作るラインはこの局面から始まります。",
+ "Clear": "クリア"
 }

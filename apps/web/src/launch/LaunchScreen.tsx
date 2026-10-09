@@ -1,7 +1,6 @@
 import { useEffect, useRef, useState } from 'react';
 import { create } from 'zustand';
 import { BAKED, hexToRgb, recolor, tintEmbeddedImages } from './recolor';
-import { AmbientBackground } from './AmbientBackground';
 
 /** Whether the launch animation is on screen — native chrome (the iOS tab bar) stays hidden meanwhile. */
 export const useLaunch = create<{ active: boolean }>(() => ({ active: false }));
@@ -9,15 +8,14 @@ export const useLaunch = create<{ active: boolean }>(() => ({ active: false }));
 type LottiePlayer = typeof import('lottie-web').default;
 
 /**
- * The launch animation, staged like ClassMate's splash: the theme's surface, a soft ambient wash of
- * drifting chess glyphs fading in (1.1 s, easeOutCubic), and the Jitter scene (watermark stripped at
- * build time by scripts/brand.mjs) recoloured to the theme and played once with aspect-fit. Then a
- * short fade to the app. It can never trap the user: tap/Escape skips, and a safety timer hands off
- * even if the player never reports completion.
+ * The launch animation: the theme's own background, nothing else, and the Jitter scene (watermark
+ * stripped and its artwork centred at build time by scripts/brand.mjs) recoloured to the theme and
+ * played once with aspect-fit in the exact middle of the screen. Then a short fade to the app. It can
+ * never trap the user: tap/Escape skips, and a safety timer hands off even if the player never
+ * reports completion.
  */
 export function LaunchScreen({ onDone }: { onDone: () => void }) {
   const host = useRef<HTMLDivElement>(null);
-  const [decorIn, setDecorIn] = useState(false);
   const [leaving, setLeaving] = useState(false);
   const done = useRef(false);
   const reduceMotion = typeof matchMedia !== 'undefined' && matchMedia('(prefers-reduced-motion: reduce)').matches;
@@ -30,7 +28,6 @@ export function LaunchScreen({ onDone }: { onDone: () => void }) {
   };
 
   useEffect(() => {
-    const raf = requestAnimationFrame(() => setDecorIn(true));
     let anim: { destroy(): void } | undefined;
     let safety: ReturnType<typeof setTimeout> | undefined;
     let cancelled = false;
@@ -78,7 +75,6 @@ export function LaunchScreen({ onDone }: { onDone: () => void }) {
     window.addEventListener('keydown', skip);
     return () => {
       cancelled = true;
-      cancelAnimationFrame(raf);
       clearTimeout(safety);
       window.removeEventListener('keydown', skip);
       anim?.destroy();
@@ -95,9 +91,6 @@ export function LaunchScreen({ onDone }: { onDone: () => void }) {
       aria-label="MainLine"
       data-testid="launch-screen"
     >
-      <div className="absolute inset-0" style={{ opacity: decorIn ? 1 : 0, transition: 'opacity 1100ms cubic-bezier(0.33, 1, 0.68, 1)' }}>
-        <AmbientBackground animate={!reduceMotion} />
-      </div>
       {/* The 16:9 scene's artwork sits in its middle ~40%: on portrait screens zoom into the empty margins. */}
       <div ref={host} className="relative aspect-video w-full max-w-[min(100vw,177.78dvh)] portrait:scale-[1.7]" />
     </div>

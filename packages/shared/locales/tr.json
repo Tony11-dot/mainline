@@ -1088,5 +1088,6 @@
  "Save": "Kaydet",
  "From the start": "Baştan",
  "Its lines and folders are built on these moves, so they stay as they are. To start from other moves, make a new folder.": "İçindeki varyantlar ve klasörler bu hamlelere dayanıyor, bu yüzden oldukları gibi kalır. Başka hamlelerden başlamak için yeni bir klasör oluştur.",
- "Lines you make inside start from here.": "Burada oluşturduğun varyantlar bu noktadan başlar."
+ "Lines you make inside start from here.": "Burada oluşturduğun varyantlar bu noktadan başlar.",
+ "Clear": "Temizle"
 }

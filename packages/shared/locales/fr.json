@@ -1088,5 +1088,6 @@
  "Save": "Enregistrer",
  "From the start": "Depuis le début",
  "Its lines and folders are built on these moves, so they stay as they are. To start from other moves, make a new folder.": "Ses lignes et dossiers reposent sur ces coups, ils restent donc tels quels. Pour partir d’autres coups, crée un nouveau dossier.",
- "Lines you make inside start from here.": "Les lignes que tu crées ici partent de ce point."
+ "Lines you make inside start from here.": "Les lignes que tu crées ici partent de ce point.",
+ "Clear": "Effacer"
 }

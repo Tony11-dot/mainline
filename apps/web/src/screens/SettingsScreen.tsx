@@ -1,4 +1,4 @@
-import { useState, type ReactNode } from 'react';
+import { useState } from 'react';
 import { BadgeCheck, LogOut, Minus, Plus, Trash2 } from 'lucide-react';
 import { accountName, SPEEDS, type Speed } from '@mainline/shared';
 import { usePrefs } from '../lib/prefs';
@@ -12,7 +12,10 @@ import { platformKind } from '../platform';
 import { legalUrl } from '../lib/legal';
 import { speedName } from '../lib/speeds';
 import { Button, Segmented } from '../ui/primitives';
+import { FormRow, FormSection, PageHeader, Pill, Toggle } from '../ui/kit';
 import { Sheet } from '../ui/Sheet';
+
+export { Toggle };
 
 // accountName() (shared) falls back to these when an account has no chess username.
 msg('your Apple ID');
@@ -24,32 +27,32 @@ export function SettingsScreen() {
   const sync = useSync();
   return (
     <div className="mx-auto max-w-2xl px-4 py-6 md:px-8 md:py-10">
-      <h1 className="text-2xl font-bold">{t('Settings')}</h1>
+      <PageHeader title={t('Settings')} />
 
-      <Group title={t('Account')}>
+      <FormSection title={t('Account')}>
         {me ? (
           <>
-            <Row label={t('Signed in as {name}', { name: t(accountName(me)) })} hint={syncHint(sync)}>
-              <Button size="sm" variant="ghost" onClick={() => void syncNow()} className="me-1">
+            <FormRow label={t('Signed in as {name}', { name: t(accountName(me)) })} hint={syncHint(sync)} stack>
+              <Button size="sm" variant="ghost" onClick={() => void syncNow()}>
                 {t('Sync now')}
               </Button>
               <Button size="sm" icon={LogOut} onClick={() => void logout()}>
                 {t('Sign out')}
               </Button>
-            </Row>
+            </FormRow>
             {me.chesscomVerified ? (
-              <Row label="Chess.com" hint={t('Your games import from this account.')}>
-                <span className="inline-flex items-center gap-1.5 text-sm font-semibold text-good">
-                  <BadgeCheck size={16} aria-hidden /> {me.chesscomUsername}
-                </span>
-              </Row>
+              <FormRow label="Chess.com" hint={t('Your games import from this account.')}>
+                <Pill tone="good" icon={BadgeCheck} size="md">
+                  {me.chesscomUsername}
+                </Pill>
+              </FormRow>
             ) : (
               providers.chesscom && (
-                <Row label="Chess.com" hint={t('Link your Chess.com account to import your games from it.')}>
+                <FormRow label="Chess.com" hint={t('Link your Chess.com account to import your games from it.')} stack>
                   <Button size="sm" onClick={() => void startLogin('chesscom')}>
                     <ChessComMark /> {t('Connect Chess.com')}
                   </Button>
-                </Row>
+                </FormRow>
               )
             )}
           </>
@@ -70,19 +73,19 @@ export function SettingsScreen() {
             </div>
           </div>
         )}
-      </Group>
+      </FormSection>
 
-      <Group title={t('Your level')}>
-        <Row label={t('Rating')} hint={t('Explorer stats and coverage use players around this rating.')}>
+      <FormSection title={t('Your level')}>
+        <FormRow label={t('Rating')} hint={t('Explorer stats and coverage use players around this rating.')}>
           <Stepper label={t('Rating')} value={p.rating} min={400} max={3200} step={50} onChange={(rating) => p.set({ rating })} />
-        </Row>
-        <Row label={t('New moves per day')} hint={t('How many new positions Learn introduces each day.')}>
+        </FormRow>
+        <FormRow label={t('New moves per day')} hint={t('How many new positions Learn introduces each day.')}>
           <Stepper label={t('New moves per day')} value={p.dailyNewLimit} min={0} max={100} step={1} onChange={(dailyNewLimit) => p.set({ dailyNewLimit })} />
-        </Row>
-        <Row label={t('Daily goal')} hint={t('Reviews per day for the goal ring on Today.')}>
+        </FormRow>
+        <FormRow label={t('Daily goal')} hint={t('Reviews per day for the goal ring on Today.')}>
           <Stepper label={t('Daily goal')} value={p.dailyGoal} min={1} max={500} step={5} onChange={(dailyGoal) => p.set({ dailyGoal })} />
-        </Row>
-        <Row label={t('Time controls')} stack>
+        </FormRow>
+        <FormRow label={t('Time controls')} stack>
           <div className="flex flex-wrap gap-1.5">
             {SPEEDS.filter((s) => s !== 'correspondence').map((s) => {
               const on = p.speeds.includes(s);
@@ -95,40 +98,37 @@ export function SettingsScreen() {
                     const next = on ? p.speeds.filter((x) => x !== s) : [...p.speeds, s];
                     if (next.length) p.set({ speeds: next as Speed[] });
                   }}
-                  className={`h-9 rounded-full px-3.5 text-sm font-semibold transition-colors ${on ? 'bg-brand text-on-brand' : 'bg-surface-3 text-ink-2 hover:text-ink'}`}
+                  className={`pressable h-9 rounded-full px-3.5 text-sm font-semibold ${on ? 'bg-brand text-on-brand' : 'bg-surface-3 text-ink-2 hover:text-ink'}`}
                 >
                   {speedName(s)}
                 </button>
               );
             })}
           </div>
-        </Row>
-      </Group>
+        </FormRow>
+      </FormSection>
 
-      <section className="mt-8">
-        <h2 className="mb-2 px-1 text-sm font-semibold text-ink-2">{t('Language')}</h2>
-        <div className="overflow-hidden rounded-[var(--radius-l)] border border-line bg-surface shadow-1">
-          <Row label={t('Language')} hint={t('Automatic follows your device language.')}>
-            <select value={p.locale} onChange={(e) => p.set({ locale: e.target.value as typeof p.locale })} className="h-10 rounded-[10px] border border-line bg-surface px-3 text-base" aria-label={t('Language')}>
-              {LOCALES.map((l) => (
-                <option key={l.id} value={l.id}>
-                  {l.id === 'auto' ? t('Automatic') : l.name}
-                </option>
-              ))}
-            </select>
-          </Row>
-        </div>
-      </section>
+      <FormSection title={t('Language')}>
+        <FormRow label={t('Language')} hint={t('Automatic follows your device language.')}>
+          <select value={p.locale} onChange={(e) => p.set({ locale: e.target.value as typeof p.locale })} className="h-10 max-w-[12rem] rounded-[var(--radius-s)] border border-line bg-surface px-3 text-base text-ink" aria-label={t('Language')}>
+            {LOCALES.map((l) => (
+              <option key={l.id} value={l.id}>
+                {l.id === 'auto' ? t('Automatic') : l.name}
+              </option>
+            ))}
+          </select>
+        </FormRow>
+      </FormSection>
 
       <RemindersSettings />
 
       <AppearanceSettings />
 
-      <Group title={t('Board & motion')}>
+      <FormSection title={t('Board & motion')}>
         <Toggle label={t('Coordinates')} checked={p.coordinates} onChange={(coordinates) => p.set({ coordinates })} />
         <Toggle label={t('Show legal moves')} checked={p.showDests} onChange={(showDests) => p.set({ showDests })} />
         <Toggle label={t('Reduce transparency')} hint={t('Solid backgrounds instead of glass.')} checked={p.reduceTransparency} onChange={(reduceTransparency) => p.set({ reduceTransparency })} />
-        <Row label={t('Piece animation')}>
+        <FormRow label={t('Piece animation')} stack>
           <Segmented
             label={t('Piece animation')}
             value={String(p.animationMs)}
@@ -139,12 +139,12 @@ export function SettingsScreen() {
               { value: '200', label: t('Normal') },
               { value: '300', label: t('Slow') },
             ]}
-            className="w-64"
+            className="w-full sm:w-72"
           />
-        </Row>
-      </Group>
+        </FormRow>
+      </FormSection>
 
-      <Group title={t('Sound & touch')}>
+      <FormSection title={t('Sound & touch')}>
         <Toggle
           label={t('Sounds')}
           checked={p.sound}
@@ -153,7 +153,7 @@ export function SettingsScreen() {
             if (sound) playSound('move');
           }}
         />
-        <Row label={t('Volume')}>
+        <FormRow label={t('Volume')}>
           <input
             type="range"
             min={0}
@@ -163,12 +163,12 @@ export function SettingsScreen() {
             disabled={!p.sound}
             onChange={(e) => p.set({ volume: Number(e.target.value) })}
             onPointerUp={() => playSound('capture')}
-            className="w-40 accent-[var(--brand)]"
+            className="w-40 accent-[var(--brand)] disabled:opacity-45"
             aria-label={t('Volume')}
           />
-        </Row>
+        </FormRow>
         <Toggle label={t('Haptics')} hint={t('Vibration feedback on supported devices.')} checked={p.haptics} onChange={(haptics) => p.set({ haptics })} />
-      </Group>
+      </FormSection>
 
       <DeleteData signedIn={!!me} />
 
@@ -207,8 +207,8 @@ function DeleteData({ signedIn }: { signedIn: boolean }) {
   const deleteEverything = useAuth((s) => s.deleteEverything);
   const label = signedIn ? t('Delete my account & data') : t('Erase all data on this device');
   return (
-    <Group title={t('Your data')}>
-      <Row
+    <FormSection title={t('Your data')}>
+      <FormRow
         label={label}
         hint={signedIn ? t('Removes your MainLine account, synced repertoires and training history, and disconnects Lichess.') : t('Removes your repertoires, training history and settings from this device.')}
         stack
@@ -216,13 +216,13 @@ function DeleteData({ signedIn }: { signedIn: boolean }) {
         <Button size="sm" variant="danger" icon={Trash2} onClick={() => setOpen(true)}>
           {signedIn ? t('Delete account') : t('Erase data')}
         </Button>
-      </Row>
+      </FormRow>
       <Sheet
         open={open}
         onClose={() => !busy && setOpen(false)}
         title={label}
         footer={
-          <div className="flex justify-end gap-2">
+          <>
             <Button variant="ghost" disabled={busy} onClick={() => setOpen(false)}>
               {t('Cancel')}
             </Button>
@@ -243,38 +243,17 @@ function DeleteData({ signedIn }: { signedIn: boolean }) {
             >
               {t('Delete permanently')}
             </Button>
-          </div>
+          </>
         }
       >
         <p className="text-ink-2">{t('This can’t be undone.')} {signedIn ? t('Everything on the server and on this device is deleted; other devices keep their local copy until you erase them too.') : t('Export your repertoires as PGN first if you want to keep them.')}</p>
         {error && (
-          <p role="alert" className="mt-3 text-sm font-medium text-bad">
+          <p role="alert" className="mt-3 text-sm font-medium text-bad-ink">
             {error}
           </p>
         )}
       </Sheet>
-    </Group>
-  );
-}
-
-function Group({ title, children }: { title: string; children: ReactNode }) {
-  return (
-    <section className="mt-8">
-      <h2 className="mb-2 px-1 text-sm font-semibold text-ink-2">{title}</h2>
-      <div className="divide-y divide-line overflow-hidden rounded-[var(--radius-l)] border border-line bg-surface shadow-1">{children}</div>
-    </section>
-  );
-}
-
-function Row({ label, hint, children, stack }: { label: string; hint?: string; children: ReactNode; stack?: boolean }) {
-  return (
-    <div className={`flex min-h-[56px] gap-x-4 gap-y-2.5 px-4 py-2.5 ${stack ? 'flex-col sm:flex-row sm:items-center sm:justify-between' : 'items-center justify-between'}`}>
-      <div className="min-w-0">
-        <div className="text-base font-medium">{label}</div>
-        {hint && <div className="text-sm text-ink-2">{hint}</div>}
-      </div>
-      <div className="shrink-0">{children}</div>
-    </div>
+    </FormSection>
   );
 }
 
@@ -287,9 +266,9 @@ function Stepper({ label, value, min, max, step, onChange }: { label: string; va
     setDraft(null);
   };
   const nudge = (dir: 1 | -1) => onChange(clamp(dir > 0 ? Math.floor(value / step) * step + step : Math.ceil(value / step) * step - step));
-  const btn = 'flex size-10 items-center justify-center text-ink-2 transition-colors duration-150 hover:bg-surface-3 hover:text-ink active:bg-surface-3 disabled:pointer-events-none disabled:opacity-35';
+  const btn = 'flex size-11 items-center justify-center text-ink-2 transition-colors duration-[var(--dur-fast)] hover:bg-surface-3 hover:text-ink active:bg-surface-3 disabled:pointer-events-none disabled:opacity-35';
   return (
-    <div className="flex h-10 items-center overflow-hidden rounded-[12px] border border-line bg-surface-2">
+    <div className="flex h-11 items-center overflow-hidden rounded-[var(--radius-control)] border border-line bg-surface-2">
       <button type="button" className={btn} aria-label={t('Decrease {setting}', { setting: label })} disabled={value <= min} onClick={() => nudge(-1)}>
         <Minus size={16} strokeWidth={2.4} aria-hidden />
       </button>
@@ -301,24 +280,12 @@ function Stepper({ label, value, min, max, step, onChange }: { label: string; va
         onChange={(e) => setDraft(e.target.value.replace(/[^0-9]/g, ''))}
         onBlur={commit}
         onKeyDown={(e) => e.key === 'Enter' && (e.target as HTMLInputElement).blur()}
-        className="tnum h-full w-[3.75rem] border-x border-line bg-surface text-center text-base font-semibold outline-none focus:bg-brand-softer"
+        className="tnum h-full w-[3.75rem] border-x border-line bg-surface text-center text-base font-semibold text-ink outline-none focus:bg-brand-softer"
       />
       <button type="button" className={btn} aria-label={t('Increase {setting}', { setting: label })} disabled={value >= max} onClick={() => nudge(1)}>
         <Plus size={16} strokeWidth={2.4} aria-hidden />
       </button>
     </div>
-  );
-}
-
-export function Toggle({ label, hint, checked, onChange }: { label: string; hint?: string; checked: boolean; onChange: (v: boolean) => void }) {
-  return (
-    <Row label={label} hint={hint}>
-      <label className="relative inline-flex cursor-pointer items-center">
-        <input type="checkbox" className="peer sr-only" checked={checked} onChange={(e) => onChange(e.target.checked)} aria-label={label} />
-        <span className="h-[31px] w-[51px] rounded-full bg-surface-3 transition-colors duration-200 peer-checked:bg-good peer-focus-visible:ring-2 peer-focus-visible:ring-brand" />
-        <span className="absolute start-[2px] top-[2px] size-[27px] rounded-full bg-white shadow-2 transition-transform duration-200 ease-[var(--ease-out)] peer-checked:translate-x-[20px] rtl:peer-checked:-translate-x-[20px]" />
-      </label>
-    </Row>
   );
 }
 
@@ -336,7 +303,7 @@ function AppleButton({ onClick }: { onClick: () => void }) {
     <button
       type="button"
       onClick={onClick}
-      className="inline-flex h-11 items-center justify-center gap-2 rounded-[12px] bg-black px-4 text-base font-semibold text-white active:opacity-80 dark:bg-white dark:text-black"
+      className="pressable inline-flex h-11 items-center justify-center gap-2 rounded-[var(--radius-control)] bg-black px-4 text-base font-semibold text-white dark:bg-white dark:text-black"
     >
       <svg viewBox="0 0 17 20" className="size-[17px] -translate-y-px" aria-hidden>
         <path

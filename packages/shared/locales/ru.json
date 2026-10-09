@@ -1214,5 +1214,6 @@
  "Save": "Сохранить",
  "From the start": "С начала",
  "Its lines and folders are built on these moves, so they stay as they are. To start from other moves, make a new folder.": "Её линии и папки построены на этих ходах, поэтому они остаются как есть. Чтобы начать с других ходов, создайте новую папку.",
- "Lines you make inside start from here.": "Линии, созданные здесь, начинаются с этой позиции."
+ "Lines you make inside start from here.": "Линии, созданные здесь, начинаются с этой позиции.",
+ "Clear": "Очистить"
 }

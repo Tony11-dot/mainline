@@ -35,7 +35,7 @@ export function ContextMenu({ at, items, label, onClose }: { at: { x: number; y:
       ref={ref}
       role="menu"
       aria-label={label}
-      className="fixed z-[var(--z-tooltip)] min-w-[220px] overflow-hidden rounded-[12px] border border-line bg-surface p-1 shadow-3 animate-[toast-in_120ms_var(--ease-out)]"
+      className="fixed z-[var(--z-tooltip)] min-w-[220px] overflow-hidden rounded-[var(--radius-m)] border border-line bg-surface p-1 shadow-3 animate-[toast-in_120ms_var(--ease-out)]"
       style={pos}
       onContextMenu={(e) => e.preventDefault()}
       onKeyDown={(e) => {
@@ -57,7 +57,7 @@ export function ContextMenu({ at, items, label, onClose }: { at: { x: number; y:
               onClose();
               it.onSelect();
             }}
-            className={`flex h-9 w-full items-center gap-2.5 rounded-[8px] px-2.5 text-start text-sm font-medium outline-none hover:bg-surface-3 focus-visible:bg-surface-3 ${it.danger ? 'text-bad' : 'text-ink'}`}
+            className={`flex h-10 w-full items-center gap-2.5 rounded-[var(--radius-xs)] px-2.5 text-start text-sm font-medium outline-none hover:bg-surface-3 focus-visible:bg-surface-3 ${it.danger ? 'text-bad-ink' : 'text-ink'}`}
           >
             {it.icon && <it.icon size={16} aria-hidden className={it.danger ? '' : 'text-ink-2'} />}
             {it.label}

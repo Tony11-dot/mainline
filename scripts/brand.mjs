@@ -96,9 +96,32 @@ for (const [dpi, size] of [['mdpi', 24], ['hdpi', 36], ['xhdpi', 48], ['xxhdpi',
   );
 }
 
-// --- Launch animation: strip the Jitter free-tier watermark --------------------------
+// --- Launch animation: strip the Jitter free-tier watermark, centre the artwork -------------
+/**
+ * Where the finished lockup (knight + wordmark) sits in the Jitter export, measured on its final frame
+ * as the bounding box of every non-background pixel at the canvas's own size (1280×720): its visual
+ * centre is 37.5 px left of and 5.5 px below the canvas centre. Re-measure after a new export.
+ */
+const LAUNCH_OFFSET = { dx: 37.5, dy: -5.5 };
 const anim = JSON.parse(readFileSync(B('launch-animation.source.json'), 'utf8'));
-writeFileSync(`${pub}launch.json`, JSON.stringify(stripJitterWatermark(anim)));
+writeFileSync(`${pub}launch.json`, JSON.stringify(centerArtwork(stripJitterWatermark(anim), LAUNCH_OFFSET)));
+
+/** Moves the whole scene by (dx, dy): every layer hangs off root layers, so shifting those shifts it all. */
+export function centerArtwork(doc, { dx, dy }) {
+  const d = structuredClone(doc);
+  for (const l of d.layers) {
+    if (l.parent !== undefined) continue;
+    l.ks ??= {};
+    const p = l.ks.p;
+    if (p && p.a === 1 && Array.isArray(p.k)) {
+      for (const kf of p.k) for (const key of ['s', 'e']) if (Array.isArray(kf[key])) kf[key] = [kf[key][0] + dx, kf[key][1] + dy, ...kf[key].slice(2)];
+    } else {
+      const k = p && Array.isArray(p.k) ? p.k : [0, 0];
+      l.ks.p = { a: 0, k: [k[0] + dx, k[1] + dy, ...k.slice(2)] };
+    }
+  }
+  return d;
+}
 
 /**
  * Jitter's free export bakes "jitter.video" into the composition as outlined vector letterforms: a

@@ -56,7 +56,7 @@ export function Menu({ trigger, items, label }: { trigger: (props: { onClick: (e
           ref={ref}
           role="menu"
           aria-label={label}
-          className="fixed z-[var(--z-tooltip)] min-w-[200px] overflow-hidden rounded-[14px] border border-line bg-surface p-1 shadow-3 animate-[toast-in_140ms_var(--ease-out)]"
+          className="fixed z-[var(--z-tooltip)] min-w-[200px] overflow-hidden rounded-[var(--radius-m)] border border-line bg-surface p-1 shadow-3 animate-[toast-in_140ms_var(--ease-out)]"
           style={pos}
           onKeyDown={(e) => {
             const btns = [...(ref.current?.querySelectorAll<HTMLButtonElement>('button') ?? [])];
@@ -75,7 +75,7 @@ export function Menu({ trigger, items, label }: { trigger: (props: { onClick: (e
                 setAnchor(null);
                 it.onSelect();
               }}
-              className={`flex h-10 w-full items-center gap-2.5 rounded-[10px] px-3 text-start text-base font-medium outline-none hover:bg-surface-3 focus-visible:bg-surface-3 ${it.danger ? 'text-bad' : 'text-ink'}`}
+              className={`flex h-11 w-full items-center gap-2.5 rounded-[var(--radius-s)] px-3 text-start text-base font-medium outline-none hover:bg-surface-3 focus-visible:bg-surface-3 ${it.danger ? 'text-bad-ink' : 'text-ink'}`}
             >
               {it.icon && <it.icon size={17} aria-hidden className={it.danger ? '' : 'text-ink-2'} />}
               {it.label}

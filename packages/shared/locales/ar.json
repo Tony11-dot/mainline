@@ -1340,5 +1340,6 @@
  "Save": "حفظ",
  "From the start": "من البداية",
  "Its lines and folders are built on these moves, so they stay as they are. To start from other moves, make a new folder.": "خطوطه ومجلداته مبنية على هذه النقلات، لذا تبقى كما هي. لتبدأ من نقلات أخرى، أنشئ مجلدًا جديدًا.",
- "Lines you make inside start from here.": "الخطوط التي تنشئها هنا تبدأ من هذه النقطة."
+ "Lines you make inside start from here.": "الخطوط التي تنشئها هنا تبدأ من هذه النقطة.",
+ "Clear": "مسح"
 }

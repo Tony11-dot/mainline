@@ -15,6 +15,7 @@ import {
 } from '../../lib/appearance';
 import { usePrefs } from '../../lib/prefs';
 import { t } from '../../lib/i18n';
+import { ListGroup, Section } from '../../ui/kit';
 
 /**
  * Theme / font / board / pieces pickers — the same layout as ClassMate & ClassMusic Settings:
@@ -24,37 +25,36 @@ import { t } from '../../lib/i18n';
 export function AppearanceSettings() {
   return (
     <>
-      <Section title={t('Light themes')}>
+      <Picker title={t('Light themes')}>
         {(['system', ...LIGHT_FAMILY] as ThemeId[]).map((id) => (
           <ThemeRow key={id} id={id} />
         ))}
-      </Section>
-      <Section title={t('Dark themes')}>
+      </Picker>
+      <Picker title={t('Dark themes')}>
         {DARK_FAMILY.map((id) => (
           <ThemeRow key={id} id={id} />
         ))}
-      </Section>
-      <Section title={t('Font')}>
+      </Picker>
+      <Picker title={t('Font')}>
         {FONTS.map((f) => (
           <FontRow key={f.id} id={f.id} name={f.name} stack={f.stack} load={f.load} />
         ))}
-      </Section>
-      <Section title={t('Board')}>
+      </Picker>
+      <Picker title={t('Board')}>
         <BoardPicker />
-      </Section>
-      <Section title={t('Pieces')}>
+      </Picker>
+      <Picker title={t('Pieces')}>
         <PiecePicker />
-      </Section>
+      </Picker>
     </>
   );
 }
 
-function Section({ title, children }: { title: string; children: ReactNode }) {
+function Picker({ title, children }: { title: string; children: ReactNode }) {
   return (
-    <section className="mt-8">
-      <h2 className="mb-2 px-1 text-sm font-semibold text-ink-2">{title}</h2>
-      <div className="divide-y divide-line overflow-hidden rounded-[var(--radius-l)] border border-line bg-surface-3/60 shadow-1">{children}</div>
-    </section>
+    <Section title={title}>
+      <ListGroup>{children}</ListGroup>
+    </Section>
   );
 }
 
@@ -72,7 +72,7 @@ function ThemeRow({ id }: { id: ThemeId }) {
       role="radio"
       aria-checked={on}
       onClick={() => set({ appTheme: id })}
-      className="flex min-h-[60px] w-full items-center gap-3 px-3.5 py-2 text-start transition-colors hover:bg-surface-2"
+      className="pressable flex min-h-[60px] w-full items-center gap-3 px-3.5 py-2 text-start hover:bg-surface-2 active:bg-surface-3"
     >
       <ThemeSwatch tokens={tokens} system={id === 'system'} />
       <span className="flex-1 text-base font-medium text-ink">{themeName(id)}</span>
@@ -110,7 +110,7 @@ function FontRow({ id, name, stack, load }: { id: (typeof FONTS)[number]['id']; 
       onPointerEnter={() => void load?.()}
       onFocus={() => void load?.()}
       onClick={() => set({ font: id })}
-      className="flex min-h-[52px] w-full items-center gap-3 px-3.5 py-2 text-start transition-colors hover:bg-surface-2"
+      className="pressable flex min-h-[52px] w-full items-center gap-3 px-3.5 py-2 text-start hover:bg-surface-2 active:bg-surface-3"
     >
       <span className="w-10 text-center text-xl text-ink" style={{ fontFamily: stack }} aria-hidden>
         Aa
@@ -141,7 +141,7 @@ function BoardPicker() {
         return (
           <button key={b.id} type="button" role="radio" aria-checked={on} onClick={() => set({ boardTheme: b.id })} className="flex flex-col items-center gap-1.5">
             <span
-              className={`size-14 rounded-[10px] transition-shadow ${on ? 'ring-2 ring-brand ring-offset-2 ring-offset-bg' : 'ring-1 ring-line'}`}
+              className={`size-14 rounded-[var(--radius-s)] transition-shadow ${on ? 'ring-2 ring-brand ring-offset-2 ring-offset-surface' : 'ring-1 ring-line'}`}
               style={{ backgroundImage: `repeating-conic-gradient(${dark} 0 25%, ${light} 0 50%)`, backgroundSize: '50% 50%' }}
             />
             <span className={`text-xs font-semibold ${on ? 'text-ink' : 'text-ink-2'}`}>{t(b.name)}</span>
@@ -166,13 +166,13 @@ function PiecePicker() {
             aria-checked={on}
             aria-label={t(p.name)}
             onClick={() => set({ pieceSet: p.id })}
-            className={`flex flex-col items-center gap-1 rounded-[12px] p-1.5 transition-colors ${on ? 'bg-brand-soft ring-2 ring-brand' : 'hover:bg-surface-2'}`}
+            className={`pressable flex flex-col items-center gap-1 rounded-[var(--radius-control)] p-1.5 ${on ? 'bg-brand-soft ring-2 ring-brand' : 'hover:bg-surface-2'}`}
           >
             <span className="flex">
               <img src={`/pieces/${p.id}/wN.svg`} alt="" className="size-8" loading="lazy" />
               <img src={`/pieces/${p.id}/bQ.svg`} alt="" className="-ms-2 size-8" loading="lazy" />
             </span>
-            <span className={`text-[11px] font-semibold ${on ? 'text-ink' : 'text-ink-2'}`}>{t(p.name)}</span>
+            <span className={`text-2xs font-semibold ${on ? 'text-ink' : 'text-ink-2'}`}>{t(p.name)}</span>
           </button>
         );
       })}

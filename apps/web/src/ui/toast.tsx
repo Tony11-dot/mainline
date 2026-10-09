@@ -46,14 +46,14 @@ export function Toaster() {
           <div
             key={t.id}
             role="status"
-            className="pointer-events-auto flex max-w-md items-center gap-3 rounded-[14px] bg-[oklch(0.22_0.015_262)] py-2.5 ps-3.5 pe-2 text-sm text-white shadow-3 animate-[toast-in_220ms_var(--ease-out)]"
+            className="pointer-events-auto flex max-w-md items-center gap-3 rounded-[var(--radius-m)] bg-toast py-2.5 ps-3.5 pe-2 text-sm text-toast-ink shadow-3 animate-[toast-in_220ms_var(--ease-out)]"
           >
-            <Icon size={17} className={t.kind === 'error' ? 'text-[oklch(0.75_0.15_25)]' : t.kind === 'success' ? 'text-[oklch(0.8_0.15_150)]' : 'text-[oklch(0.8_0.08_262)]'} aria-hidden />
+            <Icon size={17} className={t.kind === 'error' ? 'text-toast-bad' : t.kind === 'success' ? 'text-toast-good' : 'text-toast-info'} aria-hidden />
             <span className="min-w-0 flex-1">{t.text}</span>
             {t.action && (
               <button
                 type="button"
-                className="h-8 rounded-[9px] px-3 font-semibold text-[oklch(0.82_0.1_262)] hover:bg-white/10"
+                className="h-9 rounded-[var(--radius-s)] px-3 font-semibold text-toast-action hover:bg-white/10"
                 onClick={() => {
                   void t.action!.run();
                   dismiss(t.id);

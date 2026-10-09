@@ -1025,5 +1025,6 @@
  "Save": "저장",
  "From the start": "처음부터",
  "Its lines and folders are built on these moves, so they stay as they are. To start from other moves, make a new folder.": "안의 라인과 폴더가 이 수들을 바탕으로 만들어져 있어 그대로 유지됩니다. 다른 수에서 시작하려면 새 폴더를 만드세요.",
- "Lines you make inside start from here.": "여기서 만드는 라인은 이 지점에서 시작합니다."
+ "Lines you make inside start from here.": "여기서 만드는 라인은 이 지점에서 시작합니다.",
+ "Clear": "지우기"
 }

@@ -11,13 +11,13 @@ const VARIANTS: Record<Variant, string> = {
 
 export const Button = forwardRef<HTMLButtonElement, ButtonHTMLAttributes<HTMLButtonElement> & { variant?: Variant; size?: 'sm' | 'md' | 'lg'; icon?: LucideIcon; loading?: boolean }>(
   function Button({ variant = 'secondary', size = 'md', icon: Icon, loading, className = '', children, disabled, ...rest }, ref) {
-    const sizes = { sm: 'h-8 px-3 text-sm gap-1.5 rounded-[10px]', md: 'h-11 px-4 text-base gap-2 rounded-[12px]', lg: 'h-14 px-6 text-md gap-2.5 rounded-[16px]' };
+    const sizes = { sm: 'h-9 px-3 text-sm gap-1.5 rounded-[var(--radius-s)]', md: 'h-11 px-4 text-base gap-2 rounded-[var(--radius-control)]', lg: 'h-14 px-6 text-md gap-2.5 rounded-[16px]' };
     return (
       <button
         ref={ref}
         type="button"
         disabled={disabled || loading}
-        className={`inline-flex shrink-0 items-center justify-center font-semibold transition-[background-color,filter,transform,opacity] duration-150 active:scale-[0.98] disabled:pointer-events-none disabled:opacity-45 ${sizes[size]} ${VARIANTS[variant]} ${className}`}
+        className={`inline-flex shrink-0 items-center justify-center font-semibold whitespace-nowrap transition-[background-color,filter,transform,opacity] duration-[var(--dur-fast)] ease-[var(--ease-out)] active:scale-[0.98] motion-reduce:active:scale-100 disabled:pointer-events-none disabled:opacity-45 ${sizes[size]} ${VARIANTS[variant]} ${className}`}
         {...rest}
       >
         {loading ? <Spinner /> : Icon ? <Icon size={size === 'sm' ? 15 : 18} strokeWidth={2.2} aria-hidden /> : null}
@@ -37,7 +37,7 @@ export const IconButton = forwardRef<HTMLButtonElement, ButtonHTMLAttributes<HTM
         title={label}
         aria-pressed={active}
         style={{ width: size, height: size }}
-        className={`inline-flex shrink-0 items-center justify-center rounded-[12px] transition-[background-color,color,transform] duration-150 active:scale-95 disabled:opacity-35 disabled:pointer-events-none ${
+        className={`inline-flex shrink-0 items-center justify-center rounded-[var(--radius-control)] transition-[background-color,color,transform] duration-[var(--dur-fast)] active:scale-95 motion-reduce:active:scale-100 disabled:opacity-35 disabled:pointer-events-none ${
           active ? 'bg-brand-soft text-brand-ink' : 'text-ink-2 hover:bg-surface-3 hover:text-ink'
         } ${className}`}
         {...rest}
@@ -59,7 +59,7 @@ export function Spinner({ size = 16 }: { size?: number }) {
 
 export function Segmented<T extends string>({ value, options, onChange, label, className = '' }: { value: T; options: { value: T; label: ReactNode }[]; onChange: (v: T) => void; label: string; className?: string }) {
   return (
-    <div role="tablist" aria-label={label} className={`relative flex rounded-[12px] bg-surface-3 p-[3px] ${className}`}>
+    <div role="tablist" aria-label={label} className={`relative flex rounded-[var(--radius-control)] bg-surface-3 p-[3px] ${className}`}>
       {options.map((o) => {
         const active = o.value === value;
         return (
@@ -69,7 +69,7 @@ export function Segmented<T extends string>({ value, options, onChange, label, c
             type="button"
             aria-selected={active}
             onClick={() => onChange(o.value)}
-            className={`relative h-8 flex-1 rounded-[9px] px-3 text-sm font-semibold transition-[background-color,color,box-shadow] duration-200 ${
+            className={`relative h-9 flex-1 rounded-[9px] px-3 text-sm font-semibold whitespace-nowrap transition-[background-color,color,box-shadow] duration-[var(--dur-base)] ${
               active ? 'bg-surface text-ink shadow-1' : 'text-ink-2 hover:text-ink'
             }`}
           >
@@ -82,7 +82,7 @@ export function Segmented<T extends string>({ value, options, onChange, label, c
 }
 
 export function Skeleton({ className = '' }: { className?: string }) {
-  return <div className={`animate-pulse rounded-[8px] bg-surface-3 ${className}`} aria-hidden />;
+  return <div className={`animate-pulse rounded-[var(--radius-xs)] bg-surface-3 ${className}`} aria-hidden />;
 }
 
 /** Friendly inline state for empty / error / not-configured panels. */

@@ -34,14 +34,16 @@ export function Sheet({ open, onClose, title, children, footer, wide }: { open: 
       {open && (
         <div className="flex max-h-[88dvh] flex-col" style={{ paddingBottom: 'var(--safe-bottom)' }}>
           <div className="mx-auto mt-2 h-1.5 w-10 rounded-full bg-line-strong sm:hidden" aria-hidden />
-          <header className="flex items-center justify-between gap-3 px-5 pt-3 pb-2 sm:pt-5">
-            <h2 className="text-lg font-bold">{title}</h2>
-            <button type="button" onClick={onClose} aria-label={t('Close')} className="flex size-9 items-center justify-center rounded-full bg-surface-3 text-ink-2 hover:text-ink">
-              <X size={18} />
+          <header className="flex items-center justify-between gap-3 ps-5 pe-3 pt-2.5 pb-2 sm:pt-4">
+            <h2 className="min-w-0 text-lg font-bold">{title}</h2>
+            <button type="button" onClick={onClose} aria-label={t('Close')} className="pressable flex size-11 shrink-0 items-center justify-center rounded-full text-ink-2 hover:bg-surface-3 hover:text-ink">
+              <span className="flex size-8 items-center justify-center rounded-full bg-surface-3">
+                <X size={17} aria-hidden />
+              </span>
             </button>
           </header>
           <div className="min-h-0 flex-1 overflow-auto px-5 pb-4">{children}</div>
-          {footer && <footer className="flex justify-end gap-2 border-t border-line px-5 py-3">{footer}</footer>}
+          {footer && <footer className="flex flex-wrap justify-end gap-2 border-t border-line px-5 py-3">{footer}</footer>}
         </div>
       )}
     </dialog>
@@ -59,4 +61,4 @@ export function Field({ label, children, hint, group }: { label: string; childre
   );
 }
 
-export const inputCls = 'h-11 w-full rounded-[12px] border border-line bg-surface px-3.5 text-base outline-none transition-shadow placeholder:text-ink-3 focus:border-brand focus:ring-3 focus:ring-brand/20';
+export const inputCls = 'h-11 w-full rounded-[var(--radius-control)] border border-line bg-surface px-3.5 text-base text-ink outline-none transition-shadow placeholder:text-ink-3 focus:border-brand focus:ring-3 focus:ring-brand/20';

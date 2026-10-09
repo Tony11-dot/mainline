@@ -135,7 +135,8 @@ export function themeVars(t: ThemeTokens, dark: boolean): Record<string, string>
     '--surface-3': t.surfaceRaised,
     '--ink': t.ink,
     '--ink-2': t.inkSecondary,
-    '--ink-3': mix(t.inkSecondary, 78, t.surface),
+    // Hints and sub-labels: close to the secondary ink, so they stay readable (≥ 4.5:1) on every theme's surface.
+    '--ink-3': mix(t.inkSecondary, 92, t.surface),
     '--line': t.separator,
     '--line-strong': mix(t.separator, 78, t.ink),
     // Pastel accents on dark themes need dark text on top of them.

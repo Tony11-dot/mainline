@@ -38,6 +38,7 @@ import { MasteryStrip } from '../ui/MasteryStrip';
 import { MiniBoard } from '../ui/MiniBoard';
 import { platform } from '../platform';
 import { Button, IconButton, PanelNote } from '../ui/primitives';
+import { CARD, CARD_DASHED, Card } from '../ui/kit';
 import { Menu, type MenuItem } from '../ui/Menu';
 import { ContextMenu } from '../ui/ContextMenu';
 import { undoToast, toast } from '../ui/toast';
@@ -615,7 +616,7 @@ function FinderRow({ it, finder }: { it: Item; finder: FinderCtx }) {
         // Let the click that follows a long press see `fired`, then forget it.
         setTimeout(() => (press.current = null), 0);
       }}
-      className={`flex min-h-[60px] cursor-default select-none items-center gap-3 px-3 py-2 transition-colors ${over ? 'bg-brand-soft ring-2 ring-brand ring-inset' : selected ? 'bg-brand-softer' : 'hover:bg-surface-2'}`}
+      className={`pressable flex min-h-[60px] cursor-default select-none items-center gap-3 px-3 py-2 ${over ? 'bg-brand-soft ring-2 ring-brand ring-inset' : selected ? 'bg-brand-softer' : 'hover:bg-surface-2 active:bg-surface-3'}`}
     >
       {finder.selecting && <span aria-hidden className={`flex size-5 shrink-0 items-center justify-center rounded-full border-2 ${selected ? 'border-brand bg-brand text-on-brand' : 'border-line-strong'}`}>{selected && '✓'}</span>}
       {it.type === 'folder' ? (
@@ -735,7 +736,7 @@ function SidebarNode({ f, depth, kids, isOpen, active, toggle, drop, render }: {
           <ChevronRight size={13} className={`transition-transform ${isOpen ? 'rotate-90' : 'rtl:rotate-180'}`} aria-hidden />
         </button>
         <Link to={f.parentId === null ? `/library?f=${f.id}` : `/library?f=${f.id}`} className={`flex min-w-0 flex-1 items-center gap-1.5 truncate text-sm ${depth === 0 ? 'font-bold' : 'font-medium'}`}>
-          {depth === 0 ? <span className={`size-2.5 shrink-0 rounded-full ring-1 ring-line-strong ${f.color === 'white' ? 'bg-white' : 'bg-[oklch(0.25_0.015_262)]'}`} /> : <FolderIcon size={14} className="shrink-0 text-brand" aria-hidden />}
+          {depth === 0 ? <ColorDot color={f.color} size="sm" /> : <FolderIcon size={14} className="shrink-0 text-brand" aria-hidden />}
           <span className="truncate">{depth === 0 ? (f.color === 'white' ? t('As White') : t('As Black')) : t(f.name)}</span>
         </Link>
       </div>
@@ -822,7 +823,7 @@ function RootView({ roots, finder, itemsIn, conflicts, setSheet, toolbarNew, pla
           <WeakSpotCard spot={spot} />
         </div>
       ) : games.length === 0 && loaded ? (
-        <Link to="/games" className="mt-5 flex items-center gap-3 rounded-[var(--radius-l)] border border-dashed border-line-strong px-4 py-3 text-sm text-ink-2 hover:bg-surface-2">
+        <Link to="/games" className={`pressable mt-5 flex items-center gap-3 px-4 py-3 text-sm text-ink-2 hover:bg-surface-2 ${CARD_DASHED}`}>
           <Swords size={18} className="shrink-0 text-brand" aria-hidden />
           <span className="flex-1">{t('Import your games and MainLine finds the openings you lose most — then hands you ready-made lines for them.')}</span>
           <ChevronRight size={18} className="shrink-0 text-ink-3 rtl:rotate-180" aria-hidden />
@@ -830,9 +831,9 @@ function RootView({ roots, finder, itemsIn, conflicts, setSheet, toolbarNew, pla
       ) : null)}
 
       {conflicts > 0 && (
-        <button type="button" onClick={() => setSheet({ kind: 'conflicts' })} className="mt-5 flex w-full items-center gap-3 rounded-[var(--radius-m)] bg-warn-soft px-4 py-3 text-start">
-          <TriangleAlert size={18} className="shrink-0 text-warn" aria-hidden />
-          <span className="flex-1 text-sm">
+        <button type="button" onClick={() => setSheet({ kind: 'conflicts' })} className="pressable mt-5 flex w-full items-center gap-3 rounded-[var(--radius-m)] bg-warn-soft px-4 py-3 text-start text-warn-ink">
+          <TriangleAlert size={18} className="shrink-0" aria-hidden />
+          <span className="flex-1 text-sm font-medium">
             {tn(conflicts, '{n} position where your repertoires disagree on your move.', '{n} positions where your repertoires disagree on your move.')} {t('Training uses one move per position.')}
           </span>
           <ChevronRight size={18} className="text-ink-3 rtl:rotate-180" aria-hidden />
@@ -840,13 +841,13 @@ function RootView({ roots, finder, itemsIn, conflicts, setSheet, toolbarNew, pla
       )}
 
       {loaded && finder.reps.length === 0 && !single && (
-        <div className="mt-6 rounded-[var(--radius-l)] border border-dashed border-line-strong">
+        <div className={`mt-6 ${CARD_DASHED}`}>
           <PanelNote
             icon={BookMarked}
             title={t('Build your first repertoire')}
             action={
               <div className="flex flex-wrap justify-center gap-2">
-                <Link to="/library/ready" className="inline-flex h-11 items-center gap-2 rounded-[12px] bg-brand px-4 font-semibold text-on-brand">
+                <Link to="/library/ready" className="pressable inline-flex h-11 items-center gap-2 rounded-[var(--radius-control)] bg-brand px-4 font-semibold text-on-brand">
                   <Sparkles size={18} aria-hidden /> {t('Ready-made openings')}
                 </Link>
                 <Button onClick={() => setSheet({ kind: 'pick', color: 'white' })}>{t('Build my own')}</Button>
@@ -859,7 +860,7 @@ function RootView({ roots, finder, itemsIn, conflicts, setSheet, toolbarNew, pla
       )}
 
       {finder.reps.length > 0 && !single && (
-        <div className="mt-5 flex flex-wrap items-center justify-between gap-3 rounded-[var(--radius-l)] border border-line bg-surface p-4 shadow-1">
+        <Card className="mt-5 flex flex-wrap items-center justify-between gap-3">
           <div>
             <h2 className="font-bold">{t('Everything')}</h2>
             <p className="tnum text-sm text-ink-2">
@@ -868,11 +869,11 @@ function RootView({ roots, finder, itemsIn, conflicts, setSheet, toolbarNew, pla
           </div>
           <div className="flex flex-wrap gap-2">
             <PracticeButtons scope={{ kind: 'all' }} />
-            <Link to={planHref({ kind: 'all' }, t('Everything'))} className="inline-flex h-11 items-center gap-2 rounded-[12px] px-3 font-semibold text-ink-2 hover:bg-surface-3 hover:text-ink">
+            <Link to={planHref({ kind: 'all' }, t('Everything'))} className="pressable inline-flex h-11 items-center gap-2 rounded-[var(--radius-control)] px-3 font-semibold text-ink-2 hover:bg-surface-3 hover:text-ink">
               <CalendarDays size={17} aria-hidden /> {t('Plan')}
             </Link>
           </div>
-        </div>
+        </Card>
       )}
 
       <div className="mt-6 flex flex-col gap-6">
@@ -895,7 +896,7 @@ function ColorSection({ root, finder, items, setSheet, single, planHref }: { roo
         <div>
           {!single && (
             <h2 className="flex items-center gap-2 text-lg font-bold">
-              <span className={`inline-block size-3.5 rounded-full ring-1 ring-line-strong ${root.color === 'white' ? 'bg-white' : 'bg-[oklch(0.25_0.015_262)]'}`} />
+              <ColorDot color={root.color} />
               {label}
             </h2>
           )}
@@ -906,14 +907,14 @@ function ColorSection({ root, finder, items, setSheet, single, planHref }: { roo
         {inside.length > 0 && (
           <div className="flex flex-wrap gap-2">
             <PracticeButtons scope={{ kind: 'color', color: root.color }} size="sm" />
-            <Link to={planHref({ kind: 'color', color: root.color }, label)} aria-label={t('Plan')} className="inline-flex size-9 items-center justify-center rounded-[10px] text-ink-2 hover:bg-surface-3 hover:text-ink">
+            <Link to={planHref({ kind: 'color', color: root.color }, label)} aria-label={t('Plan')} className="pressable inline-flex size-11 items-center justify-center rounded-[var(--radius-control)] text-ink-2 hover:bg-surface-3 hover:text-ink">
               <CalendarDays size={16} aria-hidden />
             </Link>
           </div>
         )}
       </div>
       <FinderList items={items} finder={finder} label={label} />
-      <button type="button" onClick={() => setSheet({ kind: 'pick', color: root.color })} className="mt-2 flex min-h-[48px] w-full items-center gap-2 rounded-[var(--radius-l)] border border-dashed border-line-strong px-4 text-start font-semibold text-brand-ink hover:bg-surface-2">
+      <button type="button" onClick={() => setSheet({ kind: 'pick', color: root.color })} className={`pressable mt-2 flex min-h-[52px] w-full items-center gap-2 px-4 text-start font-semibold text-brand-ink hover:bg-surface-2 ${CARD_DASHED}`}>
         <Plus size={18} aria-hidden /> {root.color === 'white' ? t('Add a first move') : t('Add a first move to answer')}
       </button>
     </section>
@@ -943,7 +944,7 @@ function FolderView({ folder, finder, items, setSheet, newFolder, planHref, pare
     <div {...props} className={over ? 'rounded-[var(--radius-l)] ring-2 ring-brand ring-offset-8 ring-offset-bg' : ''}>
       <div className="flex items-start gap-2">
         {!wide && (
-          <Link to={parentHref} className="-ms-2 mt-0.5 flex size-10 shrink-0 items-center justify-center rounded-full text-ink-2 hover:bg-surface-3" aria-label={t('Back')}>
+          <Link to={parentHref} className="pressable -ms-2 flex size-11 shrink-0 items-center justify-center rounded-full text-ink-2 hover:bg-surface-3" aria-label={t('Back')}>
             <ArrowLeft size={20} className="rtl:rotate-180" />
           </Link>
         )}
@@ -983,7 +984,7 @@ function FolderView({ folder, finder, items, setSheet, newFolder, planHref, pare
       {inside.length > 0 && (
         <div className="mt-4 flex flex-wrap gap-2">
           <PracticeButtons scope={{ kind: 'folder', id: folder.id }} />
-          <Link to={planHref({ kind: 'folder', id: folder.id }, t(folder.name))} className="inline-flex h-11 items-center gap-2 rounded-[12px] px-3 font-semibold text-ink-2 hover:bg-surface-3 hover:text-ink">
+          <Link to={planHref({ kind: 'folder', id: folder.id }, t(folder.name))} className="pressable inline-flex h-11 items-center gap-2 rounded-[var(--radius-control)] px-3 font-semibold text-ink-2 hover:bg-surface-3 hover:text-ink">
             <CalendarDays size={17} aria-hidden /> {t('Make a plan')}
           </Link>
         </div>
@@ -994,18 +995,18 @@ function FolderView({ folder, finder, items, setSheet, newFolder, planHref, pare
           items={items}
           finder={finder}
           label={t(folder.name)}
-          empty={<p className="rounded-[var(--radius-l)] border border-dashed border-line-strong px-4 py-6 text-center text-sm text-ink-3">{wide ? t('Empty folder — drag lines or folders here.') : t('Empty folder.')}</p>}
+          empty={<p className={`px-4 py-6 text-center text-sm text-ink-2 ${CARD_DASHED}`}>{wide ? t('Empty folder — drag lines or folders here.') : t('Empty folder.')}</p>}
         />
       </div>
 
       <div className="mt-3 grid gap-2 sm:grid-cols-2">
         {isFirst && (
-          <button type="button" onClick={() => setSheet({ kind: 'pick', color: folder.color, first })} className="flex min-h-[56px] items-center gap-3 rounded-[var(--radius-l)] border border-dashed border-line-strong px-4 text-start font-semibold text-brand-ink hover:bg-surface-2">
+          <button type="button" onClick={() => setSheet({ kind: 'pick', color: folder.color, first })} className={`pressable flex min-h-[56px] items-center gap-3 px-4 text-start font-semibold text-brand-ink hover:bg-surface-2 ${CARD_DASHED}`}>
             <Plus size={18} aria-hidden /> {folder.color === 'white' ? t('Add a reply to prepare for') : t('Add your answer')}
           </button>
         )}
         {packs.length > 0 && (
-          <Link to={`/library/ready?color=${folder.color}&first=${first}&reply=${encodeURIComponent(reply!)}`} className="flex min-h-[56px] items-center gap-3 rounded-[var(--radius-l)] border border-line bg-surface px-4 py-2.5 shadow-1 hover:bg-surface-2">
+          <Link to={`/library/ready?color=${folder.color}&first=${first}&reply=${encodeURIComponent(reply!)}`} className={`pressable flex min-h-[56px] items-center gap-3 px-4 py-2.5 hover:bg-surface-2 ${CARD}`}>
             <Sparkles size={20} className="shrink-0 text-brand" aria-hidden />
             <span className="min-w-0 flex-1">
               <span className="block font-semibold">{t('Add ready-made lines')}</span>
@@ -1013,14 +1014,14 @@ function FolderView({ folder, finder, items, setSheet, newFolder, planHref, pare
             </span>
           </Link>
         )}
-        <button type="button" onClick={() => void buildOwn()} className="flex min-h-[56px] items-center gap-3 rounded-[var(--radius-l)] border border-dashed border-line-strong px-4 py-2.5 text-start hover:bg-surface-2">
+        <button type="button" onClick={() => void buildOwn()} className={`pressable flex min-h-[56px] items-center gap-3 px-4 py-2.5 text-start hover:bg-surface-2 ${CARD_DASHED}`}>
           <ListPlus size={20} className="shrink-0 text-brand" aria-hidden />
           <span className="min-w-0 flex-1">
             <span className="block font-semibold">{t('New line')}</span>
             <span className="block text-sm text-ink-2">{t('Pick its moves yourself — where it goes, where it stops, where it branches.')}</span>
           </span>
         </button>
-        <button type="button" onClick={() => newFolder(folder)} className="flex min-h-[56px] items-center gap-3 rounded-[var(--radius-l)] border border-dashed border-line-strong px-4 py-2.5 text-start hover:bg-surface-2">
+        <button type="button" onClick={() => newFolder(folder)} className={`pressable flex min-h-[56px] items-center gap-3 px-4 py-2.5 text-start hover:bg-surface-2 ${CARD_DASHED}`}>
           <FolderPlus size={20} className="shrink-0 text-brand" aria-hidden />
           <span className="min-w-0 flex-1">
             <span className="block font-semibold">{t('New folder')}</span>
@@ -1051,6 +1052,11 @@ function MobileTrail({ folder, folders }: { folder: Folder; folders: Folder[] })
       ))}
     </nav>
   );
+}
+
+/** White or Black as a small disc: the piece colour itself, never a colour of the theme. */
+function ColorDot({ color, size = 'md' }: { color: 'white' | 'black'; size?: 'sm' | 'md' }) {
+  return <span className={`inline-block shrink-0 rounded-full ring-1 ring-line-strong ${size === 'sm' ? 'size-2.5' : 'size-3.5'} ${color === 'white' ? 'bg-white' : 'bg-[#111]'}`} aria-hidden />;
 }
 
 export const slug = (s: string) => s.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '') || 'repertoire';

@@ -1,6 +1,6 @@
 import { lazy, Suspense, useEffect, useMemo, useState } from 'react';
 import { Link, Navigate } from 'react-router';
-import { BarChart3, CalendarDays, ChevronRight, Cpu, Target, Dumbbell, Flame, GraduationCap, Play, Shuffle, Snowflake, Sparkles } from 'lucide-react';
+import { BarChart3, CalendarDays, Cpu, Target, Dumbbell, Flame, GraduationCap, Play, Shuffle, Snowflake, Sparkles } from 'lucide-react';
 import { trainingSummary } from '@mainline/shared';
 import { StreakBadge, useStreak } from '../ui/streak';
 import { useLibrary } from '../lib/library';
@@ -13,6 +13,7 @@ import type { weakSpots } from '../lib/packs';
 const WeakSpotCard = lazy(async () => ({ default: (await import('./library/WeakSpotCard')).WeakSpotCard }));
 const HomePlanCard = lazy(async () => ({ default: (await import('./focus/HomePlanCard')).HomePlanCard }));
 import { LogoMark } from '../ui/Logo';
+import { Card, ListGroup, ListRow, PageHeader, SectionHeader } from '../ui/kit';
 import { fmtPercent, t, tn } from '../lib/i18n';
 
 export function HomeScreen() {
@@ -52,17 +53,11 @@ export function HomeScreen() {
 
   return (
     <div className="mx-auto max-w-3xl px-4 py-6 md:px-8 md:py-10">
-      <div className="flex items-center gap-3">
+      <PageHeader title={t('Today')} large trailing={hasReps ? <StreakBadge /> : undefined}>
         <LogoMark size={34} className="md:hidden" />
-        <h1 className="text-3xl font-bold">{t('Today')}</h1>
-        {hasReps && (
-          <span className="ms-auto">
-            <StreakBadge />
-          </span>
-        )}
-      </div>
+      </PageHeader>
       {hasReps && streak.atRisk && (
-        <p className="mt-3 flex items-center gap-2 rounded-[var(--radius-m)] bg-flame-soft px-4 py-2.5 text-sm font-semibold text-flame-ink" data-testid="streak-at-risk">
+        <p className="mt-3 flex items-center gap-2.5 rounded-[var(--radius-m)] bg-flame-soft px-4 py-3 text-sm font-semibold text-flame-ink" data-testid="streak-at-risk">
           {streak.freezeUsed ? <Snowflake size={16} className="shrink-0 text-freeze" aria-hidden /> : <Flame size={16} className="shrink-0 text-flame" aria-hidden />}
           {streak.freezeUsed
             ? tn(streak.current, 'A streak freeze saved your {n}-day streak. Practise today to keep it.', 'A streak freeze saved your {n}-day streak. Practise today to keep it.')
@@ -71,38 +66,36 @@ export function HomeScreen() {
       )}
 
       {!lib.loaded ? null : !hasReps ? (
-        <div className="mt-8 rounded-[var(--radius-xl)] border border-line bg-surface p-6 shadow-1">
+        <Card className="mt-6 p-6">
           <h2 className="text-xl font-bold">{t('Start your first repertoire')}</h2>
           <p className="mt-1 max-w-[52ch] text-ink-2">{t('Pick an opening, play the moves you want on the board, and MainLine turns every position into spaced-repetition training.')}</p>
           <div className="mt-5 flex flex-wrap gap-2">
-            <Link to="/library/ready" className="inline-flex h-12 items-center gap-2 rounded-[14px] bg-brand px-5 font-semibold text-on-brand">
+            <Link to="/library/ready" className="pressable inline-flex h-12 items-center gap-2 rounded-[var(--radius-control)] bg-brand px-5 font-semibold text-on-brand">
               <Sparkles size={18} aria-hidden /> {t('Ready-made openings')}
             </Link>
-            <Link to="/library" className="inline-flex h-12 items-center rounded-[14px] border border-line bg-surface px-5 font-semibold shadow-1">
+            <Link to="/library" className="pressable inline-flex h-12 items-center rounded-[var(--radius-control)] border border-line bg-surface px-5 font-semibold shadow-1 hover:bg-surface-2">
               {t('Build from scratch')}
             </Link>
           </div>
-        </div>
+        </Card>
       ) : (
         <>
           {primary ? (
-            <Link
-              to={primary.to}
-              className="group mt-6 flex items-center gap-4 rounded-[var(--radius-xl)] bg-brand p-5 text-on-brand shadow-3 transition-transform duration-150 active:scale-[0.99]"
-            >
+            // The one thing to do now: the only filled surface on the page.
+            <Link to={primary.to} className="pressable mt-5 flex items-center gap-4 rounded-[var(--radius-xl)] bg-brand p-5 text-on-brand shadow-3">
               <span className="flex size-14 shrink-0 items-center justify-center rounded-full bg-[color-mix(in_oklab,var(--on-brand)_18%,transparent)]">
                 <Play size={26} fill="currentColor" aria-hidden />
               </span>
-              <span>
+              <span className="min-w-0">
                 <span className="block text-2xl font-bold">{primary.label}</span>
                 <span className="tnum block opacity-85">{primary.sub}</span>
               </span>
             </Link>
           ) : (
-            <div className="mt-6 rounded-[var(--radius-xl)] border border-line bg-surface p-5 shadow-1">
+            <Card className="mt-5 p-5">
               <p className="text-lg font-bold">{t('All caught up')}</p>
               <p className="text-ink-2">{t('Nothing is due. Drill a line or add moves to your repertoire.')}</p>
-            </div>
+            </Card>
           )}
 
           <Suspense>
@@ -118,20 +111,20 @@ export function HomeScreen() {
 
           <Progress done={today.length} goal={goal} learned={sum.learned} positions={sum.positions} retention={sum.learned ? sum.retention : null} />
 
-          <h2 className="mt-8 mb-2 px-1 text-sm font-semibold text-ink-2">{t('Practice')}</h2>
+          <SectionHeader title={t('Practice')} className="mt-[var(--section-gap)]" />
           <ListGroup>
-            <ModeLink to="/train?mode=learn" icon={GraduationCap} title={t('Learn')} sub={sum.newToday ? t('{count} new today', { count: sum.newToday }) : t('Nothing new today')} />
-            <ModeLink to="/train?mode=drill" icon={Shuffle} title={t('Drill')} sub={t('Random lines, real reply odds')} />
-            <ModeLink to="/train?mode=quiz" icon={Dumbbell} title={t('Position quiz')} sub={t('Weakest positions first')} />
+            <ListRow to="/train?mode=learn" icon={GraduationCap} title={t('Learn')} sub={sum.newToday ? t('{count} new today', { count: sum.newToday }) : t('Nothing new today')} />
+            <ListRow to="/train?mode=drill" icon={Shuffle} title={t('Drill')} sub={t('Random lines, real reply odds')} />
+            <ListRow to="/train?mode=quiz" icon={Dumbbell} title={t('Position quiz')} sub={t('Weakest positions first')} />
           </ListGroup>
         </>
       )}
-      <h2 className="mt-8 mb-2 px-1 text-sm font-semibold text-ink-2">{t('Tools')}</h2>
+      <SectionHeader title={t('Tools')} className="mt-[var(--section-gap)]" />
       <ListGroup>
-        <ModeLink to="/focus" icon={Target} title={t('Weak spots')} sub={t('Your weakest moves, openings and lines')} />
-        <ModeLink to="/plan" icon={CalendarDays} title={t('Study plan')} sub={t('A few days of sessions, built around your focus')} />
-        <ModeLink to="/stats" icon={BarChart3} title={t('Statistics')} sub={t('Accuracy, repertoires, openings, games')} />
-        <ModeLink to="/setup" icon={Cpu} title={t('Analysis board')} sub={t('Set up any position, run Stockfish')} />
+        <ListRow to="/focus" icon={Target} title={t('Weak spots')} sub={t('Your weakest moves, openings and lines')} />
+        <ListRow to="/plan" icon={CalendarDays} title={t('Study plan')} sub={t('A few days of sessions, built around your focus')} />
+        <ListRow to="/stats" icon={BarChart3} title={t('Statistics')} sub={t('Accuracy, repertoires, openings, games')} />
+        <ListRow to="/setup" icon={Cpu} title={t('Analysis board')} sub={t('Set up any position, run Stockfish')} />
       </ListGroup>
     </div>
   );
@@ -143,7 +136,7 @@ function Progress({ done, goal, learned, positions, retention }: { done: number;
   const r = 15;
   const c = 2 * Math.PI * r;
   return (
-    <dl className="tnum mt-3 flex items-stretch rounded-[var(--radius-l)] border border-line bg-surface shadow-1">
+    <Card as="dl" pad={false} className="tnum mt-3 flex items-stretch">
       <div className="flex min-w-0 flex-[1.25] items-center gap-2.5 py-3 ps-3.5 pe-2 sm:gap-3 sm:px-4">
         <svg viewBox="0 0 38 38" className="size-8 shrink-0 -rotate-90 sm:size-9" aria-hidden>
           <circle cx="19" cy="19" r={r} fill="none" stroke="var(--surface-3)" strokeWidth="4" />
@@ -159,7 +152,7 @@ function Progress({ done, goal, learned, positions, retention }: { done: number;
       </div>
       <Stat label={t('Learned')} value={learned} of={positions} />
       <Stat label={t('Retention')} value={retention === null ? '—' : fmtPercent(retention)} />
-    </dl>
+    </Card>
   );
 }
 
@@ -172,24 +165,5 @@ function Stat({ label, value, of }: { label: string; value: number | string; of?
         {of !== undefined && <span className="font-semibold text-ink-3">/{of}</span>}
       </dd>
     </div>
-  );
-}
-
-function ListGroup({ children }: { children: React.ReactNode }) {
-  return <div className="divide-y divide-line overflow-hidden rounded-[var(--radius-l)] border border-line bg-surface shadow-1">{children}</div>;
-}
-
-function ModeLink({ to, icon: Icon, title, sub }: { to: string; icon: typeof Play; title: string; sub: string }) {
-  return (
-    <Link to={to} className="flex min-h-[60px] items-center gap-3.5 px-4 py-2.5 transition-colors duration-150 hover:bg-surface-2 active:bg-surface-3">
-      <span className="flex size-9 shrink-0 items-center justify-center rounded-[10px] bg-brand-soft text-brand-ink">
-        <Icon size={19} aria-hidden />
-      </span>
-      <span className="min-w-0 flex-1">
-        <span className="block font-semibold">{title}</span>
-        <span className="block truncate text-sm text-ink-2">{sub}</span>
-      </span>
-      <ChevronRight size={18} className="shrink-0 text-ink-3 rtl:rotate-180" aria-hidden />
-    </Link>
   );
 }
