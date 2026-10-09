@@ -35,6 +35,8 @@ export const engineFlavor = (): { threaded: boolean; file: string; threads: numb
 };
 
 const isMobile = () => /Android|iPhone|iPad|iPod/i.test(navigator.userAgent) || navigator.maxTouchPoints > 1;
+/** Phones search shallower, and shallower still with many lines (the guide's eight), so a search ends in seconds. */
+const defaultDepth = (multiPv: number) => (isMobile() ? (multiPv > 3 ? 18 : 20) : 24);
 
 class Engine {
   private worker?: Worker;
@@ -156,7 +158,12 @@ class Engine {
     this.state = 'searching';
     this.send(`setoption name MultiPV value ${opts.multiPv ?? 3}`);
     this.send(`position fen ${fen}`);
-    this.send(`go depth ${opts.depth ?? (isMobile() ? 20 : 24)}`);
+    this.send(`go depth ${opts.depth ?? defaultDepth(opts.multiPv ?? 3)}`);
+  }
+
+  /** Loads the engine ahead of its first search, so that search doesn't also wait for the download. */
+  warm() {
+    if (this.state === 'idle') void this.start().catch(() => undefined);
   }
 
   /** Analyze a position; replaces any running search. Returns a stop function. */

@@ -4,6 +4,8 @@ import type { FastifyInstance } from 'fastify';
 process.env.LICHESS_FALLBACK_TOKEN = 'lip_test';
 const { buildApp } = await import('../app');
 const { _resetLichessLimits } = await import('../lib/lichess');
+const { getEval } = await import('../services/evals');
+const { getGuide } = await import('../services/guide');
 
 const E4 = 'rnbqkbnr/pppppppp/8/8/4P3/8/PPPP1PPP/RNBQKBNR b KQkq e3 0 1';
 let app: FastifyInstance;
@@ -110,6 +112,46 @@ describe('guide bundle', () => {
     const calls = spy.mock.calls.length;
     await app.inject({ url });
     expect(spy.mock.calls.length).toBe(calls);
+  });
+
+  it('answers with the explorer numbers when the cloud eval is slow, inside its time box', async () => {
+    const FEN = 'rnbqkbnr/pp1ppppp/8/2p5/4P3/5N2/PPPP1PPP/RNBQKB1R b KQkq - 1 2';
+    const ex = { white: 1, draws: 1, black: 1, moves: [{ uci: 'd7d6', san: 'd6', white: 300, draws: 0, black: 0 }, { uci: 'b8c6', san: 'Nc6', white: 100, draws: 0, black: 0 }] };
+    let release!: (r: Response) => void;
+    const stuck = new Promise<Response>((r) => (release = r));
+    vi.spyOn(globalThis, 'fetch').mockImplementation(async (input) => (String(input).includes('cloud-eval') ? stuck : Response.json(ex)));
+    const t0 = Date.now();
+    const b = await getGuide({ fen: FEN, ratings: [1600], speeds: ['blitz'], evals: true }, 'lip_test', 300);
+    expect(Date.now() - t0).toBeLessThan(1500);
+    expect(b.lichess!.moves.map((m) => m.uci)).toEqual(['d7d6', 'b8c6']);
+    expect(b.eval).toBeNull();
+    expect(b.children).toEqual({});
+    release(new Response('{}', { status: 404 }));
+  });
+});
+
+describe('Lichess etiquette', () => {
+  const F1 = '8/8/8/8/8/5k2/8/4K2R b K - 1 1';
+  const F2 = '8/8/8/8/8/5k2/8/4KR2 b - - 2 1';
+  const F3 = '8/8/8/8/8/4k3/8/4K2R w K - 0 1';
+
+  it('a request queued behind a 429 fails at once instead of sleeping through the pause', async () => {
+    const spy = mockFetch(() => new Response('slow down', { status: 429 }));
+    const t0 = Date.now();
+    const [a, b] = await Promise.allSettled([getEval(F1), getEval(F2)]);
+    expect(a.status).toBe('rejected');
+    expect(b.status).toBe('rejected');
+    expect((b as PromiseRejectedResult).reason.name).toBe('LichessRateLimited');
+    expect(Date.now() - t0).toBeLessThan(1500);
+    expect(spy).toHaveBeenCalledTimes(1);
+  });
+
+  it('asks Lichess once when the same position is wanted twice at the same time', async () => {
+    const spy = mockFetch((url) => (url.includes('cloud-eval') ? Response.json({ fen: F3, depth: 30, knodes: 1, pvs: [{ moves: 'h1h3', cp: 500 }] }) : new Response('{}', { status: 404 })));
+    const [a, b] = await Promise.all([getEval(F3, 3), getEval(F3, 1)]);
+    expect(a).toEqual(b);
+    expect(a!.lines[0]).toEqual({ moves: ['h1h3'], cp: 500 });
+    expect(spy).toHaveBeenCalledTimes(1);
   });
 });
 

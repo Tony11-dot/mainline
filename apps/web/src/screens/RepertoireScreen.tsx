@@ -14,6 +14,7 @@ import { EnginePanel } from '../panels/EnginePanel';
 import { ExplorerPanel } from '../panels/ExplorerPanel';
 import { MoveTree } from '../panels/MoveTree';
 import { useEngineEval } from '../panels/useEngineEval';
+import { engine as stockfish } from '../lib/engine';
 import { folderPath, repMoves, repsUnder, useLibrary } from '../lib/library';
 import { pathToEpd, repertoireTree, validPrefix } from '../lib/repTree';
 import { usePrefs } from '../lib/prefs';
@@ -100,11 +101,19 @@ function LineEditor({ id }: { id: string }) {
   const fromBundle = useMemo(() => bundleEngine(guideData.bundle), [guideData.bundle]);
   // Stockfish on the device only fills what the server's evals don't cover: the position's own best
   // moves (needed before anything can be called the engine's pick) or popular moves nobody has analysed.
+  // The server usually answers well within a second; when it doesn't, the engine starts rather than
+  // leaving the panel empty, and the server's numbers join in when they land.
+  const serverSlow = useHeldFor(guideData.loading, 1500);
   const localNeeded =
     guided &&
-    !guideData.loading &&
-    (!guideData.bundle?.eval?.lines.length || guideMoves(guideData.bundle?.lichess, guideData.bundle?.masters, 8).some((u) => !fromBundle.lines.some((l) => l.moves[0] === u) && guideData.bundle?.children?.[u] !== null));
+    (serverSlow ||
+      (!guideData.loading &&
+        (!guideData.bundle?.eval?.lines.length || guideMoves(guideData.bundle?.lichess, guideData.bundle?.masters, 8).some((u) => !fromBundle.lines.some((l) => l.moves[0] === u) && guideData.bundle?.children?.[u] !== null))));
   const ev = useEngineEval(view.node.fen, engineOn || localNeeded, localNeeded ? 8 : 3);
+  // The guide leans on the engine sooner or later: have it loaded before it's needed.
+  useEffect(() => {
+    if (guided) stockfish.warm();
+  }, [guided]);
   const [renaming, setRenaming] = useState(false);
   const opening = useOpeningName(view.nodes.map((n) => n.fen));
   const [hoverUci, setHoverUci] = useState<string | null>(null);
@@ -544,6 +553,20 @@ function LineEditor({ id }: { id: string }) {
       {sheet}
     </div>
   );
+}
+
+/** True once `on` has held for `ms`; false again as soon as it drops. */
+function useHeldFor(on: boolean, ms: number) {
+  const [held, setHeld] = useState(false);
+  useEffect(() => {
+    if (!on) {
+      setHeld(false);
+      return;
+    }
+    const t = setTimeout(() => setHeld(true), ms);
+    return () => clearTimeout(t);
+  }, [on, ms]);
+  return held;
 }
 
 /** Back goes to the line's folder (its opening), not the top of the library. */

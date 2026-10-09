@@ -7,12 +7,18 @@ import { env } from '../env';
 import { getEval } from '../services/evals';
 import { getExplorer } from '../services/explorer';
 import { sleep } from '../lib/queue';
-import { LichessRateLimited, lichessStats } from '../lib/lichess';
+import { LichessRateLimited, lichessPauseMs, lichessStats } from '../lib/lichess';
 import { getGuide } from '../services/guide';
 import { allOpenings } from '../services/openings';
 import { sendDueNotifications } from '../services/push';
 
 const NIGHTLY_CAP = 2000;
+
+/** Lichess asked for a pause: a background job waits it out here instead of failing position after position. */
+async function waitOutPause() {
+  const pause = Math.max(lichessPauseMs({ token: env.LICHESS_FALLBACK_TOKEN }), lichessPauseMs({ bucket: 'cloud-eval' }));
+  if (pause > 0) await sleep(pause + 500);
+}
 
 /**
  * Nightly prefetch: explorer data (masters + each user's rating band) and cloud evals for every
@@ -35,6 +41,7 @@ export async function prefetchRepertoirePositions(log: FastifyBaseLogger, cap = 
   let n = 0;
   for (const r of rows) {
     if (n >= cap) break;
+    await waitOutPause();
     const fen = epdToFen(r.epd);
     try {
       await getExplorer({ source: 'masters', fen }, env.LICHESS_FALLBACK_TOKEN);
@@ -85,6 +92,7 @@ export async function warmGuides(log: FastifyBaseLogger, budget = 3000) {
   let n = 0;
   for (const epd of libraryPositions()) {
     if (lichessStats.calls - start >= budget) break;
+    await waitOutPause();
     const before = lichessStats.calls;
     try {
       await getGuide({ fen: epdToFen(epd), ratings: DEFAULT_BANDS, speeds: DEFAULT_SPEEDS, evals: true }, env.LICHESS_FALLBACK_TOKEN, 60_000);

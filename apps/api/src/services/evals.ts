@@ -14,11 +14,24 @@ interface CloudEval {
   pvs: { moves: string; cp?: number; mate?: number }[];
 }
 
+const inflight = new Map<string, Promise<EvalData | null>>();
+
 /** Deep eval for a position: our cache → Lichess cloud eval → null (client falls back to local Stockfish). */
 export async function getEval(fen: string, multiPv = 3): Promise<EvalData | null> {
   const epd = toEpd(fen);
   const cached = hot.get(epd);
   if (cached !== undefined) return cached;
+  // The same position is often wanted twice at once (a guide and the engine panel, a prefetch and the
+  // visit it predicted): one Lichess request serves them all.
+  let p = inflight.get(epd);
+  if (!p) {
+    p = lookup(epd, multiPv).finally(() => inflight.delete(epd));
+    inflight.set(epd, p);
+  }
+  return p;
+}
+
+async function lookup(epd: string, multiPv: number): Promise<EvalData | null> {
   const db = getDb();
   if (db) {
     const row = await db.query.engineEvals.findFirst({ where: eq(schema.engineEvals.epd, epd) });

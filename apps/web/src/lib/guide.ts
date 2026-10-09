@@ -6,6 +6,7 @@ import { cachedEval, primeEval } from './evals';
 import { usePrefs } from './prefs';
 
 const mem = new Map<string, GuideBundle>();
+const GUIDE_TIMEOUT_MS = 12_000;
 const inflight = new Map<string, Promise<GuideBundle>>();
 
 const keyOf = (fen: string, rating: number, speeds: Speed[], evals: boolean) => `${toEpd(fen)}|${ratingBandsFor(rating).join(',')}|${[...speeds].sort().join(',')}|${evals ? 1 : 0}`;
@@ -46,7 +47,8 @@ export function fetchGuide(fen: string, evals: boolean, signal?: AbortSignal): P
   let p = inflight.get(key);
   if (!p) {
     const q = new URLSearchParams({ fen, ratings: ratingBandsFor(rating).join(','), speeds: speeds.join(','), evals: evals ? '1' : '0' });
-    p = api<GuideBundle>(`/api/guide?${q}`)
+    // Past this, the answer isn't coming soon enough to wait for: the device's engine takes over.
+    p = api<GuideBundle>(`/api/guide?${q}`, { signal: AbortSignal.timeout(GUIDE_TIMEOUT_MS) })
       .then((b) => {
         if (b.lichess) primeExplorer('lichess', fen, rating, speeds, b.lichess);
         if (b.masters) primeExplorer('masters', fen, rating, speeds, b.masters);
@@ -61,7 +63,8 @@ export function fetchGuide(fen: string, evals: boolean, signal?: AbortSignal): P
             }
           }
         }
-        mem.set(key, b);
+        // An answer without explorer numbers (Lichess pausing us) isn't kept: the next look asks again.
+        if (b.lichess || b.masters) mem.set(key, b);
         return b;
       })
       .finally(() => inflight.delete(key));
