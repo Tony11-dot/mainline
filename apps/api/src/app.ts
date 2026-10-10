@@ -103,6 +103,8 @@ export async function buildApp(opts: { logger?: boolean } = {}): Promise<Fastify
     await app.register(fastifyStatic, {
       root: dist,
       wildcard: false,
+      // `/` must reach the catch-all below, which serves index.html with absolute share-preview URLs.
+      index: false,
       setHeaders(res, filePath) {
         if (/[.-][A-Za-z0-9_-]{8,}\.(js|css|wasm|woff2|png|svg|webp|mp3)$/.test(filePath) || filePath.includes('/assets/')) {
           res.header('Cache-Control', 'public, max-age=31536000, immutable');
