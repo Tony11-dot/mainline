@@ -81,6 +81,8 @@ async function seed(page: Page) {
 
 async function shot(page: Page, device: string, name: string) {
   await page.evaluate(() => document.fonts.ready);
+  // Clicking a tab below the fold scrolls to it; a store shot starts at the top of the page (board first).
+  await page.evaluate(() => window.scrollTo(0, 0));
   await page.waitForTimeout(400);
   await page.screenshot({ path: path.join(OUT, device, `${name}.png`), animations: 'disabled', caret: 'hide' });
 }
