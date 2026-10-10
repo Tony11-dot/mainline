@@ -34,7 +34,7 @@ export function MoveSheet({ open, color, exclude, current, count, onPick, onClos
               onPick(f.id);
               onClose();
             }}
-            className="flex h-11 min-w-0 flex-1 items-center gap-2.5 rounded-[10px] px-2 text-start hover:bg-surface-3 disabled:opacity-40"
+            className="flex h-11 min-w-0 flex-1 items-center gap-2.5 rounded-[var(--radius-s)] px-2 text-start hover:bg-surface-3 disabled:opacity-40"
           >
             <FolderIcon size={18} className="shrink-0 text-brand" aria-hidden />
             <span className="truncate font-medium">{f.parentId === null ? (color === 'white' ? t('As White') : t('As Black')) : t(f.name)}</span>

@@ -1026,5 +1026,21 @@
  "From the start": "最初から",
  "Its lines and folders are built on these moves, so they stay as they are. To start from other moves, make a new folder.": "中のラインとフォルダはこの手順の上に作られているため、変更できません。別の手順から始めるには新しいフォルダを作成してください。",
  "Lines you make inside start from here.": "ここで作るラインはこの局面から始まります。",
- "Clear": "クリア"
+ "Clear": "クリア",
+ "Page not found": "ページが見つかりません",
+ "Something went wrong": "問題が発生しました",
+ "There’s nothing at this address.": "このアドレスには何もありません。",
+ "Reload the app and try again. Your repertoire and training are saved.": "アプリを再読み込みしてもう一度お試しください。レパートリーとトレーニングは保存されています。",
+ "Reload": "再読み込み",
+ "Loading…": "読み込み中…",
+ "From the engine and game statistics": "エンジンと対局統計より",
+ "the AI coach is resting until tomorrow": "AIコーチは明日まで休憩中です",
+ "AI coach · grounded in this position’s engine lines and stats": "AIコーチ · この局面のエンジン読み筋と統計に基づく",
+ "{wrong} of {total} wrong": "{total} 回中 {wrong} 回ミス",
+ "No games as White yet.": "白番の対局はまだありません。",
+ "No games as Black yet.": "黒番の対局はまだありません。",
+ "From this position, add every opponent reply played in at least the chosen share of games by players around {rating}. Where it’s your turn, your main move is followed; positions without one are left for you to decide.": "この局面から、{rating} 前後のプレイヤーが選んだ割合以上の対局で指した相手の応手をすべて追加します。自分の手番ではメインの手をたどり、メインの手がない局面はあなたが決めるために残します。",
+ "{n} variations": {
+  "other": "{n} 個の変化"
+ }
 }

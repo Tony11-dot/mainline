@@ -380,7 +380,7 @@
  "Replies": "Risposte",
  "Replies added": "Risposte aggiunte",
  "Result split": "Ripartizione dei risultati",
- "Retention": "Memorizzazione",
+ "Retention": "Ritenzione",
  "Review": "Ripasso",
  "Review complete": "Ripasso completato",
  "Reviewed": "Ripassate",
@@ -1089,5 +1089,23 @@
  "From the start": "Dall’inizio",
  "Its lines and folders are built on these moves, so they stay as they are. To start from other moves, make a new folder.": "Le sue linee e cartelle si basano su queste mosse, quindi restano come sono. Per partire da altre mosse, crea una nuova cartella.",
  "Lines you make inside start from here.": "Le linee che crei qui partono da questo punto.",
- "Clear": "Cancella"
+ "Clear": "Cancella",
+ "Page not found": "Pagina non trovata",
+ "Something went wrong": "Qualcosa è andato storto",
+ "There’s nothing at this address.": "Non c’è niente a questo indirizzo.",
+ "Reload the app and try again. Your repertoire and training are saved.": "Ricarica l’app e riprova. Il tuo repertorio e il tuo allenamento sono salvati.",
+ "Reload": "Ricarica",
+ "Loading…": "Caricamento…",
+ "From the engine and game statistics": "Dal motore e dalle statistiche delle partite",
+ "the AI coach is resting until tomorrow": "il coach IA riposa fino a domani",
+ "AI coach · grounded in this position’s engine lines and stats": "Coach IA · basato sulle linee del motore e sulle statistiche di questa posizione",
+ "{wrong} of {total} wrong": "{wrong} su {total} sbagliate",
+ "No games as White yet.": "Ancora nessuna partita con il Bianco.",
+ "No games as Black yet.": "Ancora nessuna partita con il Nero.",
+ "From this position, add every opponent reply played in at least the chosen share of games by players around {rating}. Where it’s your turn, your main move is followed; positions without one are left for you to decide.": "Da questa posizione aggiunge ogni risposta avversaria giocata almeno nella quota di partite scelta dai giocatori intorno a {rating}. Quando tocca a te viene seguita la tua mossa principale; le posizioni senza restano da decidere a te.",
+ "{n} variations": {
+  "one": "{n} variante",
+  "many": "{n} varianti",
+  "other": "{n} varianti"
+ }
 }

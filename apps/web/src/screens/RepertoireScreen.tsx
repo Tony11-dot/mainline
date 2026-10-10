@@ -21,6 +21,7 @@ import { usePrefs } from '../lib/prefs';
 import { useAssistant } from '../lib/assistant';
 import { useGames } from '../lib/games';
 import { Button, PanelNote } from '../ui/primitives';
+import { EmptyState, Pill } from '../ui/kit';
 import { MoveStatsPanel } from '../panels/MoveStatsPanel';
 import { RepertoireStats } from '../panels/RepertoireStats';
 import { CoachPanel } from '../panels/CoachPanel';
@@ -223,10 +224,10 @@ function LineEditor({ id }: { id: string }) {
   if (!lib.loaded) return null;
   if (!rep)
     return (
-      <div className="mx-auto max-w-xl px-4 py-16">
-        <PanelNote title={t('This repertoire doesn’t exist anymore')} action={<Button onClick={() => nav('/library')}>{t('Back to repertoire')}</Button>}>
+      <div className="mx-auto max-w-md px-4 py-16 md:py-24">
+        <EmptyState icon={Waypoints} title={t('This repertoire doesn’t exist anymore')} action={<Button variant="primary" onClick={() => nav('/library')}>{t('Back to repertoire')}</Button>}>
           {t('It may have been deleted on another device.')}
-        </PanelNote>
+        </EmptyState>
       </div>
     );
 
@@ -322,24 +323,24 @@ function LineEditor({ id }: { id: string }) {
     <div className="flex flex-wrap items-center gap-2">
       {own ? (
         main ? (
-          <Chip tone="brand" icon={Crown}>
+          <Pill tone="brand" icon={Crown} size="md">
             {t('You play {move}', { move: main.san })}
             {here.length > 1 ? ` · ${tn(here.length - 1, '{n} alternate', '{n} alternates')}` : ''}
-          </Chip>
+          </Pill>
         ) : (
-          <Chip tone="warn" icon={Lightbulb}>
+          <Pill tone="warn" icon={Lightbulb} size="md">
             {t('Your move — not decided yet')}
-          </Chip>
+          </Pill>
         )
       ) : (
-        <Chip tone="neutral" icon={Waypoints}>
+        <Pill tone="neutral" icon={Waypoints} size="md">
           {here.length ? tn(here.length, '{n} reply prepared', '{n} replies prepared') : t('Their move — no replies yet')}
-        </Chip>
+        </Pill>
       )}
       {conflict && (
-        <Chip tone="warn">
+        <Pill tone="warn" size="md">
           {t('Conflict')}: {[...conflict.choices.keys()].map((u) => uciToSan(positionFromFen(epdToFen(conflict.epd)), u)).join(' / ')}
-        </Chip>
+        </Pill>
       )}
     </div>
   );
@@ -434,9 +435,9 @@ function LineEditor({ id }: { id: string }) {
   const activePane = pane === 'suggest' && (!own || ready) ? 'tree' : pane;
 
   const header = (
-    <div className="flex min-h-[44px] items-center gap-2 px-4 lg:px-0">
-      <Link to={backTo(lib.folders, rep.folderId)} className="-ms-2 flex size-10 items-center justify-center rounded-full text-ink-2 hover:bg-surface-3" aria-label={t('Back to repertoire')}>
-        <ArrowLeft size={20} className="rtl:rotate-180" />
+    <div className="flex min-h-[52px] items-center gap-2 px-4 py-1 lg:px-0">
+      <Link to={backTo(lib.folders, rep.folderId)} className="pressable -ms-2 flex size-11 shrink-0 items-center justify-center rounded-full text-ink-2 hover:bg-surface-3 hover:text-ink" aria-label={t('Back to repertoire')}>
+        <ArrowLeft size={22} className="rtl:rotate-180" aria-hidden />
       </Link>
       <div className="min-w-0 flex-1">
         {renaming ? (
@@ -444,7 +445,7 @@ function LineEditor({ id }: { id: string }) {
             autoFocus
             defaultValue={rep.name}
             aria-label={t('Rename')}
-            className="w-full rounded-md border border-line-strong bg-surface px-2 py-0.5 text-md font-bold"
+            className="w-full rounded-[var(--radius-xs)] border border-brand bg-surface px-2 py-0.5 text-lg font-bold outline-none"
             onBlur={(e) => {
               void lib.renameRepertoire(rep.id, e.target.value);
               setRenaming(false);
@@ -456,17 +457,17 @@ function LineEditor({ id }: { id: string }) {
           />
         ) : (
           <button type="button" onClick={() => setRenaming(true)} className="group flex max-w-full items-center gap-1.5 text-start" aria-label={`${t('Rename')}: ${rep.name}`}>
-            <h1 className="truncate text-md font-bold">{rep.name}</h1>
-            <Pencil size={13} className="shrink-0 text-ink-3 opacity-60 group-hover:opacity-100" aria-hidden />
+            <h1 className="truncate text-lg font-bold">{rep.name}</h1>
+            <Pencil size={14} className="shrink-0 text-ink-3 opacity-70 group-hover:opacity-100" aria-hidden />
           </button>
         )}
-        <p className="truncate text-xs text-ink-3">
+        <p className="truncate text-sm text-ink-2">
           {folderPath(lib.folders, rep.folderId).map((n) => t(n)).join(' / ')}
           {opening ? ` · ${opening.eco} ${opening.name}` : ''}
         </p>
       </div>
       {ready ? (
-        <span className="inline-flex h-9 shrink-0 items-center gap-1.5 rounded-full bg-brand-soft px-3 text-sm font-semibold text-brand-ink">
+        <span className="inline-flex h-10 shrink-0 items-center gap-1.5 rounded-full bg-brand-soft px-3.5 text-sm font-semibold text-brand-ink">
           <Sparkles size={16} aria-hidden />
           {t('Ready-made')}
         </span>
@@ -475,7 +476,7 @@ function LineEditor({ id }: { id: string }) {
         type="button"
         aria-pressed={guided}
         onClick={() => usePrefs.getState().set({ guided: !guided })}
-        className={`inline-flex h-9 shrink-0 items-center gap-1.5 rounded-full px-3 text-sm font-semibold transition-colors ${guided ? 'bg-brand text-on-brand' : 'bg-surface-3 text-ink-2 hover:text-ink'}`}
+        className={`pressable inline-flex h-10 shrink-0 items-center gap-1.5 rounded-full px-3.5 text-sm font-semibold transition-colors ${guided ? 'bg-brand text-on-brand' : 'bg-brand-soft text-brand-ink hover:bg-brand-soft-2'}`}
       >
         <Compass size={16} aria-hidden />
         {t('Guided')}
@@ -485,7 +486,7 @@ function LineEditor({ id }: { id: string }) {
   );
 
   const guide = guided && (
-    <div className="overflow-hidden rounded-[var(--radius-l)] border border-line bg-surface shadow-1">
+    <div className="overflow-hidden rounded-[var(--radius-l)] bg-surface shadow-card">
       <GuidePanel
         fen={view.node.fen}
         own={own}
@@ -515,7 +516,7 @@ function LineEditor({ id }: { id: string }) {
           <BoardControls store={store} onTypedMove={(u) => void addMove(u)} />
         </div>
         <aside className="flex max-h-[calc(100dvh-2.5rem)] min-w-[360px] max-w-[480px] flex-1 flex-col gap-3">
-          <div className="flex shrink-0 flex-col gap-3 rounded-[var(--radius-l)] border border-line bg-surface p-3.5 shadow-1">
+          <div className="flex shrink-0 flex-col gap-3.5 rounded-[var(--radius-l)] bg-surface p-4 shadow-card">
             {line}
             <div className="border-t border-line pt-3">{status}</div>
             {actions}
@@ -523,7 +524,7 @@ function LineEditor({ id }: { id: string }) {
           {/* The guide scrolls on its own so the panels below always keep room. */}
           {guide && <div className="max-h-[45dvh] shrink-0 overflow-y-auto rounded-[var(--radius-l)]">{guide}</div>}
           <PaneTabs value={activePane} onChange={setPane} options={paneOptions} />
-          <div className="min-h-[200px] flex-1 overflow-auto rounded-[var(--radius-l)] border border-line bg-surface shadow-1">{panes[activePane]}</div>
+          <div className="min-h-[200px] flex-1 overflow-auto rounded-[var(--radius-l)] bg-surface shadow-card">{panes[activePane]}</div>
         </aside>
         {sheet}
       </div>
@@ -539,17 +540,17 @@ function LineEditor({ id }: { id: string }) {
       </div>
       <BoardControls store={store} drawMode={drawMode} onToggleDraw={() => setDrawMode((d) => !d)} onTypedMove={(u) => void addMove(u)} />
       <div className="px-3 pb-3">
-        <div className="rounded-[var(--radius-l)] border border-line bg-surface p-3 shadow-1">{line}</div>
+        <div className="rounded-[var(--radius-l)] bg-surface p-4 shadow-card">{line}</div>
       </div>
       {guide && <div className="px-3 pb-3">{guide}</div>}
-      <div className="flex flex-col gap-2.5 px-3 pb-3">
+      <div className="flex flex-col gap-3 px-3 pb-4">
         {status}
         <div className="-mx-3 overflow-x-auto px-3 [scrollbar-width:none]">{actions}</div>
       </div>
       <div className="px-3">
         <PaneTabs value={activePane} onChange={setPane} options={paneOptions} />
       </div>
-      <div className="mt-2 min-h-[240px]">{panes[activePane]}</div>
+      <div className="mx-3 mt-3 min-h-[240px] overflow-hidden rounded-[var(--radius-l)] bg-surface shadow-card">{panes[activePane]}</div>
       {sheet}
     </div>
   );
@@ -585,16 +586,6 @@ function lineDests(ucis: string[]): Map<Key, Key[]> {
   return out;
 }
 
-function Chip({ tone, icon: Icon, children }: { tone: 'brand' | 'warn' | 'neutral'; icon?: typeof Crown; children: React.ReactNode }) {
-  const tones = { brand: 'bg-brand-soft text-brand-ink', warn: 'bg-warn-soft text-[oklch(0.45_0.1_70)] dark:text-warn', neutral: 'bg-surface-3 text-ink-2' };
-  return (
-    <span className={`inline-flex h-7 items-center gap-1.5 rounded-full px-2.5 text-sm font-semibold ${tones[tone]}`}>
-      {Icon && <Icon size={14} aria-hidden />}
-      {children}
-    </span>
-  );
-}
-
 /** Scrollable pill tabs — the builder has more panels than fit a segmented control on phones. */
 function PaneTabs<T extends string>({ value, onChange, options }: { value: T; onChange: (v: T) => void; options: { value: T; label: string }[] }) {
   return (
@@ -606,7 +597,7 @@ function PaneTabs<T extends string>({ value, onChange, options }: { value: T; on
           type="button"
           aria-selected={o.value === value}
           onClick={() => onChange(o.value)}
-          className={`h-9 shrink-0 rounded-full px-3.5 text-sm font-semibold transition-colors ${o.value === value ? 'bg-brand text-on-brand' : 'bg-surface-3 text-ink-2 hover:text-ink'}`}
+          className={`pressable h-10 shrink-0 rounded-full px-4 text-sm font-semibold transition-colors ${o.value === value ? 'bg-brand text-on-brand' : 'bg-surface text-ink-2 shadow-card hover:text-ink'}`}
         >
           {o.label}
         </button>

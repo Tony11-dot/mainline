@@ -10,10 +10,10 @@ export function NotesPanel({ move, onSave }: { move?: RepMove; onSave: (note: st
   useEffect(() => () => clearTimeout(timer.current), []);
   if (!move) return <PanelNote title={t('Select a move')}>{t('Notes and arrows are saved on moves. Step into the line to add one.')}</PanelNote>;
   return (
-    <div className="p-3">
-      <label className="mb-1.5 flex items-center justify-between text-sm font-semibold text-ink-2">
+    <div className="p-4">
+      <label className="mb-2 flex items-center justify-between text-md font-bold">
         <span>{t('Note on {move}', { move: move.san })}</span>
-        <span className="text-xs font-normal text-ink-3" aria-live="polite">{saved ? t('Saved') : t('Saving…')}</span>
+        <span className="text-sm font-normal text-ink-2" aria-live="polite">{saved ? t('Saved') : t('Saving…')}</span>
       </label>
       <textarea
         value={text}
@@ -27,9 +27,9 @@ export function NotesPanel({ move, onSave }: { move?: RepMove; onSave: (note: st
           }, 500);
         }}
         placeholder={t('Why this move? What’s the plan? (shown during training)')}
-        className="h-36 w-full resize-y rounded-[12px] border border-line bg-surface px-3 py-2.5 text-base outline-none focus:border-brand focus:ring-3 focus:ring-brand/20"
+        className="h-36 w-full resize-y rounded-[var(--radius-control)] border border-line bg-surface px-4 py-3 text-base outline-none focus:border-brand focus:ring-3 focus:ring-brand/20"
       />
-      <p className="mt-2 text-xs text-ink-3">{t('Tip: draw arrows on the board (right-drag, or long-press on touch) — they’re saved with this move.')}</p>
+      <p className="mt-2.5 text-sm text-ink-2">{t('Tip: draw arrows on the board (right-drag, or long-press on touch) — they’re saved with this move.')}</p>
     </div>
   );
 }

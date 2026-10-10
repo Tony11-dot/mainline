@@ -27,7 +27,7 @@ export function MoveToSheet({ open, item, onClose }: { open: boolean; item?: { t
                 else await lib.moveRepertoire(item.rep.id, f.id);
                 onClose();
               }}
-              className="flex h-12 w-full items-center gap-3 rounded-[12px] px-2 text-start hover:bg-surface-3 disabled:opacity-40"
+              className="flex h-12 w-full items-center gap-3 rounded-[var(--radius-control)] px-2 text-start hover:bg-surface-3 disabled:opacity-40"
               style={{ paddingInlineStart: 8 + (path.length - 1) * 18 }}
             >
               <FolderIcon size={18} className="text-brand" aria-hidden />

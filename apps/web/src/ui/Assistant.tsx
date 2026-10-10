@@ -54,7 +54,7 @@ export function AssistantSheet() {
             maxLength={2000}
             placeholder={t('Ask anything…')}
             aria-label={t('Your question')}
-            className="max-h-32 min-h-11 flex-1 resize-none rounded-[12px] border border-line bg-surface px-3.5 py-2.5 text-base outline-none placeholder:text-ink-3 focus:border-brand focus:ring-3 focus:ring-brand/20"
+            className="max-h-32 min-h-11 flex-1 resize-none rounded-[var(--radius-control)] border border-line bg-surface px-4 py-2.5 text-base outline-none placeholder:text-ink-3 focus:border-brand focus:ring-3 focus:ring-brand/20"
           />
           <Button type="submit" variant="primary" icon={ArrowUp} disabled={busy || !text.trim()} aria-label={t('Send')}>
             {t('Send')}
@@ -64,11 +64,11 @@ export function AssistantSheet() {
     >
       <div className="flex flex-col gap-3">
         <div className="flex flex-wrap items-center gap-2">
-          <button type="button" onClick={() => setAboutMe((v) => !v)} aria-expanded={aboutMe} className="inline-flex h-8 items-center gap-1.5 rounded-full bg-surface-3 px-3 text-sm font-semibold text-ink-2 hover:text-ink">
+          <button type="button" onClick={() => setAboutMe((v) => !v)} aria-expanded={aboutMe} className="inline-flex h-9 items-center gap-1.5 rounded-full bg-surface-3 px-3.5 text-sm font-semibold text-ink-2 hover:text-ink">
             <UserRound size={14} aria-hidden /> {notes.trim() ? t('About me ✓') : t('About me')}
           </button>
           {turns.length > 0 && (
-            <button type="button" onClick={clear} className="inline-flex h-8 items-center gap-1.5 rounded-full px-3 text-sm font-semibold text-ink-3 hover:bg-surface-3 hover:text-ink">
+            <button type="button" onClick={clear} className="inline-flex h-9 items-center gap-1.5 rounded-full px-3.5 text-sm font-semibold text-ink-3 hover:bg-surface-3 hover:text-ink">
               <Trash2 size={14} aria-hidden /> {t('New chat')}
             </button>
           )}
@@ -81,16 +81,16 @@ export function AssistantSheet() {
               onChange={(e) => usePrefs.getState().set({ aiNotes: e.target.value.slice(0, 1500) })}
               rows={3}
               placeholder={t('e.g. I like quiet positional lines, I hate theory-heavy gambits, I have little time to study.')}
-              className="w-full rounded-[12px] border border-line bg-surface px-3.5 py-2.5 text-sm outline-none placeholder:text-ink-3 focus:border-brand"
+              className="w-full rounded-[var(--radius-control)] border border-line bg-surface px-4 py-2.5 text-sm outline-none placeholder:text-ink-3 focus:border-brand"
             />
           </label>
         )}
         {turns.length === 0 ? (
           <div className="flex flex-col gap-2 py-2">
-            <p className="text-sm text-ink-2">{t('It knows your folders and lines, your rating and what you’re looking at.')}</p>
+            <p className="text-base text-ink-2">{t('It knows your folders and lines, your rating and what you’re looking at.')}</p>
             <div className="flex flex-wrap gap-2">
               {STARTERS.map((s) => (
-                <button key={s} type="button" onClick={() => send(t(s))} className="rounded-full border border-line px-3 py-1.5 text-start text-sm font-medium hover:bg-surface-2">
+                <button key={s} type="button" onClick={() => send(t(s))} className="pressable rounded-full bg-brand-soft px-3.5 py-2 text-start text-sm font-semibold text-brand-ink hover:bg-brand-soft-2">
                   {t(s)}
                 </button>
               ))}
@@ -99,12 +99,12 @@ export function AssistantSheet() {
         ) : (
           <ol className="flex flex-col gap-3" aria-label={t('Conversation')} aria-live="polite">
             {turns.map((m, i) => (
-              <li key={i} className={m.role === 'user' ? 'ms-10 self-end rounded-[16px] rounded-ee-[6px] bg-brand px-3.5 py-2 text-on-brand' : 'me-6 rounded-[16px] rounded-es-[6px] bg-surface-2 px-3.5 py-2.5'}>
+              <li key={i} className={m.role === 'user' ? 'ms-10 self-end rounded-[var(--radius-m)] rounded-ee-[6px] bg-brand px-4 py-2.5 text-on-brand' : 'me-6 rounded-[var(--radius-m)] rounded-es-[6px] bg-surface-2 px-4 py-3'}>
                 {m.role === 'user' ? <p className="whitespace-pre-wrap">{m.text}</p> : <CoachText text={m.text} fen={INITIAL_FEN} />}
               </li>
             ))}
             {busy && (
-              <li className="me-6 inline-flex items-center gap-2 self-start rounded-[16px] bg-surface-2 px-3.5 py-2.5 text-sm text-ink-2">
+              <li className="me-6 inline-flex items-center gap-2 self-start rounded-[var(--radius-m)] bg-surface-2 px-4 py-3 text-sm text-ink-2">
                 <Spinner size={14} /> {t('Thinking…')}
               </li>
             )}
@@ -137,7 +137,7 @@ export function AssistantNavButton() {
     <button
       type="button"
       onClick={() => setOpen(true)}
-      className="mt-2 flex h-14 flex-col items-center justify-center gap-1 rounded-[12px] text-[11px] font-semibold text-brand-ink transition-colors hover:bg-brand-soft lg:h-10 lg:flex-row lg:justify-start lg:gap-3 lg:rounded-[10px] lg:px-3 lg:text-base lg:font-medium"
+      className="mt-2 flex h-14 flex-col items-center justify-center gap-1 rounded-[var(--radius-control)] text-[11px] font-semibold text-brand-ink transition-colors hover:bg-brand-soft lg:h-10 lg:flex-row lg:justify-start lg:gap-3 lg:rounded-[var(--radius-s)] lg:px-3 lg:text-base lg:font-medium"
     >
       <Sparkles size={19} strokeWidth={2} aria-hidden />
       {t('Ask AI')}

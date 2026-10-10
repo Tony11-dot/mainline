@@ -64,7 +64,7 @@ export function MoveInput({ fen, onMove, disabled }: { fen: string; onMove: (uci
         autoCapitalize="off"
         autoCorrect="off"
         spellCheck={false}
-        className={`h-9 w-40 rounded-[10px] border bg-surface ps-8 pe-2 text-sm outline-none transition-colors focus:border-brand focus:ring-3 focus:ring-brand/20 ${error ? 'border-bad' : 'border-line'}`}
+        className={`h-9 w-40 rounded-[var(--radius-s)] border bg-surface ps-8 pe-2 text-sm outline-none transition-colors focus:border-brand focus:ring-3 focus:ring-brand/20 ${error ? 'border-bad' : 'border-line'}`}
       />
     </label>
   );

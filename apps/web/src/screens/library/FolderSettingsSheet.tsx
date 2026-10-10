@@ -103,7 +103,7 @@ export function FolderSettingsSheet({ folderId, onClose, onDelete }: { folderId:
         <div className="flex gap-3">
           <div className="min-w-0 flex-1">
             {movesFixed ? (
-              <p className="tnum rounded-[12px] bg-surface-2 px-3.5 py-2.5 text-sm" dir="ltr">
+              <p className="tnum rounded-[var(--radius-control)] bg-surface-2 px-3.5 py-2.5 text-sm" dir="ltr">
                 {sanOf(own) || t('From the start')}
               </p>
             ) : (

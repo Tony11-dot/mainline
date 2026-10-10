@@ -1089,5 +1089,22 @@
  "From the start": "Vanaf het begin",
  "Its lines and folders are built on these moves, so they stay as they are. To start from other moves, make a new folder.": "De lijnen en mappen erin bouwen op deze zetten, dus die blijven zoals ze zijn. Wil je vanaf andere zetten beginnen, maak dan een nieuwe map.",
  "Lines you make inside start from here.": "Lijnen die je hier maakt beginnen vanaf dit punt.",
- "Clear": "Wissen"
+ "Clear": "Wissen",
+ "Page not found": "Pagina niet gevonden",
+ "Something went wrong": "Er is iets misgegaan",
+ "There’s nothing at this address.": "Er is niets op dit adres.",
+ "Reload the app and try again. Your repertoire and training are saved.": "Laad de app opnieuw en probeer het nog eens. Je repertoire en training zijn opgeslagen.",
+ "Reload": "Opnieuw laden",
+ "Loading…": "Laden…",
+ "From the engine and game statistics": "Uit de engine en de partijstatistieken",
+ "the AI coach is resting until tomorrow": "de AI-coach rust tot morgen",
+ "AI coach · grounded in this position’s engine lines and stats": "AI-coach · gebaseerd op de engine-varianten en statistieken van deze stelling",
+ "{wrong} of {total} wrong": "{wrong} van {total} fout",
+ "No games as White yet.": "Nog geen partijen met wit.",
+ "No games as Black yet.": "Nog geen partijen met zwart.",
+ "From this position, add every opponent reply played in at least the chosen share of games by players around {rating}. Where it’s your turn, your main move is followed; positions without one are left for you to decide.": "Vanaf deze stelling wordt elk antwoord van de tegenstander toegevoegd dat spelers rond {rating} in minstens het gekozen deel van de partijen spelen. Waar jij aan zet bent, volgt het je hoofdzet; stellingen zonder hoofdzet laat het aan jou.",
+ "{n} variations": {
+  "one": "{n} variant",
+  "other": "{n} varianten"
+ }
 }

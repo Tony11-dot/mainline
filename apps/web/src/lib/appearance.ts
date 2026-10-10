@@ -47,8 +47,8 @@ export const BRAND_BLUE = '#072EB8';
 /** MainLine's own look (used by "System default"). */
 export const MAINLINE_LIGHT: ThemeTokens = {
   accent: BRAND_BLUE,
-  surface: '#F9FAFD',
-  surfaceRaised: '#E9ECF4',
+  surface: '#F2F4F9',
+  surfaceRaised: '#E3E7F0',
   paper: '#FFFFFF',
   ink: '#181D2B',
   inkSecondary: '#4A5268',
@@ -56,9 +56,9 @@ export const MAINLINE_LIGHT: ThemeTokens = {
 };
 export const MAINLINE_DARK: ThemeTokens = {
   accent: '#8FA8FF',
-  surface: '#14161C',
-  surfaceRaised: '#2A2E38',
-  paper: '#1B1E26',
+  surface: '#121419',
+  surfaceRaised: '#2B303B',
+  paper: '#1C2029',
   ink: '#EEF0F5',
   inkSecondary: '#B7BDCB',
   separator: '#333845',
@@ -131,7 +131,7 @@ export function themeVars(t: ThemeTokens, dark: boolean): Record<string, string>
     '--brand': t.accent,
     '--bg': t.surface,
     '--surface': t.paper,
-    '--surface-2': mix(t.paper, 55, t.surfaceRaised),
+    '--surface-2': mix(t.paper, 60, t.surfaceRaised),
     '--surface-3': t.surfaceRaised,
     '--ink': t.ink,
     '--ink-2': t.inkSecondary,

@@ -50,7 +50,7 @@ export function ExplorerPanel({ fen, onPlay, onHoverMove, highlightUcis }: { fen
 
   return (
     <section aria-label={t('Opening explorer')} className="flex flex-col">
-      <div className="px-3 pt-3 pb-2">
+      <div className="px-4 pt-4 pb-2">
         <Segmented
           label={t('Explorer database')}
           value={source}
@@ -60,14 +60,14 @@ export function ExplorerPanel({ fen, onPlay, onHoverMove, highlightUcis }: { fen
             { value: 'lichess', label: `Lichess · ${bands[0]}${bands[1] ? `–${bands[1]}` : '+'}` },
           ]}
         />
-        {source === 'lichess' && <p className="mt-1.5 px-1 text-xs text-ink-3">{t('Players rated {range}, {speeds} games', { range: bands.join('–'), speeds: speeds.map(speedName).join(' & ') })}</p>}
+        {source === 'lichess' && <p className="mt-2 px-1 text-sm text-ink-2">{t('Players rated {range}, {speeds} games', { range: bands.join('–'), speeds: speeds.map(speedName).join(' & ') })}</p>}
       </div>
       {error ? (
         <ExplorerError error={error} />
       ) : !data && loading ? (
-        <div className="flex flex-col gap-2 px-3 py-2">
+        <div className="flex flex-col gap-2 px-4 py-2">
           {Array.from({ length: 6 }, (_, i) => (
-            <Skeleton key={i} className="h-7" />
+            <Skeleton key={i} className="h-9" />
           ))}
         </div>
       ) : data && data.moves.length === 0 ? (
@@ -113,7 +113,7 @@ function fmt(n: number) {
 
 function MovesTable({ data, onPlay, onHoverMove, highlightUcis }: { data: ExplorerData; onPlay: (uci: string) => void; onHoverMove?: (uci: string | null) => void; highlightUcis?: Set<string> }) {
   return (
-    <table className="w-full table-fixed border-collapse text-sm">
+    <table className="w-full table-fixed border-collapse text-base">
       <colgroup>
         <col className="w-[22%]" />
         <col className="w-[24%]" />
@@ -131,9 +131,9 @@ function MovesTable({ data, onPlay, onHoverMove, highlightUcis }: { data: Explor
           <MoveRow key={m.uci} m={m} total={data.total} onPlay={onPlay} onHoverMove={onHoverMove} mine={highlightUcis?.has(m.uci)} />
         ))}
         <tr className="border-t border-line text-ink-3">
-          <td className="px-3 py-2 text-xs font-medium">Σ</td>
-          <td className="tnum px-1 py-2 text-xs">{fmt(data.total)}</td>
-          <td className="py-2 pe-3">
+          <td className="px-4 py-2.5 text-sm font-medium">Σ</td>
+          <td className="tnum px-1 py-2.5 text-sm">{fmt(data.total)}</td>
+          <td className="py-2.5 pe-4">
             <WdlBar white={data.white} draws={data.draws} black={data.black} />
           </td>
         </tr>
@@ -159,15 +159,15 @@ function MoveRow({ m, total, onPlay, onHoverMove, mine }: { m: ExplorerMove; tot
       }}
       aria-label={`${m.san}, ${t('{pct} of games', { pct: fmtPercent(pct / 100) })}`}
     >
-      <td className="truncate px-3 py-2 font-semibold text-ink">
+      <td className="truncate px-4 py-2.5 font-semibold text-ink">
         {m.san}
         {mine && <span className="ms-1.5 inline-block size-1.5 rounded-full bg-brand align-middle" aria-label={t('in your repertoire')} />}
       </td>
-      <td className="tnum px-1 py-2 text-ink-2">
+      <td className="tnum px-1 py-2.5 text-ink-2">
         <span className="inline-block w-[3.2ch] text-end font-medium text-ink">{pct < 1 ? '<1' : Math.round(pct)}</span>
-        <span className="text-ink-3">%</span> <span className="text-xs text-ink-3">{fmt(m.total)}</span>
+        <span className="text-ink-3">%</span> <span className="text-sm text-ink-3">{fmt(m.total)}</span>
       </td>
-      <td className="py-2 pe-3">
+      <td className="py-2.5 pe-4">
         <WdlBar white={m.white} draws={m.draws} black={m.black} />
       </td>
     </tr>
@@ -178,12 +178,12 @@ export function WdlBar({ white, draws, black, compact = false }: { white: number
   const [w, d, b] = wdlPercents(white, draws, black);
   const seg = (pct: number, cls: string, label: string) =>
     pct > 0 ? (
-      <div className={`flex items-center justify-center overflow-hidden text-[10.5px] font-semibold ${cls}`} style={{ width: `${pct}%` }} title={`${label} ${pct}%`}>
+      <div className={`flex items-center justify-center overflow-hidden text-2xs font-semibold ${cls}`} style={{ width: `${pct}%` }} title={`${label} ${pct}%`}>
         {!compact && pct >= 14 ? `${pct}%` : ''}
       </div>
     ) : null;
   return (
-    <div className={`tnum flex w-full overflow-hidden rounded-[6px] ring-1 ring-line ${compact ? 'h-2' : 'h-[18px]'}`} role="img" aria-label={t('White {w}, draws {d}, black {b}', { w: fmtPercent(w / 100), d: fmtPercent(d / 100), b: fmtPercent(b / 100) })}>
+    <div className={`tnum flex w-full overflow-hidden rounded-[var(--radius-xs)] ring-1 ring-line ${compact ? 'h-2' : 'h-5'}`} role="img" aria-label={t('White {w}, draws {d}, black {b}', { w: fmtPercent(w / 100), d: fmtPercent(d / 100), b: fmtPercent(b / 100) })}>
       {seg(w, 'bg-[oklch(0.985_0.003_262)] text-[oklch(0.3_0.02_262)]', t('White wins'))}
       {seg(d, 'bg-[oklch(0.72_0.012_262)] text-white', t('Draws'))}
       {seg(b, 'bg-[oklch(0.28_0.015_262)] text-white', t('Black wins'))}
@@ -193,8 +193,8 @@ export function WdlBar({ white, draws, black, compact = false }: { white: number
 
 function TopGames({ data }: { data: ExplorerData }) {
   return (
-    <div className="mt-2 border-t border-line px-3 py-3">
-      <h3 className="mb-2 text-xs font-semibold text-ink-3">{t('Top games')}</h3>
+    <div className="mt-2 border-t border-line px-4 py-4">
+      <h3 className="mb-2 text-sm font-bold">{t('Top games')}</h3>
       <ul className="flex flex-col gap-1">
         {data.topGames.slice(0, 6).map((g) => (
           <li key={g.id}>
@@ -202,7 +202,7 @@ function TopGames({ data }: { data: ExplorerData }) {
               href={`https://lichess.org/${g.id}`}
               target="_blank"
               rel="noreferrer"
-              className="flex items-center gap-2 rounded-[8px] px-2 py-1.5 text-sm hover:bg-surface-3"
+              className="flex min-h-[40px] items-center gap-2 rounded-[var(--radius-xs)] px-2 py-1.5 text-sm hover:bg-surface-3"
             >
               <span className={`tnum w-8 shrink-0 text-center text-xs font-bold ${g.winner === 'white' ? 'text-ink' : g.winner === 'black' ? 'text-ink' : 'text-ink-3'}`}>
                 {g.winner === 'white' ? '1-0' : g.winner === 'black' ? '0-1' : '½'}

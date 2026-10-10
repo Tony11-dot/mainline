@@ -1089,5 +1089,22 @@
  "From the start": "शुरुआत से",
  "Its lines and folders are built on these moves, so they stay as they are. To start from other moves, make a new folder.": "इसकी लाइनें और फ़ोल्डर इन्हीं चालों पर बने हैं, इसलिए ये जैसी हैं वैसी रहेंगी। दूसरी चालों से शुरू करने के लिए नया फ़ोल्डर बनाएँ।",
  "Lines you make inside start from here.": "यहाँ बनाई गई लाइनें इसी जगह से शुरू होती हैं।",
- "Clear": "साफ़ करें"
+ "Clear": "साफ़ करें",
+ "Page not found": "पेज नहीं मिला",
+ "Something went wrong": "कुछ गलत हो गया",
+ "There’s nothing at this address.": "इस पते पर कुछ नहीं है।",
+ "Reload the app and try again. Your repertoire and training are saved.": "ऐप को फिर से लोड करें और दोबारा कोशिश करें। आपका रिपर्टोयर और ट्रेनिंग सहेजे गए हैं।",
+ "Reload": "फिर से लोड करें",
+ "Loading…": "लोड हो रहा है…",
+ "From the engine and game statistics": "इंजन और गेम आँकड़ों से",
+ "the AI coach is resting until tomorrow": "AI कोच कल तक आराम कर रहा है",
+ "AI coach · grounded in this position’s engine lines and stats": "AI कोच · इस पोज़िशन की इंजन लाइनों और आँकड़ों पर आधारित",
+ "{wrong} of {total} wrong": "{total} में से {wrong} गलत",
+ "No games as White yet.": "अभी सफ़ेद से कोई गेम नहीं।",
+ "No games as Black yet.": "अभी काले से कोई गेम नहीं।",
+ "From this position, add every opponent reply played in at least the chosen share of games by players around {rating}. Where it’s your turn, your main move is followed; positions without one are left for you to decide.": "इस पोज़िशन से, {rating} के आसपास के खिलाड़ियों द्वारा कम से कम चुने गए हिस्से के गेम में खेला गया विरोधी का हर जवाब जोड़ता है। जहाँ आपकी बारी है, वहाँ आपकी मुख्य चाल ली जाती है; जिन पोज़िशन में मुख्य चाल नहीं है, वे आपके तय करने के लिए छोड़ दी जाती हैं।",
+ "{n} variations": {
+  "one": "{n} वैरिएशन",
+  "other": "{n} वैरिएशन"
+ }
 }

@@ -1026,5 +1026,21 @@
  "From the start": "Từ đầu",
  "Its lines and folders are built on these moves, so they stay as they are. To start from other moves, make a new folder.": "Các biến và thư mục bên trong được xây trên những nước đi này, nên chúng giữ nguyên. Để bắt đầu từ nước đi khác, hãy tạo thư mục mới.",
  "Lines you make inside start from here.": "Các biến bạn tạo ở đây bắt đầu từ vị trí này.",
- "Clear": "Xóa"
+ "Clear": "Xóa",
+ "Page not found": "Không tìm thấy trang",
+ "Something went wrong": "Đã xảy ra lỗi",
+ "There’s nothing at this address.": "Không có gì ở địa chỉ này.",
+ "Reload the app and try again. Your repertoire and training are saved.": "Tải lại ứng dụng và thử lại. Kho khai cuộc và quá trình luyện tập của bạn đã được lưu.",
+ "Reload": "Tải lại",
+ "Loading…": "Đang tải…",
+ "From the engine and game statistics": "Từ máy và thống kê ván đấu",
+ "the AI coach is resting until tomorrow": "huấn luyện viên AI nghỉ đến ngày mai",
+ "AI coach · grounded in this position’s engine lines and stats": "Huấn luyện viên AI · dựa trên các diễn biến của máy và thống kê thế cờ này",
+ "{wrong} of {total} wrong": "Sai {wrong}/{total}",
+ "No games as White yet.": "Chưa có ván nào cầm Trắng.",
+ "No games as Black yet.": "Chưa có ván nào cầm Đen.",
+ "From this position, add every opponent reply played in at least the chosen share of games by players around {rating}. Where it’s your turn, your main move is followed; positions without one are left for you to decide.": "Từ thế cờ này, thêm mọi nước đáp của đối thủ mà người chơi quanh mức {rating} đi trong ít nhất tỉ lệ ván đã chọn. Khi đến lượt bạn, nước chính của bạn được giữ; các thế chưa có nước chính để bạn tự quyết.",
+ "{n} variations": {
+  "other": "{n} biến"
+ }
 }

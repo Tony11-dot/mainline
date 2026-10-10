@@ -6,7 +6,7 @@ import { usePrefs } from '../../lib/prefs';
 import { Sheet, Field } from '../../ui/Sheet';
 import { Button, Segmented } from '../../ui/primitives';
 import { toast } from '../../ui/toast';
-import { fmtPercent, t, tn } from '../../lib/i18n';
+import { fmtPercent, t, tn, tx } from '../../lib/i18n';
 
 export function AutoBuildSheet({ open, onClose, repId, color, startFen }: { open: boolean; onClose: () => void; repId: string; color: Color; startFen: string }) {
   const rating = usePrefs((s) => s.rating);
@@ -57,8 +57,8 @@ export function AutoBuildSheet({ open, onClose, repId, color, startFen }: { open
         )
       }
     >
-      <p className="text-sm text-ink-2">
-        From this position, add every opponent reply played in at least the chosen share of games by players around <b className="tnum">{rating}</b>. Where it's your turn, your main move is followed; positions without one are left for you to decide.
+      <p className="text-base text-ink-2">
+        {tx('From this position, add every opponent reply played in at least the chosen share of games by players around {rating}. Where it’s your turn, your main move is followed; positions without one are left for you to decide.', { rating: <b className="tnum text-ink">{rating}</b> })}
       </p>
       <Field label={t('Include replies played in at least')} group>
         <Segmented label={t('Minimum share')} value={share} onChange={setShare} options={[0.05, 0.1, 0.15, 0.25].map((v) => ({ value: String(v) as typeof share, label: fmtPercent(v) }))} />
@@ -67,7 +67,7 @@ export function AutoBuildSheet({ open, onClose, repId, color, startFen }: { open
         <Segmented label={t('Depth')} value={depth} onChange={setDepth} options={[{ value: '4', label: '2' }, { value: '8', label: '4' }, { value: '12', label: '6' }, { value: '16', label: '8' }]} />
       </Field>
       {progress && (
-        <div className="mt-4 rounded-[12px] bg-surface-2 p-3 text-sm" role="status">
+        <div className="mt-5 flex flex-col gap-1 rounded-[var(--radius-m)] bg-surface-2 p-4 text-base" role="status">
           <div className="tnum flex justify-between">
             <span>{t('Positions checked')}</span>
             <b>{progress.visited}</b>
@@ -80,7 +80,7 @@ export function AutoBuildSheet({ open, onClose, repId, color, startFen }: { open
             <span>{t('Need your move')}</span>
             <b>{progress.needsYourMove}</b>
           </div>
-          <div className="mt-2 h-1 overflow-hidden rounded-full bg-surface-3">
+          <div className="mt-2 h-1.5 overflow-hidden rounded-full bg-surface-3">
             <div className="h-full w-1/3 animate-[indeterminate_1.2s_ease-in-out_infinite] rounded-full bg-brand" />
           </div>
         </div>

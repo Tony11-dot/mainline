@@ -1089,5 +1089,22 @@
  "From the start": "از ابتدا",
  "Its lines and folders are built on these moves, so they stay as they are. To start from other moves, make a new folder.": "خط‌ها و پوشه‌های آن بر پایهٔ این حرکت‌ها ساخته شده‌اند، پس همین‌طور می‌مانند. برای شروع از حرکت‌های دیگر، پوشهٔ تازه‌ای بسازید.",
  "Lines you make inside start from here.": "خط‌هایی که اینجا می‌سازید از همین نقطه شروع می‌شوند.",
- "Clear": "پاک کردن"
+ "Clear": "پاک کردن",
+ "Page not found": "صفحه پیدا نشد",
+ "Something went wrong": "مشکلی پیش آمد",
+ "There’s nothing at this address.": "در این نشانی چیزی وجود ندارد.",
+ "Reload the app and try again. Your repertoire and training are saved.": "برنامه را دوباره بارگذاری کنید و دوباره امتحان کنید. رپرتوار و تمرین شما ذخیره شده‌اند.",
+ "Reload": "بارگذاری مجدد",
+ "Loading…": "در حال بارگذاری…",
+ "From the engine and game statistics": "بر پایهٔ موتور و آمار بازی‌ها",
+ "the AI coach is resting until tomorrow": "مربی هوش مصنوعی تا فردا استراحت می‌کند",
+ "AI coach · grounded in this position’s engine lines and stats": "مربی هوش مصنوعی · بر پایهٔ خطوط موتور و آمار این وضعیت",
+ "{wrong} of {total} wrong": "{wrong} اشتباه از {total}",
+ "No games as White yet.": "هنوز بازی‌ای با سفید نیست.",
+ "No games as Black yet.": "هنوز بازی‌ای با سیاه نیست.",
+ "From this position, add every opponent reply played in at least the chosen share of games by players around {rating}. Where it’s your turn, your main move is followed; positions without one are left for you to decide.": "از این وضعیت، هر پاسخ حریف را که بازیکنان حدود {rating} دست‌کم در سهم انتخاب‌شده از بازی‌ها انجام داده‌اند اضافه می‌کند. وقتی نوبت شماست، حرکت اصلی شما دنبال می‌شود؛ وضعیت‌های بدون حرکت اصلی برای تصمیم شما می‌مانند.",
+ "{n} variations": {
+  "one": "{n} شاخه",
+  "other": "{n} شاخه"
+ }
 }

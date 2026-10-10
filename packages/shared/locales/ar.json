@@ -1341,5 +1341,26 @@
  "From the start": "من البداية",
  "Its lines and folders are built on these moves, so they stay as they are. To start from other moves, make a new folder.": "خطوطه ومجلداته مبنية على هذه النقلات، لذا تبقى كما هي. لتبدأ من نقلات أخرى، أنشئ مجلدًا جديدًا.",
  "Lines you make inside start from here.": "الخطوط التي تنشئها هنا تبدأ من هذه النقطة.",
- "Clear": "مسح"
+ "Clear": "مسح",
+ "Page not found": "الصفحة غير موجودة",
+ "Something went wrong": "حدث خطأ ما",
+ "There’s nothing at this address.": "لا يوجد شيء في هذا العنوان.",
+ "Reload the app and try again. Your repertoire and training are saved.": "أعد تحميل التطبيق وحاول مرة أخرى. ذخيرتك وتدريبك محفوظان.",
+ "Reload": "إعادة التحميل",
+ "Loading…": "جارٍ التحميل…",
+ "From the engine and game statistics": "من المحرك وإحصاءات المباريات",
+ "the AI coach is resting until tomorrow": "مدرب الذكاء الاصطناعي في استراحة حتى الغد",
+ "AI coach · grounded in this position’s engine lines and stats": "مدرب الذكاء الاصطناعي · مستند إلى خطوط المحرك وإحصاءات هذا الوضع",
+ "{wrong} of {total} wrong": "{wrong} خطأ من {total}",
+ "No games as White yet.": "لا توجد مباريات بالأبيض بعد.",
+ "No games as Black yet.": "لا توجد مباريات بالأسود بعد.",
+ "From this position, add every opponent reply played in at least the chosen share of games by players around {rating}. Where it’s your turn, your main move is followed; positions without one are left for you to decide.": "من هذا الوضع، يضيف كل رد للخصم لعبه اللاعبون حول {rating} في النسبة المختارة من المباريات على الأقل. حين يكون الدور لك، تُتبع نقلتك الرئيسية؛ وتُترك الأوضاع التي لا نقلة رئيسية فيها لتقرر أنت.",
+ "{n} variations": {
+  "zero": "{n} تفريعة",
+  "one": "تفريعة واحدة",
+  "two": "تفريعتان",
+  "few": "{n} تفريعات",
+  "many": "{n} تفريعة",
+  "other": "{n} تفريعة"
+ }
 }

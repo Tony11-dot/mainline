@@ -25,20 +25,20 @@ export function RepertoireStats({ rep }: { rep: Repertoire }) {
 
   const cell = (label: string, value: React.ReactNode) => (
     <div className="min-w-0">
-      <dt className="truncate text-xs text-ink-3">{label}</dt>
-      <dd className="tnum truncate text-md font-bold">{value}</dd>
+      <dt className="hyphens-auto text-xs leading-tight font-medium break-words text-ink-2">{label}</dt>
+      <dd className="tnum truncate text-lg font-bold">{value}</dd>
     </div>
   );
 
   return (
-    <section aria-label={t('Repertoire statistics')} className="border-b border-line p-3.5">
+    <section aria-label={t('Repertoire statistics')} className="border-b border-line p-4">
       <div className="flex items-center">
-        <h3 className="text-sm font-semibold">{t('This repertoire')}</h3>
-        <Link to="/stats" className="ms-auto text-xs font-semibold text-brand">
+        <h3 className="text-md font-bold">{t('This repertoire')}</h3>
+        <Link to="/stats" className="ms-auto inline-flex min-h-[44px] items-center text-sm font-semibold text-brand-ink">
           {t('All statistics')}
         </Link>
       </div>
-      <dl className="mt-2 grid grid-cols-4 gap-2">
+      <dl className="mt-1 grid grid-cols-4 gap-x-2 gap-y-3">
         {cell(t('Moves'), shape.moves)}
         {cell(t('Lines'), shape.lines)}
         {cell(t('Deepest'), shape.depth ? tn(Math.ceil(shape.depth / 2), '{n} move', '{n} moves') : '—')}
@@ -54,23 +54,23 @@ export function RepertoireStats({ rep }: { rep: Repertoire }) {
         </div>
       )}
       <div className="mt-3">
-        <h4 className="mb-1.5 text-xs font-semibold text-ink-3">{t('In your games')}</h4>
+        <h4 className="mb-2 text-sm font-bold">{t('In your games')}</h4>
         {rg.games ? (
           <>
             <RecordBar rec={rg} />
-            <p className="tnum mt-1.5 text-xs text-ink-2">
+            <p className="tnum mt-2 text-sm text-ink-2">
               {rg.avgBookPly !== null && <>{tn(Math.ceil(rg.avgBookPly / 2), 'Prep held for {n} move on average', 'Prep held for {n} moves on average')} · </>}
               {tn(rg.theyLeft, '{n} surprise', '{n} surprises')} · {t('{n} forgotten', { n: rg.youLeft })} · {t('{n} past your prep', { n: rg.prepEnded })}
             </p>
           </>
         ) : (
-          <p className="text-xs text-ink-3">
-            {t('No imported games reached it yet.')} <Link to="/games" className="font-semibold text-brand">{t('Import games')}</Link>
+          <p className="text-sm text-ink-2">
+            {t('No imported games reached it yet.')} <Link to="/games" className="font-semibold text-brand-ink">{t('Import games')}</Link>
           </p>
         )}
       </div>
       {tr.hardest.length > 0 && (
-        <p className="tnum mt-2 text-xs text-ink-2">
+        <p className="tnum mt-2.5 text-sm text-ink-2">
           {t('Most-missed position: {wrong} of {total} wrong.', { wrong: tr.hardest[0]!.wrong, total: tr.hardest[0]!.total })}
         </p>
       )}

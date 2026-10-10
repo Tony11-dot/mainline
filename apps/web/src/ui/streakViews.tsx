@@ -70,10 +70,10 @@ export function StreakSheet({ open, onClose, s }: { open: boolean; onClose: () =
           <Flame size={34} fill={s.doneToday ? 'currentColor' : 'none'} aria-hidden />
         </span>
         <div>
-          <p className="tnum text-3xl font-bold leading-none">
+          <p className="tnum text-3xl font-bold leading-none tracking-tight">
             {tn(s.current, '{n} day', '{n} days')}
           </p>
-          <p className="mt-1 text-sm text-ink-2">
+          <p className="mt-1.5 text-base text-ink-2">
             {s.doneToday ? t('Done for today. See you tomorrow!') : s.current ? t('Practise today to keep it going.') : t('Practise today to start a streak.')}
           </p>
         </div>
@@ -96,7 +96,7 @@ export function StreakSheet({ open, onClose, s }: { open: boolean; onClose: () =
         <Freezes n={s.freezes} />
       </div>
       {!remindersOn && (
-        <Link to="/settings#reminders" onClick={onClose} className="mt-3 flex items-center gap-3 rounded-[var(--radius-m)] border border-line px-4 py-3 text-sm font-semibold hover:bg-surface-2">
+        <Link to="/settings#reminders" onClick={onClose} className="pressable mt-3 flex min-h-[48px] items-center gap-3 rounded-[var(--radius-m)] bg-brand-soft px-4 py-3 text-base font-semibold text-brand-ink hover:bg-brand-soft-2">
           <BellRing size={18} className="text-brand" aria-hidden /> {t('Turn on streak reminders')}
         </Link>
       )}
@@ -153,13 +153,13 @@ export function StreakCelebration({ before, after, goalHit, onDone }: { before: 
       <p className="mt-1 max-w-[34ch] text-ink-2" style={{ animation: 'ml-rise 400ms var(--ease-out) 800ms both' }}>
         {milestone ?? (first ? t('Come back tomorrow to make it two.') : before.freezeUsed ? t('Your streak freeze saved it. Nice comeback!') : t('You practised today. See you tomorrow!'))}
       </p>
-      <div className="mt-7 w-full max-w-sm rounded-[var(--radius-l)] border border-line bg-surface p-4 shadow-1" style={{ animation: 'ml-rise 400ms var(--ease-out) 650ms both' }}>
+      <div className="mt-7 w-full max-w-sm rounded-[var(--radius-l)] bg-surface p-5 shadow-card" style={{ animation: 'ml-rise 400ms var(--ease-out) 650ms both' }}>
         <WeekStrip week={after.week} pop />
       </div>
       <div className="mt-3 flex flex-wrap justify-center gap-2" style={{ animation: 'ml-rise 400ms var(--ease-out) 950ms both' }}>
-        {goalHit && <span className="rounded-full bg-good-soft px-3 py-1 text-sm font-semibold text-good">🎯 {t('Daily goal complete')}</span>}
+        {goalHit && <span className="inline-flex h-8 items-center rounded-full bg-good-soft px-3 text-sm font-semibold text-good-ink">🎯 {t('Daily goal complete')}</span>}
         {earnedFreeze && (
-          <span className="inline-flex items-center gap-1 rounded-full bg-freeze-soft px-3 py-1 text-sm font-semibold text-ink">
+          <span className="inline-flex h-8 items-center gap-1 rounded-full bg-freeze-soft px-3 text-sm font-semibold text-ink">
             <Snowflake size={14} className="text-freeze" aria-hidden /> {t('Streak freeze earned')}
           </span>
         )}

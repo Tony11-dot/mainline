@@ -197,7 +197,7 @@ export function SetupScreen() {
             type="button"
             aria-label={t('Place {piece}', { piece: t(PIECE_NAMES[`${color}-${role}`]!) })}
             aria-pressed={on}
-            className={`setup-piece grid aspect-square w-[min(13vw,52px)] touch-none place-items-center rounded-[12px] transition-[background-color,transform] duration-150 ${on ? 'scale-105 bg-brand-soft ring-2 ring-brand' : 'hover:bg-surface-3'}`}
+            className={`setup-piece grid aspect-square w-[min(13vw,52px)] touch-none place-items-center rounded-[var(--radius-control)] transition-[background-color,transform] duration-150 ${on ? 'scale-105 bg-brand-soft ring-2 ring-brand' : 'hover:bg-surface-3'}`}
             onClick={() => pick(id)}
             onPointerDown={(e) => paletteDown({ color, role }, e)}
             onPointerMove={paletteMove}
@@ -212,7 +212,7 @@ export function SetupScreen() {
   );
 
   const castleChip = (c: Castle, label: string) => (
-    <label key={c} className={`flex h-9 cursor-pointer items-center gap-2 rounded-[10px] border px-3 text-sm font-medium ${castles.has(c) ? 'border-brand bg-brand-soft text-brand-ink' : 'border-line text-ink-2'}`}>
+    <label key={c} className={`pressable flex h-10 cursor-pointer items-center gap-2 rounded-full px-4 text-sm font-semibold has-[:focus-visible]:ring-2 has-[:focus-visible]:ring-brand ${castles.has(c) ? 'bg-brand text-on-brand' : 'bg-surface-3 text-ink-2 hover:text-ink'}`}>
       <input
         type="checkbox"
         className="sr-only"
@@ -234,11 +234,11 @@ export function SetupScreen() {
   return (
     <div className="mx-auto flex max-w-[1100px] flex-col gap-4 pb-6 lg:flex-row lg:items-start lg:px-6 lg:py-5">
       <div className="flex min-w-0 flex-col lg:w-[min(calc(100dvh-10rem),60%)]">
-        <div className="flex min-h-[44px] items-center gap-1 px-2 lg:px-0">
-          <Link to="/explore" className="flex h-10 items-center gap-1 rounded-[10px] px-2 text-sm font-medium text-ink-2 hover:bg-surface-3">
-            <ChevronLeft size={18} className="rtl:rotate-180" aria-hidden /> {t('Explore')}
+        <div className="flex min-h-[52px] items-center gap-1 px-2 py-1 lg:px-0">
+          <Link to="/explore" className="pressable flex h-11 items-center gap-1 rounded-full px-2.5 text-base font-semibold text-brand-ink hover:bg-brand-softer">
+            <ChevronLeft size={20} className="rtl:rotate-180" aria-hidden /> {t('Explore')}
           </Link>
-          <h1 className="ms-1 text-md font-semibold">{t('Set up position')}</h1>
+          <h1 className="ms-1 truncate text-lg font-bold">{t('Set up position')}</h1>
         </div>
         {palette(orientation === 'white' ? 'black' : 'white')}
         <div className="mx-auto w-full" style={{ maxWidth: 'calc(100dvh - 19rem)' }}>
@@ -258,13 +258,13 @@ export function SetupScreen() {
         </div>
       </div>
 
-      <aside className="flex flex-col gap-4 px-4 lg:min-w-[320px] lg:flex-1 lg:px-0 lg:pt-12">
-        <div className="flex flex-col gap-2">
-          <h2 className="text-sm font-semibold text-ink-2">{t('To move')}</h2>
+      <aside className="flex flex-col gap-5 px-4 lg:min-w-[320px] lg:flex-1 lg:px-0 lg:pt-12">
+        <div className="flex flex-col gap-2.5">
+          <h2 className="text-md font-bold">{t('To move')}</h2>
           <Segmented label={t('Side to move')} value={turn} onChange={setTurn} options={[{ value: 'white', label: t('White') }, { value: 'black', label: t('Black') }]} />
         </div>
-        <div className="flex flex-col gap-2">
-          <h2 className="text-sm font-semibold text-ink-2">{t('Castling')}</h2>
+        <div className="flex flex-col gap-2.5">
+          <h2 className="text-md font-bold">{t('Castling')}</h2>
           <div className="flex flex-wrap gap-2">
             {castleChip('K', t('White O-O'))}
             {castleChip('Q', t('White O-O-O'))}
@@ -280,14 +280,14 @@ export function SetupScreen() {
             {t('Clear board')}
           </Button>
         </div>
-        <div className="flex flex-col gap-2">
-          <label htmlFor="setup-fen" className="text-sm font-semibold text-ink-2">
+        <div className="flex flex-col gap-2.5">
+          <label htmlFor="setup-fen" className="text-md font-bold">
             FEN
           </label>
           <div className="flex gap-2">
             <input
               id="setup-fen"
-              className="tnum h-11 min-w-0 flex-1 rounded-[10px] border border-line bg-surface px-3 font-mono text-sm"
+              className="tnum h-12 min-w-0 flex-1 rounded-[var(--radius-control)] border border-line bg-surface px-3.5 font-mono text-sm outline-none focus:border-brand focus:ring-3 focus:ring-brand/20"
               value={fenDraft ?? rawFen}
               spellCheck={false}
               autoCapitalize="off"
@@ -300,12 +300,12 @@ export function SetupScreen() {
             />
             <IconButton icon={Copy} label={t('Copy FEN')} onClick={() => void navigator.clipboard?.writeText(okFen ?? rawFen).catch(() => undefined)} />
           </div>
-          {fenDraft !== null && <p className="text-xs text-ink-3">{t('Paste or type a full FEN — it applies as soon as it’s valid.')}</p>}
+          {fenDraft !== null && <p className="text-sm text-ink-2">{t('Paste or type a full FEN — it applies as soon as it’s valid.')}</p>}
         </div>
-        <p role="status" className={`min-h-5 text-sm ${error ? 'font-medium text-bad' : 'text-ink-3'}`}>
+        <p role="status" className={`min-h-5 text-base ${error ? 'font-medium text-bad-ink' : 'text-ink-2'}`}>
           {error ?? t('Legal position — ready to analyse.')}
         </p>
-        <Button size="lg" icon={Cpu} onClick={analyse} disabled={!!error}>
+        <Button size="lg" variant="primary" icon={Cpu} onClick={analyse} disabled={!!error}>
           {t('Analyse with engine')}
         </Button>
       </aside>

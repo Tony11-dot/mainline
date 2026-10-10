@@ -85,18 +85,18 @@ export function ExploreScreen({ store = exploreStore }: { store?: AnalysisStore 
   );
 
   const header = (
-    <div className="flex min-h-[44px] items-center gap-2 px-4 lg:px-0">
+    <div className="flex min-h-[52px] items-center gap-2.5 px-4 py-1 lg:px-0">
       {opening ? (
         <>
-          <span className="tnum rounded-[6px] bg-surface-3 px-1.5 py-0.5 text-xs font-bold text-ink-2">{opening.eco}</span>
-          <h1 className="truncate text-md font-semibold">{opening.name}</h1>
+          <span className="tnum shrink-0 rounded-[var(--radius-xs)] bg-brand-soft px-2 py-0.5 text-sm font-bold text-brand-ink">{opening.eco}</span>
+          <h1 className="line-clamp-2 min-w-0 text-lg leading-tight font-bold">{opening.name}</h1>
         </>
       ) : (
-        <h1 className="text-md font-semibold text-ink-2">{view.path ? t('Unnamed position') : t('Starting position')}</h1>
+        <h1 className="line-clamp-2 min-w-0 text-lg leading-tight font-bold text-ink-2">{view.path ? t('Unnamed position') : t('Starting position')}</h1>
       )}
       <Link
         to={`/setup?${new URLSearchParams({ fen: view.node.fen })}`}
-        className="ms-auto flex h-9 shrink-0 items-center gap-1.5 rounded-[10px] px-2.5 text-sm font-medium text-ink-2 hover:bg-surface-3"
+        className="pressable ms-auto flex h-10 shrink-0 items-center gap-1.5 rounded-full bg-brand-soft px-3.5 text-sm font-semibold text-brand-ink hover:bg-brand-soft-2"
       >
         <LayoutGrid size={16} aria-hidden /> {t('Set up position')}
       </Link>
@@ -115,13 +115,13 @@ export function ExploreScreen({ store = exploreStore }: { store?: AnalysisStore 
           <BoardControls store={store} />
         </div>
         <aside className="flex max-h-[calc(100dvh-2.5rem)] min-w-[340px] max-w-[460px] flex-1 flex-col gap-3 overflow-hidden">
-          <div className="rounded-[var(--radius-l)] border border-line bg-surface shadow-1">
+          <div className="rounded-[var(--radius-l)] bg-surface shadow-card">
             <EnginePanel fen={view.node.fen} view={ev} onPlayLine={playLine} onHoverMove={setHoverUci} />
           </div>
-          <div className="min-h-[120px] shrink-0 overflow-auto rounded-[var(--radius-l)] border border-line bg-surface shadow-1" style={{ maxHeight: '34%' }}>
+          <div className="min-h-[120px] shrink-0 overflow-auto rounded-[var(--radius-l)] bg-surface shadow-card" style={{ maxHeight: '34%' }}>
             <MoveTree store={store} />
           </div>
-          <div className="min-h-0 flex-1 overflow-auto rounded-[var(--radius-l)] border border-line bg-surface shadow-1">
+          <div className="min-h-0 flex-1 overflow-auto rounded-[var(--radius-l)] bg-surface shadow-card">
             <ExplorerPanel fen={view.node.fen} onPlay={(u) => s.play(u)} onHoverMove={setHoverUci} />
           </div>
         </aside>
@@ -149,7 +149,7 @@ export function ExploreScreen({ store = exploreStore }: { store?: AnalysisStore 
           ]}
         />
       </div>
-      <div className="mt-2 min-h-[240px]">
+      <div className="mx-3 mt-3 min-h-[240px] overflow-hidden rounded-[var(--radius-l)] bg-surface shadow-card">
         {pane === 'moves' && <MoveTree store={store} />}
         {pane === 'explorer' && <ExplorerPanel fen={view.node.fen} onPlay={(u) => s.play(u)} />}
         {pane === 'engine' && <EnginePanel fen={view.node.fen} view={ev} onPlayLine={playLine} />}

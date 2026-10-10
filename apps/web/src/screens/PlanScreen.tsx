@@ -1,6 +1,6 @@
 import { useEffect, useMemo, useState } from 'react';
-import { Link, useNavigate, useSearchParams } from 'react-router';
-import { ArrowLeft, CalendarDays, Check, Eye, GraduationCap, ListChecks, Play, Shuffle, Target, Trash2, X } from 'lucide-react';
+import { useNavigate, useSearchParams } from 'react-router';
+import { CalendarDays, Check, Eye, GraduationCap, ListChecks, Play, Shuffle, Target, Trash2, X } from 'lucide-react';
 import { isReadyMade } from '@mainline/shared';
 import { useLibrary } from '../lib/library';
 import { useTraining } from '../lib/training';
@@ -9,7 +9,8 @@ import { dayIndex, makePlan, usePlan, type Plan, type PlanTask } from '../lib/pl
 import { practiceHref, type Practice, type Scope } from '../lib/practice';
 import { scopeProgress } from './library/practiceUi';
 import { Sheet, Field, inputCls } from '../ui/Sheet';
-import { Button, PanelNote, Segmented } from '../ui/primitives';
+import { Button, Segmented } from '../ui/primitives';
+import { EmptyState, PageHeader, SectionHeader } from '../ui/kit';
 import { WeakRow } from './focus/WeakRow';
 import { intlLocale, msg, t, tn } from '../lib/i18n';
 
@@ -47,25 +48,26 @@ export function PlanScreen() {
 
   return (
     <div className="mx-auto max-w-3xl px-4 py-6 md:px-8 md:py-10">
-      <div className="flex items-center gap-2">
-        <Link to="/" className="-ms-2 flex size-10 items-center justify-center rounded-full text-ink-2 hover:bg-surface-3" aria-label={t('Back')}>
-          <ArrowLeft size={20} className="rtl:rotate-180" />
-        </Link>
-        <h1 className="flex-1 text-2xl font-bold">{t('Study plan')}</h1>
-        <Button variant={plan ? 'secondary' : 'primary'} icon={CalendarDays} onClick={() => setBuilder(plan ? plan.focus : { scope: { kind: 'all' }, label: t('Everything') })}>
-          {plan ? t('New plan') : t('Make a plan')}
-        </Button>
-      </div>
+      <PageHeader
+        title={t('Study plan')}
+        back="/"
+        large
+        trailing={
+          <Button variant={plan ? 'secondary' : 'primary'} icon={CalendarDays} onClick={() => setBuilder(plan ? plan.focus : { scope: { kind: 'all' }, label: t('Everything') })}>
+            {plan ? t('New plan') : t('Make a plan')}
+          </Button>
+        }
+      />
 
       {plan ? (
         <PlanView plan={plan} />
       ) : (
         <>
-          <p className="mt-1 text-ink-2">{t('Pick what to work on, for how many days and how long each day. MainLine lays out the sessions — showing the moves first, then testing the weakest parts, then an exam.')}</p>
+          <p className="mt-2 max-w-[60ch] text-md text-ink-2">{t('Pick what to work on, for how many days and how long each day. MainLine lays out the sessions — showing the moves first, then testing the weakest parts, then an exam.')}</p>
           {suggestions.length > 0 && (
-            <section className="mt-6">
-              <h2 className="mb-2 px-1 text-sm font-semibold text-ink-2">{t('Suggested from your weak spots')}</h2>
-              <ul className="divide-y divide-line overflow-hidden rounded-[var(--radius-l)] border border-line bg-surface shadow-1">
+            <section className="mt-[var(--section-gap)]">
+              <SectionHeader title={t('Suggested from your weak spots')} />
+              <ul className="divide-y divide-line overflow-hidden rounded-[var(--radius-l)] bg-surface shadow-card">
                 {suggestions.map((s) => (
                   <WeakRow key={s.kind + s.key} it={s} />
                 ))}
@@ -73,11 +75,9 @@ export function PlanScreen() {
             </section>
           )}
           {!suggestions.length && (
-            <div className="mt-6 rounded-[var(--radius-l)] border border-dashed border-line-strong">
-              <PanelNote icon={CalendarDays} title={t('No plan yet')} action={<Button variant="primary" onClick={() => setBuilder({ scope: { kind: 'all' }, label: t('Everything') })}>{t('Make a plan')}</Button>}>
-                {t('Plan a few days on your whole repertoire, one colour, an opening, a line or the answers to one move.')}
-              </PanelNote>
-            </div>
+            <EmptyState dashed className="mt-6" icon={CalendarDays} title={t('No plan yet')} action={<Button variant="primary" onClick={() => setBuilder({ scope: { kind: 'all' }, label: t('Everything') })}>{t('Make a plan')}</Button>}>
+              {t('Plan a few days on your whole repertoire, one colour, an opening, a line or the answers to one move.')}
+            </EmptyState>
           )}
         </>
       )}
@@ -100,11 +100,11 @@ function PlanView({ plan }: { plan: Plan }) {
 
   return (
     <>
-      <div className="mt-5 rounded-[var(--radius-l)] border border-line bg-surface p-4 shadow-1">
-        <p className="text-xs font-semibold text-ink-3">{tn(plan.days, '{n}-day plan', '{n}-day plan')} · {tn(plan.minutes, '{n} min a day', '{n} min a day')}</p>
-        <h2 className="mt-0.5 text-xl font-bold">{plan.title}</h2>
-        <p className="tnum mt-1 text-sm text-ink-2">{over ? t('Plan finished — {done} of {total} sessions done.', { done, total: plan.tasks.length }) : t('Day {day} of {days} · {done} of {total} sessions done', { day: Math.max(1, today + 1), days: plan.days, done, total: plan.tasks.length })}</p>
-        <div className="mt-2.5 h-2 overflow-hidden rounded-full bg-surface-3" role="progressbar" aria-valuemin={0} aria-valuemax={plan.tasks.length} aria-valuenow={done} aria-label={t('Plan progress')}>
+      <div className="mt-6 rounded-[var(--radius-l)] bg-surface p-5 shadow-card">
+        <p className="text-sm font-semibold text-ink-2">{tn(plan.days, '{n}-day plan', '{n}-day plan')} · {tn(plan.minutes, '{n} min a day', '{n} min a day')}</p>
+        <h2 className="mt-1 text-2xl font-bold">{plan.title}</h2>
+        <p className="tnum mt-1 text-base text-ink-2">{over ? t('Plan finished — {done} of {total} sessions done.', { done, total: plan.tasks.length }) : t('Day {day} of {days} · {done} of {total} sessions done', { day: Math.max(1, today + 1), days: plan.days, done, total: plan.tasks.length })}</p>
+        <div className="mt-3.5 h-2.5 overflow-hidden rounded-full bg-surface-3" role="progressbar" aria-valuemin={0} aria-valuemax={plan.tasks.length} aria-valuenow={done} aria-label={t('Plan progress')}>
           <div className="h-full rounded-full bg-brand transition-[width] duration-300" style={{ width: `${plan.tasks.length ? (done / plan.tasks.length) * 100 : 0}%` }} />
         </div>
         <div className="mt-3 flex flex-wrap gap-2">
@@ -121,18 +121,18 @@ function PlanView({ plan }: { plan: Plan }) {
         </div>
       </div>
 
-      <ol className="mt-5 flex flex-col gap-3">
+      <ol className="mt-6 flex flex-col gap-3">
         {Array.from({ length: plan.days }, (_, day) => {
           const tasks = plan.tasks.filter((x) => x.day === day);
           const isToday = day === today;
           return (
-            <li key={day} className={`rounded-[var(--radius-l)] border bg-surface p-3.5 shadow-1 ${isToday ? 'border-brand ring-1 ring-brand' : 'border-line'} ${day < today ? 'opacity-80' : ''}`}>
-              <h3 className="flex items-baseline gap-2 font-bold">
+            <li key={day} className={`rounded-[var(--radius-l)] bg-surface p-4 shadow-card ${isToday ? 'ring-2 ring-brand' : ''} ${day < today ? 'opacity-80' : ''}`}>
+              <h3 className="flex items-baseline gap-2 text-md font-bold">
                 {t('Day {n}', { n: day + 1 })}
-                <span className="text-sm font-medium text-ink-3">{isToday ? t('Today') : dateOf(day)}</span>
-                {tasks.length > 0 && tasks.every((x) => x.done) && <Check size={16} className="text-good" aria-label={t('Done')} />}
+                <span className={`text-sm font-semibold ${isToday ? 'text-brand-ink' : 'text-ink-2'}`}>{isToday ? t('Today') : dateOf(day)}</span>
+                {tasks.length > 0 && tasks.every((x) => x.done) && <Check size={17} className="self-center text-good" aria-label={t('Done')} />}
               </h3>
-              <ul className="mt-2 flex flex-col gap-1.5">
+              <ul className="mt-3 flex flex-col gap-1.5">
                 {tasks.map((task) => (
                   <TaskRow key={task.id} task={task} onToggle={() => toggle(task.id)} onRemove={() => remove(task.id)} onStart={() => nav(practiceHref(task.scope, task.how))} />
                 ))}
@@ -148,22 +148,22 @@ function PlanView({ plan }: { plan: Plan }) {
 export function TaskRow({ task, onToggle, onRemove, onStart }: { task: PlanTask; onToggle: () => void; onRemove?: () => void; onStart: () => void }) {
   const H = HOW[task.how];
   return (
-    <li className="flex items-center gap-2.5 rounded-[12px] bg-surface-2 px-2.5 py-2">
-      <button type="button" role="checkbox" aria-checked={!!task.done} aria-label={t(H.label)} onClick={onToggle} className={`flex size-6 shrink-0 items-center justify-center rounded-full border-2 ${task.done ? 'border-good bg-good text-white' : 'border-line-strong'}`}>
-        {task.done && <Check size={14} aria-hidden />}
+    <li className="flex min-h-[52px] items-center gap-2.5 rounded-[var(--radius-m)] bg-surface-2 py-1.5 ps-1 pe-1.5">
+      <button type="button" role="checkbox" aria-checked={!!task.done} aria-label={t(H.label)} onClick={onToggle} className="flex size-11 shrink-0 items-center justify-center rounded-full">
+        <span className={`flex size-6 items-center justify-center rounded-full border-2 transition-colors ${task.done ? 'border-good bg-good text-white' : 'border-line-strong bg-surface'}`}>{task.done && <Check size={14} strokeWidth={3} aria-hidden />}</span>
       </button>
-      <H.icon size={16} className="shrink-0 text-ink-2" aria-hidden />
-      <span className={`min-w-0 flex-1 text-sm ${task.done ? 'text-ink-3 line-through' : ''}`}>
+      <H.icon size={17} className="shrink-0 text-ink-2" aria-hidden />
+      <span className={`min-w-0 flex-1 text-base ${task.done ? 'text-ink-3 line-through' : ''}`}>
         <span className="font-semibold">{t(H.label)}</span> · <bdi>{task.label}</bdi>
       </span>
       {!task.done && (
-        <button type="button" onClick={onStart} className="inline-flex h-8 items-center gap-1 rounded-[10px] bg-brand px-2.5 text-sm font-semibold text-on-brand">
-          <Play size={13} fill="currentColor" aria-hidden /> {t('Start')}
+        <button type="button" onClick={onStart} className="pressable inline-flex h-10 shrink-0 items-center gap-1.5 rounded-[var(--radius-s)] bg-brand px-3.5 text-sm font-semibold text-on-brand">
+          <Play size={13} fill="currentColor" className="rtl:rotate-180" aria-hidden /> {t('Start')}
         </button>
       )}
       {onRemove && (
-        <button type="button" onClick={onRemove} aria-label={t('Remove')} className="flex size-8 shrink-0 items-center justify-center rounded-full text-ink-3 hover:bg-surface-3 hover:text-bad">
-          <Trash2 size={14} aria-hidden />
+        <button type="button" onClick={onRemove} aria-label={t('Remove')} className="flex size-10 shrink-0 items-center justify-center rounded-full text-ink-3 hover:bg-surface-3 hover:text-bad-ink">
+          <Trash2 size={16} aria-hidden />
         </button>
       )}
     </li>
@@ -252,10 +252,10 @@ function PlanBuilder({ initial, onClose }: { initial: { scope: Scope; label: str
         </select>
       </Field>
       <Field label={t('Days')} group>
-        <Segmented label={t('Days')} value={days} onChange={setDays} options={DAYS.map((d) => ({ value: d, label: d }))} />
+        <Segmented label={t('Days')} value={days} onChange={setDays} options={DAYS.map((d) => ({ value: d, label: Number(d).toLocaleString(intlLocale()) }))} />
       </Field>
       <Field label={t('Minutes a day')} group>
-        <Segmented label={t('Minutes a day')} value={minutes} onChange={setMinutes} options={MINUTES.map((m) => ({ value: m, label: m }))} />
+        <Segmented label={t('Minutes a day')} value={minutes} onChange={setMinutes} options={MINUTES.map((m) => ({ value: m, label: Number(m).toLocaleString(intlLocale()) }))} />
       </Field>
       <Field label={t('Sessions to include')} group>
         <div className="flex flex-wrap gap-2">
@@ -265,7 +265,7 @@ function PlanBuilder({ initial, onClose }: { initial: { scope: Scope; label: str
               type="button"
               aria-pressed={kinds[k]}
               onClick={() => setKinds((s) => ({ ...s, [k]: !s[k] }))}
-              className={`h-9 rounded-full px-3.5 text-sm font-semibold ${kinds[k] ? 'bg-brand text-on-brand' : 'bg-surface-3 text-ink-2'}`}
+              className={`pressable h-10 rounded-full px-4 text-sm font-semibold ${kinds[k] ? 'bg-brand text-on-brand' : 'bg-surface-3 text-ink-2 hover:text-ink'}`}
             >
               {t(HOW[k].label)}
             </button>

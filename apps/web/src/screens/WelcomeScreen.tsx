@@ -42,7 +42,7 @@ export function WelcomeScreen() {
 
   return (
     <div className="mx-auto flex min-h-[calc(100dvh-var(--tabbar-h))] max-w-xl flex-col justify-center px-5 py-10">
-      <div className="mb-6 flex gap-1.5" aria-hidden>
+      <div className="mb-8 flex gap-1.5" aria-hidden>
         {[0, 1, 2].map((i) => (
           <span key={i} className={`h-1.5 flex-1 rounded-full transition-colors duration-300 ${i <= step ? 'bg-brand' : 'bg-surface-3'}`} />
         ))}
@@ -51,10 +51,10 @@ export function WelcomeScreen() {
       {step === 0 && (
         <section aria-labelledby="w0">
           <LogoMark size={64} />
-          <h1 id="w0" className="mt-5 text-3xl font-bold tracking-tight">
+          <h1 id="w0" className="mt-6 text-4xl font-bold tracking-tight">
             {t('Master your openings, branch by branch.')}
           </h1>
-          <p className="mt-3 max-w-[46ch] text-md text-ink-2">
+          <p className="mt-4 max-w-[46ch] text-lg text-ink-2">
             {t('Build a repertoire like a tree of lines, understand every move with real statistics and a coach, and remember it with spaced repetition — on every device.')}
           </p>
           <div className="mt-8 flex flex-wrap gap-2">
@@ -70,11 +70,11 @@ export function WelcomeScreen() {
 
       {step === 1 && (
         <section aria-labelledby="w1">
-          <h1 id="w1" className="text-2xl font-bold">
+          <h1 id="w1" className="text-3xl font-bold">
             {t('What’s your level?')}
           </h1>
-          <p className="mt-1 text-ink-2">{t('Statistics and suggestions use players around your rating.')}</p>
-          <div className="mt-5 flex flex-col gap-2" role="radiogroup" aria-label={t('Rating')}>
+          <p className="mt-2 text-md text-ink-2">{t('Statistics and suggestions use players around your rating.')}</p>
+          <div className="mt-6 flex flex-col gap-2.5" role="radiogroup" aria-label={t('Rating')}>
             {LEVELS.map((l) => {
               const on = Math.abs(p.rating - l.rating) < 150;
               return (
@@ -84,16 +84,20 @@ export function WelcomeScreen() {
                   role="radio"
                   aria-checked={on}
                   onClick={() => p.set({ rating: l.rating })}
-                  className={`flex h-14 items-center justify-between rounded-[14px] border px-4 text-start text-base font-semibold transition-colors ${on ? 'border-brand bg-brand-softer' : 'border-line bg-surface hover:bg-surface-2'}`}
+                  className={`pressable flex h-14 items-center justify-between rounded-[var(--radius-m)] px-5 text-start text-md font-semibold shadow-card transition-colors ${on ? 'bg-brand-softer ring-2 ring-brand' : 'bg-surface hover:bg-surface-2'}`}
                 >
-                  {t(l.label)}
-                  {on && <Check size={20} className="text-brand" aria-hidden />}
+                  <span className="tnum">{t(l.label)}</span>
+                  {on && (
+                    <span className="flex size-6 items-center justify-center rounded-full bg-brand text-on-brand" aria-hidden>
+                      <Check size={15} strokeWidth={3} aria-hidden />
+                    </span>
+                  )}
                 </button>
               );
             })}
           </div>
-          <h2 className="mt-6 text-sm font-semibold text-ink-2">{t('I mostly play')}</h2>
-          <div className="mt-2 flex flex-wrap gap-2">
+          <h2 className="mt-8 text-lg font-bold">{t('I mostly play')}</h2>
+          <div className="mt-3 flex flex-wrap gap-2">
             {SPEEDS.filter((s) => s !== 'correspondence').map((s) => {
               const on = p.speeds.includes(s);
               return (
@@ -105,7 +109,7 @@ export function WelcomeScreen() {
                     const next = on ? p.speeds.filter((x) => x !== s) : [...p.speeds, s];
                     if (next.length) p.set({ speeds: next as Speed[] });
                   }}
-                  className={`h-10 rounded-full px-4 text-sm font-semibold ${on ? 'bg-brand text-on-brand' : 'bg-surface-3 text-ink-2'}`}
+                  className={`pressable h-11 rounded-full px-5 text-base font-semibold ${on ? 'bg-brand text-on-brand' : 'bg-surface text-ink-2 shadow-card hover:text-ink'}`}
                 >
                   {speedName(s)}
                 </button>
@@ -122,11 +126,11 @@ export function WelcomeScreen() {
 
       {step === 2 && (
         <section aria-labelledby="w2">
-          <h1 id="w2" className="text-2xl font-bold">
+          <h1 id="w2" className="text-3xl font-bold">
             {t('Pick a starting repertoire')}
           </h1>
-          <p className="mt-1 text-ink-2">{t('Short, mainstream lines to grow from. You can change everything later.')}</p>
-          <div className="mt-5 grid gap-2 sm:grid-cols-2">
+          <p className="mt-2 text-md text-ink-2">{t('Short, mainstream lines to grow from. You can change everything later.')}</p>
+          <div className="mt-6 grid gap-3 sm:grid-cols-2">
             {PACKS.filter((x) => x.starter).map((tpl) => {
               const on = picked.has(tpl.id);
               const first = parseSanLine(mainLineText(tpl.lines[0]!.pgn, 9));
@@ -143,15 +147,19 @@ export function WelcomeScreen() {
                       return n;
                     })
                   }
-                  className={`flex gap-3 rounded-[16px] border p-3 text-start transition-colors ${on ? 'border-brand bg-brand-softer' : 'border-line bg-surface hover:bg-surface-2'}`}
+                  className={`pressable flex gap-3.5 rounded-[var(--radius-l)] p-3.5 text-start shadow-card transition-colors ${on ? 'bg-brand-softer ring-2 ring-brand' : 'bg-surface hover:bg-surface-2'}`}
                 >
                   <MiniBoard fen={first.fen} size={72} orientation={tpl.color} />
                   <span className="min-w-0">
-                    <span className="flex items-center gap-1.5 font-bold">
+                    <span className="flex items-center gap-1.5 text-md font-bold">
                       {t(tpl.name)}
-                      {on && <Check size={16} className="text-brand" aria-hidden />}
+                      {on && (
+                        <span className="flex size-5 shrink-0 items-center justify-center rounded-full bg-brand text-on-brand" aria-hidden>
+                          <Check size={13} strokeWidth={3} aria-hidden />
+                        </span>
+                      )}
                     </span>
-                    <span className="block text-xs font-semibold text-ink-3">
+                    <span className="block text-sm font-semibold text-ink-2">
                       {tpl.color === 'white' ? t('White') : t('Black')} · {tpl.color === 'white' ? `1.${tpl.first} ${tpl.reply}` : t('vs {move}', { move: `1.${tpl.first}` })}
                     </span>
                     <span className="mt-1 block text-sm text-ink-2">{tpl.lines.map((l) => l.name).join(' · ')}</span>
@@ -168,7 +176,7 @@ export function WelcomeScreen() {
               {t('I’ll build my own')}
             </Button>
           </div>
-          <p className="mt-6 text-xs text-ink-3">
+          <p className="mt-6 text-sm text-ink-2">
             {tx('By continuing you agree to the {terms}. See the {privacy} and {cookies}. No ads, no tracking.', {
               terms: (
                 <a href={legalUrl('/terms')} target="_blank" rel="noreferrer" className="underline underline-offset-2">

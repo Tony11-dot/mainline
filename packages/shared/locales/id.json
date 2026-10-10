@@ -1026,5 +1026,21 @@
  "From the start": "Dari awal",
  "Its lines and folders are built on these moves, so they stay as they are. To start from other moves, make a new folder.": "Line dan folder di dalamnya dibangun di atas langkah-langkah ini, jadi tetap seperti adanya. Untuk mulai dari langkah lain, buat folder baru.",
  "Lines you make inside start from here.": "Line yang kamu buat di sini dimulai dari titik ini.",
- "Clear": "Bersihkan"
+ "Clear": "Bersihkan",
+ "Page not found": "Halaman tidak ditemukan",
+ "Something went wrong": "Terjadi kesalahan",
+ "There’s nothing at this address.": "Tidak ada apa-apa di alamat ini.",
+ "Reload the app and try again. Your repertoire and training are saved.": "Muat ulang aplikasi dan coba lagi. Repertoar dan latihanmu tersimpan.",
+ "Reload": "Muat ulang",
+ "Loading…": "Memuat…",
+ "From the engine and game statistics": "Dari mesin dan statistik permainan",
+ "the AI coach is resting until tomorrow": "pelatih AI sedang istirahat sampai besok",
+ "AI coach · grounded in this position’s engine lines and stats": "Pelatih AI · berdasarkan jalur mesin dan statistik posisi ini",
+ "{wrong} of {total} wrong": "{wrong} dari {total} salah",
+ "No games as White yet.": "Belum ada permainan sebagai Putih.",
+ "No games as Black yet.": "Belum ada permainan sebagai Hitam.",
+ "From this position, add every opponent reply played in at least the chosen share of games by players around {rating}. Where it’s your turn, your main move is followed; positions without one are left for you to decide.": "Dari posisi ini, menambahkan setiap balasan lawan yang dimainkan pemain sekitar {rating} di setidaknya porsi permainan yang dipilih. Saat giliranmu, langkah utamamu diikuti; posisi tanpa langkah utama dibiarkan untuk kamu putuskan.",
+ "{n} variations": {
+  "other": "{n} variasi"
+ }
 }

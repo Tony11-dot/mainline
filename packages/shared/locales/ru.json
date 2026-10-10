@@ -1215,5 +1215,24 @@
  "From the start": "С начала",
  "Its lines and folders are built on these moves, so they stay as they are. To start from other moves, make a new folder.": "Её линии и папки построены на этих ходах, поэтому они остаются как есть. Чтобы начать с других ходов, создайте новую папку.",
  "Lines you make inside start from here.": "Линии, созданные здесь, начинаются с этой позиции.",
- "Clear": "Очистить"
+ "Clear": "Очистить",
+ "Page not found": "Страница не найдена",
+ "Something went wrong": "Что-то пошло не так",
+ "There’s nothing at this address.": "По этому адресу ничего нет.",
+ "Reload the app and try again. Your repertoire and training are saved.": "Перезагрузите приложение и попробуйте снова. Ваш репертуар и тренировки сохранены.",
+ "Reload": "Перезагрузить",
+ "Loading…": "Загрузка…",
+ "From the engine and game statistics": "По данным движка и статистике партий",
+ "the AI coach is resting until tomorrow": "ИИ-тренер отдыхает до завтра",
+ "AI coach · grounded in this position’s engine lines and stats": "ИИ-тренер · опирается на линии движка и статистику этой позиции",
+ "{wrong} of {total} wrong": "{wrong} из {total} неверно",
+ "No games as White yet.": "Пока нет партий белыми.",
+ "No games as Black yet.": "Пока нет партий чёрными.",
+ "From this position, add every opponent reply played in at least the chosen share of games by players around {rating}. Where it’s your turn, your main move is followed; positions without one are left for you to decide.": "Из этой позиции добавляется каждый ответ соперника, который игроки около {rating} делают не реже выбранной доли партий. Когда ваш ход, используется ваш основной ход; позиции без него остаются на ваше решение.",
+ "{n} variations": {
+  "one": "{n} вариант",
+  "few": "{n} варианта",
+  "many": "{n} вариантов",
+  "other": "{n} варианта"
+ }
 }

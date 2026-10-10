@@ -1026,5 +1026,21 @@
  "From the start": "从开局",
  "Its lines and folders are built on these moves, so they stay as they are. To start from other moves, make a new folder.": "其中的线路和文件夹都建立在这些着法之上，因此保持不变。要从其他着法开始，请新建文件夹。",
  "Lines you make inside start from here.": "在这里创建的线路从此局面开始。",
- "Clear": "清除"
+ "Clear": "清除",
+ "Page not found": "找不到页面",
+ "Something went wrong": "出了点问题",
+ "There’s nothing at this address.": "此地址没有任何内容。",
+ "Reload the app and try again. Your repertoire and training are saved.": "请重新加载应用后再试。你的开局库和训练记录已保存。",
+ "Reload": "重新加载",
+ "Loading…": "加载中…",
+ "From the engine and game statistics": "来自引擎和对局统计",
+ "the AI coach is resting until tomorrow": "AI 教练明天之前在休息",
+ "AI coach · grounded in this position’s engine lines and stats": "AI 教练 · 依据此局面的引擎变着和统计",
+ "{wrong} of {total} wrong": "{total} 次中错 {wrong} 次",
+ "No games as White yet.": "还没有执白的对局。",
+ "No games as Black yet.": "还没有执黑的对局。",
+ "From this position, add every opponent reply played in at least the chosen share of games by players around {rating}. Where it’s your turn, your main move is followed; positions without one are left for you to decide.": "从此局面开始，添加 {rating} 左右的棋手在至少所选比例的对局中走过的每一种对手应着。轮到你走时沿用你的主着；没有主着的局面留给你决定。",
+ "{n} variations": {
+  "other": "{n} 个变着"
+ }
 }

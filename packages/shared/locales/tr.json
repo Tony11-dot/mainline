@@ -1089,5 +1089,22 @@
  "From the start": "Baştan",
  "Its lines and folders are built on these moves, so they stay as they are. To start from other moves, make a new folder.": "İçindeki varyantlar ve klasörler bu hamlelere dayanıyor, bu yüzden oldukları gibi kalır. Başka hamlelerden başlamak için yeni bir klasör oluştur.",
  "Lines you make inside start from here.": "Burada oluşturduğun varyantlar bu noktadan başlar.",
- "Clear": "Temizle"
+ "Clear": "Temizle",
+ "Page not found": "Sayfa bulunamadı",
+ "Something went wrong": "Bir şeyler ters gitti",
+ "There’s nothing at this address.": "Bu adreste bir şey yok.",
+ "Reload the app and try again. Your repertoire and training are saved.": "Uygulamayı yeniden yükleyip tekrar deneyin. Repertuarınız ve antrenmanınız kayıtlı.",
+ "Reload": "Yeniden yükle",
+ "Loading…": "Yükleniyor…",
+ "From the engine and game statistics": "Motor ve oyun istatistiklerinden",
+ "the AI coach is resting until tomorrow": "yapay zekâ koçu yarına kadar dinleniyor",
+ "AI coach · grounded in this position’s engine lines and stats": "Yapay zekâ koçu · bu konumun motor varyantlarına ve istatistiklerine dayanır",
+ "{wrong} of {total} wrong": "{total} denemede {wrong} yanlış",
+ "No games as White yet.": "Henüz beyazla oyun yok.",
+ "No games as Black yet.": "Henüz siyahla oyun yok.",
+ "From this position, add every opponent reply played in at least the chosen share of games by players around {rating}. Where it’s your turn, your main move is followed; positions without one are left for you to decide.": "Bu konumdan itibaren {rating} civarındaki oyuncuların oyunlarının en az seçilen oranında oynanan her rakip cevabını ekler. Sıra sizdeyken ana hamleniz izlenir; ana hamlesi olmayan konumlar size bırakılır.",
+ "{n} variations": {
+  "one": "{n} varyant",
+  "other": "{n} varyant"
+ }
 }

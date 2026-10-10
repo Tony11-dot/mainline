@@ -1152,5 +1152,23 @@
  "From the start": "מההתחלה",
  "Its lines and folders are built on these moves, so they stay as they are. To start from other moves, make a new folder.": "הקווים והתיקיות שבה בנויים על המסעים האלה, ולכן הם נשארים כפי שהם. כדי להתחיל ממסעים אחרים, צור תיקייה חדשה.",
  "Lines you make inside start from here.": "קווים שתיצור כאן מתחילים מנקודה זו.",
- "Clear": "נקה"
+ "Clear": "נקה",
+ "Page not found": "הדף לא נמצא",
+ "Something went wrong": "משהו השתבש",
+ "There’s nothing at this address.": "אין כלום בכתובת הזו.",
+ "Reload the app and try again. Your repertoire and training are saved.": "טענו מחדש את האפליקציה ונסו שוב. הרפרטואר והאימון שלכם שמורים.",
+ "Reload": "טעינה מחדש",
+ "Loading…": "טוען…",
+ "From the engine and game statistics": "מהמנוע ומסטטיסטיקת המשחקים",
+ "the AI coach is resting until tomorrow": "מאמן ה-AI נח עד מחר",
+ "AI coach · grounded in this position’s engine lines and stats": "מאמן AI · מבוסס על קווי המנוע והסטטיסטיקה של העמדה הזו",
+ "{wrong} of {total} wrong": "{wrong} שגויים מתוך {total}",
+ "No games as White yet.": "עדיין אין משחקים בלבן.",
+ "No games as Black yet.": "עדיין אין משחקים בשחור.",
+ "From this position, add every opponent reply played in at least the chosen share of games by players around {rating}. Where it’s your turn, your main move is followed; positions without one are left for you to decide.": "מהעמדה הזו מוסיף כל תשובת יריב ששחקנים סביב {rating} שיחקו לפחות בחלק המשחקים שבחרתם. כשתורכם, המסע הראשי שלכם נשמר; עמדות בלי מסע ראשי נשארות להחלטתכם.",
+ "{n} variations": {
+  "one": "וריאנט אחד",
+  "two": "{n} וריאנטים",
+  "other": "{n} וריאנטים"
+ }
 }

@@ -365,17 +365,17 @@ export function LibraryScreen() {
   };
 
   const selectionBar = (selecting || selected.length > 1) && (
-    <div className="sticky bottom-[calc(var(--tabbar-h,0px)+12px)] z-20 mt-4 flex flex-wrap items-center gap-2 rounded-[var(--radius-l)] border border-line bg-surface p-2.5 shadow-3 lg:bottom-4">
+    <div className="sticky bottom-[calc(var(--tabbar-h,0px)+12px)] z-20 mt-4 flex flex-wrap items-center gap-2 rounded-[var(--radius-l)] bg-surface p-2.5 shadow-3 ring-1 ring-line/60 lg:bottom-4">
       <span className="tnum px-1.5 text-sm font-semibold">{tn(selected.length, '{n} selected', '{n} selected')}</span>
       <span className="flex-1" />
       {(() => {
         const scope = scopeOf(selected);
         return scope ? (
           <>
-            <Link to={practiceHref(scope, 'show')} className="inline-flex h-9 items-center gap-1.5 rounded-[10px] px-2.5 text-sm font-semibold hover:bg-surface-3">
+            <Link to={practiceHref(scope, 'show')} className="inline-flex h-10 items-center gap-1.5 rounded-[var(--radius-s)] bg-brand-soft px-3 text-sm font-semibold text-brand-ink hover:bg-brand-soft-2">
               <Eye size={15} aria-hidden /> {t('Show me')}
             </Link>
-            <Link to={practiceHref(scope, 'test')} className="inline-flex h-9 items-center gap-1.5 rounded-[10px] bg-brand px-2.5 text-sm font-semibold text-on-brand">
+            <Link to={practiceHref(scope, 'test')} className="inline-flex h-10 items-center gap-1.5 rounded-[var(--radius-s)] bg-brand px-3 text-sm font-semibold text-on-brand">
               <Target size={15} aria-hidden /> {t('Test me')}
             </Link>
           </>
@@ -456,7 +456,7 @@ export function LibraryScreen() {
         {main}
         {selectionBar}
         {!selecting && visible.length > 1 && (
-          <button type="button" onClick={() => setSelecting(true)} className="mt-4 inline-flex h-9 items-center gap-1.5 rounded-[10px] px-2 text-sm font-semibold text-ink-2 hover:bg-surface-3">
+          <button type="button" onClick={() => setSelecting(true)} className="pressable mt-4 inline-flex h-11 items-center gap-2 rounded-[var(--radius-control)] px-3 text-base font-semibold text-ink-2 hover:bg-surface-3 hover:text-ink">
             <CheckSquare size={16} aria-hidden /> {t('Select')}
           </button>
         )}
@@ -542,7 +542,7 @@ function useDrop(folderId: string | undefined, drop: (keys: string[], folderId: 
 function FinderList({ items, finder, label, empty }: { items: Item[]; finder: FinderCtx; label: string; empty?: React.ReactNode }) {
   if (!items.length) return <>{empty}</>;
   return (
-    <ul role="listbox" aria-label={label} aria-multiselectable className="divide-y divide-line overflow-hidden rounded-[var(--radius-l)] border border-line bg-surface shadow-1">
+    <ul role="listbox" aria-label={label} aria-multiselectable className={`${CARD} divide-y divide-line overflow-hidden`}>
       {items.map((it) => (
         <FinderRow key={it.key} it={it} finder={finder} />
       ))}
@@ -616,7 +616,7 @@ function FinderRow({ it, finder }: { it: Item; finder: FinderCtx }) {
         // Let the click that follows a long press see `fired`, then forget it.
         setTimeout(() => (press.current = null), 0);
       }}
-      className={`pressable flex min-h-[60px] cursor-default select-none items-center gap-3 px-3 py-2 ${over ? 'bg-brand-soft ring-2 ring-brand ring-inset' : selected ? 'bg-brand-softer' : 'hover:bg-surface-2 active:bg-surface-3'}`}
+      className={`pressable flex min-h-[64px] cursor-default select-none items-center gap-3.5 px-4 py-2.5 ${over ? 'bg-brand-soft ring-2 ring-brand ring-inset' : selected ? 'bg-brand-softer' : 'hover:bg-surface-2 active:bg-surface-3'}`}
     >
       {finder.selecting && <span aria-hidden className={`flex size-5 shrink-0 items-center justify-center rounded-full border-2 ${selected ? 'border-brand bg-brand text-on-brand' : 'border-line-strong'}`}>{selected && '✓'}</span>}
       {it.type === 'folder' ? (
@@ -642,7 +642,7 @@ function FinderRow({ it, finder }: { it: Item; finder: FinderCtx }) {
             className="w-full rounded-[6px] border border-brand bg-surface px-1.5 py-0.5 font-semibold outline-none"
           />
         ) : (
-          <span className="block font-semibold">{name}</span>
+          <span className="block text-md font-semibold">{name}</span>
         )}
         {it.type === 'folder' ? (
           <span className="tnum block text-sm text-ink-2">
@@ -652,8 +652,8 @@ function FinderRow({ it, finder }: { it: Item; finder: FinderCtx }) {
           </span>
         ) : (
           <>
-            <span className="flex items-center gap-1.5 text-xs text-ink-3">
-              {isReadyMade(it.rep) ? <Sparkles size={12} aria-hidden /> : <Hammer size={12} aria-hidden />}
+            <span className="flex items-center gap-1.5 text-sm text-ink-2">
+              {isReadyMade(it.rep) ? <Sparkles size={13} aria-hidden /> : <Hammer size={13} aria-hidden />}
               {isReadyMade(it.rep) ? t('Ready-made') : t('Your line')}
             </span>
             <MasteryStrip rep={it.rep} moves={repMoves(finder.moves, it.rep.id)} cards={finder.cards} now={Date.now()} />
@@ -671,7 +671,7 @@ function FinderRow({ it, finder }: { it: Item; finder: FinderCtx }) {
             const r = e.currentTarget.getBoundingClientRect();
             finder.onContext(it, r.left, r.bottom + 4);
           }}
-          className="flex size-8 shrink-0 items-center justify-center rounded-full text-ink-3 hover:bg-surface-3 hover:text-ink"
+          className="flex size-9 shrink-0 items-center justify-center rounded-full text-lg text-ink-3 hover:bg-surface-3 hover:text-ink"
         >
           ⋯
         </button>
@@ -701,7 +701,7 @@ function Sidebar({ roots, folders, current, drop }: { roots: Folder[]; folders: 
   };
   return (
     <nav aria-label={t('Folders')} className="sticky top-0 hidden h-dvh w-[260px] shrink-0 overflow-y-auto border-e border-line px-2 py-6 lg:block">
-      <Link to="/library" className="mb-3 flex items-center gap-2 px-2 text-lg font-bold">
+      <Link to="/library" className="mb-3 flex items-center gap-2 px-2 text-xl font-bold">
         {t('Repertoire')}
       </Link>
       {roots.map((r) => (
@@ -710,16 +710,16 @@ function Sidebar({ roots, folders, current, drop }: { roots: Folder[]; folders: 
         </ul>
       ))}
       <div className="mt-4 flex flex-col gap-0.5 border-t border-line pt-3">
-        <Link to="/focus" className="flex h-9 items-center gap-2 rounded-[8px] px-2 text-sm font-semibold text-ink-2 hover:bg-surface-3 hover:text-ink">
+        <Link to="/focus" className="flex h-10 items-center gap-2.5 rounded-[var(--radius-s)] px-2.5 text-sm font-semibold text-ink-2 hover:bg-surface-3 hover:text-ink">
           <Target size={16} aria-hidden /> {t('Weak spots')}
         </Link>
-        <Link to="/plan" className="flex h-9 items-center gap-2 rounded-[8px] px-2 text-sm font-semibold text-ink-2 hover:bg-surface-3 hover:text-ink">
+        <Link to="/plan" className="flex h-10 items-center gap-2.5 rounded-[var(--radius-s)] px-2.5 text-sm font-semibold text-ink-2 hover:bg-surface-3 hover:text-ink">
           <CalendarDays size={16} aria-hidden /> {t('Study plan')}
         </Link>
-        <Link to="/library/ready" className="flex h-9 items-center gap-2 rounded-[8px] px-2 text-sm font-semibold text-ink-2 hover:bg-surface-3 hover:text-ink">
+        <Link to="/library/ready" className="flex h-10 items-center gap-2.5 rounded-[var(--radius-s)] px-2.5 text-sm font-semibold text-ink-2 hover:bg-surface-3 hover:text-ink">
           <Sparkles size={16} aria-hidden /> {t('Ready-made openings')}
         </Link>
-        <Link to="/stats" className="flex h-9 items-center gap-2 rounded-[8px] px-2 text-sm font-semibold text-ink-2 hover:bg-surface-3 hover:text-ink">
+        <Link to="/stats" className="flex h-10 items-center gap-2.5 rounded-[var(--radius-s)] px-2.5 text-sm font-semibold text-ink-2 hover:bg-surface-3 hover:text-ink">
           <BarChart3 size={16} aria-hidden /> {t('Statistics')}
         </Link>
       </div>
@@ -731,7 +731,7 @@ function SidebarNode({ f, depth, kids, isOpen, active, toggle, drop, render }: {
   const { over, props } = useDrop(f.id, drop);
   return (
     <li>
-      <div {...props} className={`flex h-8 items-center rounded-[8px] ${over ? 'bg-brand-soft ring-2 ring-brand ring-inset' : active ? 'bg-surface-3' : 'hover:bg-surface-2'}`} style={{ paddingInlineStart: depth * 14 }}>
+      <div {...props} className={`flex h-9 items-center rounded-[var(--radius-xs)] ${over ? 'bg-brand-soft ring-2 ring-brand ring-inset' : active ? 'bg-surface-3' : 'hover:bg-surface-2'}`} style={{ paddingInlineStart: depth * 14 }}>
         <button type="button" onClick={toggle} disabled={!kids.length || depth === 0} aria-label={isOpen ? t('Collapse') : t('Expand')} className="flex size-6 shrink-0 items-center justify-center text-ink-3 disabled:opacity-0">
           <ChevronRight size={13} className={`transition-transform ${isOpen ? 'rotate-90' : 'rtl:rotate-180'}`} aria-hidden />
         </button>
@@ -801,15 +801,15 @@ function RootView({ roots, finder, itemsIn, conflicts, setSheet, toolbarNew, pla
   const single = roots.length === 1;
   return (
     <>
-      <div className="flex items-center justify-between gap-3">
-        <h1 className="text-2xl font-bold">{single ? (roots[0]!.color === 'white' ? t('As White') : t('As Black')) : t('Repertoire')}</h1>
-        <div className="flex items-center gap-1">
+      <div className="flex flex-wrap items-center justify-between gap-x-3 gap-y-2">
+        <h1 className="min-w-0 text-3xl font-bold md:text-4xl">{single ? (roots[0]!.color === 'white' ? t('As White') : t('As Black')) : t('Repertoire')}</h1>
+        <div className="ms-auto flex items-center gap-1">
           {!finder.wide && (
             <>
-              <Link to="/focus" aria-label={t('Weak spots')} className="inline-flex size-11 items-center justify-center rounded-[12px] text-ink-2 hover:bg-surface-3 hover:text-ink">
+              <Link to="/focus" aria-label={t('Weak spots')} className="pressable inline-flex size-11 items-center justify-center rounded-full text-ink-2 hover:bg-surface-3 hover:text-ink">
                 <Target size={19} aria-hidden />
               </Link>
-              <Link to="/plan" aria-label={t('Study plan')} className="inline-flex size-11 items-center justify-center rounded-[12px] text-ink-2 hover:bg-surface-3 hover:text-ink">
+              <Link to="/plan" aria-label={t('Study plan')} className="pressable inline-flex size-11 items-center justify-center rounded-full text-ink-2 hover:bg-surface-3 hover:text-ink">
                 <CalendarDays size={19} aria-hidden />
               </Link>
             </>
@@ -823,17 +823,17 @@ function RootView({ roots, finder, itemsIn, conflicts, setSheet, toolbarNew, pla
           <WeakSpotCard spot={spot} />
         </div>
       ) : games.length === 0 && loaded ? (
-        <Link to="/games" className={`pressable mt-5 flex items-center gap-3 px-4 py-3 text-sm text-ink-2 hover:bg-surface-2 ${CARD_DASHED}`}>
-          <Swords size={18} className="shrink-0 text-brand" aria-hidden />
+        <Link to="/games" className={`pressable mt-5 flex items-center gap-3.5 px-5 py-4 text-base text-ink-2 hover:bg-surface-2 ${CARD_DASHED}`}>
+          <Swords size={20} className="shrink-0 text-brand" aria-hidden />
           <span className="flex-1">{t('Import your games and MainLine finds the openings you lose most — then hands you ready-made lines for them.')}</span>
           <ChevronRight size={18} className="shrink-0 text-ink-3 rtl:rotate-180" aria-hidden />
         </Link>
       ) : null)}
 
       {conflicts > 0 && (
-        <button type="button" onClick={() => setSheet({ kind: 'conflicts' })} className="pressable mt-5 flex w-full items-center gap-3 rounded-[var(--radius-m)] bg-warn-soft px-4 py-3 text-start text-warn-ink">
-          <TriangleAlert size={18} className="shrink-0" aria-hidden />
-          <span className="flex-1 text-sm font-medium">
+        <button type="button" onClick={() => setSheet({ kind: 'conflicts' })} className="pressable mt-5 flex w-full items-center gap-3.5 rounded-[var(--radius-m)] bg-warn-soft px-5 py-4 text-start text-warn-ink">
+          <TriangleAlert size={20} className="shrink-0" aria-hidden />
+          <span className="flex-1 text-base font-medium">
             {tn(conflicts, '{n} position where your repertoires disagree on your move.', '{n} positions where your repertoires disagree on your move.')} {t('Training uses one move per position.')}
           </span>
           <ChevronRight size={18} className="text-ink-3 rtl:rotate-180" aria-hidden />
@@ -862,8 +862,8 @@ function RootView({ roots, finder, itemsIn, conflicts, setSheet, toolbarNew, pla
       {finder.reps.length > 0 && !single && (
         <Card className="mt-5 flex flex-wrap items-center justify-between gap-3">
           <div>
-            <h2 className="font-bold">{t('Everything')}</h2>
-            <p className="tnum text-sm text-ink-2">
+            <h2 className="text-xl font-bold">{t('Everything')}</h2>
+            <p className="tnum text-base text-ink-2">
               <ProgressText p={all} />
             </p>
           </div>
@@ -892,15 +892,15 @@ function ColorSection({ root, finder, items, setSheet, single, planHref }: { roo
   const label = root.color === 'white' ? t('As White') : t('As Black');
   return (
     <section aria-label={label} {...props} className={over ? 'rounded-[var(--radius-l)] ring-2 ring-brand' : ''}>
-      <div className="mb-2 flex flex-wrap items-end justify-between gap-2 px-1">
+      <div className="mb-3 flex flex-wrap items-end justify-between gap-2 px-1">
         <div>
           {!single && (
-            <h2 className="flex items-center gap-2 text-lg font-bold">
+            <h2 className="flex items-center gap-2.5 text-xl font-bold">
               <ColorDot color={root.color} />
               {label}
             </h2>
           )}
-          <p className="tnum text-sm text-ink-2">
+          <p className="tnum text-base text-ink-2">
             <ProgressText p={progress} />
           </p>
         </div>
@@ -914,7 +914,7 @@ function ColorSection({ root, finder, items, setSheet, single, planHref }: { roo
         )}
       </div>
       <FinderList items={items} finder={finder} label={label} />
-      <button type="button" onClick={() => setSheet({ kind: 'pick', color: root.color })} className={`pressable mt-2 flex min-h-[52px] w-full items-center gap-2 px-4 text-start font-semibold text-brand-ink hover:bg-surface-2 ${CARD_DASHED}`}>
+      <button type="button" onClick={() => setSheet({ kind: 'pick', color: root.color })} className={`pressable mt-3 flex min-h-[56px] w-full items-center gap-2.5 px-5 text-start text-md font-semibold text-brand-ink hover:bg-surface-2 ${CARD_DASHED}`}>
         <Plus size={18} aria-hidden /> {root.color === 'white' ? t('Add a first move') : t('Add a first move to answer')}
       </button>
     </section>
@@ -964,20 +964,20 @@ function FolderView({ folder, finder, items, setSheet, newFolder, planHref, pare
                 if (e.key === 'Enter') e.currentTarget.blur();
                 if (e.key === 'Escape') setRenaming(false);
               }}
-              className="w-full rounded-[8px] border border-brand bg-surface px-2 py-0.5 text-2xl font-bold outline-none"
+              className="w-full rounded-[var(--radius-xs)] border border-brand bg-surface px-2 py-0.5 text-3xl font-bold outline-none"
             />
           ) : (
-            <h1 className="text-2xl font-bold" onDoubleClick={() => setRenaming(true)}>
+            <h1 className="text-3xl font-bold" onDoubleClick={() => setRenaming(true)}>
               {t(folder.name)}
             </h1>
           )}
-          <p className="tnum mt-0.5 flex flex-wrap items-center gap-2 text-sm text-ink-2">
+          <p className="tnum mt-1 flex flex-wrap items-center gap-2 text-base text-ink-2">
             <ProgressText p={progress} />
             <RecordBadge rec={rec} />
           </p>
         </div>
         <div className="flex shrink-0 items-center gap-1">
-          <IconButton icon={Settings2} label={t('Folder settings')} size={40} onClick={() => setSheet({ kind: 'folder-settings', id: folder.id })} />
+          <IconButton icon={Settings2} label={t('Folder settings')} size={44} onClick={() => setSheet({ kind: 'folder-settings', id: folder.id })} />
           {toolbarNew}
         </div>
       </div>
@@ -999,32 +999,32 @@ function FolderView({ folder, finder, items, setSheet, newFolder, planHref, pare
         />
       </div>
 
-      <div className="mt-3 grid gap-2 sm:grid-cols-2">
+      <div className="mt-3 grid gap-2.5 sm:grid-cols-2">
         {isFirst && (
-          <button type="button" onClick={() => setSheet({ kind: 'pick', color: folder.color, first })} className={`pressable flex min-h-[56px] items-center gap-3 px-4 text-start font-semibold text-brand-ink hover:bg-surface-2 ${CARD_DASHED}`}>
+          <button type="button" onClick={() => setSheet({ kind: 'pick', color: folder.color, first })} className={`pressable flex min-h-[60px] items-center gap-3 px-5 text-start text-md font-semibold text-brand-ink hover:bg-surface-2 ${CARD_DASHED}`}>
             <Plus size={18} aria-hidden /> {folder.color === 'white' ? t('Add a reply to prepare for') : t('Add your answer')}
           </button>
         )}
         {packs.length > 0 && (
-          <Link to={`/library/ready?color=${folder.color}&first=${first}&reply=${encodeURIComponent(reply!)}`} className={`pressable flex min-h-[56px] items-center gap-3 px-4 py-2.5 hover:bg-surface-2 ${CARD}`}>
+          <Link to={`/library/ready?color=${folder.color}&first=${first}&reply=${encodeURIComponent(reply!)}`} className={`pressable flex min-h-[60px] items-center gap-3.5 px-5 py-3 hover:bg-surface-2 ${CARD}`}>
             <Sparkles size={20} className="shrink-0 text-brand" aria-hidden />
             <span className="min-w-0 flex-1">
-              <span className="block font-semibold">{t('Add ready-made lines')}</span>
+              <span className="block text-md font-semibold">{t('Add ready-made lines')}</span>
               <span className="block text-sm text-ink-2">{tn(packs.length, '{n} set to choose from', '{n} sets to choose from')}</span>
             </span>
           </Link>
         )}
-        <button type="button" onClick={() => void buildOwn()} className={`pressable flex min-h-[56px] items-center gap-3 px-4 py-2.5 text-start hover:bg-surface-2 ${CARD_DASHED}`}>
+        <button type="button" onClick={() => void buildOwn()} className={`pressable flex min-h-[60px] items-center gap-3.5 px-5 py-3 text-start hover:bg-surface-2 ${CARD_DASHED}`}>
           <ListPlus size={20} className="shrink-0 text-brand" aria-hidden />
           <span className="min-w-0 flex-1">
-            <span className="block font-semibold">{t('New line')}</span>
+            <span className="block text-md font-semibold">{t('New line')}</span>
             <span className="block text-sm text-ink-2">{t('Pick its moves yourself — where it goes, where it stops, where it branches.')}</span>
           </span>
         </button>
-        <button type="button" onClick={() => newFolder(folder)} className={`pressable flex min-h-[56px] items-center gap-3 px-4 py-2.5 text-start hover:bg-surface-2 ${CARD_DASHED}`}>
+        <button type="button" onClick={() => newFolder(folder)} className={`pressable flex min-h-[60px] items-center gap-3.5 px-5 py-3 text-start hover:bg-surface-2 ${CARD_DASHED}`}>
           <FolderPlus size={20} className="shrink-0 text-brand" aria-hidden />
           <span className="min-w-0 flex-1">
-            <span className="block font-semibold">{t('New folder')}</span>
+            <span className="block text-md font-semibold">{t('New folder')}</span>
             <span className="block text-sm text-ink-2">{t('One step deeper, e.g. an opening or a variation — its lines start from its moves.')}</span>
           </span>
         </button>
@@ -1041,7 +1041,7 @@ function MobileTrail({ folder, folders }: { folder: Folder; folders: Folder[] })
     cur = folders.find((f) => f.id === cur!.parentId);
   }
   return (
-    <nav aria-label={t('Breadcrumb')} className="truncate text-sm text-ink-3">
+    <nav aria-label={t('Breadcrumb')} className="truncate text-sm text-ink-2">
       {trail.map((f, i) => (
         <span key={f.id}>
           {i > 0 && ' › '}

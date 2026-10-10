@@ -50,16 +50,16 @@ export function LinePanel({
   return (
     <section aria-label={t('The line')} className="flex flex-col gap-2.5">
       <div className="flex items-baseline justify-between gap-2">
-        <h2 className="text-sm font-semibold text-ink-2">{t('The line')}</h2>
-        <span className="tnum text-xs text-ink-3">
+        <h2 className="text-lg font-bold">{t('The line')}</h2>
+        <span className="tnum text-sm text-ink-2">
           {tn(steps.length, '{n} move', '{n} moves')}
           {forks > 0 && ` · ${tn(forks, '{n} branch point', '{n} branch points')}`}
         </span>
       </div>
-      <ol className="flex flex-wrap items-center gap-x-0.5 gap-y-1 text-sm" aria-label={t('Moves in this line')}>
+      <ol dir="ltr" className="flex flex-wrap items-center gap-x-0.5 gap-y-1 text-base" aria-label={t('Moves in this line')}>
         {start.length > 0 && (
           <li className="me-1 text-ink-3">
-            <button type="button" onClick={() => onGoto('')} aria-current={atRoot ? 'step' : undefined} className={`rounded-[6px] px-1.5 py-1 ${atRoot ? 'bg-brand text-on-brand' : 'hover:bg-surface-3'}`}>
+            <button type="button" onClick={() => onGoto('')} aria-current={atRoot ? 'step' : undefined} className={`min-h-[36px] rounded-[var(--radius-xs)] px-2 py-1 ${atRoot ? 'bg-brand text-on-brand' : 'hover:bg-surface-3'}`}>
               {start.map((san, i) => `${i % 2 === 0 ? `${i / 2 + 1}.` : ''}${san}`).join(' ')}
             </button>
           </li>
@@ -75,7 +75,7 @@ export function LinePanel({
                 type="button"
                 onClick={() => onGoto(p)}
                 aria-current={on ? 'step' : undefined}
-                className={`tnum rounded-[6px] px-1.5 py-1 font-semibold ${on ? 'bg-brand text-on-brand' : p.length < path.length || !path ? 'text-ink hover:bg-surface-3' : 'text-ink-2 hover:bg-surface-3'}`}
+                className={`tnum min-h-[36px] rounded-[var(--radius-xs)] px-2 py-1 font-semibold ${on ? 'bg-brand text-on-brand' : p.length < path.length || !path ? 'text-ink hover:bg-surface-3' : 'text-ink-2 hover:bg-surface-3'}`}
               >
                 {label}
               </button>
@@ -88,7 +88,7 @@ export function LinePanel({
             </li>
           );
         })}
-        <li className="ms-1 text-xs font-semibold text-ink-3">{steps.length ? t('end') : t('Play the first move on the board')}</li>
+        <li className="ms-1.5 text-sm font-semibold text-ink-3">{steps.length ? t('end') : t('Play the first move on the board')}</li>
       </ol>
       {!ready ? (
         <div className="flex flex-wrap gap-2">
@@ -102,7 +102,7 @@ export function LinePanel({
               <Button size="sm" variant="ghost" icon={Replace} onClick={onChange}>
                 {t('Change {move}', { move: here.san })}
               </Button>
-              <Button size="sm" variant="ghost" icon={Trash2} onClick={onDelete} className="text-bad hover:text-bad">
+              <Button size="sm" variant="ghost" icon={Trash2} onClick={onDelete} className="text-bad-ink hover:text-bad-ink">
                 {t('Delete {move}', { move: here.san })}
               </Button>
             </>

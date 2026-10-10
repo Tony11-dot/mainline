@@ -5,22 +5,22 @@ import { intlLocale, msg, t, tn } from '../lib/i18n';
 /** One number with its label (and an optional qualifier underneath). */
 export function StatTile({ label, value, sub }: { label: string; value: ReactNode; sub?: ReactNode }) {
   return (
-    <div className="min-w-0 rounded-[var(--radius-m)] border border-line bg-surface px-3.5 py-3 shadow-1">
-      <div className="truncate text-xs font-medium text-ink-3">{label}</div>
-      <div className="tnum mt-0.5 truncate text-xl font-bold tracking-tight">{value}</div>
-      {sub && <div className="tnum truncate text-xs text-ink-3">{sub}</div>}
+    <div className="min-w-0 rounded-[var(--radius-l)] bg-surface px-4 py-3.5 shadow-card">
+      <div className="text-sm font-medium text-ink-2">{label}</div>
+      <div className="tnum mt-0.5 truncate text-2xl font-bold tracking-tight">{value}</div>
+      {sub && <div className="tnum mt-0.5 text-xs text-ink-2">{sub}</div>}
     </div>
   );
 }
 
 export function StatGrid({ children }: { children: ReactNode }) {
-  return <div className="grid grid-cols-2 gap-2 sm:grid-cols-4">{children}</div>;
+  return <div className="grid grid-cols-2 gap-3 sm:grid-cols-4">{children}</div>;
 }
 
 export function StatSection({ title, action, children }: { title: string; action?: ReactNode; children: ReactNode }) {
   return (
-    <section className="mt-7 first:mt-0">
-      <div className="mb-2.5 flex items-center gap-2">
+    <section className="mt-[var(--section-gap)] first:mt-0">
+      <div className="mb-3 flex items-center gap-2 px-1">
         <h2 className="text-lg font-bold">{title}</h2>
         {action && <div className="ms-auto">{action}</div>}
       </div>
@@ -41,20 +41,20 @@ export function ReviewsChart({ daily }: { daily: TrainingStats['daily'] }) {
   const h = hover !== null ? daily[hover] : undefined;
   const total = daily.reduce((n, d) => n + d.reviews, 0);
   return (
-    <figure className="rounded-[var(--radius-l)] border border-line bg-surface p-3.5 shadow-1">
-      <figcaption className="flex items-baseline gap-2 text-sm">
-        <span className="font-semibold">{t('Reviews per day')}</span>
-        <span className="tnum ms-auto text-xs text-ink-3" aria-live="polite">
+    <figure className="rounded-[var(--radius-l)] bg-surface p-5 shadow-card">
+      <figcaption className="flex flex-wrap items-baseline gap-x-2 gap-y-0.5 text-sm">
+        <span className="text-md font-bold">{t('Reviews per day')}</span>
+        <span className="tnum ms-auto text-sm text-ink-2" aria-live="polite">
           {h
             ? `${fmtDay(h.day)} · ${tn(h.reviews, '{n} review', '{n} reviews')}${h.reviews ? ` · ${t('{pct} correct', { pct: pct(h.correct / h.reviews) })}` : ''}`
             : tn(daily.length, '{total} in {n} day', '{total} in {n} days', { total })}
         </span>
       </figcaption>
-      <div className="relative mt-3 h-28" onPointerLeave={() => setHover(null)}>
+      <div className="relative mt-4 h-32" onPointerLeave={() => setHover(null)}>
         {/* Recessive guides: max and half. */}
         <div className="pointer-events-none absolute inset-x-0 top-0 border-t border-dashed border-line" />
         <div className="pointer-events-none absolute inset-x-0 top-1/2 border-t border-dashed border-line" />
-        <span className="tnum pointer-events-none absolute -top-2 end-0 bg-surface ps-1 text-[10px] text-ink-3">{max}</span>
+        <span className="tnum pointer-events-none absolute -top-2 end-0 bg-surface ps-1 text-2xs text-ink-3">{max}</span>
         <div className="absolute inset-0 flex items-end gap-[2px]" role="list" aria-label={t('Reviews per day')}>
           {daily.map((d, i) => (
             <div
@@ -73,7 +73,7 @@ export function ReviewsChart({ daily }: { daily: TrainingStats['daily'] }) {
           ))}
         </div>
       </div>
-      <div className="tnum mt-1.5 flex justify-between text-[10px] text-ink-3">
+      <div className="tnum mt-2 flex justify-between text-xs text-ink-2">
         <span>{fmtDay(daily[0]!.day)}</span>
         <span>{t('Today')}</span>
       </div>
@@ -99,7 +99,7 @@ export function MaturityBar({ maturity }: { maturity: Record<Maturity, number> }
           maturity[k] ? <div key={k} className={MATURITY_STYLE[k].cls} style={{ width: `${(maturity[k] / total) * 100}%` }} title={`${t(MATURITY_STYLE[k].label)}: ${maturity[k]} (${t(MATURITY_STYLE[k].hint)})`} /> : null,
         )}
       </div>
-      <ul className="mt-2 flex flex-wrap gap-x-4 gap-y-1 text-xs text-ink-2">
+      <ul className="mt-2.5 flex flex-wrap gap-x-4 gap-y-1 text-sm text-ink-2">
         {MATURITY.map((k) => (
           <li key={k} className="flex items-center gap-1.5">
             <span className={`size-2.5 rounded-[3px] ${MATURITY_STYLE[k].cls} ${k === 'new' ? 'ring-1 ring-line-strong' : ''}`} aria-hidden />
@@ -113,7 +113,7 @@ export function MaturityBar({ maturity }: { maturity: Record<Maturity, number> }
 
 /** Wins / draws / losses as a split bar with the counts spelled out beside it. */
 export function RecordBar({ rec, showScore = true }: { rec: Record3; showScore?: boolean }) {
-  if (!rec.games) return <span className="text-xs text-ink-3">{t('No games')}</span>;
+  if (!rec.games) return <span className="text-sm text-ink-2">{t('No games')}</span>;
   const seg = (n: number, cls: string, label: string) => (n ? <div className={cls} style={{ width: `${(n / rec.games) * 100}%` }} title={`${label}: ${n}`} /> : null);
   return (
     <div className="flex min-w-0 items-center gap-2.5">
@@ -122,7 +122,7 @@ export function RecordBar({ rec, showScore = true }: { rec: Record3; showScore?:
         {seg(rec.draw, 'bg-ink-3/50', t('Draws'))}
         {seg(rec.loss, 'bg-bad', t('Losses'))}
       </div>
-      <span className="tnum shrink-0 text-xs text-ink-2">
+      <span className="tnum shrink-0 text-sm text-ink-2">
         <span className="font-semibold text-ink">+{rec.win}</span> ={rec.draw} −{rec.loss}
         {showScore && <span className="ms-1.5 font-semibold text-ink">{pct(rec.score)}</span>}
       </span>
@@ -136,7 +136,7 @@ export function FormDots({ form }: { form: ('win' | 'draw' | 'loss')[] }) {
   return (
     <ol className="flex gap-1" aria-label={tn(form.length, 'Last {n} result, newest first', 'Last {n} results, newest first')}>
       {form.map((r, i) => (
-        <li key={i} className={`grid size-6 place-items-center rounded-full text-[10.5px] font-bold ${style[r][0]}`}>
+        <li key={i} className={`grid size-7 place-items-center rounded-full text-xs font-bold ${style[r][0]}`}>
           {style[r][1]}
         </li>
       ))}

@@ -37,7 +37,7 @@ export function MoveStatsPanel({ parentFen, uci, color }: { parentFen?: string; 
   if (!parentFen || !uci) return <PanelNote title={t('Select a move')}>{t('Step into the line to see stats for that move.')}</PanelNote>;
   if (d.loading)
     return (
-      <div className="flex flex-col gap-2 p-3.5">
+      <div className="flex flex-col gap-2 p-4">
         {[0, 1, 2, 3].map((i) => (
           <Skeleton key={i} className="h-10" />
         ))}
@@ -58,7 +58,7 @@ export function MoveStatsPanel({ parentFen, uci, color }: { parentFen?: string; 
   const score = (m?: { white: number; draws: number; black: number; total: number }) => (m && m.total ? fmtPercent(((color === 'white' ? m.white : m.black) + m.draws / 2) / m.total) : undefined);
 
   return (
-    <dl className="flex flex-col divide-y divide-line text-sm">
+    <dl className="flex flex-col divide-y divide-line text-base">
       <Row label={t('Engine')}>
         {after ? (
           <span className="tnum font-semibold">
@@ -72,7 +72,7 @@ export function MoveStatsPanel({ parentFen, uci, color }: { parentFen?: string; 
       </Row>
       {swing !== undefined && (
         <Row label={t('Eval swing')}>
-          <span className={`tnum inline-flex items-center gap-1.5 font-semibold ${swing >= 0.7 ? 'text-warn' : ''}`}>
+          <span className={`tnum inline-flex items-center gap-1.5 font-semibold ${swing >= 0.7 ? 'text-warn-ink' : ''}`}>
             {swing >= 0.7 && <TriangleAlert size={14} aria-hidden />}
             {swing <= 0.05 ? t('None — this is the engine’s choice') : mover === 'white' ? t('−{swing} for White vs the engine’s best', { swing: swing.toFixed(2) }) : t('−{swing} for Black vs the engine’s best', { swing: swing.toFixed(2) })}
           </span>
@@ -132,8 +132,8 @@ export function MoveStatsPanel({ parentFen, uci, color }: { parentFen?: string; 
 
 function Row({ label, children }: { label: string; children: React.ReactNode }) {
   return (
-    <div className="grid grid-cols-[112px_1fr] gap-3 px-3.5 py-3">
-      <dt className="text-ink-3">{label}</dt>
+    <div className="grid grid-cols-[minmax(6rem,8rem)_1fr] gap-3 px-4 py-3.5">
+      <dt className="text-sm font-medium text-ink-2">{label}</dt>
       <dd className="min-w-0">{children}</dd>
     </div>
   );

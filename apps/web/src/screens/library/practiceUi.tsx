@@ -3,18 +3,19 @@ import { Eye, Target } from 'lucide-react';
 import { isOwnTurn, type RepMove, type Repertoire, type TrainCard } from '@mainline/shared';
 import { practiceHref, type Scope } from '../../lib/practice';
 import type { OpeningRecord } from '../../lib/packs';
+import { Pill } from '../../ui/kit';
 import { fmtPercent, t, tn } from '../../lib/i18n';
 
-/** "Show me" (every move shown) and "Test me" (from memory) for any part of the library. */
+/** "Show me" (every move shown, tonal) and "Test me" (from memory, filled) for any part of the library. */
 export function PracticeButtons({ scope, disabled, size = 'md' }: { scope: Scope; disabled?: boolean; size?: 'sm' | 'md' }) {
-  const cls = size === 'sm' ? 'h-9 gap-1.5 rounded-[10px] px-3 text-sm' : 'h-11 gap-2 rounded-[12px] px-4';
+  const cls = size === 'sm' ? 'h-9 gap-1.5 rounded-[var(--radius-s)] px-3.5 text-sm' : 'h-11 gap-2 rounded-[var(--radius-control)] px-4';
   const off = disabled ? 'pointer-events-none opacity-45' : '';
   return (
     <div className="flex flex-wrap gap-2">
-      <Link to={practiceHref(scope, 'show')} aria-disabled={disabled} tabIndex={disabled ? -1 : undefined} className={`inline-flex items-center border border-line bg-surface font-semibold shadow-1 hover:bg-surface-2 ${cls} ${off}`}>
+      <Link to={practiceHref(scope, 'show')} aria-disabled={disabled} tabIndex={disabled ? -1 : undefined} className={`pressable inline-flex items-center bg-brand-soft font-semibold text-brand-ink hover:bg-brand-soft-2 ${cls} ${off}`}>
         <Eye size={size === 'sm' ? 15 : 17} aria-hidden /> {t('Show me')}
       </Link>
-      <Link to={practiceHref(scope, 'test')} aria-disabled={disabled} tabIndex={disabled ? -1 : undefined} className={`inline-flex items-center bg-brand font-semibold text-on-brand hover:brightness-110 ${cls} ${off}`}>
+      <Link to={practiceHref(scope, 'test')} aria-disabled={disabled} tabIndex={disabled ? -1 : undefined} className={`pressable inline-flex items-center bg-brand font-semibold text-on-brand hover:brightness-110 ${cls} ${off}`}>
         <Target size={size === 'sm' ? 15 : 17} aria-hidden /> {t('Test me')}
       </Link>
     </div>
@@ -54,6 +55,10 @@ export function ProgressText({ p }: { p: ScopeProgress }) {
 /** "You: 31% in 26 games", coloured by how it's going. */
 export function RecordBadge({ rec }: { rec?: OpeningRecord }) {
   if (!rec) return null;
-  const tone = rec.games < 5 ? 'bg-surface-3 text-ink-2' : rec.score < 0.45 ? 'bg-bad-soft text-bad' : rec.score >= 0.55 ? 'bg-good-soft text-good' : 'bg-surface-3 text-ink-2';
-  return <span className={`tnum inline-flex h-6 shrink-0 items-center rounded-full px-2 text-xs font-semibold ${tone}`}>{tn(rec.games, 'You: {score} in {n} game', 'You: {score} in {n} games', { score: fmtPercent(rec.score) })}</span>;
+  const tone = rec.games < 5 ? 'neutral' : rec.score < 0.45 ? 'bad' : rec.score >= 0.55 ? 'good' : 'neutral';
+  return (
+    <Pill tone={tone} className="tnum">
+      {tn(rec.games, 'You: {score} in {n} game', 'You: {score} in {n} games', { score: fmtPercent(rec.score) })}
+    </Pill>
+  );
 }

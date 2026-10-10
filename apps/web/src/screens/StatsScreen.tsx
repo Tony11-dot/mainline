@@ -9,7 +9,8 @@ import { openingIndex, openingForLine, type OpeningInfo } from '../lib/openings'
 import { gameStats, openingStats, pct, repertoireGames, repertoireShape, trainingStats, type OpeningStat } from '../lib/stats';
 import { MiniBoard } from '../ui/MiniBoard';
 import { speedName } from '../lib/speeds';
-import { PanelNote, Segmented } from '../ui/primitives';
+import { Segmented } from '../ui/primitives';
+import { EmptyState, ListGroup, ListRow, PageHeader } from '../ui/kit';
 import { FormDots, MaturityBar, RecordBar, ReviewsChart, StatGrid, StatSection, StatTile } from '../ui/stats';
 import { intlLocale, t, tn } from '../lib/i18n';
 
@@ -45,18 +46,13 @@ export function StatsScreen() {
 
   return (
     <div className="mx-auto max-w-3xl px-4 py-6 md:px-8 md:py-10">
-      <h1 className="text-2xl font-bold">{t('Statistics')}</h1>
-      <p className="mt-1 text-ink-2">{t('Your training, repertoires, openings and games — all computed on this device.')}</p>
-      <Link to="/focus" className="mt-4 flex items-center gap-3 rounded-[var(--radius-l)] border border-line bg-surface px-4 py-3 shadow-1 hover:bg-surface-2">
-        <Target size={20} className="shrink-0 text-brand" aria-hidden />
-        <span className="min-w-0 flex-1">
-          <span className="block font-semibold">{t('Weak spots')}</span>
-          <span className="block text-sm text-ink-2">{t('Your weakest moves, openings and lines')}</span>
-        </span>
-        <ChevronRight size={18} className="shrink-0 text-ink-3 rtl:rotate-180" aria-hidden />
-      </Link>
+      <PageHeader title={t('Statistics')} large />
+      <p className="mt-2 text-md text-ink-2">{t('Your training, repertoires, openings and games — all computed on this device.')}</p>
+      <ListGroup className="mt-5">
+        <ListRow to="/focus" icon={Target} title={t('Weak spots')} sub={t('Your weakest moves, openings and lines')} />
+      </ListGroup>
 
-      <div className="mt-6">
+      <div className="mt-[var(--section-gap)]">
         <StatSection title={t('Training')}>
           {ts.reviews === 0 && ts.due === 0 ? (
             // Before the first review every tile would read 0 or —; one clear next step instead.
@@ -69,14 +65,14 @@ export function StatsScreen() {
                 <StatTile label={t('Due now')} value={ts.due} sub={tn(ts.lapses, '{n} lapse so far', '{n} lapses so far')} />
                 <StatTile label={t('Answer time')} value={ts.medianMs ? t('{sec} s', { sec: (ts.medianMs / 1000).toLocaleString(intlLocale(), { maximumFractionDigits: 1, minimumFractionDigits: 1 }) }) : '—'} sub={t('median, correct answers')} />
               </StatGrid>
-              <div className="mt-2">
+              <div className="mt-3">
                 <ReviewsChart daily={ts.daily} />
               </div>
             </>
           )}
           {MaturityTotal(ts.maturity) > 0 && (
-            <div className="mt-2 rounded-[var(--radius-l)] border border-line bg-surface p-3.5 shadow-1">
-              <h3 className="mb-2.5 text-sm font-semibold">{t('Positions by memory strength')}</h3>
+            <div className="mt-3 rounded-[var(--radius-l)] bg-surface p-5 shadow-card">
+              <h3 className="mb-3 text-md font-bold">{t('Positions by memory strength')}</h3>
               <MaturityBar maturity={ts.maturity} />
             </div>
           )}
@@ -87,22 +83,22 @@ export function StatsScreen() {
           {reps.length === 0 ? (
             <Empty text={t('No repertoires yet.')} to="/library/openings" cta={t('Start one')} />
           ) : (
-            <ul className="flex flex-col gap-2">
+            <ul className="flex flex-col gap-3">
               {reps.map(({ rep, shape, tr, known, games: rg }) => (
                 <li key={rep.id}>
-                  <Link to={`/rep/${rep.id}`} className="block rounded-[var(--radius-l)] border border-line bg-surface p-3.5 shadow-1 transition-colors hover:bg-surface-2">
-                    <div className="flex items-center gap-2">
-                      <span className={`size-3 shrink-0 rounded-full ring-1 ring-line-strong ${rep.color === 'white' ? 'bg-white' : 'bg-ink'}`} aria-label={rep.color === 'white' ? t('As White') : t('As Black')} />
-                      <span className="min-w-0 truncate font-semibold">{rep.name}</span>
-                      <ChevronRight size={16} className="ms-auto shrink-0 text-ink-3 rtl:rotate-180" aria-hidden />
+                  <Link to={`/rep/${rep.id}`} className="pressable block rounded-[var(--radius-l)] bg-surface p-5 shadow-card transition-colors hover:bg-surface-2">
+                    <div className="flex items-center gap-2.5">
+                      <span role="img" className={`size-3.5 shrink-0 rounded-full ring-1 ring-line-strong ${rep.color === 'white' ? 'bg-white' : 'bg-[#111]'}`} aria-label={rep.color === 'white' ? t('As White') : t('As Black')} />
+                      <span className="min-w-0 truncate text-md font-bold">{rep.name}</span>
+                      <ChevronRight size={20} className="ms-auto shrink-0 text-ink-3 rtl:rotate-180" aria-hidden />
                     </div>
-                    <dl className="tnum mt-2 grid grid-cols-4 gap-2 text-xs">
+                    <dl className="tnum mt-3 grid grid-cols-4 gap-2 text-sm">
                       <Mini label={t('Moves')} value={shape.moves} />
                       <Mini label={t('Lines')} value={shape.lines} />
                       <Mini label={t('Known')} value={pct(known)} />
                       <Mini label={t('Accuracy')} value={pct(tr.accuracy)} />
                     </dl>
-                    <div className="mt-2.5">{rg.games ? <RecordBar rec={rg} /> : <span className="text-xs text-ink-3">{t('No imported games reached this repertoire yet')}</span>}</div>
+                    <div className="mt-3">{rg.games ? <RecordBar rec={rg} /> : <span className="text-sm text-ink-2">{t('No imported games reached this repertoire yet')}</span>}</div>
                   </Link>
                 </li>
               ))}
@@ -123,7 +119,7 @@ export function StatsScreen() {
                 <StatTile label={t('Avg opponent')} value={games.avgOpponent ? Math.round(games.avgOpponent) : '—'} />
                 <StatTile label={t('Recent form')} value={<FormDots form={games.form.slice(0, 5)} />} sub={t('newest first')} />
               </StatGrid>
-              <div className="mt-2 flex flex-col divide-y divide-line rounded-[var(--radius-l)] border border-line bg-surface shadow-1">
+              <div className="mt-3 flex flex-col divide-y divide-line rounded-[var(--radius-l)] bg-surface shadow-card">
                 <Row label={t('As White')} right={<RecordBar rec={games.white} />} />
                 <Row label={t('As Black')} right={<RecordBar rec={games.black} />} />
                 {games.bySpeed.map((s) => (
@@ -145,16 +141,16 @@ const MaturityTotal = (m: Record<string, number>) => Object.values(m).reduce((a,
 function Mini({ label, value }: { label: string; value: React.ReactNode }) {
   return (
     <div className="min-w-0">
-      <dt className="truncate text-ink-3">{label}</dt>
-      <dd className="truncate text-sm font-semibold">{value}</dd>
+      <dt className="hyphens-auto text-xs leading-tight font-medium break-words text-ink-2">{label}</dt>
+      <dd className="truncate text-md font-bold">{value}</dd>
     </div>
   );
 }
 
 function Row({ label, right }: { label: string; right: React.ReactNode }) {
   return (
-    <div className="grid grid-cols-[7.5rem_1fr] items-center gap-3 px-3.5 py-2.5">
-      <span className="truncate text-sm font-medium">{label}</span>
+    <div className="grid grid-cols-[minmax(6rem,8rem)_1fr] items-center gap-3 px-5 py-3.5">
+      <span className="text-base font-medium">{label}</span>
       {right}
     </div>
   );
@@ -162,17 +158,16 @@ function Row({ label, right }: { label: string; right: React.ReactNode }) {
 
 function Empty({ text, to, cta, icon = BarChart3 }: { text: string; to: string; cta: string; icon?: typeof BarChart3 }) {
   return (
-    <div className="rounded-[var(--radius-l)] border border-dashed border-line-strong">
-      <PanelNote
-        icon={icon}
-        title={text}
-        action={
-          <Link to={to} className="inline-flex h-10 items-center rounded-[12px] bg-brand px-4 text-sm font-semibold text-on-brand">
-            {cta}
-          </Link>
-        }
-      />
-    </div>
+    <EmptyState
+      dashed
+      icon={icon}
+      title={text}
+      action={
+        <Link to={to} className="pressable inline-flex h-11 items-center rounded-[var(--radius-control)] bg-brand px-4 font-semibold text-on-brand">
+          {cta}
+        </Link>
+      }
+    />
   );
 }
 
@@ -186,17 +181,17 @@ function Hardest({ items }: { items: { color: 'white' | 'black'; epd: string; wr
     };
   }, [items]);
   return (
-    <div className="mt-2 rounded-[var(--radius-l)] border border-line bg-surface p-3.5 shadow-1">
-      <h3 className="text-sm font-semibold">{t('Positions you miss most')}</h3>
-      <ul className="mt-2.5 flex gap-3 overflow-x-auto pb-1">
+    <div className="mt-3 rounded-[var(--radius-l)] bg-surface p-5 shadow-card">
+      <h3 className="text-md font-bold">{t('Positions you miss most')}</h3>
+      <ul className="-mx-5 mt-3 flex gap-3 overflow-x-auto px-5 pb-1 [scrollbar-width:none]">
         {items.map((h) => (
           <li key={h.color + h.epd} className="shrink-0">
             <Link to={`/explore?${new URLSearchParams({ fen: epdToFen(h.epd), color: h.color })}`} className="block w-[104px]">
               <MiniBoard fen={epdToFen(h.epd)} orientation={h.color} size={104} />
-              <div className="tnum mt-1 text-xs font-semibold text-bad">
-                {h.wrong} of {h.total} wrong
+              <div className="tnum mt-1.5 text-sm font-semibold text-bad-ink">
+                {t('{wrong} of {total} wrong', { wrong: h.wrong, total: h.total })}
               </div>
-              <div className="truncate text-[11px] text-ink-3">{names.get(h.epd)?.name ?? t('Unnamed position')}</div>
+              <div className="truncate text-xs text-ink-2">{names.get(h.epd)?.name ?? t('Unnamed position')}</div>
             </Link>
           </li>
         ))}
@@ -218,23 +213,23 @@ function OpeningsSection() {
   const shown = all ? rows : rows.slice(0, 12);
   return (
     <StatSection title={t('Openings you play')}>
-      <div className="mb-2 flex flex-wrap gap-2">
+      <div className="mb-3 flex flex-wrap gap-2">
         <Segmented label={t('Colour')} value={color} onChange={setColor} options={[{ value: 'white', label: t('As White') }, { value: 'black', label: t('As Black') }]} className="min-w-[200px] flex-1" />
         <Segmented label={t('Grouping')} value={grain} onChange={setGrain} options={[{ value: 'family', label: t('Openings') }, { value: 'variation', label: t('Variations') }]} className="min-w-[200px] flex-1" />
       </div>
       {!byEpd ? (
-        <p className="py-6 text-center text-sm text-ink-3">{t('Loading openings…')}</p>
+        <p className="py-6 text-center text-base text-ink-2">{t('Loading openings…')}</p>
       ) : rows.length === 0 ? (
-        <p className="py-6 text-center text-sm text-ink-3">No games as {color} yet.</p>
+        <p className="py-6 text-center text-base text-ink-2">{color === 'white' ? t('No games as White yet.') : t('No games as Black yet.')}</p>
       ) : (
-        <ul className="flex flex-col divide-y divide-line rounded-[var(--radius-l)] border border-line bg-surface shadow-1">
+        <ul className="flex flex-col divide-y divide-line rounded-[var(--radius-l)] bg-surface shadow-card">
           {shown.map((o) => (
             <li key={o.opening.name}>
-              <Link to={`/explore?${new URLSearchParams({ fen: epdToFen(o.opening.epd), color })}`} className="grid grid-cols-1 gap-1.5 px-3.5 py-2.5 hover:bg-surface-2 sm:grid-cols-[1fr_15rem] sm:items-center sm:gap-3">
+              <Link to={`/explore?${new URLSearchParams({ fen: epdToFen(o.opening.epd), color })}`} className="grid grid-cols-1 gap-2 px-5 py-3.5 hover:bg-surface-2 sm:grid-cols-[1fr_15rem] sm:items-center sm:gap-4">
                 <div className="flex min-w-0 items-center gap-2">
-                  <span className="tnum shrink-0 rounded-[6px] bg-surface-3 px-1.5 py-0.5 text-[11px] font-bold text-ink-2">{o.opening.eco}</span>
-                  <span className="min-w-0 truncate text-sm font-medium">{o.opening.name}</span>
-                  <span className="tnum ms-auto shrink-0 text-xs text-ink-3">
+                  <span className="tnum shrink-0 rounded-[var(--radius-xs)] bg-brand-soft px-1.5 py-0.5 text-xs font-bold text-brand-ink">{o.opening.eco}</span>
+                  <span className="min-w-0 truncate text-base font-semibold">{o.opening.name}</span>
+                  <span className="tnum ms-auto shrink-0 text-sm text-ink-2">
                     {tn(o.rec.games, '{n} game', '{n} games')}
                     {o.avgOpponent ? ` · ~${o.avgOpponent}` : ''}
                   </span>
@@ -246,7 +241,7 @@ function OpeningsSection() {
         </ul>
       )}
       {rows.length > 12 && (
-        <button type="button" className="mt-2 h-10 w-full rounded-[12px] text-sm font-semibold text-brand hover:bg-brand-soft" onClick={() => setAll((a) => !a)}>
+        <button type="button" className="mt-3 h-11 w-full rounded-[var(--radius-control)] text-base font-semibold text-brand-ink hover:bg-brand-softer" onClick={() => setAll((a) => !a)}>
           {all ? t('Show fewer') : t('Show all {n}', { n: rows.length })}
         </button>
       )}

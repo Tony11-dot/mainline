@@ -27,7 +27,7 @@ export function SettingsScreen() {
   const sync = useSync();
   return (
     <div className="mx-auto max-w-2xl px-4 py-6 md:px-8 md:py-10">
-      <PageHeader title={t('Settings')} />
+      <PageHeader title={t('Settings')} large />
 
       <FormSection title={t('Account')}>
         {me ? (
@@ -57,10 +57,10 @@ export function SettingsScreen() {
             )}
           </>
         ) : (
-          <div className="px-4 py-4">
-            <div className="text-base font-medium">{t('Sign in to sync')}</div>
-            <p className="text-sm text-ink-2">{t('Optional. Keeps your repertoire and training in step across devices. Everything works without an account.')}</p>
-            <div className="mt-3.5 grid gap-2 sm:flex sm:flex-wrap">
+          <div className="px-5 py-5">
+            <div className="text-md font-semibold">{t('Sign in to sync')}</div>
+            <p className="mt-0.5 text-sm text-ink-2">{t('Optional. Keeps your repertoire and training in step across devices. Everything works without an account.')}</p>
+            <div className="mt-4 grid gap-2 sm:flex sm:flex-wrap">
               {platformKind === 'ios' && <AppleButton onClick={() => void signInWithApple()} />}
               <Button variant={platformKind === 'ios' ? 'secondary' : 'primary'} onClick={() => void startLogin('lichess')}>
                 {t('Sign in with Lichess')}
@@ -98,7 +98,7 @@ export function SettingsScreen() {
                     const next = on ? p.speeds.filter((x) => x !== s) : [...p.speeds, s];
                     if (next.length) p.set({ speeds: next as Speed[] });
                   }}
-                  className={`pressable h-9 rounded-full px-3.5 text-sm font-semibold ${on ? 'bg-brand text-on-brand' : 'bg-surface-3 text-ink-2 hover:text-ink'}`}
+                  className={`pressable h-10 rounded-full px-4 text-sm font-semibold ${on ? 'bg-brand text-on-brand' : 'bg-surface-3 text-ink-2 hover:text-ink'}`}
                 >
                   {speedName(s)}
                 </button>
@@ -110,7 +110,7 @@ export function SettingsScreen() {
 
       <FormSection title={t('Language')}>
         <FormRow label={t('Language')} hint={t('Automatic follows your device language.')}>
-          <select value={p.locale} onChange={(e) => p.set({ locale: e.target.value as typeof p.locale })} className="h-10 max-w-[12rem] rounded-[var(--radius-s)] border border-line bg-surface px-3 text-base text-ink" aria-label={t('Language')}>
+          <select value={p.locale} onChange={(e) => p.set({ locale: e.target.value as typeof p.locale })} className="h-11 max-w-[12rem] rounded-[var(--radius-control)] border border-line bg-surface px-3 text-base text-ink" aria-label={t('Language')}>
             {LOCALES.map((l) => (
               <option key={l.id} value={l.id}>
                 {l.id === 'auto' ? t('Automatic') : l.name}
@@ -172,7 +172,7 @@ export function SettingsScreen() {
 
       <DeleteData signedIn={!!me} />
 
-      <p className="mt-6 text-center text-xs text-ink-3">
+      <p className="mt-8 text-center text-xs text-ink-3">
         {(
           [
             ['/privacy', msg('Privacy policy')],
@@ -268,7 +268,7 @@ function Stepper({ label, value, min, max, step, onChange }: { label: string; va
   const nudge = (dir: 1 | -1) => onChange(clamp(dir > 0 ? Math.floor(value / step) * step + step : Math.ceil(value / step) * step - step));
   const btn = 'flex size-11 items-center justify-center text-ink-2 transition-colors duration-[var(--dur-fast)] hover:bg-surface-3 hover:text-ink active:bg-surface-3 disabled:pointer-events-none disabled:opacity-35';
   return (
-    <div className="flex h-11 items-center overflow-hidden rounded-[var(--radius-control)] border border-line bg-surface-2">
+    <div className="flex h-11 items-center overflow-hidden rounded-[var(--radius-control)] border border-line bg-surface-3/60">
       <button type="button" className={btn} aria-label={t('Decrease {setting}', { setting: label })} disabled={value <= min} onClick={() => nudge(-1)}>
         <Minus size={16} strokeWidth={2.4} aria-hidden />
       </button>

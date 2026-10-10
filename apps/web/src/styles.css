@@ -12,11 +12,11 @@
   --brand: #072eb8;
   --on-brand: #fff;
 
-  /* Cool neutrals, tinted a hair toward the brand hue. */
-  --bg: oklch(0.985 0.004 262);
+  /* Cool neutrals, tinted toward the brand hue: the page is the tint, cards are the white on top of it. */
+  --bg: oklch(0.966 0.008 262);
   --surface: oklch(1 0 0);
-  --surface-2: oklch(0.968 0.006 262);
-  --surface-3: oklch(0.935 0.009 262);
+  --surface-2: oklch(0.972 0.006 262);
+  --surface-3: oklch(0.935 0.01 262);
   --ink: oklch(0.2 0.02 262);
   --ink-2: oklch(0.42 0.018 262);
   --ink-3: oklch(0.51 0.016 262);
@@ -25,6 +25,7 @@
 
   --brand-ink: color-mix(in oklab, var(--brand) 88%, black);
   --brand-soft: color-mix(in oklab, var(--brand) 11%, var(--surface));
+  --brand-soft-2: color-mix(in oklab, var(--brand) 17%, var(--surface));
   --brand-softer: color-mix(in oklab, var(--brand) 6%, var(--surface));
   --on-brand: #fff;
 
@@ -65,6 +66,8 @@
   --shadow-1: 0 1px 2px oklch(0.3 0.03 262 / 0.06), 0 1px 1px oklch(0.3 0.03 262 / 0.04);
   --shadow-2: 0 4px 16px -4px oklch(0.3 0.03 262 / 0.12), 0 1px 3px oklch(0.3 0.03 262 / 0.08);
   --shadow-3: 0 24px 64px -16px oklch(0.25 0.04 262 / 0.28), 0 4px 12px oklch(0.3 0.03 262 / 0.08);
+  /* Cards have no border: a white surface lifted off the tinted page by the softest shadow. */
+  --shadow-card: 0 1px 2px oklch(0.25 0.03 262 / 0.05), 0 6px 20px -8px oklch(0.25 0.03 262 / 0.12);
 
   /* Board theme (cool blue-grey by default). */
   --sq-light: oklch(0.93 0.018 250);
@@ -78,9 +81,9 @@
   --radius-xs: 8px;
   --radius-s: 10px;
   --radius-control: 12px;
-  --radius-m: 14px;
-  --radius-l: 22px;
-  --radius-xl: 28px;
+  --radius-m: 16px;
+  --radius-l: 24px;
+  --radius-xl: 32px;
 
   /* Spacing: the 4-pt grid (Tailwind's numeric utilities are these same steps), and the page rhythm built on it. */
   --space-1: 4px;
@@ -93,9 +96,9 @@
   --space-10: 40px;
   --space-12: 48px;
   --page-x: 16px; /* side gutter on phones */
-  --section-gap: 32px; /* between titled sections */
+  --section-gap: 36px; /* between titled sections */
   --stack-gap: 12px; /* between cards in one section */
-  --card-pad: 16px;
+  --card-pad: 20px;
 
   /* Motion: state changes, not choreography. Exponential ease-out; reduced motion collapses every duration. */
   --dur-fast: 120ms;
@@ -116,10 +119,10 @@
 }
 
 :root[data-theme='dark'] {
-  --bg: oklch(0.16 0.012 262);
-  --surface: oklch(0.2 0.014 262);
-  --surface-2: oklch(0.235 0.015 262);
-  --surface-3: oklch(0.28 0.016 262);
+  --bg: oklch(0.15 0.012 262);
+  --surface: oklch(0.215 0.014 262);
+  --surface-2: oklch(0.25 0.015 262);
+  --surface-3: oklch(0.3 0.016 262);
   --ink: oklch(0.96 0.005 262);
   --ink-2: oklch(0.78 0.012 262);
   --ink-3: oklch(0.66 0.014 262);
@@ -127,6 +130,7 @@
   --line-strong: oklch(0.38 0.016 262);
   --brand-ink: color-mix(in oklab, var(--brand) 70%, white);
   --brand-soft: color-mix(in oklab, var(--brand) 22%, var(--surface));
+  --brand-soft-2: color-mix(in oklab, var(--brand) 30%, var(--surface));
   --brand-softer: color-mix(in oklab, var(--brand) 12%, var(--surface));
   --good-soft: oklch(0.3 0.06 150);
   --bad-soft: oklch(0.3 0.07 25);
@@ -146,6 +150,8 @@
   --shadow-1: 0 1px 2px oklch(0 0 0 / 0.3);
   --shadow-2: 0 4px 16px -4px oklch(0 0 0 / 0.45);
   --shadow-3: 0 24px 64px -16px oklch(0 0 0 / 0.6);
+  /* In the dark a hairline of light does what the shadow does by day. */
+  --shadow-card: 0 0 0 1px oklch(1 0 0 / 0.06), 0 1px 2px oklch(0 0 0 / 0.3);
   --sq-light: oklch(0.78 0.03 250);
   --sq-dark: oklch(0.52 0.05 250);
   color-scheme: dark;
@@ -186,6 +192,7 @@
   --color-on-brand: var(--on-brand);
   --color-brand-ink: var(--brand-ink);
   --color-brand-soft: var(--brand-soft);
+  --color-brand-soft-2: var(--brand-soft-2);
   --color-brand-softer: var(--brand-softer);
   --color-good: var(--good);
   --color-good-soft: var(--good-soft);
@@ -221,6 +228,7 @@
   --shadow-1: var(--shadow-1);
   --shadow-2: var(--shadow-2);
   --shadow-3: var(--shadow-3);
+  --shadow-card: var(--shadow-card);
   --ease-out: var(--ease-out);
   --ease-out-expo: var(--ease-out-expo);
   /* Type scale, ratio ~1.2 */
@@ -233,6 +241,7 @@
   --text-xl: 1.5rem;
   --text-2xl: 1.875rem;
   --text-3xl: 2.25rem;
+  --text-4xl: 2.75rem;
 }
 
 @layer base {
@@ -268,6 +277,10 @@
   h3 {
     text-wrap: balance;
     letter-spacing: -0.015em;
+  }
+  h1 {
+    letter-spacing: -0.025em;
+    line-height: 1.1;
   }
   button {
     cursor: pointer;

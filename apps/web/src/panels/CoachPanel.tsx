@@ -37,14 +37,14 @@ export function CoachAnswer({ req, onMove, onHover }: { req: Req; onMove?: (uci:
   return (
     <div>
       <CoachText text={r.text} fen={req.fen} onMove={onMove} onHover={onHover} />
-      <p className="mt-3 flex items-center gap-1.5 text-xs text-ink-3">
+      <p className="mt-3 flex items-center gap-1.5 text-sm text-ink-2">
         {r.source === 'template' ? (
           <>
-            <BookOpenText size={13} aria-hidden /> From the engine and game statistics{r.resting ? ' · the AI coach is resting until tomorrow' : ''}
+            <BookOpenText size={14} className="shrink-0" aria-hidden /> {t('From the engine and game statistics')}{r.resting ? ` · ${t('the AI coach is resting until tomorrow')}` : ''}
           </>
         ) : (
           <>
-            <Sparkles size={13} aria-hidden /> AI coach · grounded in this position’s engine lines and stats
+            <Sparkles size={14} className="shrink-0" aria-hidden /> {t('AI coach · grounded in this position’s engine lines and stats')}
           </>
         )}
       </p>
@@ -72,8 +72,8 @@ export function CoachPanel({ fen, parentFen, moveUci, lineUcis, lineStartFen, on
     }
   };
   return (
-    <div className="p-3.5">
-      <div className="mb-3 flex gap-1.5" role="tablist" aria-label={t('Coach')}>
+    <div className="p-4">
+      <div className="mb-4 flex flex-wrap gap-1.5" role="tablist" aria-label={t('Coach')}>
         {(
           [
             ['why', msg('Why this move?')],
@@ -88,7 +88,7 @@ export function CoachPanel({ fen, parentFen, moveUci, lineUcis, lineStartFen, on
             type="button"
             onClick={() => setTab(id)}
             disabled={id === 'why' && !moveUci}
-            className={`h-8 rounded-full px-3 text-sm font-semibold transition-colors disabled:opacity-40 ${tab === id ? 'bg-brand text-on-brand' : 'bg-surface-3 text-ink-2 hover:text-ink'}`}
+            className={`pressable h-10 rounded-full px-4 text-sm font-semibold transition-colors disabled:opacity-40 ${tab === id ? 'bg-brand text-on-brand' : 'bg-surface-3 text-ink-2 hover:text-ink'}`}
           >
             {t(label)}
           </button>
@@ -101,9 +101,9 @@ export function CoachPanel({ fen, parentFen, moveUci, lineUcis, lineStartFen, on
         <div className="flex flex-col gap-3">
           {asked.map((a, i) => (
             <div key={i} className="flex flex-col gap-1.5">
-              <p className="self-end rounded-[14px] rounded-ee-[4px] bg-brand px-3 py-2 text-sm text-on-brand">{a.q}</p>
-              <div className="rounded-[14px] rounded-es-[4px] bg-surface-2 px-3 py-2.5">
-                {a.loading ? <Spinner /> : a.error ? <p className="text-sm text-bad">{a.error}</p> : a.reply ? <CoachText text={a.reply.text} fen={fen} onMove={onMove} onHover={onHover} /> : null}
+              <p className="ms-10 self-end rounded-[var(--radius-m)] rounded-ee-[6px] bg-brand px-4 py-2.5 text-base text-on-brand">{a.q}</p>
+              <div className="me-6 rounded-[var(--radius-m)] rounded-es-[6px] bg-surface-2 px-4 py-3">
+                {a.loading ? <Spinner /> : a.error ? <p className="text-sm text-bad-ink">{a.error}</p> : a.reply ? <CoachText text={a.reply.text} fen={fen} onMove={onMove} onHover={onHover} /> : null}
               </div>
             </div>
           ))}
@@ -114,12 +114,12 @@ export function CoachPanel({ fen, parentFen, moveUci, lineUcis, lineStartFen, on
               void ask();
             }}
           >
-            <input value={q} onChange={(e) => setQ(e.target.value)} placeholder={t('Ask about this position…')} maxLength={400} className="h-11 min-w-0 flex-1 rounded-[12px] border border-line bg-surface px-3 text-base outline-none focus:border-brand focus:ring-3 focus:ring-brand/20" aria-label={t('Ask the coach')} />
+            <input value={q} onChange={(e) => setQ(e.target.value)} placeholder={t('Ask about this position…')} maxLength={400} className="h-11 min-w-0 flex-1 rounded-[var(--radius-control)] border border-line bg-surface px-4 text-base outline-none focus:border-brand focus:ring-3 focus:ring-brand/20" aria-label={t('Ask the coach')} />
             <Button variant="primary" icon={MessageCircleQuestion} type="submit" disabled={!q.trim()}>
               {t('Ask')}
             </Button>
           </form>
-          <p className="text-xs text-ink-3">{t('The coach only uses this position’s engine lines and game statistics — it won’t invent moves.')}</p>
+          <p className="text-sm text-ink-2">{t('The coach only uses this position’s engine lines and game statistics — it won’t invent moves.')}</p>
         </div>
       )}
     </div>

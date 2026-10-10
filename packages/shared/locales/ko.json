@@ -1026,5 +1026,21 @@
  "From the start": "처음부터",
  "Its lines and folders are built on these moves, so they stay as they are. To start from other moves, make a new folder.": "안의 라인과 폴더가 이 수들을 바탕으로 만들어져 있어 그대로 유지됩니다. 다른 수에서 시작하려면 새 폴더를 만드세요.",
  "Lines you make inside start from here.": "여기서 만드는 라인은 이 지점에서 시작합니다.",
- "Clear": "지우기"
+ "Clear": "지우기",
+ "Page not found": "페이지를 찾을 수 없습니다",
+ "Something went wrong": "문제가 발생했습니다",
+ "There’s nothing at this address.": "이 주소에는 아무것도 없습니다.",
+ "Reload the app and try again. Your repertoire and training are saved.": "앱을 다시 불러와서 다시 시도하세요. 레퍼토리와 훈련 기록은 저장되어 있습니다.",
+ "Reload": "다시 불러오기",
+ "Loading…": "불러오는 중…",
+ "From the engine and game statistics": "엔진과 대국 통계 기반",
+ "the AI coach is resting until tomorrow": "AI 코치는 내일까지 쉬는 중입니다",
+ "AI coach · grounded in this position’s engine lines and stats": "AI 코치 · 이 포지션의 엔진 수순과 통계 기반",
+ "{wrong} of {total} wrong": "{total}번 중 {wrong}번 틀림",
+ "No games as White yet.": "아직 백으로 둔 대국이 없습니다.",
+ "No games as Black yet.": "아직 흑으로 둔 대국이 없습니다.",
+ "From this position, add every opponent reply played in at least the chosen share of games by players around {rating}. Where it’s your turn, your main move is followed; positions without one are left for you to decide.": "이 포지션부터 {rating} 안팎의 플레이어가 선택한 비율 이상의 대국에서 둔 상대의 응수를 모두 추가합니다. 내 차례에서는 주 수를 따라가고, 주 수가 없는 포지션은 직접 정하도록 남겨 둡니다.",
+ "{n} variations": {
+  "other": "변화 {n}개"
+ }
 }

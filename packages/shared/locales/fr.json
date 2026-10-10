@@ -1089,5 +1089,23 @@
  "From the start": "Depuis le début",
  "Its lines and folders are built on these moves, so they stay as they are. To start from other moves, make a new folder.": "Ses lignes et dossiers reposent sur ces coups, ils restent donc tels quels. Pour partir d’autres coups, crée un nouveau dossier.",
  "Lines you make inside start from here.": "Les lignes que tu crées ici partent de ce point.",
- "Clear": "Effacer"
+ "Clear": "Effacer",
+ "Page not found": "Page introuvable",
+ "Something went wrong": "Un problème est survenu",
+ "There’s nothing at this address.": "Il n’y a rien à cette adresse.",
+ "Reload the app and try again. Your repertoire and training are saved.": "Rechargez l’app et réessayez. Votre répertoire et votre entraînement sont sauvegardés.",
+ "Reload": "Recharger",
+ "Loading…": "Chargement…",
+ "From the engine and game statistics": "D’après le moteur et les statistiques de parties",
+ "the AI coach is resting until tomorrow": "le coach IA se repose jusqu’à demain",
+ "AI coach · grounded in this position’s engine lines and stats": "Coach IA · fondé sur les lignes du moteur et les statistiques de cette position",
+ "{wrong} of {total} wrong": "{wrong} sur {total} faux",
+ "No games as White yet.": "Pas encore de parties avec les Blancs.",
+ "No games as Black yet.": "Pas encore de parties avec les Noirs.",
+ "From this position, add every opponent reply played in at least the chosen share of games by players around {rating}. Where it’s your turn, your main move is followed; positions without one are left for you to decide.": "À partir de cette position, ajoute chaque réponse adverse jouée dans au moins la part choisie des parties par les joueurs autour de {rating}. Quand c’est à vous de jouer, votre coup principal est suivi ; les positions sans coup principal vous sont laissées.",
+ "{n} variations": {
+  "one": "{n} variante",
+  "many": "{n} variantes",
+  "other": "{n} variantes"
+ }
 }

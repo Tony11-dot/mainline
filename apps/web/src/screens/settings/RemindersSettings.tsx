@@ -38,14 +38,14 @@ export function RemindersSettings() {
   return (
     <FormSection title={t('Reminders')} id="reminders" className="scroll-mt-6">
         {homeScreenHint ? (
-          <div className="flex gap-3 px-4 py-3.5">
+          <div className="flex gap-3 px-5 py-4">
             <BellRing size={20} className="mt-0.5 shrink-0 text-brand" aria-hidden />
             <p className="text-sm text-ink-2">
               {t('To get reminders on iPhone, add MainLine to your Home Screen first: tap Share, then Add to Home Screen, and open it from there.')}
             </p>
           </div>
         ) : unsupported ? (
-          <p className="px-4 py-3.5 text-sm text-ink-2">{t('This browser doesn’t support notifications. Install the app or use Chrome, Edge, Firefox or Safari.')}</p>
+          <p className="px-5 py-4 text-sm text-ink-2">{t('This browser doesn’t support notifications. Install the app or use Chrome, Edge, Firefox or Safari.')}</p>
         ) : (
           <>
             <div aria-busy={busy}>
@@ -56,7 +56,7 @@ export function RemindersSettings() {
                 type="time"
                 value={p.reminderTime}
                 onChange={(e) => e.target.value && p.set({ reminderTime: e.target.value })}
-                className="tnum h-10 rounded-[var(--radius-s)] border border-line bg-surface px-3 text-base font-semibold text-ink"
+                className="tnum h-11 rounded-[var(--radius-control)] border border-line bg-surface px-3 text-base font-semibold text-ink"
                 aria-label={t('Reminder time')}
               />
             </FormRow>

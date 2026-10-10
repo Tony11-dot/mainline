@@ -29,11 +29,11 @@ export function MoveTree({ store, emptyHint }: { store: AnalysisStore; emptyHint
   }, [path]);
 
   if (!root.children.length)
-    return <p className="px-4 py-6 text-center text-sm text-ink-3">{emptyHint ?? t('Make a move on the board to start.')}</p>;
+    return <p className="px-5 py-8 text-center text-base text-ink-2">{emptyHint ?? t('Make a move on the board to start.')}</p>;
 
   const ctx: Ctx = { current: path, goto: (p) => store.getState().goto(p), collapsed, toggle: (p) => store.getState().toggleCollapsed(p) };
   return (
-    <div ref={ref} dir="ltr" className="px-3 py-2 text-start text-[0.9375rem] leading-[1.9]" role="tree" aria-label={t('Moves')}>
+    <div ref={ref} dir="ltr" className="px-4 py-3 text-start text-md leading-[2]" role="tree" aria-label={t('Moves')}>
       <Line parent={root} parentPath="" ctx={ctx} forceNumber />
     </div>
   );
@@ -85,9 +85,7 @@ function Variations({ parentPath, vars, ctx }: { parentPath: string; vars: TreeN
         <ChevronRight size={11} strokeWidth={2.6} className={`transition-transform duration-150 ${closed ? 'rtl:rotate-180' : 'rotate-90'}`} />
       </button>
       {closed ? (
-        <span className="text-sm text-ink-3">
-          {vars.length} variation{vars.length > 1 ? 's' : ''}
-        </span>
+        <span className="text-sm text-ink-3">{tn(vars.length, '{n} variation', '{n} variations')}</span>
       ) : (
         vars.map((v) => {
           const vp = childPath(parentPath, v.uci);
@@ -117,7 +115,7 @@ function Move({ node, path, ctx, showNumber }: { node: TreeNode; path: string; c
         data-active={active}
         onClick={() => ctx.goto(path)}
         title={node.tags?.includes('alt') ? t('Alternate move (not trained)') : node.tags?.includes('tr') ? t('Transposition: this position is reached by another move order too') : undefined}
-        className={`me-1 rounded-[6px] px-1 font-semibold transition-colors duration-100 ${
+        className={`me-1 rounded-[var(--radius-xs)] px-1 font-semibold transition-colors duration-100 ${
           active ? 'bg-brand text-on-brand' : node.tags?.includes('alt') ? 'italic text-ink-3 hover:bg-brand-soft' : 'text-ink hover:bg-brand-soft'
         }`}
       >

@@ -45,21 +45,21 @@ export function OpeningPickerSheet({ open, color, first, onClose }: { open: bool
 
   return (
     <Sheet open={open} onClose={onClose} title={title}>
-      <p className="-mt-1 text-sm text-ink-2">{first ? t('Each opening gets its own folder of lines.') : t('Each first move gets its own folder of openings.')}</p>
-      <ul className="flex flex-col divide-y divide-line overflow-hidden rounded-[var(--radius-l)] border border-line bg-surface">
+      <p className="-mt-1 text-base text-ink-2">{first ? t('Each opening gets its own folder of lines.') : t('Each first move gets its own folder of openings.')}</p>
+      <ul className="-mx-3 mt-3 flex flex-col">
         {rows.map((r) => (
           <li key={r.key}>
-            <button type="button" onClick={() => void go(r.key)} className="flex min-h-[56px] w-full items-center gap-3 px-4 py-2.5 text-start hover:bg-surface-2">
+            <button type="button" onClick={() => void go(r.key)} className="pressable flex min-h-[60px] w-full items-center gap-3 rounded-[var(--radius-m)] px-3 py-2.5 text-start hover:bg-surface-2 active:bg-surface-3">
               <span className="min-w-0 flex-1">
-                <span className="block font-semibold">{r.label}</span>
+                <span className="block text-md font-semibold">{r.label}</span>
                 {r.packs > 0 && (
-                  <span className="flex items-center gap-1 text-xs text-ink-3">
-                    <Sparkles size={12} aria-hidden /> {tn(r.packs, '{n} ready-made set', '{n} ready-made sets')}
+                  <span className="flex items-center gap-1 text-sm text-ink-2">
+                    <Sparkles size={13} aria-hidden /> {tn(r.packs, '{n} ready-made set', '{n} ready-made sets')}
                   </span>
                 )}
               </span>
               <RecordBadge rec={r.rec} />
-              <ChevronRight size={18} className="shrink-0 text-ink-3 rtl:rotate-180" aria-hidden />
+              <ChevronRight size={20} className="shrink-0 text-ink-3 rtl:rotate-180" aria-hidden />
             </button>
           </li>
         ))}

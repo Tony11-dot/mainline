@@ -15,16 +15,16 @@ export interface ExplorerPair {
 const TAGS: Record<GuideTag, { icon: string; label: string; rule: string; tone: string }> = {
   yours: { icon: '✅', label: msg('In this line'), rule: msg('Already saved in this line.'), tone: 'bg-brand-soft text-brand-ink' },
   family: { icon: '🔁', label: msg('In your other lines'), rule: msg('Another line in this folder plays it here — keeping your lines alike makes them easier to remember.'), tone: 'bg-brand-soft text-brand-ink' },
-  proven: { icon: '🎯', label: msg('Works for you'), rule: msg('In your own games from this position, you scored 60% or more after this move (at least 5 games).'), tone: 'bg-good-soft text-good' },
-  trouble: { icon: '🩹', label: msg('Trouble for you'), rule: msg('In your own games from this position, you scored 40% or less after this move (at least 3 games).'), tone: 'bg-bad-soft text-bad' },
+  proven: { icon: '🎯', label: msg('Works for you'), rule: msg('In your own games from this position, you scored 60% or more after this move (at least 5 games).'), tone: 'bg-good-soft text-good-ink' },
+  trouble: { icon: '🩹', label: msg('Trouble for you'), rule: msg('In your own games from this position, you scored 40% or less after this move (at least 3 games).'), tone: 'bg-bad-soft text-bad-ink' },
   fits: { icon: '🧩', label: msg('Goes with your repertoire'), rule: msg('Leads to a position another of your repertoires already covers.'), tone: 'bg-brand-soft text-brand-ink' },
-  dubious: { icon: '🤨', label: msg('Dubious'), rule: msg('The engine rates it clearly worse than the best move (roughly a pawn).'), tone: 'bg-bad-soft text-bad' },
+  dubious: { icon: '🤨', label: msg('Dubious'), rule: msg('The engine rates it clearly worse than the best move (roughly a pawn).'), tone: 'bg-bad-soft text-bad-ink' },
   book: { icon: '📖', label: msg('By the book'), rule: msg('The move masters play most here.'), tone: 'bg-surface-3 text-ink-2' },
-  engine: { icon: '🤖', label: msg('Engine’s pick'), rule: msg('The engine’s best move, or within about a tenth of a pawn of it.'), tone: 'bg-good-soft text-good' },
-  gem: { icon: '💎', label: msg('Hidden gem'), rule: msg('Nearly as good as the engine’s best, yet rarely played by masters.'), tone: 'bg-[oklch(0.94_0.04_300)] text-[oklch(0.42_0.14_300)] dark:bg-[oklch(0.32_0.07_300)] dark:text-[oklch(0.85_0.08_300)]' },
-  club: { icon: '🏆', label: msg('Club crusher'), rule: msg('The best score at your rating, over enough games that it isn’t luck, and the engine says it’s sound.'), tone: 'bg-warn-soft text-[oklch(0.45_0.1_70)] dark:text-warn' },
+  engine: { icon: '🤖', label: msg('Engine’s pick'), rule: msg('The engine’s best move, or within about a tenth of a pawn of it.'), tone: 'bg-good-soft text-good-ink' },
+  gem: { icon: '💎', label: msg('Hidden gem'), rule: msg('Nearly as good as the engine’s best, yet rarely played by masters.'), tone: 'bg-gem-soft text-gem-ink' },
+  club: { icon: '🏆', label: msg('Club crusher'), rule: msg('The best score at your rating, over enough games that it isn’t luck, and the engine says it’s sound.'), tone: 'bg-warn-soft text-warn-ink' },
   crowd: { icon: '🍿', label: msg('Crowd favourite'), rule: msg('Played most at your rating.'), tone: 'bg-surface-3 text-ink-2' },
-  surprise: { icon: '🎁', label: msg('Surprise weapon'), rule: msg('Rare among masters, yet it scores clearly above 50% at your rating and holds up with the engine.'), tone: 'bg-warn-soft text-[oklch(0.45_0.1_70)] dark:text-warn' },
+  surprise: { icon: '🎁', label: msg('Surprise weapon'), rule: msg('Rare among masters, yet it scores clearly above 50% at your rating and holds up with the engine.'), tone: 'bg-warn-soft text-warn-ink' },
 };
 
 /** The tag's icon alone, pinned on the board's suggestion arrows. */
@@ -65,8 +65,8 @@ export function GuidePanel(props: {
         hint={own ? (candidates.length ? t('The arrow shows the top pick. Play it, drag another piece, or tap a row.') : undefined) : candidates.length ? t('You decide how they play: pick a reply, or play any move for them on the board.') : undefined}
         busy={searching || explorer.loading}
         action={
-          <button type="button" onClick={() => setLegend((v) => !v)} aria-expanded={legend} aria-label={t('What the tags mean')} title={t('What the tags mean')} className="-me-1 ms-auto flex size-8 items-center justify-center rounded-full text-ink-3 hover:bg-surface-3 hover:text-ink">
-            <CircleHelp size={17} aria-hidden />
+          <button type="button" onClick={() => setLegend((v) => !v)} aria-expanded={legend} aria-label={t('What the tags mean')} title={t('What the tags mean')} className="-me-2 ms-auto flex size-11 items-center justify-center rounded-full text-ink-3 hover:bg-surface-3 hover:text-ink">
+            <CircleHelp size={19} aria-hidden />
           </button>
         }
       />
@@ -75,9 +75,9 @@ export function GuidePanel(props: {
         explorer.loading || searching ? (
           <Rows />
         ) : own ? (
-          <p className="px-4 pb-4 text-sm text-ink-2">{t('Not enough data yet')} — {t('Play your first move on the board.')}</p>
+          <p className="px-4 pb-4 text-base text-ink-2">{t('Not enough data yet')} — {t('Play your first move on the board.')}</p>
         ) : (
-          <p className="px-4 pb-4 text-sm text-ink-2">{t('Opponent left book')} — {t('Play the moves you expect from your opponent.')}</p>
+          <p className="px-4 pb-4 text-base text-ink-2">{t('Opponent left book')} — {t('Play the moves you expect from your opponent.')}</p>
         )
       ) : (
         <ol className="flex flex-col divide-y divide-line">
@@ -90,19 +90,19 @@ export function GuidePanel(props: {
                 onClick={() => onPlay(c.uci)}
                 onPointerEnter={() => onHover(c.uci)}
                 onPointerLeave={() => onHover(null)}
-                className={`flex w-full items-center gap-3 px-3 py-2.5 text-start transition-colors hover:bg-surface-2 ${i === 0 ? 'bg-brand-softer' : ''}`}
+                className={`flex w-full items-center gap-3 px-4 py-3 text-start transition-colors hover:bg-surface-2 ${i === 0 ? 'bg-brand-softer' : ''}`}
                 aria-label={`${c.san ?? uciToSan(pos, c.uci)}${name ? `, ${name}` : ''}${c.tags.length ? ` — ${c.tags.map((g) => t(TAGS[g].label)).join(', ')}` : ''}`}
               >
                 <PieceIcon fen={fen} uci={c.uci} />
                 <div className="min-w-0 flex-1">
                   <div className="flex flex-wrap items-center gap-1.5">
-                    <bdi className="tnum me-1 text-md font-bold">{c.san ?? uciToSan(pos, c.uci)}</bdi>
+                    <bdi className="tnum me-1 text-lg font-bold">{c.san ?? uciToSan(pos, c.uci)}</bdi>
                     {c.tags.slice(0, 2).map((g) => (
                       <Tag key={g} tag={g} />
                     ))}
                   </div>
                   {name && (
-                    <p className="mt-0.5 truncate text-xs font-medium text-ink-2" title={name}>
+                    <p className="mt-0.5 truncate text-sm font-medium text-ink-2" title={name}>
                       <bdi>{name}</bdi>
                     </p>
                   )}
@@ -121,7 +121,7 @@ export function GuidePanel(props: {
                     )}
                   </div>
                 </div>
-                <span className="tnum shrink-0 rounded-md bg-surface-3 px-2 py-1 text-sm font-bold" title={t('{eval} after this move', { eval: formatEval(c.line) })} dir="ltr">
+                <span className="tnum shrink-0 rounded-[var(--radius-xs)] bg-surface-3 px-2 py-1 text-sm font-bold" title={t('{eval} after this move', { eval: formatEval(c.line) })} dir="ltr">
                   {c.line ? formatEval(c.line) : searching ? <Spinner size={12} /> : '—'}
                 </span>
               </button>
@@ -130,7 +130,7 @@ export function GuidePanel(props: {
           })}
           {candidates.length > 5 && (
             <li>
-              <button type="button" onClick={() => setAll((a) => !a)} className="w-full px-3 py-2.5 text-sm font-semibold text-brand hover:bg-surface-2">
+              <button type="button" onClick={() => setAll((a) => !a)} className="min-h-[48px] w-full px-4 py-3 text-base font-semibold text-brand-ink hover:bg-surface-2">
                 {all ? t('Show fewer') : t('Show all {n}', { n: candidates.length })}
               </button>
             </li>
@@ -143,42 +143,42 @@ export function GuidePanel(props: {
 
 function Header({ title, hint, busy, action }: { title: string; hint?: string; busy: boolean; action?: ReactNode }) {
   return (
-    <header className="px-3 pt-3 pb-2">
-      <h2 className="flex items-center gap-2 text-sm font-bold">
+    <header className="ps-4 pe-3 pt-2 pb-2">
+      <h2 className="flex min-h-[44px] items-center gap-2 text-lg font-bold">
         {title}
         {busy && <Spinner size={12} />}
         {action}
       </h2>
-      {hint && <p className="mt-0.5 text-xs text-ink-3">{hint}</p>}
+      {hint && <p className="-mt-1 text-sm text-ink-2">{hint}</p>}
     </header>
   );
 }
 
 function Legend() {
   return (
-    <div className="mx-3 mb-3 rounded-[var(--radius-m)] bg-surface-2 p-3">
-      <h3 className="text-xs font-bold">{t('What the tags mean')}</h3>
+    <div className="mx-3 mb-3 rounded-[var(--radius-m)] bg-surface-2 p-4">
+      <h3 className="text-sm font-bold">{t('What the tags mean')}</h3>
       <dl className="mt-2 flex flex-col gap-2">
         {(Object.keys(TAGS) as GuideTag[]).map((g) => (
           <div key={g} className="flex flex-col items-start gap-1">
             <dt>
               <Tag tag={g} />
             </dt>
-            <dd className="text-xs text-ink-2">{t(TAGS[g].rule)}</dd>
+            <dd className="text-sm text-ink-2">{t(TAGS[g].rule)}</dd>
           </div>
         ))}
       </dl>
-      <p className="mt-3 text-xs text-ink-3">{t('Engine tags appear once the engine has searched deep enough. Masters: share of master games. Club: your side’s score at your rating.')}</p>
-      <p className="mt-1 text-xs text-ink-3">{t('You: your score after the move in your imported games (Games tab).')}</p>
+      <p className="mt-3 text-sm text-ink-2">{t('Engine tags appear once the engine has searched deep enough. Masters: share of master games. Club: your side’s score at your rating.')}</p>
+      <p className="mt-1 text-sm text-ink-2">{t('You: your score after the move in your imported games (Games tab).')}</p>
     </div>
   );
 }
 
 function Rows() {
   return (
-    <div className="flex flex-col gap-2 px-3 pb-3">
+    <div className="flex flex-col gap-2 px-4 pb-4">
       {[0, 1, 2].map((i) => (
-        <Skeleton key={i} className="h-12" />
+        <Skeleton key={i} className="h-14 rounded-[var(--radius-control)]" />
       ))}
     </div>
   );

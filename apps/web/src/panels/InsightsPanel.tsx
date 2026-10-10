@@ -15,7 +15,7 @@ import { fmtPercent, intlLocale, t, tn, tx } from '../lib/i18n';
 export function InsightsPanel({ rep, onOpen }: { rep: Repertoire; onOpen: (epd: string) => void }) {
   const [tab, setTab] = useState<'coverage' | 'radar'>('coverage');
   return (
-    <div className="p-3.5">
+    <div className="p-4">
       <Segmented
         label={t('Insights')}
         value={tab}
@@ -25,7 +25,7 @@ export function InsightsPanel({ rep, onOpen }: { rep: Repertoire; onOpen: (epd: 
           { value: 'radar', label: t('Mistake radar') },
         ]}
       />
-      <div className="mt-3">{tab === 'coverage' ? <Coverage rep={rep} onOpen={onOpen} /> : <Radar rep={rep} onOpen={onOpen} />}</div>
+      <div className="mt-4">{tab === 'coverage' ? <Coverage rep={rep} onOpen={onOpen} /> : <Radar rep={rep} onOpen={onOpen} />}</div>
     </div>
   );
 }
@@ -53,7 +53,7 @@ function ProgressBar({ p }: { p?: Progress }) {
       <div className="h-1.5 overflow-hidden rounded-full bg-surface-3">
         <div className="h-full rounded-full bg-brand transition-[width]" style={{ width: `${p && p.total ? (p.done / p.total) * 100 : 5}%` }} />
       </div>
-      <p className="tnum mt-1 text-xs text-ink-3">{p ? t('{done} of {total} positions (one Lichess request at a time)', { done: p.done, total: p.total }) : t('Starting…')}</p>
+      <p className="tnum mt-1.5 text-sm text-ink-2">{p ? t('{done} of {total} positions (one Lichess request at a time)', { done: p.done, total: p.total }) : t('Starting…')}</p>
     </div>
   );
 }
@@ -82,7 +82,7 @@ function Coverage({ rep, onOpen }: { rep: Repertoire; onOpen: (epd: string) => v
         )}
       </div>
       {state.running && <ProgressBar p={state.progress} />}
-      {state.error && <p className="mt-3 text-sm text-bad">{state.error}</p>}
+      {state.error && <p className="mt-3 text-sm text-bad-ink">{state.error}</p>}
       {res && !state.running && (
         <div className="mt-4">
           <p className="text-lg font-bold">
@@ -93,20 +93,20 @@ function Coverage({ rep, onOpen }: { rep: Repertoire; onOpen: (epd: string) => v
               move: Math.ceil(Number(depth) / 2),
             })}
           </p>
-          {res.missing.length > 0 && <p className="text-xs text-ink-3">{tn(res.missing.length, '{n} position had no explorer data and was split evenly.', '{n} positions had no explorer data and were split evenly.')}</p>}
+          {res.missing.length > 0 && <p className="mt-1 text-sm text-ink-2">{tn(res.missing.length, '{n} position had no explorer data and was split evenly.', '{n} positions had no explorer data and were split evenly.')}</p>}
           {res.gaps.length > 0 && (
             <>
-              <h3 className="mt-4 mb-1.5 text-sm font-semibold text-ink-2">{t('Biggest gaps')}</h3>
-              <ul className="divide-y divide-line rounded-[12px] border border-line">
+              <h3 className="mt-5 mb-2 text-md font-bold">{t('Biggest gaps')}</h3>
+              <ul className="divide-y divide-line overflow-hidden rounded-[var(--radius-m)] bg-surface-2">
                 {res.gaps.slice(0, 12).map((g) => (
-                  <li key={g.epd + g.uci} className="flex items-center gap-3 px-3 py-2 text-sm">
+                  <li key={g.epd + g.uci} className="flex flex-wrap items-center gap-x-3 gap-y-1.5 px-3.5 py-3 text-sm">
                     <span className="tnum w-12 shrink-0 font-bold">{pct(g.reach)}</span>
                     <span className="min-w-0 flex-1">
                       <b className="block">
                         {Math.floor(plyFromFen(epdToFen(g.epd)) / 2) + 1}
                         {plyFromFen(epdToFen(g.epd)) % 2 ? '…' : '.'} {g.san}
                       </b>
-                      <span className="block truncate text-xs text-ink-3">
+                      <span className="block text-sm text-ink-2">
                         {t('{pct} of games there', { pct: fmtPercent(g.share) })} · {tn(g.games, '{n} game', '{n} games')}
                       </span>
                     </span>
@@ -121,7 +121,7 @@ function Coverage({ rep, onOpen }: { rep: Repertoire; onOpen: (epd: string) => v
               </ul>
             </>
           )}
-          {res.undecided.length > 0 && <p className="mt-3 text-sm text-warn">{tn(res.undecided.length, '{n} position where it’s your move but nothing is prepared.', '{n} positions where it’s your move but nothing is prepared.')}</p>}
+          {res.undecided.length > 0 && <p className="mt-3 text-sm font-medium text-warn-ink">{tn(res.undecided.length, '{n} position where it’s your move but nothing is prepared.', '{n} positions where it’s your move but nothing is prepared.')}</p>}
         </div>
       )}
     </div>
@@ -140,8 +140,8 @@ function Radar({ rep, onOpen }: { rep: Repertoire; onOpen: (epd: string) => void
   };
   return (
     <div>
-      <p className="text-sm text-ink-2">{t('Popular opponent replies (≥ 5% at your level) that lose at least a pawn according to the engine — know how to punish them.')}</p>
-      <div className="mt-2">
+      <p className="text-base text-ink-2">{t('Popular opponent replies (≥ 5% at your level) that lose at least a pawn according to the engine — know how to punish them.')}</p>
+      <div className="mt-3">
         {state.running ? (
           <Button size="sm" onClick={stop}>
             {t('Stop')}
@@ -161,14 +161,14 @@ function Radar({ rep, onOpen }: { rep: Repertoire; onOpen: (epd: string) => void
             const ref = r.refutation ? uciToSan(pos, r.refutation) : undefined;
             const key = r.epd + r.uci;
             return (
-              <li key={key} className="rounded-[12px] border border-line p-3">
-                <div className="flex items-center gap-2 text-sm">
+              <li key={key} className="rounded-[var(--radius-m)] bg-surface-2 p-3.5">
+                <div className="flex flex-wrap items-center gap-2 text-sm">
                   <span className="flex-1">
                     <b>{r.san}</b> <span className="text-ink-2">({fmtPercent(r.share)} · −{r.drop.toFixed(1)})</span>
                     {ref && (
                       <>
                         {' '}
-                        → {tx('punish with {move}', { move: <b className="text-good">{ref}</b> })}
+                        → {tx('punish with {move}', { move: <b className="text-good-ink">{ref}</b> })}
                       </>
                     )}
                   </span>

@@ -14,8 +14,8 @@ mkdirSync(`${pub}brand`, { recursive: true });
 mkdirSync(`${root}apps/mobile/assets`, { recursive: true });
 
 export const BRAND = '#072EB8'; // sampled from the icon's blue field
-const BG_LIGHT = '#F9FAFD';
-const BG_DARK = '#14161C';
+const BG_LIGHT = '#F2F4F9'; // the app's page background (styles.css --bg, appearance.ts MAINLINE_LIGHT.surface)
+const BG_DARK = '#121419';
 
 const icon = sharp(B('app-icon.png'));
 const png = async (img, size, file) => writeFileSync(file, await img.clone().resize(size, size).png().toBuffer());

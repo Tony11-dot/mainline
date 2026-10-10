@@ -5,6 +5,7 @@ import { useLibrary } from '../../lib/library';
 import { addPack, openingFolderName, packLinesIn, type OpeningRecord, type Pack } from '../../lib/packs';
 import { practiceHref } from '../../lib/practice';
 import { Button } from '../../ui/primitives';
+import { Pill } from '../../ui/kit';
 import { toast } from '../../ui/toast';
 import { fmtPercent, t, tn } from '../../lib/i18n';
 
@@ -34,26 +35,26 @@ export function WeakSpotCard({ spot }: { spot: OpeningRecord & { packs: Pack[] }
   };
 
   return (
-    <div className="rounded-[var(--radius-l)] border border-bad/30 bg-bad-soft/60 p-4">
-      <p className="flex items-center gap-1.5 text-xs font-bold tracking-wide text-bad uppercase">
-        <TrendingDown size={14} aria-hidden /> {t('Your weakest opening')}
-      </p>
-      <h2 className="mt-1 text-lg font-bold">
+    <div className="rounded-[var(--radius-l)] bg-bad-soft p-[var(--card-pad)]">
+      <Pill tone="bad" icon={TrendingDown} className="bg-[color-mix(in_oklab,var(--bad)_18%,var(--surface))]">
+        {t('Your weakest opening')}
+      </Pill>
+      <h2 className="mt-2.5 text-xl font-bold">
         {spot.color === 'white' ? t('As White, 1.{first} {reply}', { first: spot.first, reply: name }) : t('As Black, {opening} vs 1.{first}', { opening: name, first: spot.first })}
       </h2>
-      <p className="tnum text-sm text-ink-2">{tn(spot.games, 'You score {score} in {n} game: {w} won, {d} drawn, {l} lost.', 'You score {score} in {n} games: {w} won, {d} drawn, {l} lost.', { score: fmtPercent(spot.score), w: spot.win, d: spot.draw, l: spot.loss })}</p>
+      <p className="tnum text-base text-ink-2">{tn(spot.games, 'You score {score} in {n} game: {w} won, {d} drawn, {l} lost.', 'You score {score} in {n} games: {w} won, {d} drawn, {l} lost.', { score: fmtPercent(spot.score), w: spot.win, d: spot.draw, l: spot.loss })}</p>
       {owned ? (
-        <div className="mt-3 flex flex-wrap items-center gap-2">
-          <p className="text-sm">{t('You have ready-made lines for it. Test yourself until they stick.')}</p>
+        <div className="mt-4 flex flex-wrap items-center gap-3">
+          <p className="text-base">{t('You have ready-made lines for it. Test yourself until they stick.')}</p>
           {ownedFolder && (
-            <Link to={practiceHref({ kind: 'folder', id: ownedFolder.id }, 'test')} className="inline-flex h-10 items-center rounded-[12px] bg-brand px-4 font-semibold text-on-brand">
+            <Link to={practiceHref({ kind: 'folder', id: ownedFolder.id }, 'test')} className="pressable inline-flex h-11 items-center rounded-[var(--radius-control)] bg-brand px-4 font-semibold text-on-brand">
               {t('Test me')}
             </Link>
           )}
         </div>
       ) : single ? (
-        <div className="mt-3">
-          <p className="text-sm">
+        <div className="mt-4">
+          <p className="text-base">
             {t('Ready-made lines for it:')} <span className="text-ink-2">{single.lines.map((l) => l.name).join(' · ')}</span>
           </p>
           <Button variant="primary" className="mt-3" loading={busy} onClick={() => void add(single)}>
@@ -61,7 +62,7 @@ export function WeakSpotCard({ spot }: { spot: OpeningRecord & { packs: Pack[] }
           </Button>
         </div>
       ) : spot.packs.length ? (
-        <Link to={`/library/ready?color=${spot.color}&first=${spot.first}&reply=${encodeURIComponent(spot.reply)}`} className="mt-3 inline-flex h-10 items-center rounded-[12px] bg-brand px-4 font-semibold text-on-brand">
+        <Link to={`/library/ready?color=${spot.color}&first=${spot.first}&reply=${encodeURIComponent(spot.reply)}`} className="pressable mt-4 inline-flex h-11 items-center rounded-[var(--radius-control)] bg-brand px-4 font-semibold text-on-brand">
           {tn(spot.packs.length, 'See {n} ready-made set', 'See {n} ready-made sets')}
         </Link>
       ) : null}

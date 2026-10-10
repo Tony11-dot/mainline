@@ -1089,5 +1089,23 @@
  "From the start": "Desde o início",
  "Its lines and folders are built on these moves, so they stay as they are. To start from other moves, make a new folder.": "As linhas e pastas dentro dela se baseiam nesses lances, então ficam como estão. Para começar de outros lances, crie uma nova pasta.",
  "Lines you make inside start from here.": "As linhas que você criar aqui começam deste ponto.",
- "Clear": "Limpar"
+ "Clear": "Limpar",
+ "Page not found": "Página não encontrada",
+ "Something went wrong": "Algo deu errado",
+ "There’s nothing at this address.": "Não há nada neste endereço.",
+ "Reload the app and try again. Your repertoire and training are saved.": "Recarregue o app e tente novamente. Seu repertório e seu treino estão salvos.",
+ "Reload": "Recarregar",
+ "Loading…": "Carregando…",
+ "From the engine and game statistics": "Do motor e das estatísticas de partidas",
+ "the AI coach is resting until tomorrow": "o treinador de IA descansa até amanhã",
+ "AI coach · grounded in this position’s engine lines and stats": "Treinador de IA · com base nas linhas do motor e nas estatísticas desta posição",
+ "{wrong} of {total} wrong": "{wrong} de {total} erradas",
+ "No games as White yet.": "Ainda não há partidas de brancas.",
+ "No games as Black yet.": "Ainda não há partidas de pretas.",
+ "From this position, add every opponent reply played in at least the chosen share of games by players around {rating}. Where it’s your turn, your main move is followed; positions without one are left for you to decide.": "A partir desta posição, adiciona cada resposta do adversário jogada em pelo menos a fração escolhida das partidas por jogadores em torno de {rating}. Quando é a sua vez, segue o seu lance principal; posições sem um ficam para você decidir.",
+ "{n} variations": {
+  "one": "{n} variante",
+  "many": "{n} variantes",
+  "other": "{n} variantes"
+ }
 }

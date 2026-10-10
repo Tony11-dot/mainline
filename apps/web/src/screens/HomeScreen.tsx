@@ -54,10 +54,10 @@ export function HomeScreen() {
   return (
     <div className="mx-auto max-w-3xl px-4 py-6 md:px-8 md:py-10">
       <PageHeader title={t('Today')} large trailing={hasReps ? <StreakBadge /> : undefined}>
-        <LogoMark size={34} className="md:hidden" />
+        <LogoMark size={36} className="md:hidden" />
       </PageHeader>
       {hasReps && streak.atRisk && (
-        <p className="mt-3 flex items-center gap-2.5 rounded-[var(--radius-m)] bg-flame-soft px-4 py-3 text-sm font-semibold text-flame-ink" data-testid="streak-at-risk">
+        <p className="mt-4 flex items-center gap-3 rounded-[var(--radius-m)] bg-flame-soft px-4 py-3.5 text-base font-semibold text-flame-ink" data-testid="streak-at-risk">
           {streak.freezeUsed ? <Snowflake size={16} className="shrink-0 text-freeze" aria-hidden /> : <Flame size={16} className="shrink-0 text-flame" aria-hidden />}
           {streak.freezeUsed
             ? tn(streak.current, 'A streak freeze saved your {n}-day streak. Practise today to keep it.', 'A streak freeze saved your {n}-day streak. Practise today to keep it.')
@@ -66,14 +66,14 @@ export function HomeScreen() {
       )}
 
       {!lib.loaded ? null : !hasReps ? (
-        <Card className="mt-6 p-6">
-          <h2 className="text-xl font-bold">{t('Start your first repertoire')}</h2>
-          <p className="mt-1 max-w-[52ch] text-ink-2">{t('Pick an opening, play the moves you want on the board, and MainLine turns every position into spaced-repetition training.')}</p>
-          <div className="mt-5 flex flex-wrap gap-2">
+        <Card className="mt-6 p-6 md:p-8">
+          <h2 className="text-2xl font-bold">{t('Start your first repertoire')}</h2>
+          <p className="mt-2 max-w-[52ch] text-md text-ink-2">{t('Pick an opening, play the moves you want on the board, and MainLine turns every position into spaced-repetition training.')}</p>
+          <div className="mt-6 flex flex-wrap gap-2.5">
             <Link to="/library/ready" className="pressable inline-flex h-12 items-center gap-2 rounded-[var(--radius-control)] bg-brand px-5 font-semibold text-on-brand">
               <Sparkles size={18} aria-hidden /> {t('Ready-made openings')}
             </Link>
-            <Link to="/library" className="pressable inline-flex h-12 items-center rounded-[var(--radius-control)] border border-line bg-surface px-5 font-semibold shadow-1 hover:bg-surface-2">
+            <Link to="/library" className="pressable inline-flex h-12 items-center rounded-[var(--radius-control)] bg-brand-soft px-5 font-semibold text-brand-ink hover:bg-brand-soft-2">
               {t('Build from scratch')}
             </Link>
           </div>
@@ -82,19 +82,19 @@ export function HomeScreen() {
         <>
           {primary ? (
             // The one thing to do now: the only filled surface on the page.
-            <Link to={primary.to} className="pressable mt-5 flex items-center gap-4 rounded-[var(--radius-xl)] bg-brand p-5 text-on-brand shadow-3">
-              <span className="flex size-14 shrink-0 items-center justify-center rounded-full bg-[color-mix(in_oklab,var(--on-brand)_18%,transparent)]">
+            <Link to={primary.to} className="pressable mt-5 flex items-center gap-4 rounded-[var(--radius-l)] bg-brand p-5 text-on-brand shadow-3 md:gap-5 md:p-6">
+              <span className="flex size-14 shrink-0 items-center justify-center rounded-full bg-[color-mix(in_oklab,var(--on-brand)_18%,transparent)] md:size-16">
                 <Play size={26} fill="currentColor" aria-hidden />
               </span>
               <span className="min-w-0">
-                <span className="block text-2xl font-bold">{primary.label}</span>
-                <span className="tnum block opacity-85">{primary.sub}</span>
+                <span className="block text-2xl font-bold tracking-tight md:text-3xl">{primary.label}</span>
+                <span className="tnum block text-md opacity-85">{primary.sub}</span>
               </span>
             </Link>
           ) : (
-            <Card className="mt-5 p-5">
-              <p className="text-lg font-bold">{t('All caught up')}</p>
-              <p className="text-ink-2">{t('Nothing is due. Drill a line or add moves to your repertoire.')}</p>
+            <Card className="mt-5">
+              <p className="text-xl font-bold">{t('All caught up')}</p>
+              <p className="mt-0.5 text-md text-ink-2">{t('Nothing is due. Drill a line or add moves to your repertoire.')}</p>
             </Card>
           )}
 
@@ -137,16 +137,16 @@ function Progress({ done, goal, learned, positions, retention }: { done: number;
   const c = 2 * Math.PI * r;
   return (
     <Card as="dl" pad={false} className="tnum mt-3 flex items-stretch">
-      <div className="flex min-w-0 flex-[1.25] items-center gap-2.5 py-3 ps-3.5 pe-2 sm:gap-3 sm:px-4">
-        <svg viewBox="0 0 38 38" className="size-8 shrink-0 -rotate-90 sm:size-9" aria-hidden>
-          <circle cx="19" cy="19" r={r} fill="none" stroke="var(--surface-3)" strokeWidth="4" />
-          <circle cx="19" cy="19" r={r} fill="none" stroke={pct >= 1 ? 'var(--good)' : 'var(--brand)'} strokeWidth="4" strokeLinecap="round" strokeDasharray={c} strokeDashoffset={c * (1 - pct)} className="transition-[stroke-dashoffset] duration-500" />
+      <div className="flex min-w-0 flex-[1.3] items-center gap-3 py-4 ps-4 pe-2 sm:px-5">
+        <svg viewBox="0 0 38 38" className="size-10 shrink-0 -rotate-90 sm:size-11" aria-hidden>
+          <circle cx="19" cy="19" r={r} fill="none" stroke="var(--surface-3)" strokeWidth="4.5" />
+          <circle cx="19" cy="19" r={r} fill="none" stroke={pct >= 1 ? 'var(--good)' : 'var(--brand)'} strokeWidth="4.5" strokeLinecap="round" strokeDasharray={c} strokeDashoffset={c * (1 - pct)} className="transition-[stroke-dashoffset] duration-500" />
         </svg>
         <div className="min-w-0">
-          <dt className="text-xs whitespace-nowrap text-ink-3">{t('Daily goal')}</dt>
-          <dd className="text-md font-bold">
+          <dt className="hyphens-auto text-xs leading-tight font-medium break-words text-ink-2 sm:text-sm">{t('Daily goal')}</dt>
+          <dd className="text-xl font-bold leading-tight">
             {done}
-            <span className="font-semibold text-ink-3">/{goal}</span>
+            <span className="text-base font-semibold text-ink-3">/{goal}</span>
           </dd>
         </div>
       </div>
@@ -158,11 +158,11 @@ function Progress({ done, goal, learned, positions, retention }: { done: number;
 
 function Stat({ label, value, of }: { label: string; value: number | string; of?: number }) {
   return (
-    <div className="min-w-0 flex-1 border-s border-line px-3.5 py-3 sm:px-4">
-      <dt className="truncate text-xs text-ink-3">{label}</dt>
-      <dd className="text-md font-bold">
+    <div className="min-w-0 flex-1 border-s border-line px-4 py-4 sm:px-5">
+      <dt className="hyphens-auto text-xs leading-tight font-medium break-words text-ink-2 sm:text-sm">{label}</dt>
+      <dd className="text-xl font-bold leading-tight">
         {value}
-        {of !== undefined && <span className="font-semibold text-ink-3">/{of}</span>}
+        {of !== undefined && <span className="text-base font-semibold text-ink-3">/{of}</span>}
       </dd>
     </div>
   );

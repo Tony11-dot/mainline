@@ -35,7 +35,7 @@ export function LaunchScreen({ onDone }: { onDone: () => void }) {
     (async () => {
       const css = getComputedStyle(document.documentElement);
       const accent = css.getPropertyValue('--theme-accent-hex').trim() || '#072EB8';
-      const surface = css.getPropertyValue('--theme-surface-hex').trim() || '#F9FAFD';
+      const surface = css.getPropertyValue('--theme-surface-hex').trim() || '#F2F4F9';
       let doc: { op: number; fr: number; assets?: { p?: string }[] };
       try {
         doc = await (await fetch('/launch.json')).json();

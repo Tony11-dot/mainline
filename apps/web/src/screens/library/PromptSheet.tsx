@@ -36,7 +36,7 @@ export function PromptSheet({ open, title, label, placeholder, initial = '', con
         }}
       >
         <Field label={label}>
-          <input autoFocus className={inputCls} value={value} placeholder={placeholder} onChange={(e) => setValue(e.target.value)} maxLength={80} />
+          <input autoFocus data-autofocus className={inputCls} value={value} placeholder={placeholder} onChange={(e) => setValue(e.target.value)} maxLength={80} />
         </Field>
       </form>
     </Sheet>

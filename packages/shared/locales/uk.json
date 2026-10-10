@@ -1215,5 +1215,24 @@
  "From the start": "Від початку",
  "Its lines and folders are built on these moves, so they stay as they are. To start from other moves, make a new folder.": "Її лінії та папки побудовано на цих ходах, тому вони лишаються як є. Щоб почати з інших ходів, створіть нову папку.",
  "Lines you make inside start from here.": "Лінії, створені тут, починаються з цієї позиції.",
- "Clear": "Очистити"
+ "Clear": "Очистити",
+ "Page not found": "Сторінку не знайдено",
+ "Something went wrong": "Щось пішло не так",
+ "There’s nothing at this address.": "За цією адресою нічого немає.",
+ "Reload the app and try again. Your repertoire and training are saved.": "Перезавантажте застосунок і спробуйте ще раз. Ваш репертуар і тренування збережено.",
+ "Reload": "Перезавантажити",
+ "Loading…": "Завантаження…",
+ "From the engine and game statistics": "За даними рушія та статистикою партій",
+ "the AI coach is resting until tomorrow": "ШІ-тренер відпочиває до завтра",
+ "AI coach · grounded in this position’s engine lines and stats": "ШІ-тренер · спирається на лінії рушія та статистику цієї позиції",
+ "{wrong} of {total} wrong": "{wrong} з {total} неправильно",
+ "No games as White yet.": "Поки немає партій білими.",
+ "No games as Black yet.": "Поки немає партій чорними.",
+ "From this position, add every opponent reply played in at least the chosen share of games by players around {rating}. Where it’s your turn, your main move is followed; positions without one are left for you to decide.": "З цієї позиції додається кожна відповідь суперника, яку гравці близько {rating} роблять щонайменше у вибраній частці партій. Коли ваш хід, використовується ваш основний хід; позиції без нього лишаються на ваше рішення.",
+ "{n} variations": {
+  "one": "{n} варіант",
+  "few": "{n} варіанти",
+  "many": "{n} варіантів",
+  "other": "{n} варіанта"
+ }
 }

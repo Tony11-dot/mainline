@@ -28,7 +28,7 @@ export const MiniBoard = memo(function MiniBoard({ fen, orientation = 'white', s
     : null;
   return (
     <div
-      className={`ml-mini cg-wrap relative shrink-0 overflow-hidden rounded-[8px] shadow-1 ${className}`}
+      className={`ml-mini cg-wrap relative shrink-0 overflow-hidden rounded-[var(--radius-xs)] shadow-1 ${className}`}
       style={{ width: size, height: size, backgroundImage: 'repeating-conic-gradient(var(--sq-dark) 0 25%, var(--sq-light) 0 50%)', backgroundSize: '25% 25%' }}
       {...(decorative ? { 'aria-hidden': true } : { role: 'img', 'aria-label': t('Chess position') })}
     >

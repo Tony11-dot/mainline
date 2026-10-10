@@ -5,6 +5,7 @@ import { LaunchScreen, shouldShowLaunch, useLaunch } from './launch/LaunchScreen
 import { platform } from './platform';
 import { handleIncoming } from './lib/incomingHandler';
 import { HomeScreen } from './screens/HomeScreen';
+import { RouteError, RouteLoading } from './ui/RouteStates';
 
 // Screens load on demand: the first paint only needs the shell and Today.
 const lazy = <K extends string>(load: () => Promise<Record<K, React.ComponentType>>, name: K) => async () => ({ Component: (await load())[name] });
@@ -12,21 +13,31 @@ const lazy = <K extends string>(load: () => Promise<Record<K, React.ComponentTyp
 export const router = createBrowserRouter([
   {
     element: <AppShell />,
+    errorElement: <RouteError />,
     children: [
-      { index: true, element: <HomeScreen /> },
-      { path: 'library', lazy: lazy(() => import('./screens/LibraryScreen'), 'LibraryScreen') },
-      { path: 'focus', lazy: lazy(() => import('./screens/FocusScreen'), 'FocusScreen') },
-      { path: 'plan', lazy: lazy(() => import('./screens/PlanScreen'), 'PlanScreen') },
-      { path: 'library/ready', lazy: lazy(() => import('./screens/ReadyScreen'), 'ReadyScreen') },
-      { path: 'library/openings', lazy: lazy(() => import('./screens/OpeningsScreen'), 'OpeningsScreen') },
-      { path: 'rep/:id', lazy: lazy(() => import('./screens/RepertoireScreen'), 'RepertoireScreen') },
-      { path: 'train', lazy: lazy(() => import('./screens/TrainScreen'), 'TrainScreen') },
-      { path: 'explore', lazy: lazy(() => import('./screens/ExploreScreen'), 'ExploreScreen') },
-      { path: 'stats', lazy: lazy(() => import('./screens/StatsScreen'), 'StatsScreen') },
-      { path: 'setup', lazy: lazy(() => import('./screens/SetupScreen'), 'SetupScreen') },
-      { path: 'games', lazy: lazy(() => import('./screens/GamesScreen'), 'GamesScreen') },
-      { path: 'welcome', lazy: lazy(() => import('./screens/WelcomeScreen'), 'WelcomeScreen') },
-      { path: 'settings', lazy: lazy(() => import('./screens/SettingsScreen'), 'SettingsScreen') },
+      {
+        // A pathless layer so a screen that fails, or a URL that matches nothing, shows inside the shell —
+        // the tab bar stays, and a quiet skeleton holds the page while a screen's code loads on first visit.
+        errorElement: <RouteError />,
+        hydrateFallbackElement: <RouteLoading />,
+        children: [
+          { index: true, element: <HomeScreen /> },
+          { path: 'library', lazy: lazy(() => import('./screens/LibraryScreen'), 'LibraryScreen') },
+          { path: 'focus', lazy: lazy(() => import('./screens/FocusScreen'), 'FocusScreen') },
+          { path: 'plan', lazy: lazy(() => import('./screens/PlanScreen'), 'PlanScreen') },
+          { path: 'library/ready', lazy: lazy(() => import('./screens/ReadyScreen'), 'ReadyScreen') },
+          { path: 'library/openings', lazy: lazy(() => import('./screens/OpeningsScreen'), 'OpeningsScreen') },
+          { path: 'rep/:id', lazy: lazy(() => import('./screens/RepertoireScreen'), 'RepertoireScreen') },
+          { path: 'train', lazy: lazy(() => import('./screens/TrainScreen'), 'TrainScreen') },
+          { path: 'explore', lazy: lazy(() => import('./screens/ExploreScreen'), 'ExploreScreen') },
+          { path: 'stats', lazy: lazy(() => import('./screens/StatsScreen'), 'StatsScreen') },
+          { path: 'setup', lazy: lazy(() => import('./screens/SetupScreen'), 'SetupScreen') },
+          { path: 'games', lazy: lazy(() => import('./screens/GamesScreen'), 'GamesScreen') },
+          { path: 'welcome', lazy: lazy(() => import('./screens/WelcomeScreen'), 'WelcomeScreen') },
+          { path: 'settings', lazy: lazy(() => import('./screens/SettingsScreen'), 'SettingsScreen') },
+          { path: '*', element: <RouteError /> },
+        ],
+      },
     ],
   },
 ]);

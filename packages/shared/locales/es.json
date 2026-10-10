@@ -1089,5 +1089,23 @@
  "From the start": "Desde el inicio",
  "Its lines and folders are built on these moves, so they stay as they are. To start from other moves, make a new folder.": "Sus líneas y carpetas se basan en estas jugadas, así que se quedan como están. Para empezar desde otras jugadas, crea una carpeta nueva.",
  "Lines you make inside start from here.": "Las líneas que crees aquí empiezan desde este punto.",
- "Clear": "Borrar"
+ "Clear": "Borrar",
+ "Page not found": "Página no encontrada",
+ "Something went wrong": "Algo salió mal",
+ "There’s nothing at this address.": "No hay nada en esta dirección.",
+ "Reload the app and try again. Your repertoire and training are saved.": "Recarga la app e inténtalo de nuevo. Tu repertorio y tu entrenamiento están guardados.",
+ "Reload": "Recargar",
+ "Loading…": "Cargando…",
+ "From the engine and game statistics": "Del motor y las estadísticas de partidas",
+ "the AI coach is resting until tomorrow": "el entrenador IA descansa hasta mañana",
+ "AI coach · grounded in this position’s engine lines and stats": "Entrenador IA · basado en las líneas del motor y las estadísticas de esta posición",
+ "{wrong} of {total} wrong": "{wrong} de {total} mal",
+ "No games as White yet.": "Aún no hay partidas con blancas.",
+ "No games as Black yet.": "Aún no hay partidas con negras.",
+ "From this position, add every opponent reply played in at least the chosen share of games by players around {rating}. Where it’s your turn, your main move is followed; positions without one are left for you to decide.": "Desde esta posición, añade cada respuesta del rival jugada en al menos la proporción elegida de partidas por jugadores de alrededor de {rating}. Cuando te toca a ti, se sigue tu jugada principal; las posiciones sin ella quedan para que decidas.",
+ "{n} variations": {
+  "one": "{n} variante",
+  "many": "{n} variantes",
+  "other": "{n} variantes"
+ }
 }

@@ -138,28 +138,39 @@ function page(title: string, body: string) {
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>${title} · MainLine</title>
+<meta name="theme-color" content="#F2F4F9" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#121419" media="(prefers-color-scheme: dark)">
 <style>
-  :root { color-scheme: light dark; --ink: #10131a; --ink2: #4a5163; --bg: #f7f8fb; --brand: #072eb8; }
-  @media (prefers-color-scheme: dark) { :root { --ink: #eef0f5; --ink2: #a3a9b8; --bg: #12141a; --brand: #8aa4ff; } }
-  body { margin: 0; background: var(--bg); color: var(--ink); font: 17px/1.6 -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; }
-  main { max-width: 680px; margin: 0 auto; padding: 40px 20px 64px; }
-  h1 { font-size: 32px; line-height: 1.2; margin: 0 0 4px; letter-spacing: -0.01em; }
-  h2 { font-size: 19px; margin: 32px 0 8px; }
+  /* The app's own look: a tinted page, the text on a white card, the brand blue for links. */
+  :root { color-scheme: light dark; --ink: #181d2b; --ink2: #4a5268; --bg: #f2f4f9; --card: #fff; --line: #dde1ea; --brand: #072eb8; }
+  @media (prefers-color-scheme: dark) { :root { --ink: #eef0f5; --ink2: #b7bdcb; --bg: #121419; --card: #1c2029; --line: #333845; --brand: #8fa8ff; } }
+  body { margin: 0; background: var(--bg); color: var(--ink); font: 17px/1.6 -apple-system, BlinkMacSystemFont, "SF Pro Text", "Segoe UI", Roboto, sans-serif; -webkit-font-smoothing: antialiased; }
+  main { max-width: 720px; margin: 0 auto; padding: 32px 16px 64px; }
+  .brand { display: inline-block; font-weight: 800; font-size: 15px; letter-spacing: -0.01em; color: var(--brand); text-decoration: none; margin: 0 4px 16px; }
+  article { background: var(--card); border-radius: 24px; padding: 32px 24px; box-shadow: 0 1px 2px rgb(20 30 60 / 0.05), 0 6px 20px -8px rgb(20 30 60 / 0.12); }
+  @media (prefers-color-scheme: dark) { article { box-shadow: 0 0 0 1px rgb(255 255 255 / 0.06); } }
+  @media (min-width: 600px) { main { padding-top: 48px; } article { padding: 40px 40px; } }
+  h1 { font-size: 34px; line-height: 1.12; margin: 0 0 6px; letter-spacing: -0.025em; text-wrap: balance; }
+  h2 { font-size: 20px; line-height: 1.3; margin: 32px 0 8px; letter-spacing: -0.01em; text-wrap: balance; }
+  p, li { text-wrap: pretty; overflow-wrap: anywhere; }
   .updated { color: var(--ink2); margin: 0 0 24px; font-size: 15px; }
-  a { color: var(--brand); }
-  ul { padding-left: 22px; }
+  a { color: var(--brand); text-underline-offset: 2px; }
+  ul { padding-inline-start: 22px; }
   li { margin: 6px 0; }
-  table { width: 100%; border-collapse: collapse; font-size: 15px; }
-  th, td { text-align: left; vertical-align: top; padding: 8px 8px 8px 0; border-bottom: 1px solid color-mix(in srgb, var(--ink2) 30%, transparent); }
-  td:last-child, th:last-child { white-space: nowrap; padding-right: 0; }
-  code { font-size: 14px; }
-  nav { margin-top: 48px; font-size: 15px; color: var(--ink2); }
+  table { width: 100%; border-collapse: collapse; font-size: 15px; display: block; overflow-x: auto; }
+  th, td { text-align: start; vertical-align: top; padding: 10px 12px 10px 0; border-bottom: 1px solid var(--line); }
+  td:last-child, th:last-child { white-space: nowrap; padding-inline-end: 0; }
+  code { font-size: 14px; background: color-mix(in srgb, var(--ink2) 12%, transparent); border-radius: 6px; padding: 1px 5px; }
+  nav { margin: 24px 4px 0; font-size: 15px; color: var(--ink2); line-height: 2; }
 </style>
 </head>
 <body><main>
+<a class="brand" href="${esc(env.PUBLIC_URL)}/">MainLine</a>
+<article>
 <h1>${title}</h1>
 <p class="updated">MainLine · last updated ${LEGAL_UPDATED}</p>
 ${body}
+</article>
 <nav><a href="${esc(env.PUBLIC_URL)}/privacy">Privacy policy</a> · <a href="${esc(env.PUBLIC_URL)}/terms">Terms of use</a> · <a href="${esc(env.PUBLIC_URL)}/cookies">Cookies</a> · <a href="${esc(env.PUBLIC_URL)}/accessibility">Accessibility</a></nav>
 </main></body>
 </html>`;

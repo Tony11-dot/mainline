@@ -5,6 +5,7 @@ import {
   DARK_FAMILY,
   FONTS,
   LIGHT_FAMILY,
+  MAINLINE_DARK,
   MAINLINE_LIGHT,
   PIECE_SETS,
   THEME_TOKENS,
@@ -72,10 +73,10 @@ function ThemeRow({ id }: { id: ThemeId }) {
       role="radio"
       aria-checked={on}
       onClick={() => set({ appTheme: id })}
-      className="pressable flex min-h-[60px] w-full items-center gap-3 px-3.5 py-2 text-start hover:bg-surface-2 active:bg-surface-3"
+      className="pressable flex min-h-[64px] w-full items-center gap-4 px-5 py-2.5 text-start hover:bg-surface-2 active:bg-surface-3"
     >
       <ThemeSwatch tokens={tokens} system={id === 'system'} />
-      <span className="flex-1 text-base font-medium text-ink">{themeName(id)}</span>
+      <span className="flex-1 text-md font-medium text-ink">{themeName(id)}</span>
       <Check on={on} />
     </button>
   );
@@ -86,8 +87,8 @@ function ThemeSwatch({ tokens: t, system }: { tokens: ThemeTokens; system?: bool
   return (
     <span
       aria-hidden
-      className="relative flex h-11 w-[108px] shrink-0 items-center gap-1.5 overflow-hidden rounded-[10px] px-2"
-      style={{ background: system ? `linear-gradient(135deg, ${t.surface} 50%, #14161C 50%)` : t.surface, boxShadow: `inset 0 0 0 0.5px ${t.separator}` }}
+      className="relative flex h-11 w-[108px] shrink-0 items-center gap-1.5 overflow-hidden rounded-[var(--radius-s)] px-2"
+      style={{ background: system ? `linear-gradient(135deg, ${t.surface} 50%, ${MAINLINE_DARK.surface} 50%)` : t.surface, boxShadow: `inset 0 0 0 0.5px ${t.separator}` }}
     >
       <span className="size-4 shrink-0 rounded-full" style={{ background: t.accent }} />
       <span className="flex flex-col gap-[3px]">
@@ -110,12 +111,12 @@ function FontRow({ id, name, stack, load }: { id: (typeof FONTS)[number]['id']; 
       onPointerEnter={() => void load?.()}
       onFocus={() => void load?.()}
       onClick={() => set({ font: id })}
-      className="pressable flex min-h-[52px] w-full items-center gap-3 px-3.5 py-2 text-start hover:bg-surface-2 active:bg-surface-3"
+      className="pressable flex min-h-[56px] w-full items-center gap-4 px-5 py-2 text-start hover:bg-surface-2 active:bg-surface-3"
     >
       <span className="w-10 text-center text-xl text-ink" style={{ fontFamily: stack }} aria-hidden>
         Aa
       </span>
-      <span className="flex-1 text-base font-medium text-ink" style={{ fontFamily: stack }}>
+      <span className="flex-1 text-md font-medium text-ink" style={{ fontFamily: stack }}>
         {t(name)}
       </span>
       <Check on={on} />
@@ -133,7 +134,7 @@ const BOARD_PREVIEW: Record<Exclude<BoardTheme, 'match'>, [string, string]> = {
 function BoardPicker() {
   const { boardTheme, set } = usePrefs();
   return (
-    <div className="flex flex-wrap gap-3 p-3.5" role="radiogroup" aria-label={t('Board')}>
+    <div className="flex flex-wrap gap-4 p-5" role="radiogroup" aria-label={t('Board')}>
       {BOARD_THEMES.map((b) => {
         const [light, dark] =
           b.id === 'match' ? ['color-mix(in oklab, var(--brand) 9%, #f3f5f8)', 'color-mix(in oklab, var(--brand) 34%, #9ea6b3)'] : BOARD_PREVIEW[b.id];
@@ -155,7 +156,7 @@ function BoardPicker() {
 function PiecePicker() {
   const { pieceSet, set } = usePrefs();
   return (
-    <div className="grid grid-cols-4 gap-2 p-3.5 sm:grid-cols-8" role="radiogroup" aria-label={t('Pieces')}>
+    <div className="grid grid-cols-4 gap-2 p-4 sm:grid-cols-8" role="radiogroup" aria-label={t('Pieces')}>
       {PIECE_SETS.map((p) => {
         const on = pieceSet === p.id;
         return (

@@ -1,6 +1,6 @@
 import { useEffect, useMemo, useState } from 'react';
-import { Link, useNavigate, useSearchParams } from 'react-router';
-import { ArrowLeft, Check } from 'lucide-react';
+import { useNavigate, useSearchParams } from 'react-router';
+import { Check } from 'lucide-react';
 import type { Color } from '@mainline/shared';
 import { useLibrary } from '../lib/library';
 import { useGames } from '../lib/games';
@@ -8,6 +8,7 @@ import { FIRST_MOVES, PACKS, addPack, mainLineText, openingFolderName, openingRe
 import { practiceHref } from '../lib/practice';
 import { Button, Segmented } from '../ui/primitives';
 import { MiniBoard } from '../ui/MiniBoard';
+import { PageHeader } from '../ui/kit';
 import { toast } from '../ui/toast';
 import { parseSanLine } from './library/sanLine';
 import { RecordBadge } from './library/practiceUi';
@@ -42,16 +43,11 @@ export function ReadyScreen() {
 
   return (
     <div className="mx-auto max-w-3xl px-4 py-6 md:px-8 md:py-10">
-      <div className="flex items-center gap-2">
-        <Link to="/library" className="-ms-2 flex size-10 items-center justify-center rounded-full text-ink-2 hover:bg-surface-3" aria-label={t('Back')}>
-          <ArrowLeft size={20} className="rtl:rotate-180" />
-        </Link>
-        <h1 className="text-2xl font-bold">{t('Ready-made openings')}</h1>
-      </div>
-      <p className="mt-1 text-ink-2">{t('Each set is a few named lines for one opening. Add it and practise straight away — no building needed.')}</p>
+      <PageHeader title={t('Ready-made openings')} back="/library" large />
+      <p className="mt-2 max-w-[60ch] text-md text-ink-2">{t('Each set is a few named lines for one opening. Add it and practise straight away — no building needed.')}</p>
 
       {!only && spots.length > 0 && (
-        <div className="mt-5 flex flex-col gap-3">
+        <div className="mt-6 flex flex-col gap-3">
           {spots.map((s) => (
             <WeakSpotCard key={`${s.color}${s.first}${s.reply}`} spot={s} />
           ))}
@@ -68,19 +64,19 @@ export function ReadyScreen() {
         />
       </div>
       {only && (
-        <button type="button" onClick={() => set({ reply: null })} className="mt-3 text-sm font-semibold text-brand hover:underline">
+        <button type="button" onClick={() => set({ reply: null })} className="mt-3 inline-flex min-h-[44px] items-center rounded-[var(--radius-s)] px-2 text-base font-semibold text-brand-ink hover:bg-brand-softer">
           {t('Show every opening')}
         </button>
       )}
 
       {replies.map((reply) => (
-        <section key={reply} className="mt-7" aria-label={openingFolderName(color, first, reply)}>
-          <div className="mb-2 flex flex-wrap items-center justify-between gap-2 px-1">
-            <h2 className="text-md font-bold">{openingFolderName(color, first, reply)}</h2>
+        <section key={reply} className="mt-[var(--section-gap)]" aria-label={openingFolderName(color, first, reply)}>
+          <div className="mb-3 flex flex-wrap items-center justify-between gap-2 px-1">
+            <h2 className="text-xl font-bold">{openingFolderName(color, first, reply)}</h2>
             <RecordBadge rec={recordFor(records, color, first, reply)} />
           </div>
-          {color === 'white' && packs.filter((p) => p.reply === reply).length > 1 && <p className="mb-2 px-1 text-sm text-ink-3">{t('Pick one system — they answer the same reply in different ways.')}</p>}
-          <ul className="flex flex-col gap-2">
+          {color === 'white' && packs.filter((p) => p.reply === reply).length > 1 && <p className="mb-3 px-1 text-base text-ink-2">{t('Pick one system — they answer the same reply in different ways.')}</p>}
+          <ul className="flex flex-col gap-3">
             {packs
               .filter((p) => p.reply === reply)
               .map((p) => (
@@ -115,14 +111,14 @@ function PackCard({ pack }: { pack: Pack }) {
   };
 
   return (
-    <li className="rounded-[16px] border border-line bg-surface p-3 shadow-1">
-      <div className="flex gap-3">
-        <MiniBoard fen={fen} size={64} orientation={pack.color} decorative />
+    <li className="rounded-[var(--radius-l)] bg-surface p-4 shadow-card">
+      <div className="flex gap-3.5">
+        <MiniBoard fen={fen} size={68} orientation={pack.color} decorative />
         <div className="min-w-0 flex-1">
           <div className="flex items-start justify-between gap-2">
             <div className="min-w-0">
-              <h3 className="font-bold leading-snug">{t(pack.name)}</h3>
-              <p className="text-sm text-ink-2">{tn(pack.lines.length, '{n} line', '{n} lines')}</p>
+              <h3 className="text-md font-bold leading-snug">{t(pack.name)}</h3>
+              <p className="text-base text-ink-2">{tn(pack.lines.length, '{n} line', '{n} lines')}</p>
             </div>
             {complete ? (
               <Button size="sm" icon={Check} onClick={() => folder && nav(`/library?f=${folder.id}`)}>
@@ -136,11 +132,11 @@ function PackCard({ pack }: { pack: Pack }) {
           </div>
         </div>
       </div>
-      <ol className="mt-2.5 flex flex-col gap-1" aria-label={t('Lines')}>
+      <ol className="mt-3.5 flex flex-col gap-1.5" aria-label={t('Lines')}>
         {pack.lines.map((l) => (
-          <li key={l.id} className="rounded-[10px] bg-surface-2 px-2.5 py-1.5">
-            <span className="block text-sm font-semibold">{l.name}</span>
-            <bdi className="block truncate text-xs text-ink-3" dir="ltr">
+          <li key={l.id} className="rounded-[var(--radius-control)] bg-surface-2 px-3.5 py-2.5">
+            <span className="block text-base font-semibold">{l.name}</span>
+            <bdi className="tnum block text-sm text-ink-2 [overflow-wrap:anywhere]" dir="ltr">
               {mainLineText(l.pgn, 12)}
             </bdi>
           </li>

@@ -17,7 +17,8 @@ import { usePrefs } from '../lib/prefs';
 import { peekReplyWeights } from '../lib/explorer';
 import { scopeRepIds } from '../lib/practice';
 import { usePlan } from '../lib/plan';
-import { Button, IconButton, PanelNote } from '../ui/primitives';
+import { Button, IconButton } from '../ui/primitives';
+import { EmptyState } from '../ui/kit';
 import { CoachAnswer } from '../panels/CoachPanel';
 import type { StoreApi } from 'zustand';
 import { fmtPercent, msg, t, tn } from '../lib/i18n';
@@ -119,10 +120,10 @@ function Session({ store, mode, showAll, onAgain }: { store: StoreApi<TrainerSta
       <div className="lg:w-[min(calc(100dvh-8rem),640px)] lg:shrink-0">
         <div className="flex items-center gap-2 px-3 py-2 lg:px-0">
           <IconButton icon={X} label={t('End session (Esc)')} onClick={() => nav(-1)} />
-          <div className="h-2 flex-1 overflow-hidden rounded-full bg-surface-3" role="progressbar" aria-valuemin={0} aria-valuemax={totalSteps} aria-valuenow={doneSteps} aria-label={t('Session progress')}>
+          <div className="h-2.5 flex-1 overflow-hidden rounded-full bg-surface-3" role="progressbar" aria-valuemin={0} aria-valuemax={totalSteps} aria-valuenow={doneSteps} aria-label={t('Session progress')}>
             <div className="h-full rounded-full bg-brand transition-[width] duration-300 ease-[var(--ease-out)]" style={{ width: `${totalSteps ? (doneSteps / totalSteps) * 100 : 0}%` }} />
           </div>
-          <span className="tnum w-14 text-end text-sm font-semibold text-ink-2">
+          <span className="tnum min-w-14 text-end text-base font-bold text-ink-2">
             {doneSteps}/{totalSteps}
           </span>
         </div>
@@ -141,8 +142,8 @@ function Session({ store, mode, showAll, onAgain }: { store: StoreApi<TrainerSta
           ariaLabel={`${t('Training board.')} ${pos.turn === 'white' ? t('White to move.') : t('Black to move.')} ${yourTurn ? t('Your move') : t('Opponent to move')}.`}
         />
       </div>
-      <div className="flex flex-col gap-3 px-4 pt-4 lg:w-[360px] lg:px-0 lg:pt-14">
-        <p className="text-xs font-semibold text-ink-3">
+      <div className="flex flex-col gap-4 px-4 pt-5 lg:w-[360px] lg:px-0 lg:pt-14">
+        <p className="text-sm font-semibold text-ink-2">
           {showAll ? t('Moves shown') : mode === 'drill' ? t('From memory') : t(MODE_NAMES[mode])}
           {line ? ` · ${repName(line.repId)}` : ''}
           {opening ? ` · ${opening.name}` : ''}
@@ -150,7 +151,7 @@ function Session({ store, mode, showAll, onAgain }: { store: StoreApi<TrainerSta
         <div data-expected={s.expected[0] ?? ''} data-phase={s.phase}>
           <Prompt phase={s.phase} expectedSan={expectedSan} message={s.message} color={color} showAll={showAll} />
         </div>
-        {note && <p className="rounded-[12px] bg-surface-2 px-3.5 py-2.5 text-sm text-ink-2">{note}</p>}
+        {note && <p className="rounded-[var(--radius-m)] bg-surface px-4 py-3 text-base text-ink-2 shadow-card">{note}</p>}
         <div className="flex flex-wrap gap-2">
           <span className="hidden md:inline-flex">
             <MoveInput fen={s.fen} onMove={(u) => store.getState().userMove(u)} disabled={!yourTurn} />
@@ -193,11 +194,11 @@ function Prompt({ phase, expectedSan, message, color, showAll }: { phase: Traine
           : phase === 'lineDone'
             ? { title: t('Line complete'), sub: t('Next line…'), tone: 'good' }
             : { title: t('Opponent is moving…'), sub: message ?? ' ', tone: 'muted' };
-  const tones: Record<string, string> = { brand: 'text-brand-ink', ink: 'text-ink', bad: 'text-bad', good: 'text-good', muted: 'text-ink-2' };
+  const tones: Record<string, string> = { brand: 'text-brand-ink', ink: 'text-ink', bad: 'text-bad-ink', good: 'text-good-ink', muted: 'text-ink-2' };
   return (
     <div aria-live="polite">
-      <h2 className={`text-xl font-bold tracking-tight ${tones[text.tone]}`}>{text.title}</h2>
-      <p className="mt-0.5 text-sm text-ink-2">{text.sub}</p>
+      <h2 className={`text-3xl font-bold tracking-tight ${tones[text.tone]}`}>{text.title}</h2>
+      <p className="mt-1 text-md text-ink-2">{text.sub}</p>
     </div>
   );
 }
@@ -218,10 +219,12 @@ function Summary({ s, mode, showAll, onAgain }: { s: TrainerState; mode: TrainMo
   const secs = Math.round(((s.stats.endedAt ?? Date.now()) - s.stats.startedAt) / 1000);
   const acc = s.stats.graded ? Math.round((s.stats.correct / s.stats.graded) * 100) : 100;
   return (
-    <div className="mx-auto max-w-lg px-4 py-10 text-center">
-      <CheckCircle2 size={48} className="mx-auto text-good" aria-hidden />
-      <h1 className="mt-3 text-2xl font-bold">{showAll ? t('Walkthrough complete') : t(MODE_DONE[mode])}</h1>
-      <dl className="tnum mt-6 grid grid-cols-3 gap-2 rounded-[var(--radius-l)] border border-line bg-surface p-4 shadow-1">
+    <div className="mx-auto max-w-lg px-4 py-12 text-center">
+      <span className="mx-auto flex size-20 items-center justify-center rounded-full bg-good-soft text-good" aria-hidden>
+        <CheckCircle2 size={44} aria-hidden />
+      </span>
+      <h1 className="mt-5 text-3xl font-bold">{showAll ? t('Walkthrough complete') : t(MODE_DONE[mode])}</h1>
+      <dl className="tnum mt-7 grid grid-cols-3 divide-x divide-line rounded-[var(--radius-l)] bg-surface py-5 shadow-card rtl:divide-x-reverse">
         <Stat label={showAll ? t('Moves played') : mode === 'learn' ? t('Learned') : t('Reviewed')} value={mode === 'learn' ? s.stats.learned : s.stats.graded} />
         <Stat label={t('Accuracy')} value={fmtPercent(acc / 100)} />
         <Stat label={t('Time')} value={secs >= 60 ? t('{min} min {sec} s', { min: Math.floor(secs / 60), sec: secs % 60 }) : t('{sec} s', { sec: secs })} />
@@ -229,35 +232,35 @@ function Summary({ s, mode, showAll, onAgain }: { s: TrainerState; mode: TrainMo
       {(streak > 0 || goalHit) && (
         <p className="mt-4 flex flex-wrap justify-center gap-2 text-sm font-semibold">
           {streak > 0 && (
-            <span className="inline-flex items-center gap-1.5 rounded-full bg-flame-soft px-3 py-1 text-flame-ink">
+            <span className="inline-flex h-9 items-center gap-1.5 rounded-full bg-flame-soft px-3.5 text-flame-ink">
               <Flame size={15} fill="currentColor" aria-hidden /> {tn(streak, '{n}-day streak', '{n}-day streak')}
             </span>
           )}
-          {goalHit && <span className="rounded-full bg-good-soft px-3 py-1 text-good">🎯 {t('Daily goal complete')}</span>}
+          {goalHit && <span className="inline-flex h-9 items-center rounded-full bg-good-soft px-3.5 text-good-ink">🎯 {t('Daily goal complete')}</span>}
         </p>
       )}
       {s.mistakes.length > 0 && (
-        <div className="mt-6 text-start">
-          <h2 className="mb-2 text-sm font-semibold text-ink-2">{t('To look at again')}</h2>
-          <ul className="divide-y divide-line overflow-hidden rounded-[var(--radius-l)] border border-line bg-surface shadow-1">
+        <div className="mt-8 text-start">
+          <h2 className="mb-3 px-1 text-lg font-bold">{t('To look at again')}</h2>
+          <ul className="divide-y divide-line overflow-hidden rounded-[var(--radius-l)] bg-surface shadow-card">
             {s.mistakes.map((m, i) => {
               const pos = positionFromFen(m.fen);
               return (
-                <li key={i} className="flex flex-wrap items-center justify-between gap-3 px-4 py-3 text-sm">
+                <li key={i} className="flex flex-wrap items-center justify-between gap-3 px-5 py-3.5 text-base">
                   <span>
                     {m.played ? (
                       <>
-                        {t('You played')} <b className="text-bad">{uciToSan(pos, m.played)}</b>
+                        {t('You played')} <b className="text-bad-ink">{uciToSan(pos, m.played)}</b>
                         {' · '}
                       </>
                     ) : null}
-                    {t('The move is')} <b className="text-good">{m.expected.map((u) => uciToSan(pos, u)).join(' / ')}</b>
+                    {t('The move is')} <b className="text-good-ink">{m.expected.map((u) => uciToSan(pos, u)).join(' / ')}</b>
                   </span>
-                  <span className="flex shrink-0 gap-3">
-                    <button type="button" className="font-semibold text-brand hover:underline" onClick={() => setWhy(why === i ? null : i)} aria-expanded={why === i}>
+                  <span className="flex shrink-0 gap-1">
+                    <button type="button" className="inline-flex min-h-[44px] items-center rounded-[var(--radius-s)] px-2.5 font-semibold text-brand-ink hover:bg-brand-softer" onClick={() => setWhy(why === i ? null : i)} aria-expanded={why === i}>
                       {t('Why?')}
                     </button>
-                    <Link to={`/explore?fen=${encodeURIComponent(m.fen)}&color=${m.color}`} className="font-semibold text-brand hover:underline">
+                    <Link to={`/explore?fen=${encodeURIComponent(m.fen)}&color=${m.color}`} className="inline-flex min-h-[44px] items-center rounded-[var(--radius-s)] px-2.5 font-semibold text-brand-ink hover:bg-brand-softer">
                       {t('Explore')}
                     </Link>
                   </span>
@@ -272,11 +275,11 @@ function Summary({ s, mode, showAll, onAgain }: { s: TrainerState; mode: TrainMo
           </ul>
         </div>
       )}
-      <div className="mt-8 flex justify-center gap-2">
-        <Button icon={RotateCcw} onClick={onAgain}>
+      <div className="mt-8 grid grid-cols-2 gap-2.5">
+        <Button size="lg" icon={RotateCcw} onClick={onAgain}>
           {t('Again')}
         </Button>
-        <Link to="/" className="inline-flex h-11 items-center rounded-[12px] bg-brand px-5 font-semibold text-on-brand">
+        <Link to="/" className="pressable inline-flex h-14 items-center justify-center rounded-[var(--radius-m)] bg-brand px-6 text-md font-semibold text-on-brand">
           {t('Done')}
         </Link>
       </div>
@@ -286,9 +289,9 @@ function Summary({ s, mode, showAll, onAgain }: { s: TrainerState; mode: TrainMo
 
 function Stat({ label, value }: { label: string; value: string | number }) {
   return (
-    <div>
-      <dt className="text-xs text-ink-3">{label}</dt>
-      <dd className="text-xl font-bold">{value}</dd>
+    <div className="min-w-0 px-2">
+      <dt className="text-sm font-medium text-ink-2">{label}</dt>
+      <dd className="mt-0.5 text-2xl font-bold">{value}</dd>
     </div>
   );
 }
@@ -302,8 +305,8 @@ function EmptySession({ mode }: { mode: TrainMode }) {
     quiz: { title: t('No positions learned yet'), body: t('Learn some moves first — the quiz tests positions you know.') },
   };
   return (
-    <div className="mx-auto max-w-lg px-4 py-16">
-      <PanelNote
+    <div className="mx-auto max-w-md px-4 py-16 md:py-24">
+      <EmptyState
         icon={CheckCircle2}
         title={copy[mode].title}
         action={
@@ -326,7 +329,7 @@ function EmptySession({ mode }: { mode: TrainMode }) {
         }
       >
         {copy[mode].body}
-      </PanelNote>
+      </EmptyState>
     </div>
   );
 }
