@@ -84,17 +84,18 @@ export function GuidePanel(props: {
           {shown.map((c, i) => {
             const name = reached(c.uci);
             return (
-            <li key={c.uci}>
+            // A size container: under 12 rem (a phone at 2× text) the piece and the eval share the first line and the details take the full width below.
+            <li key={c.uci} className="@container">
               <button
                 type="button"
                 onClick={() => onPlay(c.uci)}
                 onPointerEnter={() => onHover(c.uci)}
                 onPointerLeave={() => onHover(null)}
-                className={`flex w-full items-center gap-3 px-4 py-3 text-start transition-colors hover:bg-surface-2 ${i === 0 ? 'bg-brand-softer' : ''}`}
+                className={`flex w-full flex-wrap items-center gap-3 px-4 py-3 text-start transition-colors hover:bg-surface-2 ${i === 0 ? 'bg-brand-softer' : ''}`}
                 aria-label={`${c.san ?? uciToSan(pos, c.uci)}${name ? `, ${name}` : ''}${c.tags.length ? ` — ${c.tags.map((g) => t(TAGS[g].label)).join(', ')}` : ''}`}
               >
                 <PieceIcon fen={fen} uci={c.uci} />
-                <div className="min-w-0 flex-1">
+                <div className="min-w-0 flex-1 @max-[12rem]:order-2 @max-[12rem]:basis-full">
                   <div className="flex flex-wrap items-center gap-1.5">
                     <bdi className="tnum me-1 text-lg font-bold">{c.san ?? uciToSan(pos, c.uci)}</bdi>
                     {c.tags.slice(0, 2).map((g) => (
@@ -102,7 +103,7 @@ export function GuidePanel(props: {
                     ))}
                   </div>
                   {name && (
-                    <p className="mt-0.5 truncate text-sm font-medium text-ink-2" title={name}>
+                    <p className="mt-0.5 line-clamp-2 text-sm font-medium break-words text-ink-2" title={name}>
                       <bdi>{name}</bdi>
                     </p>
                   )}
@@ -121,7 +122,7 @@ export function GuidePanel(props: {
                     )}
                   </div>
                 </div>
-                <span className="tnum shrink-0 rounded-[var(--radius-xs)] bg-surface-3 px-2 py-1 text-sm font-bold" title={t('{eval} after this move', { eval: formatEval(c.line) })} dir="ltr">
+                <span className="tnum ms-auto shrink-0 rounded-[var(--radius-xs)] bg-surface-3 px-2 py-1 text-sm font-bold @max-[12rem]:order-1" title={t('{eval} after this move', { eval: formatEval(c.line) })} dir="ltr">
                   {c.line ? formatEval(c.line) : searching ? <Spinner size={12} /> : '—'}
                 </span>
               </button>
@@ -187,7 +188,7 @@ function Rows() {
 export function Tag({ tag }: { tag: GuideTag }) {
   const d = TAGS[tag];
   return (
-    <span className={`inline-flex h-6 items-center gap-1 rounded-full px-2 text-xs font-semibold whitespace-nowrap ${d.tone}`} title={t(d.rule)}>
+    <span className={`inline-flex min-h-6 items-center gap-1 rounded-full px-2 py-px text-xs font-semibold break-words ${d.tone}`} title={t(d.rule)}>
       <span aria-hidden>{d.icon}</span>
       {t(d.label)}
     </span>

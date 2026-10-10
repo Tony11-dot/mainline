@@ -64,11 +64,11 @@ export function AssistantSheet() {
     >
       <div className="flex flex-col gap-3">
         <div className="flex flex-wrap items-center gap-2">
-          <button type="button" onClick={() => setAboutMe((v) => !v)} aria-expanded={aboutMe} className="inline-flex h-9 items-center gap-1.5 rounded-full bg-surface-3 px-3.5 text-sm font-semibold text-ink-2 hover:text-ink">
+          <button type="button" onClick={() => setAboutMe((v) => !v)} aria-expanded={aboutMe} className="inline-flex min-h-9 py-1 items-center gap-1.5 rounded-full bg-surface-3 px-3.5 text-sm font-semibold text-ink-2 hover:text-ink">
             <UserRound size={14} aria-hidden /> {notes.trim() ? t('About me ✓') : t('About me')}
           </button>
           {turns.length > 0 && (
-            <button type="button" onClick={clear} className="inline-flex h-9 items-center gap-1.5 rounded-full px-3.5 text-sm font-semibold text-ink-3 hover:bg-surface-3 hover:text-ink">
+            <button type="button" onClick={clear} className="inline-flex min-h-9 py-1 items-center gap-1.5 rounded-full px-3.5 text-sm font-semibold text-ink-3 hover:bg-surface-3 hover:text-ink">
               <Trash2 size={14} aria-hidden /> {t('New chat')}
             </button>
           )}

@@ -62,7 +62,7 @@ export function GamesScreen() {
         title={t('Games')}
         large
         trailing={
-          <Link to="/stats" className="pressable inline-flex h-11 items-center gap-2 rounded-full bg-brand-soft px-4 text-base font-semibold text-brand-ink hover:bg-brand-soft-2">
+          <Link to="/stats" className="pressable inline-flex min-h-11 py-1 items-center gap-2 rounded-full bg-brand-soft px-4 text-base font-semibold text-brand-ink hover:bg-brand-soft-2">
             <BarChart3 size={18} aria-hidden /> {t('Statistics')}
           </Link>
         }
@@ -196,8 +196,8 @@ function BreakList({ bps }: { bps: BreakPoint[] }) {
         const repId = repFor(b.color, b.epd);
         return (
           <li key={b.kind + b.epd + b.color} className="flex flex-wrap items-center gap-x-3 gap-y-2 px-5 py-3.5">
-            <span className="min-w-0 flex-1">
-              <span className="block text-base font-semibold [overflow-wrap:anywhere]">{b.path.length ? <bdi>{lineText(b.path)}</bdi> : t('Start')}</span>
+            <span className="min-w-[min(10rem,100%)] flex-1">
+              <span className="block text-base font-semibold break-words">{b.path.length ? <bdi>{lineText(b.path)}</bdi> : t('Start')}</span>
               <span className="text-sm text-ink-2">
                 {b.kind === 'opponent_left_book' && topSan && (
                   <>{tx('They played {move}', { move: <b className="text-ink">{topSan}</b> })}</>
@@ -214,7 +214,7 @@ function BreakList({ bps }: { bps: BreakPoint[] }) {
                 <span className="tnum text-ink-3"> · {tn(b.count, '{n} game', '{n} games')}</span>
               </span>
             </span>
-            <span className="flex gap-1.5">
+            <span className="flex flex-wrap gap-1.5">
               {repId && (
                 <Button size="sm" variant="ghost" onClick={() => nav(`/rep/${repId}?at=${encodeURIComponent(b.epd)}`)}>
                   {t('Open')}
@@ -249,9 +249,9 @@ function RecentGames({ games, devs }: { games: PlayedGame[]; devs: Map<string, D
           const d = devs.get(g.id);
           const tone: Tone = d?.kind === 'you_left_book' ? 'bad' : d?.kind === 'opponent_left_book' ? 'warn' : d?.kind === 'end_of_prep' ? 'good' : 'neutral';
           return (
-            <li key={g.id} className="flex min-h-[52px] items-center gap-3 ps-5 pe-2 py-2 text-base">
+            <li key={g.id} className="flex min-h-[52px] flex-wrap items-center gap-3 ps-5 pe-2 py-2 text-base">
               <span className={`tnum min-w-12 shrink-0 font-bold ${g.result === 'win' ? 'text-good-ink' : g.result === 'loss' ? 'text-bad-ink' : 'text-ink-2'}`}>{g.result === 'win' ? t('Won') : g.result === 'loss' ? t('Lost') : t('Draw')}</span>
-              <span className="min-w-0 flex-1 [overflow-wrap:anywhere]">
+              <span className="min-w-[min(10rem,100%)] flex-1 [overflow-wrap:anywhere]">
                 {tx('vs {opponent}', { opponent: <b>{g.opponent}</b> })} {g.opponentRating ? <span className="tnum text-ink-3">({g.opponentRating})</span> : null} · <span className="text-ink-3">{speedName(g.speed)}</span>
                 {d && (
                   <span className="mt-1 block sm:hidden">

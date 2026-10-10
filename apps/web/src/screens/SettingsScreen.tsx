@@ -98,7 +98,7 @@ export function SettingsScreen() {
                     const next = on ? p.speeds.filter((x) => x !== s) : [...p.speeds, s];
                     if (next.length) p.set({ speeds: next as Speed[] });
                   }}
-                  className={`pressable h-10 rounded-full px-4 text-sm font-semibold ${on ? 'bg-brand text-on-brand' : 'bg-surface-3 text-ink-2 hover:text-ink'}`}
+                  className={`pressable min-h-10 py-1 rounded-full px-4 text-sm font-semibold ${on ? 'bg-brand text-on-brand' : 'bg-surface-3 text-ink-2 hover:text-ink'}`}
                 >
                   {speedName(s)}
                 </button>
@@ -163,7 +163,7 @@ export function SettingsScreen() {
             disabled={!p.sound}
             onChange={(e) => p.set({ volume: Number(e.target.value) })}
             onPointerUp={() => playSound('capture')}
-            className="w-40 accent-[var(--brand)] disabled:opacity-45"
+            className="w-40 max-w-full accent-[var(--brand)] disabled:opacity-45"
             aria-label={t('Volume')}
           />
         </FormRow>
@@ -266,9 +266,10 @@ function Stepper({ label, value, min, max, step, onChange }: { label: string; va
     setDraft(null);
   };
   const nudge = (dir: 1 | -1) => onChange(clamp(dir > 0 ? Math.floor(value / step) * step + step : Math.ceil(value / step) * step - step));
-  const btn = 'flex size-11 items-center justify-center text-ink-2 transition-colors duration-[var(--dur-fast)] hover:bg-surface-3 hover:text-ink active:bg-surface-3 disabled:pointer-events-none disabled:opacity-35';
+  // The buttons are 44 px wide in pixels, not rem: a 44 pt target is enough at every text size, and rem-wide buttons pushed the stepper out of its card at 2×.
+  const btn = 'flex h-full w-[44px] shrink-0 items-center justify-center text-ink-2 transition-colors duration-[var(--dur-fast)] hover:bg-surface-3 hover:text-ink active:bg-surface-3 disabled:pointer-events-none disabled:opacity-35';
   return (
-    <div className="flex h-11 items-center overflow-hidden rounded-[var(--radius-control)] border border-line bg-surface-3/60">
+    <div className="flex h-11 max-w-full items-center overflow-hidden rounded-[var(--radius-control)] border border-line bg-surface-3/60">
       <button type="button" className={btn} aria-label={t('Decrease {setting}', { setting: label })} disabled={value <= min} onClick={() => nudge(-1)}>
         <Minus size={16} strokeWidth={2.4} aria-hidden />
       </button>
@@ -280,7 +281,7 @@ function Stepper({ label, value, min, max, step, onChange }: { label: string; va
         onChange={(e) => setDraft(e.target.value.replace(/[^0-9]/g, ''))}
         onBlur={commit}
         onKeyDown={(e) => e.key === 'Enter' && (e.target as HTMLInputElement).blur()}
-        className="tnum h-full w-[3.75rem] border-x border-line bg-surface text-center text-base font-semibold text-ink outline-none focus:bg-brand-softer"
+        className="tnum h-full w-[3.75rem] min-w-0 flex-1 border-x border-line bg-surface text-center text-base font-semibold text-ink outline-none focus:bg-brand-softer"
       />
       <button type="button" className={btn} aria-label={t('Increase {setting}', { setting: label })} disabled={value >= max} onClick={() => nudge(1)}>
         <Plus size={16} strokeWidth={2.4} aria-hidden />
@@ -303,7 +304,7 @@ function AppleButton({ onClick }: { onClick: () => void }) {
     <button
       type="button"
       onClick={onClick}
-      className="pressable inline-flex h-11 items-center justify-center gap-2 rounded-[var(--radius-control)] bg-black px-4 text-base font-semibold text-white dark:bg-white dark:text-black"
+      className="pressable inline-flex min-h-11 py-1 items-center justify-center gap-2 rounded-[var(--radius-control)] bg-black px-4 text-base font-semibold text-white dark:bg-white dark:text-black"
     >
       <svg viewBox="0 0 17 20" className="size-[17px] -translate-y-px" aria-hidden>
         <path

@@ -60,7 +60,7 @@ function Picker({ title, children }: { title: string; children: ReactNode }) {
 }
 
 function Check({ on }: { on: boolean }) {
-  return on ? <CheckCircle2 size={22} className="shrink-0 fill-brand text-surface" aria-hidden /> : <span className="size-[22px] shrink-0" />;
+  return on ? <CheckCircle2 size={22} className="ms-auto shrink-0 fill-brand text-surface" aria-hidden /> : <span className="ms-auto size-[22px] shrink-0" />;
 }
 
 function ThemeRow({ id }: { id: ThemeId }) {
@@ -68,17 +68,20 @@ function ThemeRow({ id }: { id: ThemeId }) {
   const tokens = id === 'system' ? MAINLINE_LIGHT : THEME_TOKENS[id];
   const on = appTheme === id;
   return (
-    <button
-      type="button"
-      role="radio"
-      aria-checked={on}
-      onClick={() => set({ appTheme: id })}
-      className="pressable flex min-h-[64px] w-full items-center gap-4 px-5 py-2.5 text-start hover:bg-surface-2 active:bg-surface-3"
-    >
-      <ThemeSwatch tokens={tokens} system={id === 'system'} />
-      <span className="flex-1 text-md font-medium text-ink">{themeName(id)}</span>
-      <Check on={on} />
-    </button>
+    // A size container: under 12 rem (a phone at 2× text) the name takes a full line under the swatch instead of breaking into syllables beside it.
+    <div className="@container">
+      <button
+        type="button"
+        role="radio"
+        aria-checked={on}
+        onClick={() => set({ appTheme: id })}
+        className="pressable flex min-h-[64px] w-full flex-wrap items-center gap-4 px-5 py-2.5 text-start hover:bg-surface-2 active:bg-surface-3"
+      >
+        <ThemeSwatch tokens={tokens} system={id === 'system'} />
+        <span className="min-w-0 flex-1 hyphens-auto text-md font-medium break-words text-ink @max-[12rem]:order-last @max-[12rem]:basis-full">{themeName(id)}</span>
+        <Check on={on} />
+      </button>
+    </div>
   );
 }
 

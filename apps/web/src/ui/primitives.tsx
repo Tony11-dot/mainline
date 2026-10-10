@@ -12,13 +12,14 @@ const VARIANTS: Record<Variant, string> = {
 
 export const Button = forwardRef<HTMLButtonElement, ButtonHTMLAttributes<HTMLButtonElement> & { variant?: Variant; size?: 'sm' | 'md' | 'lg'; icon?: LucideIcon; loading?: boolean }>(
   function Button({ variant = 'secondary', size = 'md', icon: Icon, loading, className = '', children, disabled, ...rest }, ref) {
-    const sizes = { sm: 'h-9 px-3.5 text-sm gap-1.5 rounded-[var(--radius-s)]', md: 'h-11 px-4 text-base gap-2 rounded-[var(--radius-control)]', lg: 'h-14 px-6 text-md gap-2.5 rounded-[var(--radius-m)]' };
+    // Minimum heights, not fixed ones: a long label (German, 2× text) wraps inside the button instead of overflowing.
+    const sizes = { sm: 'min-h-9 px-3.5 py-1 text-sm gap-1.5 rounded-[var(--radius-s)]', md: 'min-h-11 px-4 py-1.5 text-base gap-2 rounded-[var(--radius-control)]', lg: 'min-h-14 px-6 py-2 text-md gap-2.5 rounded-[var(--radius-m)]' };
     return (
       <button
         ref={ref}
         type="button"
         disabled={disabled || loading}
-        className={`inline-flex shrink-0 items-center justify-center font-semibold whitespace-nowrap transition-[background-color,filter,transform,opacity] duration-[var(--dur-fast)] ease-[var(--ease-out)] active:scale-[0.98] motion-reduce:active:scale-100 disabled:pointer-events-none disabled:opacity-45 ${sizes[size]} ${VARIANTS[variant]} ${className}`}
+        className={`inline-flex items-center justify-center text-center leading-tight font-semibold transition-[background-color,filter,transform,opacity] duration-[var(--dur-fast)] ease-[var(--ease-out)] active:scale-[0.98] motion-reduce:active:scale-100 disabled:pointer-events-none disabled:opacity-45 ${sizes[size]} ${VARIANTS[variant]} ${className}`}
         {...rest}
       >
         {loading ? <Spinner /> : Icon ? <Icon size={size === 'sm' ? 15 : 18} strokeWidth={2.2} aria-hidden /> : null}
@@ -60,7 +61,8 @@ export function Spinner({ size = 16 }: { size?: number }) {
 
 export function Segmented<T extends string>({ value, options, onChange, label, className = '' }: { value: T; options: { value: T; label: ReactNode }[]; onChange: (v: T) => void; label: string; className?: string }) {
   return (
-    <div role="tablist" aria-label={label} className={`relative flex rounded-[var(--radius-control)] bg-surface-3 p-[3px] ${className}`}>
+    // A tab is never narrower than its label (min-width: fit-content), so "1.Nf3" or "Mit Schwarz" stays on one line; tabs that no longer fit beside the others (five first-move tabs at 2× text) wrap onto a second row.
+    <div role="tablist" aria-label={label} className={`relative flex max-w-full flex-wrap gap-y-[3px] rounded-[var(--radius-control)] bg-surface-3 p-[3px] ${className}`}>
       {options.map((o) => {
         const active = o.value === value;
         return (
@@ -70,7 +72,7 @@ export function Segmented<T extends string>({ value, options, onChange, label, c
             type="button"
             aria-selected={active}
             onClick={() => onChange(o.value)}
-            className={`relative min-h-9 flex-1 rounded-[9px] px-3 py-1 text-sm leading-tight font-semibold transition-[background-color,color,box-shadow] duration-[var(--dur-base)] ${
+            className={`relative min-h-9 min-w-fit flex-1 rounded-[9px] px-3 py-1 text-sm leading-tight font-semibold break-words hyphens-auto transition-[background-color,color,box-shadow] duration-[var(--dur-base)] ${
               active ? 'bg-surface text-ink shadow-1' : 'text-ink-2 hover:text-ink'
             }`}
           >

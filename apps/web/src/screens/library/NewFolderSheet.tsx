@@ -92,7 +92,7 @@ export function NewFolderSheet({ open, initial, onClose }: { open: boolean; init
           </div>
           <MiniBoard fen={parsed.fen} size={72} orientation={color} />
         </div>
-        {parsed.error && <span className="mt-1 block text-sm text-bad">{parsed.error}</span>}
+        {parsed.error && <span className="mt-1 block text-sm text-bad-ink">{parsed.error}</span>}
       </Field>
       <Field label={t('Name (optional)')}>
         <input className={inputCls} value={name} onChange={(e) => setName(e.target.value)} placeholder={auto} maxLength={80} />

@@ -212,7 +212,7 @@ export function SetupScreen() {
   );
 
   const castleChip = (c: Castle, label: string) => (
-    <label key={c} className={`pressable flex h-10 cursor-pointer items-center gap-2 rounded-full px-4 text-sm font-semibold has-[:focus-visible]:ring-2 has-[:focus-visible]:ring-brand ${castles.has(c) ? 'bg-brand text-on-brand' : 'bg-surface-3 text-ink-2 hover:text-ink'}`}>
+    <label key={c} className={`pressable flex min-h-10 py-1 cursor-pointer items-center gap-2 rounded-full px-4 text-sm font-semibold has-[:focus-visible]:ring-2 has-[:focus-visible]:ring-brand ${castles.has(c) ? 'bg-brand text-on-brand' : 'bg-surface-3 text-ink-2 hover:text-ink'}`}>
       <input
         type="checkbox"
         className="sr-only"
@@ -234,14 +234,15 @@ export function SetupScreen() {
   return (
     <div className="mx-auto flex max-w-[1100px] flex-col gap-4 pb-6 lg:flex-row lg:items-start lg:px-6 lg:py-5">
       <div className="flex min-w-0 flex-col lg:w-[min(calc(100dvh-10rem),60%)]">
-        <div className="flex min-h-[52px] items-center gap-1 px-2 py-1 lg:px-0">
-          <Link to="/explore" className="pressable flex h-11 items-center gap-1 rounded-full px-2.5 text-base font-semibold text-brand-ink hover:bg-brand-softer">
+        <div className="flex min-h-[52px] flex-wrap items-center gap-1 px-2 py-1 lg:px-0">
+          <Link to="/explore" className="pressable flex min-h-11 py-1 items-center gap-1 rounded-full px-2.5 text-base font-semibold text-brand-ink hover:bg-brand-softer">
             <ChevronLeft size={20} className="rtl:rotate-180" aria-hidden /> {t('Explore')}
           </Link>
-          <h1 className="ms-1 truncate text-lg font-bold">{t('Set up position')}</h1>
+          <h1 className="ms-1 line-clamp-2 min-w-[min(10rem,100%)] flex-1 text-lg leading-tight font-bold break-words">{t('Set up position')}</h1>
         </div>
         {palette(orientation === 'white' ? 'black' : 'white')}
-        <div className="mx-auto w-full" style={{ maxWidth: 'calc(100dvh - 19rem)' }}>
+        {/* Board + palettes + controls fit the viewport height: the palettes are px (they do not grow with text), the header and controls rem. The board never drops under 260 px, so at 2× text the page scrolls instead. */}
+        <div className="mx-auto w-full" style={{ maxWidth: 'max(260px, calc(100dvh - 120px - 11.5rem))' }}>
           <div className={`ml-board relative aspect-square w-full select-none ${tool !== 'move' ? 'cursor-crosshair' : ''}`} onPointerDownCapture={onBoardPointerDown} role="application" aria-label={t('Board editor')}>
             <div ref={el} className="h-full w-full" />
           </div>

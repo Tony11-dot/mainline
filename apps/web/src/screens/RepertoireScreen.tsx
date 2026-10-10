@@ -435,11 +435,11 @@ function LineEditor({ id }: { id: string }) {
   const activePane = pane === 'suggest' && (!own || ready) ? 'tree' : pane;
 
   const header = (
-    <div className="flex min-h-[52px] items-center gap-2 px-4 py-1 lg:px-0">
+    <div className="flex min-h-[52px] flex-wrap items-center gap-2 px-4 py-1 lg:px-0">
       <Link to={backTo(lib.folders, rep.folderId)} className="pressable -ms-2 flex size-11 shrink-0 items-center justify-center rounded-full text-ink-2 hover:bg-surface-3 hover:text-ink" aria-label={t('Back to repertoire')}>
         <ArrowLeft size={22} className="rtl:rotate-180" aria-hidden />
       </Link>
-      <div className="min-w-0 flex-1">
+      <div className="min-w-[min(10rem,100%)] flex-1">
         {renaming ? (
           <input
             autoFocus
@@ -457,17 +457,17 @@ function LineEditor({ id }: { id: string }) {
           />
         ) : (
           <button type="button" onClick={() => setRenaming(true)} className="group flex max-w-full items-center gap-1.5 text-start" aria-label={`${t('Rename')}: ${rep.name}`}>
-            <h1 className="truncate text-lg font-bold">{rep.name}</h1>
+            <h1 className="line-clamp-2 min-w-0 text-lg leading-tight font-bold break-words">{rep.name}</h1>
             <Pencil size={14} className="shrink-0 text-ink-3 opacity-70 group-hover:opacity-100" aria-hidden />
           </button>
         )}
-        <p className="truncate text-sm text-ink-2">
+        <p className="line-clamp-2 text-sm text-ink-2 break-words">
           {folderPath(lib.folders, rep.folderId).map((n) => t(n)).join(' / ')}
           {opening ? ` · ${opening.eco} ${opening.name}` : ''}
         </p>
       </div>
       {ready ? (
-        <span className="inline-flex h-10 shrink-0 items-center gap-1.5 rounded-full bg-brand-soft px-3.5 text-sm font-semibold text-brand-ink">
+        <span className="inline-flex min-h-10 py-1 shrink-0 items-center gap-1.5 rounded-full bg-brand-soft px-3.5 text-sm font-semibold text-brand-ink">
           <Sparkles size={16} aria-hidden />
           {t('Ready-made')}
         </span>
@@ -476,7 +476,7 @@ function LineEditor({ id }: { id: string }) {
         type="button"
         aria-pressed={guided}
         onClick={() => usePrefs.getState().set({ guided: !guided })}
-        className={`pressable inline-flex h-10 shrink-0 items-center gap-1.5 rounded-full px-3.5 text-sm font-semibold transition-colors ${guided ? 'bg-brand text-on-brand' : 'bg-brand-soft text-brand-ink hover:bg-brand-soft-2'}`}
+        className={`pressable inline-flex min-h-10 py-1 shrink-0 items-center gap-1.5 rounded-full px-3.5 text-sm font-semibold transition-colors ${guided ? 'bg-brand text-on-brand' : 'bg-brand-soft text-brand-ink hover:bg-brand-soft-2'}`}
       >
         <Compass size={16} aria-hidden />
         {t('Guided')}
@@ -535,7 +535,8 @@ function LineEditor({ id }: { id: string }) {
     <div className="mx-auto flex max-w-[640px] flex-col">
       {header}
       {engineOn && <EvalBar line={ev.lines[0]} orientation={orientation} direction="horizontal" className="rounded-none" />}
-      <div className="mx-auto w-full" style={{ maxWidth: 'calc(100dvh - 15rem)' }}>
+      {/* Board + header + controls fit the viewport height; the board never drops under 260 px (at 2× text the page scrolls instead). */}
+      <div className="mx-auto w-full" style={{ maxWidth: 'max(260px, calc(100dvh - 60px - 11.25rem))' }}>
         {board}
       </div>
       <BoardControls store={store} drawMode={drawMode} onToggleDraw={() => setDrawMode((d) => !d)} onTypedMove={(u) => void addMove(u)} />
@@ -597,7 +598,7 @@ function PaneTabs<T extends string>({ value, onChange, options }: { value: T; on
           type="button"
           aria-selected={o.value === value}
           onClick={() => onChange(o.value)}
-          className={`pressable h-10 shrink-0 rounded-full px-4 text-sm font-semibold transition-colors ${o.value === value ? 'bg-brand text-on-brand' : 'bg-surface text-ink-2 shadow-card hover:text-ink'}`}
+          className={`pressable min-h-10 py-1 shrink-0 rounded-full px-4 text-sm font-semibold transition-colors ${o.value === value ? 'bg-brand text-on-brand' : 'bg-surface text-ink-2 shadow-card hover:text-ink'}`}
         >
           {o.label}
         </button>

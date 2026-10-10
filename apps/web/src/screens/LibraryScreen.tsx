@@ -372,17 +372,17 @@ export function LibraryScreen() {
         const scope = scopeOf(selected);
         return scope ? (
           <>
-            <Link to={practiceHref(scope, 'show')} className="inline-flex h-10 items-center gap-1.5 rounded-[var(--radius-s)] bg-brand-soft px-3 text-sm font-semibold text-brand-ink hover:bg-brand-soft-2">
+            <Link to={practiceHref(scope, 'show')} className="inline-flex min-h-10 py-1 items-center gap-1.5 rounded-[var(--radius-s)] bg-brand-soft px-3 text-sm font-semibold text-brand-ink hover:bg-brand-soft-2">
               <Eye size={15} aria-hidden /> {t('Show me')}
             </Link>
-            <Link to={practiceHref(scope, 'test')} className="inline-flex h-10 items-center gap-1.5 rounded-[var(--radius-s)] bg-brand px-3 text-sm font-semibold text-on-brand">
+            <Link to={practiceHref(scope, 'test')} className="inline-flex min-h-10 py-1 items-center gap-1.5 rounded-[var(--radius-s)] bg-brand px-3 text-sm font-semibold text-on-brand">
               <Target size={15} aria-hidden /> {t('Test me')}
             </Link>
           </>
         ) : null;
       })()}
       <IconButton icon={FolderInput} label={t('Move to…')} size={36} disabled={!selected.length} onClick={() => setSheet({ kind: 'move', keys: selected })} />
-      <IconButton icon={Trash2} label={t('Delete')} size={36} disabled={!selected.length} onClick={() => void deleteKeys(selected)} className="text-bad" />
+      <IconButton icon={Trash2} label={t('Delete')} size={36} disabled={!selected.length} onClick={() => void deleteKeys(selected)} className="text-bad-ink" />
       <IconButton
         icon={X}
         label={t('Done')}
@@ -456,7 +456,7 @@ export function LibraryScreen() {
         {main}
         {selectionBar}
         {!selecting && visible.length > 1 && (
-          <button type="button" onClick={() => setSelecting(true)} className="pressable mt-4 inline-flex h-11 items-center gap-2 rounded-[var(--radius-control)] px-3 text-base font-semibold text-ink-2 hover:bg-surface-3 hover:text-ink">
+          <button type="button" onClick={() => setSelecting(true)} className="pressable mt-4 inline-flex min-h-11 py-1 items-center gap-2 rounded-[var(--radius-control)] px-3 text-base font-semibold text-ink-2 hover:bg-surface-3 hover:text-ink">
             <CheckSquare size={16} aria-hidden /> {t('Select')}
           </button>
         )}
@@ -710,16 +710,16 @@ function Sidebar({ roots, folders, current, drop }: { roots: Folder[]; folders: 
         </ul>
       ))}
       <div className="mt-4 flex flex-col gap-0.5 border-t border-line pt-3">
-        <Link to="/focus" className="flex h-10 items-center gap-2.5 rounded-[var(--radius-s)] px-2.5 text-sm font-semibold text-ink-2 hover:bg-surface-3 hover:text-ink">
+        <Link to="/focus" className="flex min-h-10 py-1 items-center gap-2.5 rounded-[var(--radius-s)] px-2.5 text-sm font-semibold text-ink-2 hover:bg-surface-3 hover:text-ink">
           <Target size={16} aria-hidden /> {t('Weak spots')}
         </Link>
-        <Link to="/plan" className="flex h-10 items-center gap-2.5 rounded-[var(--radius-s)] px-2.5 text-sm font-semibold text-ink-2 hover:bg-surface-3 hover:text-ink">
+        <Link to="/plan" className="flex min-h-10 py-1 items-center gap-2.5 rounded-[var(--radius-s)] px-2.5 text-sm font-semibold text-ink-2 hover:bg-surface-3 hover:text-ink">
           <CalendarDays size={16} aria-hidden /> {t('Study plan')}
         </Link>
-        <Link to="/library/ready" className="flex h-10 items-center gap-2.5 rounded-[var(--radius-s)] px-2.5 text-sm font-semibold text-ink-2 hover:bg-surface-3 hover:text-ink">
+        <Link to="/library/ready" className="flex min-h-10 py-1 items-center gap-2.5 rounded-[var(--radius-s)] px-2.5 text-sm font-semibold text-ink-2 hover:bg-surface-3 hover:text-ink">
           <Sparkles size={16} aria-hidden /> {t('Ready-made openings')}
         </Link>
-        <Link to="/stats" className="flex h-10 items-center gap-2.5 rounded-[var(--radius-s)] px-2.5 text-sm font-semibold text-ink-2 hover:bg-surface-3 hover:text-ink">
+        <Link to="/stats" className="flex min-h-10 py-1 items-center gap-2.5 rounded-[var(--radius-s)] px-2.5 text-sm font-semibold text-ink-2 hover:bg-surface-3 hover:text-ink">
           <BarChart3 size={16} aria-hidden /> {t('Statistics')}
         </Link>
       </div>
@@ -737,7 +737,7 @@ function SidebarNode({ f, depth, kids, isOpen, active, toggle, drop, render }: {
         </button>
         <Link to={f.parentId === null ? `/library?f=${f.id}` : `/library?f=${f.id}`} className={`flex min-w-0 flex-1 items-center gap-1.5 truncate text-sm ${depth === 0 ? 'font-bold' : 'font-medium'}`}>
           {depth === 0 ? <ColorDot color={f.color} size="sm" /> : <FolderIcon size={14} className="shrink-0 text-brand" aria-hidden />}
-          <span className="truncate">{depth === 0 ? (f.color === 'white' ? t('As White') : t('As Black')) : t(f.name)}</span>
+          <span className="min-w-0 break-words">{depth === 0 ? (f.color === 'white' ? t('As White') : t('As Black')) : t(f.name)}</span>
         </Link>
       </div>
       {isOpen && kids.length > 0 && <ul>{kids.map((k) => render(k, depth + 1))}</ul>}
@@ -847,7 +847,7 @@ function RootView({ roots, finder, itemsIn, conflicts, setSheet, toolbarNew, pla
             title={t('Build your first repertoire')}
             action={
               <div className="flex flex-wrap justify-center gap-2">
-                <Link to="/library/ready" className="pressable inline-flex h-11 items-center gap-2 rounded-[var(--radius-control)] bg-brand px-4 font-semibold text-on-brand">
+                <Link to="/library/ready" className="pressable inline-flex min-h-11 py-1 items-center gap-2 rounded-[var(--radius-control)] bg-brand px-4 font-semibold text-on-brand">
                   <Sparkles size={18} aria-hidden /> {t('Ready-made openings')}
                 </Link>
                 <Button onClick={() => setSheet({ kind: 'pick', color: 'white' })}>{t('Build my own')}</Button>
@@ -869,7 +869,7 @@ function RootView({ roots, finder, itemsIn, conflicts, setSheet, toolbarNew, pla
           </div>
           <div className="flex flex-wrap gap-2">
             <PracticeButtons scope={{ kind: 'all' }} />
-            <Link to={planHref({ kind: 'all' }, t('Everything'))} className="pressable inline-flex h-11 items-center gap-2 rounded-[var(--radius-control)] px-3 font-semibold text-ink-2 hover:bg-surface-3 hover:text-ink">
+            <Link to={planHref({ kind: 'all' }, t('Everything'))} className="pressable inline-flex min-h-11 py-1 items-center gap-2 rounded-[var(--radius-control)] px-3 font-semibold text-ink-2 hover:bg-surface-3 hover:text-ink">
               <CalendarDays size={17} aria-hidden /> {t('Plan')}
             </Link>
           </div>
@@ -984,7 +984,7 @@ function FolderView({ folder, finder, items, setSheet, newFolder, planHref, pare
       {inside.length > 0 && (
         <div className="mt-4 flex flex-wrap gap-2">
           <PracticeButtons scope={{ kind: 'folder', id: folder.id }} />
-          <Link to={planHref({ kind: 'folder', id: folder.id }, t(folder.name))} className="pressable inline-flex h-11 items-center gap-2 rounded-[var(--radius-control)] px-3 font-semibold text-ink-2 hover:bg-surface-3 hover:text-ink">
+          <Link to={planHref({ kind: 'folder', id: folder.id }, t(folder.name))} className="pressable inline-flex min-h-11 py-1 items-center gap-2 rounded-[var(--radius-control)] px-3 font-semibold text-ink-2 hover:bg-surface-3 hover:text-ink">
             <CalendarDays size={17} aria-hidden /> {t('Make a plan')}
           </Link>
         </div>

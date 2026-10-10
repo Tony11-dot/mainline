@@ -70,10 +70,10 @@ export function HomeScreen() {
           <h2 className="text-2xl font-bold">{t('Start your first repertoire')}</h2>
           <p className="mt-2 max-w-[52ch] text-md text-ink-2">{t('Pick an opening, play the moves you want on the board, and MainLine turns every position into spaced-repetition training.')}</p>
           <div className="mt-6 flex flex-wrap gap-2.5">
-            <Link to="/library/ready" className="pressable inline-flex h-12 items-center gap-2 rounded-[var(--radius-control)] bg-brand px-5 font-semibold text-on-brand">
+            <Link to="/library/ready" className="pressable inline-flex min-h-12 py-1 items-center gap-2 rounded-[var(--radius-control)] bg-brand px-5 font-semibold text-on-brand">
               <Sparkles size={18} aria-hidden /> {t('Ready-made openings')}
             </Link>
-            <Link to="/library" className="pressable inline-flex h-12 items-center rounded-[var(--radius-control)] bg-brand-soft px-5 font-semibold text-brand-ink hover:bg-brand-soft-2">
+            <Link to="/library" className="pressable inline-flex min-h-12 py-1 items-center rounded-[var(--radius-control)] bg-brand-soft px-5 font-semibold text-brand-ink hover:bg-brand-soft-2">
               {t('Build from scratch')}
             </Link>
           </div>
@@ -136,29 +136,32 @@ function Progress({ done, goal, learned, positions, retention }: { done: number;
   const r = 15;
   const c = 2 * Math.PI * r;
   return (
-    <Card as="dl" pad={false} className="tnum mt-3 flex items-stretch">
-      <div className="flex min-w-0 flex-[1.3] items-center gap-3 py-4 ps-4 pe-2 sm:px-5">
-        <svg viewBox="0 0 38 38" className="size-10 shrink-0 -rotate-90 sm:size-11" aria-hidden>
-          <circle cx="19" cy="19" r={r} fill="none" stroke="var(--surface-3)" strokeWidth="4.5" />
-          <circle cx="19" cy="19" r={r} fill="none" stroke={pct >= 1 ? 'var(--good)' : 'var(--brand)'} strokeWidth="4.5" strokeLinecap="round" strokeDasharray={c} strokeDashoffset={c * (1 - pct)} className="transition-[stroke-dashoffset] duration-500" />
-        </svg>
-        <div className="min-w-0">
-          <dt className="hyphens-auto text-xs leading-tight font-medium break-words text-ink-2 sm:text-sm">{t('Daily goal')}</dt>
-          <dd className="text-xl font-bold leading-tight">
-            {done}
-            <span className="text-base font-semibold text-ink-3">/{goal}</span>
-          </dd>
+    // A size container, so at 2× text (under 16 rem of width) the three stats stack instead of squeezing.
+    <div className="@container">
+      <Card as="dl" pad={false} className="tnum mt-3 flex items-stretch @max-[16rem]:flex-col">
+        <div className="flex min-w-0 flex-[1.3] items-center gap-3 py-4 ps-4 pe-2 sm:px-5">
+          <svg viewBox="0 0 38 38" className="size-10 shrink-0 -rotate-90 sm:size-11" aria-hidden>
+            <circle cx="19" cy="19" r={r} fill="none" stroke="var(--surface-3)" strokeWidth="4.5" />
+            <circle cx="19" cy="19" r={r} fill="none" stroke={pct >= 1 ? 'var(--good)' : 'var(--brand)'} strokeWidth="4.5" strokeLinecap="round" strokeDasharray={c} strokeDashoffset={c * (1 - pct)} className="transition-[stroke-dashoffset] duration-500" />
+          </svg>
+          <div className="min-w-0">
+            <dt className="hyphens-auto text-xs leading-tight font-medium break-words text-ink-2 sm:text-sm">{t('Daily goal')}</dt>
+            <dd className="text-xl font-bold leading-tight">
+              {done}
+              <span className="text-base font-semibold text-ink-3">/{goal}</span>
+            </dd>
+          </div>
         </div>
-      </div>
-      <Stat label={t('Learned')} value={learned} of={positions} />
-      <Stat label={t('Retention')} value={retention === null ? '—' : fmtPercent(retention)} />
-    </Card>
+        <Stat label={t('Learned')} value={learned} of={positions} />
+        <Stat label={t('Retention')} value={retention === null ? '—' : fmtPercent(retention)} />
+      </Card>
+    </div>
   );
 }
 
 function Stat({ label, value, of }: { label: string; value: number | string; of?: number }) {
   return (
-    <div className="min-w-0 flex-1 border-s border-line px-4 py-4 sm:px-5">
+    <div className="min-w-0 flex-1 border-s border-line px-4 py-4 @max-[16rem]:border-s-0 @max-[16rem]:border-t sm:px-5">
       <dt className="hyphens-auto text-xs leading-tight font-medium break-words text-ink-2 sm:text-sm">{label}</dt>
       <dd className="text-xl font-bold leading-tight">
         {value}

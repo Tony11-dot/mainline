@@ -47,7 +47,7 @@ export function WeakSpotCard({ spot }: { spot: OpeningRecord & { packs: Pack[] }
         <div className="mt-4 flex flex-wrap items-center gap-3">
           <p className="text-base">{t('You have ready-made lines for it. Test yourself until they stick.')}</p>
           {ownedFolder && (
-            <Link to={practiceHref({ kind: 'folder', id: ownedFolder.id }, 'test')} className="pressable inline-flex h-11 items-center rounded-[var(--radius-control)] bg-brand px-4 font-semibold text-on-brand">
+            <Link to={practiceHref({ kind: 'folder', id: ownedFolder.id }, 'test')} className="pressable inline-flex min-h-11 py-1 items-center rounded-[var(--radius-control)] bg-brand px-4 font-semibold text-on-brand">
               {t('Test me')}
             </Link>
           )}
@@ -62,7 +62,7 @@ export function WeakSpotCard({ spot }: { spot: OpeningRecord & { packs: Pack[] }
           </Button>
         </div>
       ) : spot.packs.length ? (
-        <Link to={`/library/ready?color=${spot.color}&first=${spot.first}&reply=${encodeURIComponent(spot.reply)}`} className="pressable mt-4 inline-flex h-11 items-center rounded-[var(--radius-control)] bg-brand px-4 font-semibold text-on-brand">
+        <Link to={`/library/ready?color=${spot.color}&first=${spot.first}&reply=${encodeURIComponent(spot.reply)}`} className="pressable mt-4 inline-flex min-h-11 py-1 items-center rounded-[var(--radius-control)] bg-brand px-4 font-semibold text-on-brand">
           {tn(spot.packs.length, 'See {n} ready-made set', 'See {n} ready-made sets')}
         </Link>
       ) : null}

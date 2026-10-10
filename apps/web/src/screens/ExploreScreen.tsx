@@ -85,20 +85,20 @@ export function ExploreScreen({ store = exploreStore }: { store?: AnalysisStore 
   );
 
   const header = (
-    <div className="flex min-h-[52px] items-center gap-2.5 px-4 py-1 lg:px-0">
+    <div className="flex min-h-[52px] flex-wrap items-center gap-2.5 px-4 py-1 lg:px-0">
       {opening ? (
         <>
           <span className="tnum shrink-0 rounded-[var(--radius-xs)] bg-brand-soft px-2 py-0.5 text-sm font-bold text-brand-ink">{opening.eco}</span>
-          <h1 className="line-clamp-2 min-w-0 text-lg leading-tight font-bold">{opening.name}</h1>
+          <h1 className="line-clamp-2 min-w-[min(10rem,100%)] flex-1 hyphens-auto text-lg leading-tight font-bold break-words">{opening.name}</h1>
         </>
       ) : (
-        <h1 className="line-clamp-2 min-w-0 text-lg leading-tight font-bold text-ink-2">{view.path ? t('Unnamed position') : t('Starting position')}</h1>
+        <h1 className="line-clamp-2 min-w-[min(10rem,100%)] flex-1 hyphens-auto text-lg leading-tight font-bold break-words text-ink-2">{view.path ? t('Unnamed position') : t('Starting position')}</h1>
       )}
       <Link
         to={`/setup?${new URLSearchParams({ fen: view.node.fen })}`}
-        className="pressable ms-auto flex h-10 shrink-0 items-center gap-1.5 rounded-full bg-brand-soft px-3.5 text-sm font-semibold text-brand-ink hover:bg-brand-soft-2"
+        className="pressable ms-auto flex max-w-full min-h-10 items-center gap-1.5 rounded-full bg-brand-soft px-3.5 py-1 text-sm leading-tight font-semibold text-brand-ink hover:bg-brand-soft-2"
       >
-        <LayoutGrid size={16} aria-hidden /> {t('Set up position')}
+        <LayoutGrid size={16} className="shrink-0" aria-hidden /> {t('Set up position')}
       </Link>
     </div>
   );
@@ -133,7 +133,8 @@ export function ExploreScreen({ store = exploreStore }: { store?: AnalysisStore 
     <div className="mx-auto flex max-w-[640px] flex-col">
       {header}
       {engineOn && <EvalBar line={ev.lines[0]} orientation={orientation} direction="horizontal" className="mx-0 rounded-none" />}
-      <div className="mx-auto w-full" style={{ maxWidth: 'calc(100dvh - 14rem)' }}>
+      {/* Board + header + controls + tabs fit the viewport height; the board never drops under 260 px (at 2× text the page scrolls instead). */}
+      <div className="mx-auto w-full" style={{ maxWidth: 'max(260px, calc(100dvh - 60px - 10.25rem))' }}>
         {board}
       </div>
       <BoardControls store={store} drawMode={drawMode} onToggleDraw={() => setDrawMode((d) => !d)} />

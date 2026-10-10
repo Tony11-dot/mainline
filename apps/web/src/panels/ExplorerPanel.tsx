@@ -115,7 +115,7 @@ function MovesTable({ data, onPlay, onHoverMove, highlightUcis }: { data: Explor
   return (
     <table className="w-full table-fixed border-collapse text-base">
       <colgroup>
-        <col className="w-[22%]" />
+        <col className="w-[max(22%,5.5em)]" />
         <col className="w-[24%]" />
         <col />
       </colgroup>
@@ -178,8 +178,9 @@ export function WdlBar({ white, draws, black, compact = false }: { white: number
   const [w, d, b] = wdlPercents(white, draws, black);
   const seg = (pct: number, cls: string, label: string) =>
     pct > 0 ? (
-      <div className={`flex items-center justify-center overflow-hidden text-2xs font-semibold ${cls}`} style={{ width: `${pct}%` }} title={`${label} ${pct}%`}>
-        {!compact && pct >= 14 ? `${pct}%` : ''}
+      <div className={`@container flex items-center justify-center overflow-hidden text-2xs font-semibold ${cls}`} style={{ width: `${pct}%` }} title={`${label} ${pct}%`}>
+        {/* The label hides when its segment is narrower than the text (large text, narrow panes). */}
+        {!compact && pct >= 14 ? <span className="@max-[2.75em]:hidden">{pct}%</span> : ''}
       </div>
     ) : null;
   return (

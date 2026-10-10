@@ -86,13 +86,13 @@ export function StatsScreen() {
             <ul className="flex flex-col gap-3">
               {reps.map(({ rep, shape, tr, known, games: rg }) => (
                 <li key={rep.id}>
-                  <Link to={`/rep/${rep.id}`} className="pressable block rounded-[var(--radius-l)] bg-surface p-5 shadow-card transition-colors hover:bg-surface-2">
+                  <Link to={`/rep/${rep.id}`} className="pressable @container block rounded-[var(--radius-l)] bg-surface p-5 shadow-card transition-colors hover:bg-surface-2">
                     <div className="flex items-center gap-2.5">
                       <span role="img" className={`size-3.5 shrink-0 rounded-full ring-1 ring-line-strong ${rep.color === 'white' ? 'bg-white' : 'bg-[#111]'}`} aria-label={rep.color === 'white' ? t('As White') : t('As Black')} />
-                      <span className="min-w-0 truncate text-md font-bold">{rep.name}</span>
+                      <span className="line-clamp-2 min-w-0 text-md leading-tight font-bold break-words">{rep.name}</span>
                       <ChevronRight size={20} className="ms-auto shrink-0 text-ink-3 rtl:rotate-180" aria-hidden />
                     </div>
-                    <dl className="tnum mt-3 grid grid-cols-4 gap-2 text-sm">
+                    <dl className="tnum mt-3 grid grid-cols-4 gap-2 text-sm @max-[18rem]:grid-cols-2">
                       <Mini label={t('Moves')} value={shape.moves} />
                       <Mini label={t('Lines')} value={shape.lines} />
                       <Mini label={t('Known')} value={pct(known)} />
@@ -142,7 +142,7 @@ function Mini({ label, value }: { label: string; value: React.ReactNode }) {
   return (
     <div className="min-w-0">
       <dt className="hyphens-auto text-xs leading-tight font-medium break-words text-ink-2">{label}</dt>
-      <dd className="truncate text-md font-bold">{value}</dd>
+      <dd className="text-md font-bold break-words">{value}</dd>
     </div>
   );
 }
@@ -163,7 +163,7 @@ function Empty({ text, to, cta, icon = BarChart3 }: { text: string; to: string; 
       icon={icon}
       title={text}
       action={
-        <Link to={to} className="pressable inline-flex h-11 items-center rounded-[var(--radius-control)] bg-brand px-4 font-semibold text-on-brand">
+        <Link to={to} className="pressable inline-flex min-h-11 py-1 items-center rounded-[var(--radius-control)] bg-brand px-4 font-semibold text-on-brand">
           {cta}
         </Link>
       }

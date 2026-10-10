@@ -94,11 +94,12 @@ function TabBar() {
   };
 
   // Ask AI sits beside the bar as its own circle, so it never floats over the page.
+  // The bar's geometry is in px, like its height and labels: a larger text size must not narrow it until the five labels overlap.
   return (
-    <div data-web-tabbar className="fixed inset-x-3 z-[var(--z-chrome)] flex h-[var(--tabbar-h)] gap-2 md:hidden" style={{ bottom: 'calc(var(--safe-bottom) + 10px)' }}>
+    <div data-web-tabbar className="fixed inset-x-[12px] z-[var(--z-chrome)] flex h-[var(--tabbar-h)] gap-[8px] md:hidden" style={{ bottom: 'calc(var(--safe-bottom) + 10px)' }}>
     <nav
       aria-label={t('Main')}
-      className="glass flex min-w-0 flex-1 touch-none items-stretch justify-around rounded-[26px] px-1 select-none"
+      className="glass flex min-w-0 flex-1 touch-none items-stretch justify-around rounded-[26px] px-[4px] select-none"
       onPointerDown={onPointerDown}
       onPointerMove={onPointerMove}
       onPointerUp={onPointerUp}
@@ -119,7 +120,7 @@ function TabBar() {
           draggable={false}
           className={({ isActive }) => {
             const lit = hover === null ? isActive : hover === i;
-            return `relative flex min-w-0 flex-1 flex-col items-center justify-center gap-1 rounded-[20px] text-[10.5px] font-semibold transition-[color,background-color,transform] duration-150 ${
+            return `relative flex min-w-0 flex-1 flex-col items-center justify-center gap-[4px] rounded-[20px] text-[10.5px] font-semibold transition-[color,background-color,transform] duration-150 ${
               lit ? 'text-brand' : 'text-ink-3'
             } ${hover === i ? 'scale-[1.06] bg-brand-soft' : ''}`;
           }}

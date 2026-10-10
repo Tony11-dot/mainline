@@ -232,11 +232,11 @@ function Summary({ s, mode, showAll, onAgain }: { s: TrainerState; mode: TrainMo
       {(streak > 0 || goalHit) && (
         <p className="mt-4 flex flex-wrap justify-center gap-2 text-sm font-semibold">
           {streak > 0 && (
-            <span className="inline-flex h-9 items-center gap-1.5 rounded-full bg-flame-soft px-3.5 text-flame-ink">
+            <span className="inline-flex min-h-9 py-1 items-center gap-1.5 rounded-full bg-flame-soft px-3.5 text-flame-ink">
               <Flame size={15} fill="currentColor" aria-hidden /> {tn(streak, '{n}-day streak', '{n}-day streak')}
             </span>
           )}
-          {goalHit && <span className="inline-flex h-9 items-center rounded-full bg-good-soft px-3.5 text-good-ink">🎯 {t('Daily goal complete')}</span>}
+          {goalHit && <span className="inline-flex min-h-9 py-1 items-center rounded-full bg-good-soft px-3.5 text-good-ink">🎯 {t('Daily goal complete')}</span>}
         </p>
       )}
       {s.mistakes.length > 0 && (
@@ -279,7 +279,7 @@ function Summary({ s, mode, showAll, onAgain }: { s: TrainerState; mode: TrainMo
         <Button size="lg" icon={RotateCcw} onClick={onAgain}>
           {t('Again')}
         </Button>
-        <Link to="/" className="pressable inline-flex h-14 items-center justify-center rounded-[var(--radius-m)] bg-brand px-6 text-md font-semibold text-on-brand">
+        <Link to="/" className="pressable inline-flex min-h-14 py-1 items-center justify-center rounded-[var(--radius-m)] bg-brand px-6 text-md font-semibold text-on-brand">
           {t('Done')}
         </Link>
       </div>

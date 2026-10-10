@@ -7,14 +7,18 @@ export function StatTile({ label, value, sub }: { label: string; value: ReactNod
   return (
     <div className="min-w-0 rounded-[var(--radius-l)] bg-surface px-4 py-3.5 shadow-card">
       <div className="text-sm font-medium text-ink-2">{label}</div>
-      <div className="tnum mt-0.5 truncate text-2xl font-bold tracking-tight">{value}</div>
+      <div className="tnum mt-0.5 text-2xl leading-tight font-bold tracking-tight break-words">{value}</div>
       {sub && <div className="tnum mt-0.5 text-xs text-ink-2">{sub}</div>}
     </div>
   );
 }
 
 export function StatGrid({ children }: { children: ReactNode }) {
-  return <div className="grid grid-cols-2 gap-3 sm:grid-cols-4">{children}</div>;
+  return (
+    <div className="@container">
+      <div className="grid grid-cols-2 gap-3 @max-[16rem]:grid-cols-1 sm:grid-cols-4">{children}</div>
+    </div>
+  );
 }
 
 export function StatSection({ title, action, children }: { title: string; action?: ReactNode; children: ReactNode }) {

@@ -130,7 +130,7 @@ function PlanView({ plan }: { plan: Plan }) {
               <h3 className="flex items-baseline gap-2 text-md font-bold">
                 {t('Day {n}', { n: day + 1 })}
                 <span className={`text-sm font-semibold ${isToday ? 'text-brand-ink' : 'text-ink-2'}`}>{isToday ? t('Today') : dateOf(day)}</span>
-                {tasks.length > 0 && tasks.every((x) => x.done) && <Check size={17} className="self-center text-good" aria-label={t('Done')} />}
+                {tasks.length > 0 && tasks.every((x) => x.done) && <Check size={17} className="self-center text-good-ink" aria-label={t('Done')} />}
               </h3>
               <ul className="mt-3 flex flex-col gap-1.5">
                 {tasks.map((task) => (
@@ -157,7 +157,7 @@ export function TaskRow({ task, onToggle, onRemove, onStart }: { task: PlanTask;
         <span className="font-semibold">{t(H.label)}</span> · <bdi>{task.label}</bdi>
       </span>
       {!task.done && (
-        <button type="button" onClick={onStart} className="pressable inline-flex h-10 shrink-0 items-center gap-1.5 rounded-[var(--radius-s)] bg-brand px-3.5 text-sm font-semibold text-on-brand">
+        <button type="button" onClick={onStart} className="pressable inline-flex min-h-10 py-1 shrink-0 items-center gap-1.5 rounded-[var(--radius-s)] bg-brand px-3.5 text-sm font-semibold text-on-brand">
           <Play size={13} fill="currentColor" className="rtl:rotate-180" aria-hidden /> {t('Start')}
         </button>
       )}
@@ -265,7 +265,7 @@ function PlanBuilder({ initial, onClose }: { initial: { scope: Scope; label: str
               type="button"
               aria-pressed={kinds[k]}
               onClick={() => setKinds((s) => ({ ...s, [k]: !s[k] }))}
-              className={`pressable h-10 rounded-full px-4 text-sm font-semibold ${kinds[k] ? 'bg-brand text-on-brand' : 'bg-surface-3 text-ink-2 hover:text-ink'}`}
+              className={`pressable min-h-10 py-1 rounded-full px-4 text-sm font-semibold ${kinds[k] ? 'bg-brand text-on-brand' : 'bg-surface-3 text-ink-2 hover:text-ink'}`}
             >
               {t(HOW[k].label)}
             </button>

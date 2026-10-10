@@ -59,9 +59,9 @@ export function FocusScreen() {
           value={side}
           onChange={setSide}
           options={[
-            { value: 'all', label: <span className="whitespace-nowrap px-1">{t('Both')}</span> },
-            { value: 'white', label: <span className="whitespace-nowrap px-1">{t('As White')}</span> },
-            { value: 'black', label: <span className="whitespace-nowrap px-1">{t('As Black')}</span> },
+            { value: 'all', label: <span className="px-1">{t('Both')}</span> },
+            { value: 'white', label: <span className="px-1">{t('As White')}</span> },
+            { value: 'black', label: <span className="px-1">{t('As Black')}</span> },
           ]}
         />
         {top && (
@@ -77,7 +77,7 @@ export function FocusScreen() {
           icon={Swords}
           title={t('Nothing stands out yet')}
           action={
-            <Link to="/games" className="pressable inline-flex h-11 items-center rounded-[var(--radius-control)] bg-brand-soft px-4 font-semibold text-brand-ink hover:bg-brand-soft-2">
+            <Link to="/games" className="pressable inline-flex min-h-11 py-1 items-center rounded-[var(--radius-control)] bg-brand-soft px-4 font-semibold text-brand-ink hover:bg-brand-soft-2">
               {t('Import games')}
             </Link>
           }
@@ -101,7 +101,7 @@ export function FocusScreen() {
                   <span className="block text-md font-semibold">{t(g.label)}</span>
                   <span className="tnum block text-sm text-ink-2">{t('{learned} of {total} positions learned', { learned: g.learned, total: g.positions })}</span>
                 </span>
-                <Link to={practiceHref(g.scope, 'learn')} className="pressable inline-flex h-10 items-center rounded-[var(--radius-s)] bg-brand px-4 text-sm font-semibold text-on-brand">
+                <Link to={practiceHref(g.scope, 'learn')} className="pressable inline-flex min-h-10 py-1 items-center rounded-[var(--radius-s)] bg-brand px-4 text-sm font-semibold text-on-brand">
                   {t('Learn')}
                 </Link>
               </li>

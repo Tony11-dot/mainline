@@ -31,14 +31,14 @@ export function RepertoireStats({ rep }: { rep: Repertoire }) {
   );
 
   return (
-    <section aria-label={t('Repertoire statistics')} className="border-b border-line p-4">
+    <section aria-label={t('Repertoire statistics')} className="@container border-b border-line p-4">
       <div className="flex items-center">
         <h3 className="text-md font-bold">{t('This repertoire')}</h3>
         <Link to="/stats" className="ms-auto inline-flex min-h-[44px] items-center text-sm font-semibold text-brand-ink">
           {t('All statistics')}
         </Link>
       </div>
-      <dl className="mt-1 grid grid-cols-4 gap-x-2 gap-y-3">
+      <dl className="mt-1 grid grid-cols-4 gap-x-2 gap-y-3 @max-[18rem]:grid-cols-2">
         {cell(t('Moves'), shape.moves)}
         {cell(t('Lines'), shape.lines)}
         {cell(t('Deepest'), shape.depth ? tn(Math.ceil(shape.depth / 2), '{n} move', '{n} moves') : '—')}

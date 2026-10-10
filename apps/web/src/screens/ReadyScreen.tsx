@@ -55,12 +55,12 @@ export function ReadyScreen() {
       )}
 
       <div className="mt-6 flex flex-wrap gap-2">
-        <Segmented<Color> label={t('Colour')} value={color} onChange={(c) => set({ color: c, reply: null })} options={[{ value: 'white', label: <span className="whitespace-nowrap px-1">{t('As White')}</span> }, { value: 'black', label: <span className="whitespace-nowrap px-1">{t('As Black')}</span> }]} />
+        <Segmented<Color> label={t('Colour')} value={color} onChange={(c) => set({ color: c, reply: null })} options={[{ value: 'white', label: <span className="px-1">{t('As White')}</span> }, { value: 'black', label: <span className="px-1">{t('As Black')}</span> }]} />
         <Segmented<FirstMove>
           label={t('First move')}
           value={first}
           onChange={(f) => set({ first: f, reply: null })}
-          options={FIRST_MOVES.filter((f) => PACKS.some((p) => p.color === color && p.first === f)).map((f) => ({ value: f, label: <span className="whitespace-nowrap px-1">{color === 'white' ? `1.${f}` : t('vs {move}', { move: `1.${f}` })}</span> }))}
+          options={FIRST_MOVES.filter((f) => PACKS.some((p) => p.color === color && p.first === f)).map((f) => ({ value: f, label: <span className="px-1">{color === 'white' ? `1.${f}` : t('vs {move}', { move: `1.${f}` })}</span> }))}
         />
       </div>
       {only && (

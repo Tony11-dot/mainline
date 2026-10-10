@@ -16,7 +16,7 @@ export function RouteError() {
         title={notFound ? t('Page not found') : t('Something went wrong')}
         action={
           <div className="flex flex-wrap justify-center gap-2">
-            <Link to="/" className="pressable inline-flex h-11 items-center rounded-[var(--radius-control)] bg-brand px-4 font-semibold text-on-brand">
+            <Link to="/" className="pressable inline-flex min-h-11 py-1 items-center rounded-[var(--radius-control)] bg-brand px-4 font-semibold text-on-brand">
               {t('Back to Today')}
             </Link>
             {!notFound && (

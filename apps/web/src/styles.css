@@ -29,7 +29,7 @@
   --brand-softer: color-mix(in oklab, var(--brand) 6%, var(--surface));
   --on-brand: #fff;
 
-  --good: oklch(0.6 0.15 150);
+  --good: oklch(0.52 0.15 150);
   --good-soft: oklch(0.95 0.05 150);
   --bad: oklch(0.58 0.2 25);
   --bad-soft: oklch(0.95 0.035 25);
@@ -239,9 +239,10 @@
   --text-md: 1.0625rem;
   --text-lg: 1.25rem;
   --text-xl: 1.5rem;
-  --text-2xl: 1.875rem;
-  --text-3xl: 2.25rem;
-  --text-4xl: 2.75rem;
+  /* Titles grow at half the rate of body text (as Dynamic Type does), so 2× text still fits a phone. */
+  --text-2xl: calc(0.9375rem + 15px);
+  --text-3xl: calc(1.125rem + 18px);
+  --text-4xl: calc(1.375rem + 22px);
 }
 
 @layer base {
@@ -249,6 +250,11 @@
     -webkit-text-size-adjust: 100%;
     -webkit-tap-highlight-color: transparent;
     background: var(--bg);
+    /* Where text may hyphenate (hyphens: auto), only long words break and never closer than 4 letters to either end:
+       "Synchronisierungs-problem", "Schwach-stellen" — never "to-day" or "fai-led". Inherited by everything. */
+    -webkit-hyphenate-limit-before: 4;
+    -webkit-hyphenate-limit-after: 4;
+    hyphenate-limit-chars: 10 4 4;
   }
   /* Phones: scrollIntoView / keyboard focus stop above the floating tab bar instead of under it. */
   @media (width < 48rem) {
@@ -294,6 +300,14 @@
   }
   .tnum {
     font-variant-numeric: tabular-nums;
+  }
+  /* Hints and row subtitles: only very long words hyphenate (14+ letters, 7 either side) — "Synchronisierungs-problem",
+     "Trainings-antworten" — so ordinary words never do ("automatically", "coverage"). */
+  .hyphens-long {
+    hyphens: auto;
+    -webkit-hyphenate-limit-before: 7;
+    -webkit-hyphenate-limit-after: 7;
+    hyphenate-limit-chars: 14 7 7;
   }
 }
 

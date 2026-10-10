@@ -72,7 +72,7 @@ export function FolderSettingsSheet({ folderId, onClose, onDelete }: { folderId:
       title={t('Folder settings')}
       footer={
         <>
-          <Button variant="ghost" icon={Trash2} className="me-auto text-bad hover:text-bad" onClick={() => onDelete(folder.id)}>
+          <Button variant="ghost" icon={Trash2} className="me-auto text-bad-ink hover:text-bad-ink" onClick={() => onDelete(folder.id)}>
             {t('Delete')}
           </Button>
           <Button variant="ghost" onClick={onClose}>
@@ -114,7 +114,7 @@ export function FolderSettingsSheet({ folderId, onClose, onDelete }: { folderId:
                   </p>
                 )}
                 <input className={`${inputCls} ${parsed.error ? 'border-bad' : ''}`} value={moves} onChange={(e) => setMoves(e.target.value)} placeholder={before.length ? 'Nf3' : '1.e4'} autoCapitalize="off" autoCorrect="off" spellCheck={false} aria-label={t('Moves')} aria-invalid={!!parsed.error} />
-                {parsed.error && <span className="mt-1 block text-sm text-bad">{parsed.error}</span>}
+                {parsed.error && <span className="mt-1 block text-sm text-bad-ink">{parsed.error}</span>}
               </>
             )}
           </div>

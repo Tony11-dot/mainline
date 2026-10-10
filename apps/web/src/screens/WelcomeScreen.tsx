@@ -84,7 +84,7 @@ export function WelcomeScreen() {
                   role="radio"
                   aria-checked={on}
                   onClick={() => p.set({ rating: l.rating })}
-                  className={`pressable flex h-14 items-center justify-between rounded-[var(--radius-m)] px-5 text-start text-md font-semibold shadow-card transition-colors ${on ? 'bg-brand-softer ring-2 ring-brand' : 'bg-surface hover:bg-surface-2'}`}
+                  className={`pressable flex min-h-14 py-1 items-center justify-between rounded-[var(--radius-m)] px-5 text-start text-md font-semibold shadow-card transition-colors ${on ? 'bg-brand-softer ring-2 ring-brand' : 'bg-surface hover:bg-surface-2'}`}
                 >
                   <span className="tnum">{t(l.label)}</span>
                   {on && (
@@ -109,7 +109,7 @@ export function WelcomeScreen() {
                     const next = on ? p.speeds.filter((x) => x !== s) : [...p.speeds, s];
                     if (next.length) p.set({ speeds: next as Speed[] });
                   }}
-                  className={`pressable h-11 rounded-full px-5 text-base font-semibold ${on ? 'bg-brand text-on-brand' : 'bg-surface text-ink-2 shadow-card hover:text-ink'}`}
+                  className={`pressable min-h-11 py-1 rounded-full px-5 text-base font-semibold ${on ? 'bg-brand text-on-brand' : 'bg-surface text-ink-2 shadow-card hover:text-ink'}`}
                 >
                   {speedName(s)}
                 </button>
@@ -147,12 +147,12 @@ export function WelcomeScreen() {
                       return n;
                     })
                   }
-                  className={`pressable flex gap-3.5 rounded-[var(--radius-l)] p-3.5 text-start shadow-card transition-colors ${on ? 'bg-brand-softer ring-2 ring-brand' : 'bg-surface hover:bg-surface-2'}`}
+                  className={`pressable flex min-w-0 gap-3.5 rounded-[var(--radius-l)] p-3.5 text-start shadow-card transition-colors ${on ? 'bg-brand-softer ring-2 ring-brand' : 'bg-surface hover:bg-surface-2'}`}
                 >
                   <MiniBoard fen={first.fen} size={72} orientation={tpl.color} />
                   <span className="min-w-0">
                     <span className="flex items-center gap-1.5 text-md font-bold">
-                      {t(tpl.name)}
+                      <span className="min-w-0 hyphens-auto break-words">{t(tpl.name)}</span>
                       {on && (
                         <span className="flex size-5 shrink-0 items-center justify-center rounded-full bg-brand text-on-brand" aria-hidden>
                           <Check size={13} strokeWidth={3} aria-hidden />

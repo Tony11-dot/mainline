@@ -88,7 +88,7 @@ export function CoachPanel({ fen, parentFen, moveUci, lineUcis, lineStartFen, on
             type="button"
             onClick={() => setTab(id)}
             disabled={id === 'why' && !moveUci}
-            className={`pressable h-10 rounded-full px-4 text-sm font-semibold transition-colors disabled:opacity-40 ${tab === id ? 'bg-brand text-on-brand' : 'bg-surface-3 text-ink-2 hover:text-ink'}`}
+            className={`pressable min-h-10 py-1 rounded-full px-4 text-sm font-semibold transition-colors disabled:opacity-40 ${tab === id ? 'bg-brand text-on-brand' : 'bg-surface-3 text-ink-2 hover:text-ink'}`}
           >
             {t(label)}
           </button>
