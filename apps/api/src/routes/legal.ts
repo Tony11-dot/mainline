@@ -3,11 +3,20 @@ import { env } from '../env';
 
 /** Privacy policy and terms (required by the App Store and Google Play), cookie list and accessibility statement. Plain HTML, no scripts. */
 export async function legalRoutes(app: FastifyInstance) {
-  app.get('/privacy', async (_req, reply) => reply.type('text/html').header('Cache-Control', 'public, max-age=3600').send(page('Privacy policy', PRIVACY())));
-  app.get('/terms', async (_req, reply) => reply.type('text/html').header('Cache-Control', 'public, max-age=3600').send(page('Terms of use', TERMS())));
-  app.get('/cookies', async (_req, reply) => reply.type('text/html').header('Cache-Control', 'public, max-age=3600').send(page('Cookies and local storage', COOKIES())));
-  app.get('/accessibility', async (_req, reply) => reply.type('text/html').header('Cache-Control', 'public, max-age=3600').send(page('Accessibility statement', ACCESSIBILITY())));
+  for (const p of PAGES) {
+    app.get(p.path, async (_req, reply) => reply.type('text/html').header('Cache-Control', 'public, max-age=3600').send(page(p)));
+  }
 }
+
+type LegalPage = { path: string; title: string; nav: string; description: string; body: () => string };
+
+/** The four pages, in the order of the footer links (and of Settings). */
+const PAGES: LegalPage[] = [
+  { path: '/privacy', title: 'Privacy policy', nav: 'Privacy policy', description: 'What MainLine stores, what it sends and how to delete it. No ads, no analytics, no tracking.', body: () => PRIVACY() },
+  { path: '/terms', title: 'Terms of use', nav: 'Terms of use', description: 'The terms for using MainLine, a free chess opening trainer.', body: () => TERMS() },
+  { path: '/cookies', title: 'Cookies and local storage', nav: 'Cookies', description: 'The two sign-in cookies MainLine uses and what it keeps on your device.', body: () => COOKIES() },
+  { path: '/accessibility', title: 'Accessibility statement', nav: 'Accessibility', description: 'How MainLine works with keyboards, screen readers, large text and reduced motion.', body: () => ACCESSIBILITY() },
+];
 
 export const LEGAL_UPDATED = '25 September 2026';
 
@@ -96,10 +105,10 @@ const COOKIES = () => `
 
 <h2>Cookies</h2>
 <table>
-  <thead><tr><th>Name</th><th>Purpose</th><th>Lifetime</th></tr></thead>
+  <thead><tr><th scope="col">Name</th><th scope="col">Purpose</th><th scope="col">Lifetime</th></tr></thead>
   <tbody>
-    <tr><td><code>ml_session</code></td><td>Keeps you signed in after you choose <em>Sign in with Lichess</em> or <em>Sign in with Chess.com</em>. HttpOnly, first-party, only set if you sign in. Removed when you sign out or delete your account.</td><td>1 year</td></tr>
-    <tr><td><code>ml_oauth</code></td><td>Protects the Lichess and Chess.com sign-in step against forgery (a one-time code). Only set while signing in.</td><td>10 minutes</td></tr>
+    <tr><td data-label="Name"><code>ml_session</code></td><td data-label="Purpose">Keeps you signed in after you choose <em>Sign in with Lichess</em> or <em>Sign in with Chess.com</em>. HttpOnly, first-party, only set if you sign in. Removed when you sign out or delete your account.</td><td data-label="Lifetime">1 year</td></tr>
+    <tr><td data-label="Name"><code>ml_oauth</code></td><td data-label="Purpose">Protects the Lichess and Chess.com sign-in step against forgery (a one-time code). Only set while signing in.</td><td data-label="Lifetime">10 minutes</td></tr>
   </tbody>
 </table>
 
@@ -131,47 +140,77 @@ const ACCESSIBILITY = () => `
 <p>If something in MainLine is hard to use, tell us what you were trying to do and which device you use: ${contact()}. We read every message.</p>
 `;
 
-function page(title: string, body: string) {
+/**
+ * The page around each text: the app's own look (its light and dark MainLine palettes, the knight and
+ * wordmark, a white card on the tinted page, the brand blue for links). Type is in rem so the reader's
+ * text-size setting applies, titles grow at half the rate like the app's, and the insets stay in px.
+ */
+function page(p: LegalPage) {
+  const base = esc(env.PUBLIC_URL.replace(/\/$/, ''));
+  const nav = PAGES.map((q) => (q.path === p.path ? `<a href="${base}${q.path}" aria-current="page">${q.nav}</a>` : `<a href="${base}${q.path}">${q.nav}</a>`)).join('\n');
   return `<!doctype html>
 <html lang="en">
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>${title} · MainLine</title>
+<title>${p.title} · MainLine</title>
+<meta name="description" content="${esc(p.description)}">
 <meta name="theme-color" content="#F2F4F9" media="(prefers-color-scheme: light)">
 <meta name="theme-color" content="#121419" media="(prefers-color-scheme: dark)">
+<link rel="icon" href="${base}/favicon-32.png" type="image/png">
+<link rel="apple-touch-icon" href="${base}/apple-touch-icon.png">
 <style>
-  /* The app's own look: a tinted page, the text on a white card, the brand blue for links. */
-  :root { color-scheme: light dark; --ink: #181d2b; --ink2: #4a5268; --bg: #f2f4f9; --card: #fff; --line: #dde1ea; --brand: #072eb8; }
-  @media (prefers-color-scheme: dark) { :root { --ink: #eef0f5; --ink2: #b7bdcb; --bg: #121419; --card: #1c2029; --line: #333845; --brand: #8fa8ff; } }
-  body { margin: 0; background: var(--bg); color: var(--ink); font: 17px/1.6 -apple-system, BlinkMacSystemFont, "SF Pro Text", "Segoe UI", Roboto, sans-serif; -webkit-font-smoothing: antialiased; }
-  main { max-width: 720px; margin: 0 auto; padding: 32px 16px 64px; }
-  .brand { display: inline-block; font-weight: 800; font-size: 15px; letter-spacing: -0.01em; color: var(--brand); text-decoration: none; margin: 0 4px 16px; }
-  article { background: var(--card); border-radius: 24px; padding: 32px 24px; box-shadow: 0 1px 2px rgb(20 30 60 / 0.05), 0 6px 20px -8px rgb(20 30 60 / 0.12); }
-  @media (prefers-color-scheme: dark) { article { box-shadow: 0 0 0 1px rgb(255 255 255 / 0.06); } }
-  @media (min-width: 600px) { main { padding-top: 48px; } article { padding: 40px 40px; } }
-  h1 { font-size: 34px; line-height: 1.12; margin: 0 0 6px; letter-spacing: -0.025em; text-wrap: balance; }
-  h2 { font-size: 20px; line-height: 1.3; margin: 32px 0 8px; letter-spacing: -0.01em; text-wrap: balance; }
-  p, li { text-wrap: pretty; overflow-wrap: anywhere; }
-  .updated { color: var(--ink2); margin: 0 0 24px; font-size: 15px; }
-  a { color: var(--brand); text-underline-offset: 2px; }
-  ul { padding-inline-start: 22px; }
-  li { margin: 6px 0; }
-  table { width: 100%; border-collapse: collapse; font-size: 15px; display: block; overflow-x: auto; }
+  :root { color-scheme: light dark; --bg: #f2f4f9; --card: #fff; --ink: #181d2b; --ink2: #4a5268; --line: #dde1ea; --brand: #072eb8; --brand-soft: color-mix(in oklab, var(--brand) 11%, var(--card)); --shadow: 0 1px 2px rgb(20 30 60 / 0.05), 0 6px 20px -8px rgb(20 30 60 / 0.12); }
+  @media (prefers-color-scheme: dark) { :root { --bg: #121419; --card: #1c2029; --ink: #eef0f5; --ink2: #b7bdcb; --line: #333845; --brand: #8fa8ff; --brand-soft: color-mix(in oklab, var(--brand) 22%, var(--card)); --shadow: 0 0 0 1px rgb(255 255 255 / 0.06), 0 1px 2px rgb(0 0 0 / 0.3); } }
+  html { -webkit-text-size-adjust: 100%; text-size-adjust: 100%; -webkit-hyphenate-limit-before: 4; -webkit-hyphenate-limit-after: 4; hyphenate-limit-chars: 10 4 4; }
+  body { margin: 0; background: var(--bg); color: var(--ink); font-family: -apple-system, BlinkMacSystemFont, "SF Pro Text", "Inter Variable", "Segoe UI Variable Text", "Segoe UI", Roboto, system-ui, sans-serif; font-size: 1.0625rem; line-height: 1.6; -webkit-font-smoothing: antialiased; }
+  main { max-width: 45rem; margin: 0 auto; padding: 20px 16px 48px; }
+  /* The knight-and-wordmark, filled with the brand colour the way the app's sidebar draws it (30 px tall). */
+  .brand { display: inline-flex; align-items: center; min-height: 44px; padding: 0 6px; margin: 0 0 12px -6px; border-radius: 12px; text-decoration: none; }
+  .brand span { display: block; width: 111px; height: 30px; background: var(--brand); -webkit-mask: url(${base}/brand/wordmark.png) center / contain no-repeat; mask: url(${base}/brand/wordmark.png) center / contain no-repeat; }
+  article { background: var(--card); border-radius: 24px; padding: 28px 20px 32px; box-shadow: var(--shadow); }
+  @media (min-width: 600px) { main { padding-top: 32px; } .brand { margin-bottom: 16px; } article { padding: 40px 40px 44px; } }
+  h1, h2 { overflow-wrap: anywhere; hyphens: auto; text-wrap: balance; }
+  h1 { font-size: calc(1.125rem + 18px); line-height: 1.12; margin: 0 0 6px; letter-spacing: -0.025em; }
+  h2 { font-size: 1.25rem; line-height: 1.3; margin: 1.75em 0 0.4em; letter-spacing: -0.01em; }
+  p, li { text-wrap: pretty; overflow-wrap: anywhere; margin: 0.6em 0; }
+  .updated { color: var(--ink2); margin: 0 0 1.4em; font-size: 0.9375rem; }
+  a { color: var(--brand); text-underline-offset: 2px; text-decoration-thickness: 1px; }
+  a:focus-visible, .brand:focus-visible { outline: 2px solid var(--brand); outline-offset: 2px; border-radius: 6px; }
+  ul { padding-inline-start: 22px; margin: 0.6em 0; }
+  li { margin: 0.4em 0; }
+  code { font-size: 0.875em; background: color-mix(in srgb, var(--ink2) 12%, transparent); border-radius: 6px; padding: 1px 5px; }
+  table { width: 100%; border-collapse: collapse; font-size: 0.9375rem; margin: 0.8em 0; }
   th, td { text-align: start; vertical-align: top; padding: 10px 12px 10px 0; border-bottom: 1px solid var(--line); }
-  td:last-child, th:last-child { white-space: nowrap; padding-inline-end: 0; }
-  code { font-size: 14px; background: color-mix(in srgb, var(--ink2) 12%, transparent); border-radius: 6px; padding: 1px 5px; }
-  nav { margin: 24px 4px 0; font-size: 15px; color: var(--ink2); line-height: 2; }
+  th { color: var(--ink2); font-weight: 600; font-size: 0.8125rem; }
+  th:last-child, td:last-child { padding-inline-end: 0; }
+  @media (min-width: 600px) { td:last-child { white-space: nowrap; } }
+  /* On a phone each row becomes a small block with its own labels: nothing scrolls sideways. */
+  @media (max-width: 599px) {
+    thead { position: absolute; width: 1px; height: 1px; overflow: hidden; clip-path: inset(50%); }
+    table, tbody, tr, td { display: block; }
+    tr { padding: 10px 0 12px; border-bottom: 1px solid var(--line); }
+    td { padding: 0; border: 0; }
+    td::before { content: attr(data-label); display: block; margin-top: 8px; font-size: 0.8125rem; font-weight: 600; color: var(--ink2); }
+    td:first-child::before { margin-top: 0; }
+  }
+  nav { display: flex; flex-wrap: wrap; gap: 0 2px; margin: 12px -10px 0; font-size: 0.9375rem; font-weight: 600; }
+  nav a { display: inline-flex; align-items: center; min-height: 44px; padding: 0 10px; border-radius: 12px; text-decoration: none; }
+  nav a:hover { background: var(--brand-soft); }
+  nav a[aria-current="page"] { color: var(--ink2); }
+  @media print { body { background: #fff; } article { box-shadow: none; padding: 0; } .brand, nav { display: none; } a { color: inherit; } }
 </style>
 </head>
 <body><main>
-<a class="brand" href="${esc(env.PUBLIC_URL)}/">MainLine</a>
+<a class="brand" href="${base}/"><span role="img" aria-label="MainLine"></span></a>
 <article>
-<h1>${title}</h1>
-<p class="updated">MainLine · last updated ${LEGAL_UPDATED}</p>
-${body}
+<h1>${p.title}</h1>
+<p class="updated">Last updated ${LEGAL_UPDATED}</p>
+${p.body()}
 </article>
-<nav><a href="${esc(env.PUBLIC_URL)}/privacy">Privacy policy</a> · <a href="${esc(env.PUBLIC_URL)}/terms">Terms of use</a> · <a href="${esc(env.PUBLIC_URL)}/cookies">Cookies</a> · <a href="${esc(env.PUBLIC_URL)}/accessibility">Accessibility</a></nav>
+<nav aria-label="Legal pages">
+${nav}
+</nav>
 </main></body>
 </html>`;
 }

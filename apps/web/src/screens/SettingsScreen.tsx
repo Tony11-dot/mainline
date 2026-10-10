@@ -172,7 +172,8 @@ export function SettingsScreen() {
 
       <DeleteData signedIn={!!me} />
 
-      <p className="mt-8 text-center text-xs text-ink-3">
+      {/* Each legal link is a 44 px target; the gaps separate them. */}
+      <nav aria-label={t('Legal')} className="mt-6 flex flex-wrap justify-center gap-x-1 text-sm text-ink-3">
         {(
           [
             ['/privacy', msg('Privacy policy')],
@@ -180,15 +181,18 @@ export function SettingsScreen() {
             ['/cookies', msg('Cookies')],
             ['/accessibility', msg('Accessibility')],
           ] as const
-        ).map(([path, label], i) => (
-          <span key={path}>
-            {i > 0 && ' · '}
-            <a href={legalUrl(path)} target="_blank" rel="noreferrer" className="underline-offset-2 hover:underline">
-              {t(label)}
-            </a>
-          </span>
+        ).map(([path, label]) => (
+          <a
+            key={path}
+            href={legalUrl(path)}
+            target="_blank"
+            rel="noreferrer"
+            className="pressable inline-flex min-h-[44px] items-center rounded-[var(--radius-s)] px-2.5 underline-offset-2 hover:underline"
+          >
+            {t(label)}
+          </a>
         ))}
-      </p>
+      </nav>
 
       <p className="mt-3 text-center text-xs text-ink-3">
         {t('MainLine is free software (GPL-3.0). Board by chessground, rules by chessops, engine Stockfish 19 — all GPL-3.0.')}{' '}

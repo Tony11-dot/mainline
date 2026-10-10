@@ -11,25 +11,35 @@
     <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
     <title>MainLine</title>
     <script>
-      // Paint the user's theme before React loads (values cached by lib/prefs.ts).
+      // Paint the user's theme before React loads (values cached by lib/prefs.ts), browser chrome included.
       (function () {
         try {
           var b = JSON.parse(localStorage.getItem('mainline.boot') || 'null');
           var r = document.documentElement;
+          var dark = matchMedia('(prefers-color-scheme: dark)').matches;
+          var bar = dark ? '#121419' : '#F2F4F9';
           if (b) {
             for (var k in b.vars) r.style.setProperty(k, b.vars[k]);
             r.dataset.theme = b.dark ? 'dark' : 'light';
             r.dataset.board = b.board || 'match';
             if (b.font) r.style.setProperty('--font-sans-live', b.font);
+            bar = b.vars['--theme-surface-hex'] || bar;
           } else {
-            r.dataset.theme = matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
+            r.dataset.theme = dark ? 'dark' : 'light';
             r.dataset.board = 'match';
           }
+          var m = document.querySelector('meta[name="theme-color"]');
+          if (m) m.setAttribute('content', bar);
         } catch (e) {}
       })();
     </script>
   </head>
   <body>
+    <noscript>
+      <p style="margin: 0; padding: 24px 16px; font: 500 17px/1.5 -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; color: #181d2b; text-align: center; text-wrap: balance">
+        MainLine needs JavaScript. Turn it on for this site and reload.
+      </p>
+    </noscript>
     <div id="root"></div>
     <script type="module" src="/src/main.tsx"></script>
   </body>

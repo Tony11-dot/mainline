@@ -24,5 +24,5 @@ UNDERSTAND THE IDEAS
 MADE TO FEEL RIGHT
 • A smooth board with drag, tap-tap moves, sounds and haptics.
 • 20 themes, board colours, piece sets and fonts.
-• Works fully offline. No account needed. Sign in with Lichess to sync across devices.
+• Works fully offline. No account needed. Sign in with Lichess or Apple to sync across devices.
 • No ads, no tracking. Free and open source (GPL-3.0).
