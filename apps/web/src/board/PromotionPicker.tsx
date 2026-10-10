@@ -24,7 +24,7 @@ export function PromotionPicker(props: { color: 'white' | 'black'; file: number;
 
   return (
     <div
-      className="absolute inset-0 z-[var(--z-board-overlay)] bg-[oklch(0.2_0.02_262/0.45)] backdrop-blur-[2px] animate-[fade-in_120ms_ease-out]"
+      className="absolute inset-0 z-[var(--z-board-overlay)] bg-scrim backdrop-blur-[2px] animate-[fade-in_120ms_ease-out]"
       onPointerDown={(e) => {
         if (e.target === e.currentTarget) onPick(null);
       }}

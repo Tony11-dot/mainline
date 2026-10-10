@@ -444,3 +444,8 @@ Visual checks: `VISUAL=1 pnpm e2e visual` (add `--update-snapshots` after an int
 - **Privacy, terms, cookies, accessibility.** The four pages now look like the app: its light and dark colours, the knight-and-wordmark, the text on a card. They follow your text-size setting, the cookie list reads as a short list on a phone instead of a table that scrolls sideways, and the links at the foot are easy to tap.
 - **Settings.** The legal links at the foot of Settings are bigger targets.
 - **On the web.** The browser's title-bar colour follows your theme from the first frame, and a plain line explains that MainLine needs JavaScript if it is off.
+
+## The last sweep (2026-10-10)
+- **Installed web app.** The accessibility page opens as itself: the offline shell used to answer for it with the app's "Page not found" (the other three legal pages were already excluded). Web notifications show the knight as their status-bar badge instead of the colour icon.
+- **Sharing the web address.** A link to MainLine now comes with a preview card: the lockup on the brand blue, a title and a one-line description.
+- **One grey for each side.** The result bars, the eval bar, the engine's eval chips and the colour dots use the same white, draw-grey and black everywhere (there were three different blacks); the dimming behind sheets and the promotion picker is one shared tone.

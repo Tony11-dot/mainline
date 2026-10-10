@@ -185,9 +185,9 @@ export function WdlBar({ white, draws, black, compact = false }: { white: number
     ) : null;
   return (
     <div className={`tnum flex w-full overflow-hidden rounded-[var(--radius-xs)] ring-1 ring-line ${compact ? 'h-2' : 'h-5'}`} role="img" aria-label={t('White {w}, draws {d}, black {b}', { w: fmtPercent(w / 100), d: fmtPercent(d / 100), b: fmtPercent(b / 100) })}>
-      {seg(w, 'bg-[oklch(0.985_0.003_262)] text-[oklch(0.3_0.02_262)]', t('White wins'))}
-      {seg(d, 'bg-[oklch(0.72_0.012_262)] text-white', t('Draws'))}
-      {seg(b, 'bg-[oklch(0.28_0.015_262)] text-white', t('Black wins'))}
+      {seg(w, 'bg-chess-white text-on-chess-white', t('White wins'))}
+      {seg(d, 'bg-chess-draw text-on-chess-black', t('Draws'))}
+      {seg(b, 'bg-chess-black text-on-chess-black', t('Black wins'))}
     </div>
   );
 }

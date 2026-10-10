@@ -156,6 +156,16 @@ export function stripJitterWatermark(doc) {
   return d;
 }
 
+// Web Push badge: the status-bar glyph Android shows for a web notification — a white silhouette on
+// transparent (the system tints it), like the native ic_stat icon above.
+writeFileSync(
+  `${pub}badge-96.png`,
+  await sharp({ create: { width: 96, height: 96, channels: 4, background: { r: 0, g: 0, b: 0, alpha: 0 } } })
+    .composite([{ input: await whiteKnight(86), gravity: 'center' }])
+    .png()
+    .toBuffer(),
+);
+
 // Store listing graphics (Google Play): 512 icon + 1024×500 feature graphic.
 const storeDir = `${root}apps/mobile/store/android/images/`;
 mkdirSync(storeDir, { recursive: true });
@@ -167,8 +177,24 @@ await png(icon, 512, `${storeDir}icon.png`);
     for (let i = 0; i < d.length; i += 4) d[i] = d[i + 1] = d[i + 2] = 255;
     return sharp(d, { raw: m.info }).png().toBuffer();
   };
-  const bg = `<svg xmlns="http://www.w3.org/2000/svg" width="1024" height="500"><defs><linearGradient id="g" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#2962F4"/><stop offset="0.5" stop-color="${BRAND}"/><stop offset="1" stop-color="#0423A2"/></linearGradient></defs><rect width="1024" height="500" fill="url(#g)"/></svg>`;
+  const field = (w, h) =>
+    `<svg xmlns="http://www.w3.org/2000/svg" width="${w}" height="${h}"><defs><linearGradient id="g" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#2962F4"/><stop offset="0.5" stop-color="${BRAND}"/><stop offset="1" stop-color="#0423A2"/></linearGradient></defs><rect width="${w}" height="${h}" fill="url(#g)"/></svg>`;
   // The wordmark already carries the knight.
+  const lockup = async (w, h, wordHeight, file) => {
+    const word = await whiteWordmark(wordHeight);
+    const wMeta = await sharp(word).metadata();
+    writeFileSync(
+      file,
+      await sharp(Buffer.from(field(w, h)))
+        .composite([{ input: word, left: Math.round((w - wMeta.width) / 2), top: Math.round((h - wMeta.height) / 2) }])
+        .flatten({ background: BRAND })
+        .png()
+        .toBuffer(),
+    );
+  };
+  // The share preview for the web app's URL (Open Graph / Twitter card), the same lockup at 1200×630.
+  await lockup(1200, 630, 230, `${pub}social.png`);
+  const bg = field(1024, 500);
   const word = await whiteWordmark(190);
   const wMeta = await sharp(word).metadata();
   writeFileSync(

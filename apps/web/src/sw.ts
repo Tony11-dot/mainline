@@ -18,7 +18,7 @@ cleanupOutdatedCaches();
 precacheAndRoute(self.__WB_MANIFEST);
 
 // SPA navigations → cached index.html (except API and the share-target POST).
-registerRoute(new NavigationRoute(createHandlerBoundToURL('/index.html'), { denylist: [/^\/api\//, /^\/import/, /^\/privacy/, /^\/terms/, /^\/cookies/] }));
+registerRoute(new NavigationRoute(createHandlerBoundToURL('/index.html'), { denylist: [/^\/api\//, /^\/import/, /^\/privacy/, /^\/terms/, /^\/cookies/, /^\/accessibility/] }));
 
 // Engine: only the single-threaded build goes through the worker. The threaded build's own thread
 // workers fail to start when a service worker answers for them, and it retries until the page freezes;
@@ -60,7 +60,7 @@ self.addEventListener('push', (event) => {
     self.registration.showNotification(data.title ?? 'MainLine', {
       body: data.body ?? 'Your openings are waiting.',
       icon: '/icon-192.png',
-      badge: '/favicon-32.png',
+      badge: '/badge-96.png',
       tag: data.tag ?? 'mainline',
       data: { url: data.url ?? '/train?mode=review' },
     }),

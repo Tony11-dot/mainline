@@ -43,6 +43,14 @@
   --gem: oklch(0.55 0.16 300);
   --gem-soft: oklch(0.94 0.04 300);
   --gem-ink: oklch(0.42 0.14 300);
+  /* The two sides of the board are absolute, the same in both schemes: result bars, the eval bar, the colour dots. */
+  --chess-white: oklch(0.985 0.003 262);
+  --chess-black: oklch(0.28 0.015 262);
+  --chess-draw: oklch(0.72 0.012 262);
+  --on-chess-white: oklch(0.3 0.02 262);
+  --on-chess-black: #fff;
+  /* Behind sheets and the promotion picker. */
+  --scrim: oklch(0.2 0.02 262 / 0.4);
   /* Toasts: a dark pill in both schemes, so they read over any theme. */
   --toast-bg: oklch(0.22 0.015 262);
   --toast-ink: #fff;
@@ -211,6 +219,12 @@
   --color-gem: var(--gem);
   --color-gem-soft: var(--gem-soft);
   --color-gem-ink: var(--gem-ink);
+  --color-chess-white: var(--chess-white);
+  --color-chess-black: var(--chess-black);
+  --color-chess-draw: var(--chess-draw);
+  --color-on-chess-white: var(--on-chess-white);
+  --color-on-chess-black: var(--on-chess-black);
+  --color-scrim: var(--scrim);
   --color-toast: var(--toast-bg);
   --color-toast-ink: var(--toast-ink);
   --color-toast-good: var(--toast-good);

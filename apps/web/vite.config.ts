@@ -22,7 +22,7 @@ export default defineConfig({
       injectManifest: {
         // App shell + small data. Engines, pieces, fonts are cached at runtime on first use.
         globPatterns: ['**/*.{js,css,html,png,svg,webmanifest}', 'data/openings.json', 'launch.json'],
-        globIgnores: ['engine/**', 'pieces/**', '**/*.map'],
+        globIgnores: ['engine/**', 'pieces/**', '**/*.map', 'social.png'],
         maximumFileSizeToCacheInBytes: 3 * 1024 * 1024,
         rollupFormat: 'iife',
       },

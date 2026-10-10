@@ -34,7 +34,7 @@ export function Sheet({ open, onClose, title, children, footer, wide }: { open: 
         if (e.target === ref.current) onClose();
       }}
       aria-label={title}
-      className={`sheet m-0 mt-auto w-full max-w-none rounded-t-[var(--radius-xl)] border border-transparent bg-surface p-0 text-ink shadow-3 backdrop:bg-[oklch(0.2_0.02_262/0.4)] backdrop:backdrop-blur-[2px] sm:m-auto sm:rounded-[var(--radius-xl)] dark:border-line ${wide ? 'sm:max-w-2xl' : 'sm:max-w-md'}`}
+      className={`sheet m-0 mt-auto w-full max-w-none rounded-t-[var(--radius-xl)] border border-transparent bg-surface p-0 text-ink shadow-3 backdrop:bg-scrim backdrop:backdrop-blur-[2px] sm:m-auto sm:rounded-[var(--radius-xl)] dark:border-line ${wide ? 'sm:max-w-2xl' : 'sm:max-w-md'}`}
     >
       {open && (
         <div className="flex max-h-[88dvh] flex-col" style={{ paddingBottom: 'var(--safe-bottom)' }}>

@@ -1056,7 +1056,7 @@ function MobileTrail({ folder, folders }: { folder: Folder; folders: Folder[] })
 
 /** White or Black as a small disc: the piece colour itself, never a colour of the theme. */
 function ColorDot({ color, size = 'md' }: { color: 'white' | 'black'; size?: 'sm' | 'md' }) {
-  return <span className={`inline-block shrink-0 rounded-full ring-1 ring-line-strong ${size === 'sm' ? 'size-2.5' : 'size-3.5'} ${color === 'white' ? 'bg-white' : 'bg-[#111]'}`} aria-hidden />;
+  return <span className={`inline-block shrink-0 rounded-full ring-1 ring-line-strong ${size === 'sm' ? 'size-2.5' : 'size-3.5'} ${color === 'white' ? 'bg-chess-white' : 'bg-chess-black'}`} aria-hidden />;
 }
 
 export const slug = (s: string) => s.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '') || 'repertoire';

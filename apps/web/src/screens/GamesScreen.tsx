@@ -103,7 +103,7 @@ export function GamesScreen() {
             <ul className="divide-y divide-line overflow-hidden rounded-[var(--radius-l)] bg-surface shadow-card">
               {lines.slice(0, 12).map((l) => (
                 <li key={l.color + l.path.join()} className="flex items-center gap-3.5 px-5 py-3.5">
-                  <span className={`size-3.5 shrink-0 rounded-full ring-1 ring-line-strong ${l.color === 'white' ? 'bg-white' : 'bg-[#111]'}`} role="img" aria-label={l.color === 'white' ? t('As White') : t('As Black')} />
+                  <span className={`size-3.5 shrink-0 rounded-full ring-1 ring-line-strong ${l.color === 'white' ? 'bg-chess-white' : 'bg-chess-black'}`} role="img" aria-label={l.color === 'white' ? t('As White') : t('As Black')} />
                   <span className="min-w-0 flex-1">
                     <span className="block text-base font-semibold [overflow-wrap:anywhere]">
                       <bdi>{lineText(l.path)}</bdi>

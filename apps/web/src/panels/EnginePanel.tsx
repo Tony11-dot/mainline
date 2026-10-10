@@ -54,7 +54,7 @@ function PvRow({ fen, line, onPlayLine, onHoverMove }: { fen: string; line?: Eva
       onMouseEnter={() => onHoverMove?.(line.moves[0] ?? null)}
       onMouseLeave={() => onHoverMove?.(null)}
     >
-      <span className={`tnum w-[5.2ch] shrink-0 rounded-[var(--radius-xs)] px-1 py-0.5 text-center text-sm font-bold ${positive ? 'bg-[oklch(0.97_0.004_262)] text-[oklch(0.25_0.02_262)] ring-1 ring-line' : 'bg-[oklch(0.3_0.015_262)] text-white'}`}>
+      <span className={`tnum w-[5.2ch] shrink-0 rounded-[var(--radius-xs)] px-1 py-0.5 text-center text-sm font-bold ${positive ? 'bg-chess-white text-on-chess-white ring-1 ring-line' : 'bg-chess-black text-on-chess-black'}`}>
         {formatEval(line)}
       </span>
       <span className="min-w-0 truncate text-ink-2">

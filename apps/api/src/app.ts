@@ -26,6 +26,15 @@ function webDistDir(): string | undefined {
   return [path.resolve(here, '../../web/dist'), path.resolve(here, '../web/dist')].find((p) => existsSync(p));
 }
 
+/**
+ * Share previews (Open Graph) need absolute URLs. The page keeps them root-relative so the dev server,
+ * the preview and the native builds stay self-contained; the API, which knows the public origin, fills them in.
+ */
+export function absoluteSocialMeta(html: string, publicUrl: string): string {
+  const base = publicUrl.replace(/\/$/, '');
+  return html.replace(/(property="og:(?:image|url)" content=")\//g, `$1${base}/`);
+}
+
 export async function buildApp(opts: { logger?: boolean } = {}): Promise<FastifyInstance> {
   const app = Fastify({
     logger: opts.logger ?? env.NODE_ENV !== 'test',
@@ -90,7 +99,7 @@ export async function buildApp(opts: { logger?: boolean } = {}): Promise<Fastify
 
   const dist = webDistDir();
   if (dist) {
-    const indexHtml = readFileSync(path.join(dist, 'index.html'), 'utf8');
+    const indexHtml = absoluteSocialMeta(readFileSync(path.join(dist, 'index.html'), 'utf8'), env.PUBLIC_URL);
     await app.register(fastifyStatic, {
       root: dist,
       wildcard: false,

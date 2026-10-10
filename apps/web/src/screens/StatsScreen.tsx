@@ -88,7 +88,7 @@ export function StatsScreen() {
                 <li key={rep.id}>
                   <Link to={`/rep/${rep.id}`} className="pressable @container block rounded-[var(--radius-l)] bg-surface p-5 shadow-card transition-colors hover:bg-surface-2">
                     <div className="flex items-center gap-2.5">
-                      <span role="img" className={`size-3.5 shrink-0 rounded-full ring-1 ring-line-strong ${rep.color === 'white' ? 'bg-white' : 'bg-[#111]'}`} aria-label={rep.color === 'white' ? t('As White') : t('As Black')} />
+                      <span role="img" className={`size-3.5 shrink-0 rounded-full ring-1 ring-line-strong ${rep.color === 'white' ? 'bg-chess-white' : 'bg-chess-black'}`} aria-label={rep.color === 'white' ? t('As White') : t('As Black')} />
                       <span className="line-clamp-2 min-w-0 text-md leading-tight font-bold break-words">{rep.name}</span>
                       <ChevronRight size={20} className="ms-auto shrink-0 text-ink-3 rtl:rotate-180" aria-hidden />
                     </div>

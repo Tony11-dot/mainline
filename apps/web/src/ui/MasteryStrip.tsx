@@ -27,7 +27,7 @@ export const MasteryStrip = memo(function MasteryStrip({ rep, moves, cards, now 
   const cells = values.slice(0, 60);
   return (
     <span className="mt-1 flex items-center gap-2" aria-label={t('Mastery {pct}, {learned} of {total} learned', { pct: fmtPercent(mean), learned: learned.length, total: order.length })} role="img">
-      <span className="flex flex-wrap gap-[2px]">
+      <span className="flex flex-wrap items-center gap-[2px]">
         {cells.map((v, i) => (
           <span
             key={i}
@@ -35,7 +35,7 @@ export const MasteryStrip = memo(function MasteryStrip({ rep, moves, cards, now 
             style={{ background: v < 0 ? 'var(--surface-3)' : `color-mix(in oklab, var(--brand) ${Math.round(25 + v * 75)}%, var(--surface))` }}
           />
         ))}
-        {values.length > 60 && <span className="text-[10px] leading-[7px] text-ink-3">+{values.length - 60}</span>}
+        {values.length > 60 && <span className="text-2xs leading-none text-ink-3">+{values.length - 60}</span>}
       </span>
       {learned.length > 0 && <span className="tnum text-xs font-semibold text-ink-2">{Math.round(mean * 100)}%</span>}
     </span>
