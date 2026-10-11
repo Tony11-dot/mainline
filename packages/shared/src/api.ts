@@ -1,19 +1,15 @@
-import { z } from 'zod';
-
-export const colorSchema = z.enum(['white', 'black']);
-
 /* ---------------- Explorer ---------------- */
 
-export const explorerMoveSchema = z.object({
-  uci: z.string(),
-  san: z.string(),
-  white: z.number(),
-  draws: z.number(),
-  black: z.number(),
-  averageRating: z.number().nullable().optional(),
-  opening: z.object({ eco: z.string(), name: z.string() }).nullable().optional(),
-});
-export type ExplorerMove = z.infer<typeof explorerMoveSchema> & { total: number };
+export interface ExplorerMove {
+  uci: string;
+  san: string;
+  white: number;
+  draws: number;
+  black: number;
+  averageRating?: number | null;
+  opening?: { eco: string; name: string } | null;
+  total: number;
+}
 
 export interface ExplorerPlayer {
   name: string;
@@ -56,13 +52,6 @@ export function ratingBandsFor(rating: number): number[] {
   return bands;
 }
 
-export const explorerQuerySchema = z.object({
-  source: z.enum(['masters', 'lichess']),
-  fen: z.string().min(10).max(120),
-  ratings: z.string().regex(/^[0-9,]*$/).optional(),
-  speeds: z.string().regex(/^[a-z,]*$/).optional(),
-});
-
 /* ---------------- Engine ---------------- */
 
 export interface EvalLine {
@@ -81,21 +70,6 @@ export interface EvalData {
   lines: EvalLine[];
   source: 'cloud' | 'local';
 }
-
-export const evalSubmitSchema = z.object({
-  fen: z.string().min(10).max(120),
-  depth: z.number().int().min(1).max(99),
-  lines: z
-    .array(
-      z.object({
-        moves: z.array(z.string().regex(/^[a-h][1-8][a-h][1-8][qrbn]?$/)).min(1).max(40),
-        cp: z.number().int().min(-100000).max(100000).optional(),
-        mate: z.number().int().min(-200).max(200).optional(),
-      }),
-    )
-    .min(1)
-    .max(5),
-});
 
 /* ---------------- Auth / user ---------------- */
 

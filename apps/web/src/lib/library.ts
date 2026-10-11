@@ -424,14 +424,3 @@ export function repPreview(moves: RepMove[], rep: Repertoire, plies = 8) {
   }
   return { epd, lastUci };
 }
-
-export function repStats(moves: RepMove[], rep: Repertoire) {
-  const g = buildGraph(repMoves(moves, rep.id));
-  let own = 0;
-  let total = 0;
-  for (const list of g.values()) {
-    total += list.length;
-    for (const m of list) if (m.isMainline && (m.fromEpd.split(' ')[1] === 'w') === (rep.color === 'white')) own++;
-  }
-  return { moves: total, positions: own };
-}

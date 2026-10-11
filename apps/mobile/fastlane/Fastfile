@@ -61,9 +61,9 @@ def web_build(platform)
   sh("cd #{MOBILE} && pnpm exec cap sync #{platform}")
 end
 
-# "What's new": the newest PROGRESS.md entry, as plain text.
+# "What's new": the newest docs/PROGRESS.md entry, as plain text.
 def changelog(limit)
-  text = File.read(File.join(ROOT, "PROGRESS.md"))
+  text = File.read(File.join(ROOT, "docs", "PROGRESS.md"))
   section = text.split(/^## /).last.to_s
   title, *body = section.lines
   plain = body.join

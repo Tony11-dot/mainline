@@ -1,6 +1,7 @@
 import type { FastifyInstance } from 'fastify';
 import { z } from 'zod';
-import { evalSubmitSchema, explorerQuerySchema, positionFromFen } from '@mainline/shared';
+import { positionFromFen } from '@mainline/shared';
+import { evalSubmitSchema, explorerQuerySchema } from '@mainline/shared/schemas';
 import { getExplorer } from '../services/explorer';
 import { getEval, submitLocalEval } from '../services/evals';
 import { getGuide } from '../services/guide';

@@ -11,7 +11,7 @@ git tag v1.0.1 && git push origin v1.0.1
 Version numbers:
 - **Marketing version:** the tag (`1.0.1`).
 - **Build number:** whatever the store has, plus 1.
-- **"What's new":** the newest `PROGRESS.md` entry.
+- **"What's new":** the newest `docs/PROGRESS.md` entry.
 
 `native.yml` runs on the same tag and attaches desktop builds to a draft GitHub release.
 
