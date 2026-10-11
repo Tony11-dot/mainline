@@ -433,6 +433,11 @@ dialog.sheet[open] {
   0% { transform: translate(-50%, -50%) rotate(var(--a)) translateY(0) scale(1); opacity: 1; }
   100% { transform: translate(-50%, -50%) rotate(var(--a)) translateY(-120px) scale(0.2); opacity: 0; }
 }
+/* The tour's chapters slide in from the side they come from (--guide-from: 1 forward, -1 back; flipped in RTL). */
+@keyframes ml-guide-in {
+  from { transform: translateX(calc(var(--guide-from, 1) * 32px)); opacity: 0; }
+  to { transform: none; opacity: 1; }
+}
 @keyframes ml-rise {
   from { transform: translateY(16px); opacity: 0; }
   to { transform: none; opacity: 1; }

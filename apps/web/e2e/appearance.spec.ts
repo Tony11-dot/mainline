@@ -49,8 +49,8 @@ test('theme, font, board and pieces pickers apply everywhere and persist', async
   v = await vars();
   expect(v.brand).toBe('#BD93F9');
   await page.goto('/explore');
-  const bg = await page.locator('.ml-board piece.white.knight').first().evaluate((el) => getComputedStyle(el).backgroundImage);
-  expect(bg).toContain('merida');
+  // The piece set's stylesheet applies just after the board mounts: wait for it rather than read it once.
+  await expect.poll(() => page.locator('.ml-board piece.white.knight').first().evaluate((el) => getComputedStyle(el).backgroundImage)).toContain('merida');
   await page.goto('/settings');
   await page.getByRole('radio', { name: /System default/ }).click();
   expect((await vars()).brand).toBe('#072EB8');

@@ -1,5 +1,5 @@
 import { Capacitor, registerPlugin, type PluginListenerHandle } from '@capacitor/core';
-import { NAV } from '../ui/nav';
+import { NAV, isImmersive } from '../ui/nav';
 import { useLaunch } from '../launch/LaunchScreen';
 import { useOverlays } from '../ui/overlay';
 import { useAssistant } from '../lib/assistant';
@@ -52,7 +52,7 @@ export async function startNativeChrome(router: { navigate: (to: string) => unkn
   const wide = matchMedia('(min-width: 768px)');
   const sync = (path: string) => {
     void NativeChrome.select({ id: idFor(path) });
-    void NativeChrome.setVisible({ visible: !wide.matches && !useLaunch.getState().active && useOverlays.getState().open === 0 && !path.startsWith('/train') });
+    void NativeChrome.setVisible({ visible: !wide.matches && !useLaunch.getState().active && useOverlays.getState().open === 0 && !isImmersive(path) });
   };
   router.subscribe((s) => sync(s.location.pathname));
   useLaunch.subscribe(() => sync(router.state.location.pathname));

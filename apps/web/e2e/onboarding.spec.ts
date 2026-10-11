@@ -1,7 +1,7 @@
 import { expect, test } from '@playwright/test';
 import { dragMove, item, openItem, tapMove } from './helpers';
 
-test('first run: level → starter repertoires → learning', async ({ page }, info) => {
+test('first run: level → starter repertoires → the tour → learning', async ({ page }, info) => {
   test.skip(info.project.name === 'android');
   await page.route('**/api/**', (r) => r.fulfill({ json: { me: null, eval: null } }));
   await page.goto('/');
@@ -12,6 +12,10 @@ test('first run: level → starter repertoires → learning', async ({ page }, i
   // Italian + Caro-Kann are preselected; add the London too.
   await page.getByRole('button', { name: /London System/ }).click();
   await page.getByRole('button', { name: 'Start learning' }).click();
+  // The tour comes first; skipping it carries on to where setup was heading.
+  await expect(page).toHaveURL(/\/guide\?next=/);
+  await expect(page.getByRole('heading', { name: 'Welcome to MainLine' })).toBeVisible();
+  await page.getByRole('button', { name: 'Skip tour' }).click();
   await expect(page).toHaveURL(/\/train\?mode=learn/);
   await expect(page.getByRole('heading', { name: /New move:/ })).toBeVisible();
   const move = info.project.name === 'phone' ? tapMove : dragMove;

@@ -2,18 +2,19 @@ import { useRef, useState } from 'react';
 import { NavLink, Outlet, useLocation, useNavigate } from 'react-router';
 import { platform } from '../platform';
 import { usePrefs } from '../lib/prefs';
-import { NAV } from './nav';
+import { NAV, isImmersive } from './nav';
 import { LogoMark, Wordmark } from './Logo';
 import { Toaster } from './toast';
 import { AssistantNavButton, AssistantSheet, AssistantTabButton } from './Assistant';
 import { t } from '../lib/i18n';
 
 export function AppShell() {
+  const immersive = isImmersive(useLocation().pathname);
   return (
     <div className="min-h-dvh md:grid md:grid-cols-[80px_1fr] lg:grid-cols-[232px_1fr]">
       <Sidebar />
       <main
-        className="min-w-0 pb-[calc(var(--tabbar-h)+var(--safe-bottom)+16px)] md:pb-0"
+        className={`min-w-0 md:pb-0 ${immersive ? '' : 'pb-[calc(var(--tabbar-h)+var(--safe-bottom)+16px)]'}`}
         style={{ paddingTop: 'var(--safe-top)' }}
       >
         <Outlet />
@@ -65,8 +66,8 @@ function TabBar() {
   // The tab under the finger while it slides along the bar; lifting the finger opens it.
   const [hover, setHover] = useState<number | null>(null);
   const slid = useRef(false);
-  // Training is immersive on phones: no tab bar competing with the board.
-  if (path.startsWith('/train')) return null;
+  // Training and the tour are immersive on phones: no tab bar competing with them.
+  if (isImmersive(path)) return null;
 
   const indexAt = (el: HTMLElement, x: number) => {
     const r = el.getBoundingClientRect();

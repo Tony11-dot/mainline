@@ -37,7 +37,9 @@ export function WelcomeScreen() {
       for (const p of PACKS.filter((x) => picked.has(x.id))) await addPack(p);
     }
     p.set({ onboarded: true });
-    nav(withTemplates && picked.size ? '/train?mode=learn' : '/library', { replace: true });
+    const then = withTemplates && picked.size ? '/train?mode=learn' : '/library';
+    // First run: the tour of the app, then straight on to where setup was heading.
+    nav(p.guideSeen ? then : `/guide?next=${encodeURIComponent(then)}`, { replace: true });
   };
 
   return (

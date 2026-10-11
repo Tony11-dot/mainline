@@ -1,6 +1,6 @@
 import { lazy, Suspense, useEffect, useMemo, useState } from 'react';
 import { Link, Navigate } from 'react-router';
-import { BarChart3, CalendarDays, Cpu, Target, Dumbbell, Flame, GraduationCap, Play, Shuffle, Snowflake, Sparkles } from 'lucide-react';
+import { BarChart3, CalendarDays, Cpu, Target, Dumbbell, Flame, GraduationCap, Play, Shuffle, Signpost, Snowflake, Sparkles, X } from 'lucide-react';
 import { trainingSummary } from '@mainline/shared';
 import { StreakBadge, useStreak } from '../ui/streak';
 import { useLibrary } from '../lib/library';
@@ -13,7 +13,8 @@ import type { weakSpots } from '../lib/packs';
 const WeakSpotCard = lazy(async () => ({ default: (await import('./library/WeakSpotCard')).WeakSpotCard }));
 const HomePlanCard = lazy(async () => ({ default: (await import('./focus/HomePlanCard')).HomePlanCard }));
 import { LogoMark } from '../ui/Logo';
-import { Card, ListGroup, ListRow, PageHeader, SectionHeader } from '../ui/kit';
+import { Card, IconTile, ListGroup, ListRow, PageHeader, SectionHeader } from '../ui/kit';
+import { IconButton } from '../ui/primitives';
 import { fmtPercent, t, tn } from '../lib/i18n';
 
 export function HomeScreen() {
@@ -119,14 +120,35 @@ export function HomeScreen() {
           </ListGroup>
         </>
       )}
+      <GuideOffer />
       <SectionHeader title={t('Tools')} className="mt-[var(--section-gap)]" />
       <ListGroup>
         <ListRow to="/focus" icon={Target} title={t('Weak spots')} sub={t('Your weakest moves, openings and lines')} />
         <ListRow to="/plan" icon={CalendarDays} title={t('Study plan')} sub={t('A few days of sessions, built around your focus')} />
         <ListRow to="/stats" icon={BarChart3} title={t('Statistics')} sub={t('Accuracy, repertoires, openings, games')} />
         <ListRow to="/setup" icon={Cpu} title={t('Analysis board')} sub={t('Set up any position, run Stockfish')} />
+        <ListRow to="/guide" icon={Signpost} tone="gem" title={t('How MainLine works')} sub={t('A step-by-step tour of everything in the app')} />
       </ListGroup>
     </div>
+  );
+}
+
+/** Until the tour has been taken or dismissed, Today offers it (and picks it up where it was left). */
+function GuideOffer() {
+  const seen = usePrefs((s) => s.guideSeen);
+  const at = usePrefs((s) => s.guideAt);
+  if (seen) return null;
+  return (
+    <Card pad={false} className="mt-[var(--section-gap)] flex items-center gap-1 pe-2" data-testid="guide-offer">
+      <Link to="/guide" className="pressable flex min-h-[72px] min-w-0 flex-1 items-center gap-4 rounded-s-[var(--radius-l)] py-3 ps-5">
+        <IconTile icon={Signpost} tone="gem" />
+        <span className="min-w-0">
+          <span className="block text-md font-semibold">{t('How MainLine works')}</span>
+          <span className="block text-sm text-ink-2">{at > 0 ? t('Pick up the tour where you left it.') : t('A five-minute tour of everything in the app.')}</span>
+        </span>
+      </Link>
+      <IconButton icon={X} label={t('Dismiss')} onClick={() => usePrefs.getState().set({ guideSeen: true })} />
+    </Card>
   );
 }
 

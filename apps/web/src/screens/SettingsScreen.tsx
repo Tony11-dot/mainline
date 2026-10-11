@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { BadgeCheck, LogOut, Minus, Plus, Trash2 } from 'lucide-react';
+import { BadgeCheck, LogOut, Minus, Plus, Signpost, Trash2 } from 'lucide-react';
 import { accountName, SPEEDS, type Speed } from '@mainline/shared';
 import { usePrefs } from '../lib/prefs';
 import { AppearanceSettings } from './settings/AppearanceSettings';
@@ -12,7 +12,7 @@ import { platformKind } from '../platform';
 import { legalUrl } from '../lib/legal';
 import { speedName } from '../lib/speeds';
 import { Button, Segmented } from '../ui/primitives';
-import { FormRow, FormSection, PageHeader, Pill, Toggle } from '../ui/kit';
+import { FormRow, FormSection, ListRow, PageHeader, Pill, Toggle } from '../ui/kit';
 import { Sheet } from '../ui/Sheet';
 
 export { Toggle };
@@ -168,6 +168,10 @@ export function SettingsScreen() {
           />
         </FormRow>
         <Toggle label={t('Haptics')} hint={t('Vibration feedback on supported devices.')} checked={p.haptics} onChange={(haptics) => p.set({ haptics })} />
+      </FormSection>
+
+      <FormSection title={t('Help')}>
+        <ListRow to="/guide" icon={Signpost} tone="gem" title={t('How MainLine works')} sub={t('A step-by-step tour of everything in the app')} />
       </FormSection>
 
       <DeleteData signedIn={!!me} />

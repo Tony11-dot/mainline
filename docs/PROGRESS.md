@@ -449,3 +449,8 @@ Visual checks: `VISUAL=1 pnpm e2e visual` (add `--update-snapshots` after an int
 - **Installed web app.** The accessibility page opens as itself: the offline shell used to answer for it with the app's "Page not found" (the other three legal pages were already excluded). Web notifications show the knight as their status-bar badge instead of the colour icon.
 - **Sharing the web address.** A link to MainLine now comes with a preview card: the lockup on the brand blue, a title and a one-line description.
 - **One grey for each side.** The result bars, the eval bar, the engine's eval chips and the colour dots use the same white, draw-grey and black everywhere (there were three different blacks); the dimming behind sheets and the promotion picker is one shared tone.
+
+## A tour of the app (2026-10-11)
+- **How MainLine works.** A step-by-step tour of everything in the app, in 16 short chapters: getting around, Today, your repertoire and its folders, building a line, the tools under the board, training (with a board to try it on), the four ways to practise, goal and streak, your games, weak spots and study plans, looking things up, Ask AI and Settings. Each chapter has a picture of the screen it explains and a link to open it.
+- **First run.** The tour follows the welcome setup, and you can skip it at any point. Afterwards it's under Tools on Today and in Settings, and it reopens where you left it.
+- **In every language.** The tour is in all 20 languages, using the app's own words for every button it mentions.
