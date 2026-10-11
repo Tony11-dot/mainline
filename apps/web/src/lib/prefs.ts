@@ -29,6 +29,10 @@ export interface Prefs {
   lichessUser: string;
   locale: LocaleId;
   onboarded: boolean;
+  /** The tour (/guide) was finished or dismissed; until then Today offers it. */
+  guideSeen: boolean;
+  /** The tour's chapter, so it reopens where it was left. */
+  guideAt: number;
   chesscomUser: string;
   engineLines: number;
   reduceTransparency: boolean;
@@ -89,6 +93,8 @@ export const usePrefs = create<Prefs>()(
       lichessUser: '',
       locale: 'auto',
       onboarded: false,
+      guideSeen: false,
+      guideAt: 0,
       chesscomUser: '',
       engineLines: 3,
       reduceTransparency: false,

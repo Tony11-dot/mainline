@@ -10,6 +10,9 @@ export interface NavItem {
   sfSymbol: string;
 }
 
+/** Screens that take the whole display on phones: no tab bar competing with the board or the tour. */
+export const isImmersive = (path: string) => path.startsWith('/train') || path.startsWith('/guide');
+
 export const NAV: NavItem[] = [
   { to: '/', label: msg('Today'), icon: Home, sfSymbol: 'house' },
   { to: '/library', label: msg('Repertoire'), icon: BookOpen, sfSymbol: 'books.vertical' },

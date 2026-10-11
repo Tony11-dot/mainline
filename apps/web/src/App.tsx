@@ -33,6 +33,7 @@ export const router = createBrowserRouter([
           { path: 'stats', lazy: lazy(() => import('./screens/StatsScreen'), 'StatsScreen') },
           { path: 'setup', lazy: lazy(() => import('./screens/SetupScreen'), 'SetupScreen') },
           { path: 'games', lazy: lazy(() => import('./screens/GamesScreen'), 'GamesScreen') },
+          { path: 'guide', lazy: lazy(() => import('./screens/GuideScreen'), 'GuideScreen') },
           { path: 'welcome', lazy: lazy(() => import('./screens/WelcomeScreen'), 'WelcomeScreen') },
           { path: 'settings', lazy: lazy(() => import('./screens/SettingsScreen'), 'SettingsScreen') },
           { path: '*', element: <RouteError /> },
