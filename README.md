@@ -34,4 +34,4 @@ A chess opening trainer for the web, iPhone, iPad, Android and desktop. You buil
 
 ## Development
 
-See `PLAN.md` (architecture), `PROGRESS.md` (history) and `apps/mobile/store/RELEASING.md` (releases).
+See `docs/PLAN.md` (architecture), `docs/PROGRESS.md` (history), `docs/REDESIGN_PROGRESS.md` (the redesign) and `apps/mobile/store/RELEASING.md` (releases).

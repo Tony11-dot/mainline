@@ -116,12 +116,6 @@ export function tx(text: string, parts: Record<string, ReactNode>): ReactNode {
 /** Marks English kept in a constant (labels, option lists) for the catalog; translate it with t() where it's shown. */
 export const msg = <S extends string>(text: S): S => text;
 
-/** React-friendly accessor kept for existing call sites: `const t = useT(); t('Today')`. */
-export function useT() {
-  useI18n((s) => s.lang);
-  return t;
-}
-
 /** Switch language: load its catalog, then flip `lang` (the App remounts its tree on that key). */
 export async function applyLocale(pref: LocaleId) {
   const lang = resolveLocale(pref);
@@ -141,5 +135,3 @@ export async function applyLocale(pref: LocaleId) {
 
 /** 0.42 → "42%" in the app language (some languages put the sign first or use other digits). */
 export const fmtPercent = (x: number) => new Intl.NumberFormat(intlLocale(), { style: 'percent', maximumFractionDigits: 0 }).format(x);
-
-export const isRtl = () => RTL.has(useI18n.getState().lang);

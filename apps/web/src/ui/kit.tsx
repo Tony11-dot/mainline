@@ -1,4 +1,4 @@
-import { forwardRef, type ButtonHTMLAttributes, type InputHTMLAttributes, type ReactNode } from 'react';
+import { forwardRef, type InputHTMLAttributes, type ReactNode } from 'react';
 import { Link } from 'react-router';
 import { ArrowLeft, ChevronRight, Search, X, type LucideIcon } from 'lucide-react';
 import { t } from '../lib/i18n';
@@ -200,27 +200,6 @@ export function FormRow({ label, hint, children, stack, className = '' }: { labe
   );
 }
 
-/** A row that opens a picker: the label, the current value, a chevron. */
-export function PickerRow({ label, value, hint, onClick, to, className = '' }: { label: ReactNode; value: ReactNode; hint?: ReactNode; onClick?: () => void; to?: string; className?: string }) {
-  const inner = (
-    <>
-      <span className="min-w-0 flex-1">
-        <span className="block text-md font-medium">{label}</span>
-        {hint && <span className="block text-sm text-ink-2">{hint}</span>}
-      </span>
-      <span className="min-w-0 max-w-[50%] truncate text-end text-base text-ink-2">{value}</span>
-      <ChevronRight size={20} className="-me-1 shrink-0 text-ink-3 rtl:rotate-180" aria-hidden />
-    </>
-  );
-  const cls = `pressable flex min-h-[60px] w-full items-center gap-3 px-5 py-3 text-start hover:bg-surface-2 active:bg-surface-3 ${className}`;
-  if (to) return <Link to={to} className={cls}>{inner}</Link>;
-  return (
-    <button type="button" onClick={onClick} className={cls}>
-      {inner}
-    </button>
-  );
-}
-
 /** The on/off switch, on its own row. */
 export function Toggle({ label, hint, checked, onChange, disabled }: { label: string; hint?: string; checked: boolean; onChange: (v: boolean) => void; disabled?: boolean }) {
   return (
@@ -267,14 +246,5 @@ export const SearchField = forwardRef<HTMLInputElement, Omit<InputHTMLAttributes
         </button>
       )}
     </div>
-  );
-});
-
-/** A quiet circular icon button for headers (back, close, more). 44pt target. */
-export const CircleButton = forwardRef<HTMLButtonElement, ButtonHTMLAttributes<HTMLButtonElement> & { icon: LucideIcon; label: string; size?: number }>(function CircleButton({ icon: Icon, label, size = 44, className = '', ...rest }, ref) {
-  return (
-    <button ref={ref} type="button" aria-label={label} title={label} style={{ width: size, height: size }} className={`pressable inline-flex shrink-0 items-center justify-center rounded-full text-ink-2 hover:bg-surface-3 hover:text-ink disabled:pointer-events-none disabled:opacity-35 ${className}`} {...rest}>
-      <Icon size={20} aria-hidden />
-    </button>
   );
 });
