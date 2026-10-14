@@ -30,6 +30,7 @@
  "Added {move} — now choose your reply": "تمت إضافة {move} — اختر الآن ردك",
  "After the first import, new games are checked automatically.": "بعد أول استيراد، تُفحص المباريات الجديدة تلقائيًا.",
  "Again": "مرة أخرى",
+ "All": "الكل",
  "All caught up": "لا شيء متأخر",
  "All four start from Today. Pick the one that fits your time and mood.": "الأربعة كلها تبدأ من «اليوم». اختر ما يناسب وقتك ومزاجك.",
  "All games and variations are merged. Comments become move notes.": "تُدمج كل المباريات والتفريعات. تتحول التعليقات إلى ملاحظات على النقلات.",
@@ -222,6 +223,7 @@
  "In the Games tab, enter your Lichess or Chess.com username and import. MainLine only looks at the openings.": "في لسان «المباريات» أدخل اسم مستخدمك على Lichess أو Chess.com واستورد. لا ينظر MainLine إلا إلى الافتتاحيات.",
  "In your games": "في مبارياتك",
  "In your repertoire": "في ذخيرتك",
+ "In your repertoire all the way": "في ذخيرتك حتى النهاية",
  "In {guided} mode an arrow shows the top pick. Play it, play any other move, or tap a suggestion in the list.": "في وضع {guided} يُظهر سهم الخيار الأفضل. العبه، أو العب أي نقلة أخرى، أو اضغط اقتراحًا من القائمة.",
  "Include replies played in at least": "تضمين الردود التي لُعبت بنسبة لا تقل عن",
  "Increase {setting}": "زيادة {setting}",
@@ -257,6 +259,7 @@
  "Line complete": "اكتمل الخط",
  "Line story": "قصة الخط",
  "Lines": "الخطوط",
+ "Lines to prepare": "خطوط للتحضير",
  "Link your Chess.com account to import your games from it.": "اربط حسابك في Chess.com لاستيراد مبارياتك منه.",
  "Loading openings…": "جارٍ تحميل الافتتاحيات…",
  "London System": "نظام لندن",
@@ -313,8 +316,6 @@
  "No master games": "لا مباريات للأساتذة",
  "No new moves to learn": "لا نقلات جديدة للتعلم",
  "No opening matches “{query}”.": "لا افتتاحية تطابق «{query}».",
- "No overlap with your Black repertoire in their games.": "لا تداخل مع ذخيرتك للأسود في مبارياته.",
- "No overlap with your White repertoire in their games.": "لا تداخل مع ذخيرتك للأبيض في مبارياته.",
  "No positions learned yet": "لم تتعلم أي أوضاع بعد",
  "No repertoires yet.": "لا ذخائر بعد.",
  "No reviews are due. Learn new moves, or come back when positions are due again.": "لا مراجعات مستحقة. تعلّم نقلات جديدة، أو عد عندما تستحق الأوضاع مجددًا.",
@@ -325,6 +326,7 @@
  "Not enough data yet": "لا توجد بيانات كافية بعد",
  "Not in your repertoire": "ليست في ذخيرتك",
  "Not played at this level": "لم تُلعب في هذا المستوى",
+ "Not prepared": "غير محضّرة",
  "Not quite — it’s {move}": "ليس تمامًا — إنها {move}",
  "Not quite. The move is {move}.": "ليس تمامًا. النقلة هي {move}.",
  "Not trained yet": "لم يُتدرَّب عليها بعد",
@@ -549,6 +551,8 @@
  "The tab bar at the bottom of the screen takes you everywhere. On a tablet or a computer, the same tabs sit in the sidebar.": "شريط الألسنة أسفل الشاشة يأخذك إلى كل مكان. على الجهاز اللوحي أو الكمبيوتر توجد الألسنة نفسها في الشريط الجانبي.",
  "The whole line. Tap a move to jump to it.": "الخط كاملًا. اضغط على نقلة للانتقال إليها.",
  "The {board} (on Today) sets up any position or takes a pasted FEN, then analyses it with Stockfish.": "تُعدّ {board} (في «اليوم») أي وضع أو تقبل FEN ملصوقًا، ثم تحلّله باستخدام Stockfish.",
+ "Their answer to {move}": "ردّ الخصم على {move}",
+ "Their first move": "النقلة الأولى للخصم",
  "Their move — no replies yet": "دور الخصم — لا ردود بعد",
  "Their username": "اسم مستخدمه",
  "Themes, boards, piece sets and fonts, plus sound, vibration and language: pick what you like.": "السمات واللوحات وأطقم القطع والخطوط، إضافة إلى الصوت والاهتزاز واللغة: اختر ما يعجبك.",
@@ -645,6 +649,7 @@
  "Your real games, checked against your preparation.": "مبارياتك الحقيقية، مقارنةً بتحضيرك.",
  "Your repertoire": "ذخيرتك",
  "Your repertoire and training sync across devices.": "ذخيرتك وتدريبك متزامنان بين الأجهزة.",
+ "Your repertoire ends after {move}": "تنتهي ذخيرتك بعد {move}",
  "Your repertoire is every move you have decided to play. The Repertoire tab keeps White and Black apart, and sorts each side into folders: first moves, then openings, then their lines.": "ذخيرتك هي كل نقلة قررت أن تلعبها. يفصل لسان «الذخيرة» بين الأبيض والأسود، ويرتب كل جانب في مجلدات: النقلات الأولى أولًا، ثم الافتتاحيات، ثم خطوطها.",
  "Your repertoire is waiting for you.": "ذخيرتك بانتظارك.",
  "Your repertoire misses you": "ذخيرتك تشتاق إليك",
@@ -671,16 +676,14 @@
  "has a note": "لها ملاحظة",
  "in": "في",
  "in your repertoire": "في ذخيرتك",
+ "last played {date}": "آخر مرة {date}",
  "median, correct answers": "الوسيط، الإجابات الصحيحة",
  "missed": "فائت",
  "move {n}": "النقلة {n}",
  "never trained": "لم يُتدرَّب عليها قط",
  "newest first": "الأحدث أولًا",
- "not in your repertoire": "ليست في ذخيرتك",
- "not prepared": "غير محضّرة",
  "not yet": "ليس بعد",
  "practised": "تدرّبت",
- "prepared": "محضّرة",
  "promotes to bishop": "ترقية إلى فيل",
  "promotes to knight": "ترقية إلى حصان",
  "promotes to queen": "ترقية إلى وزير",
@@ -693,7 +696,6 @@
  "still being learnt": "ما زالت قيد التعلم",
  "streak freeze used": "استُخدم تجميد السلسلة",
  "takes {square}": "يأخذ {square}",
- "they play {move}": "يلعب {move}",
  "transposition": "تبديل ترتيب النقلات",
  "unavailable": "غير متاح",
  "unknown": "غير معروف",
@@ -704,7 +706,6 @@
  "you score {score}": "نتيجتك {score}",
  "your Apple ID": "معرّف Apple الخاص بك",
  "your account": "حسابك",
- "you’re prepared": "أنت محضّر",
  "{account} is optional. Sign in with Lichess, Chess.com or Apple to keep your repertoire and training in step across devices. Without an account, everything stays on this device and works offline.": "{account} اختياري. سجّل الدخول عبر Lichess أو Chess.com أو Apple لتبقى ذخيرتك وتدريبك متطابقين على كل أجهزتك. دون حساب يبقى كل شيء على هذا الجهاز ويعمل دون اتصال.",
  "{breaks} shows where each game left your preparation: {surprises} (your opponent played a move you hadn’t prepared, and you can add your answer right there), {forgotten} (you played something other than the move you learned, so that position becomes due again) and {ended} (the game outlasted your line).": "يُظهر {breaks} أين خرجت كل مباراة عن تحضيرك: {surprises} (لعب خصمك نقلة لم تحضّرها، ويمكنك إضافة ردّك هناك مباشرة)، و{forgotten} (لعبت شيئًا غير النقلة التي تعلمتها، فيعود ذلك الوضع مستحقًا للمراجعة)، و{ended} (تجاوزت المباراة نهاية خطك).",
  "{build}: choose the moves you play and the replies you expect from your opponent.": "{build}: اختر النقلات التي تلعبها والردود التي تتوقعها من خصمك.",
@@ -739,7 +740,6 @@
  "{pct} of games there": "{pct} من المباريات هناك",
  "{pct} of {games} · you score {score}": "{pct} من {games} · نتيجتك {score}",
  "{sec} s": "{sec} ث",
- "{share} of their games here · reached in {reach}": "{share} من مبارياته هنا · يُوصل إليه في {reach}",
  "{suggest} ranks your options. {replies} adds the replies you are most likely to meet, so your line is ready for them.": "يرتّب {suggest} خياراتك. ويضيف {replies} الردود التي يُرجّح أن تواجهها، ليكون خطك جاهزًا لها.",
  "{train} appears when positions are due for review. {learn} appears when there are new moves to learn. When neither is needed, you are all caught up.": "يظهر {train} عندما تكون هناك أوضاع مستحقة للمراجعة. ويظهر {learn} عندما توجد نقلات جديدة لتتعلمها. وإن لم يلزم أي منهما فقد أنجزت كل شيء.",
  "{train}: the app tests you on each position just before you would forget it.": "{train}: يختبرك التطبيق في كل وضع قبل أن تنساه مباشرة.",
@@ -752,6 +752,14 @@
  "❄️ Streak freeze used": "❄️ استُخدم تجميد السلسلة",
  "🔥 Day {day} is waiting": "🔥 اليوم {day} بانتظارك",
  "🔥 Still time today": "🔥 ما زال هناك وقت اليوم",
+ "A line goes on while at least {n} of their games follow it.": {
+  "zero": "يستمر الخط ما دام عدد مباريات الخصم التي تتبعه {n} على الأقل.",
+  "one": "يستمر الخط ما دام عدد مباريات الخصم التي تتبعه {n} على الأقل.",
+  "two": "يستمر الخط ما دام عدد مباريات الخصم التي تتبعه {n} على الأقل.",
+  "few": "يستمر الخط ما دام عدد مباريات الخصم التي تتبعه {n} على الأقل.",
+  "many": "يستمر الخط ما دام عدد مباريات الخصم التي تتبعه {n} على الأقل.",
+  "other": "يستمر الخط ما دام عدد مباريات الخصم التي تتبعه {n} على الأقل."
+ },
  "A streak freeze saved your {n}-day streak. Practise today to keep it.": {
   "zero": "أنقذ تجميد السلسلة سلسلتك. تدرّب اليوم للحفاظ عليها.",
   "one": "أنقذ تجميد السلسلة سلسلتك ذات اليوم الواحد. تدرّب اليوم للحفاظ عليها.",
@@ -783,6 +791,22 @@
   "few": "لا تدع {n} أيام تفلت",
   "many": "لا تدع {n} يومًا يفلت",
   "other": "لا تدع {n} يوم يفلت"
+ },
+ "From {n} games where they had Black": {
+  "zero": "لا مباريات لعب فيها الخصم بالأسود",
+  "one": "من مباراة واحدة لعب فيها الخصم بالأسود",
+  "two": "من مباراتين لعب فيهما الخصم بالأسود",
+  "few": "من {n} مباريات لعب فيها الخصم بالأسود",
+  "many": "من {n} مباراة لعب فيها الخصم بالأسود",
+  "other": "من {n} مباراة لعب فيها الخصم بالأسود"
+ },
+ "From {n} games where they had White": {
+  "zero": "لا مباريات لعب فيها الخصم بالأبيض",
+  "one": "من مباراة واحدة لعب فيها الخصم بالأبيض",
+  "two": "من مباراتين لعب فيهما الخصم بالأبيض",
+  "few": "من {n} مباريات لعب فيها الخصم بالأبيض",
+  "many": "من {n} مباراة لعب فيها الخصم بالأبيض",
+  "other": "من {n} مباراة لعب فيها الخصم بالأبيض"
  },
  "Imported {added} moves · {n} problems: {first}": {
   "zero": "تم استيراد {added} نقلة · لا مشكلات: {first}",
@@ -832,6 +856,14 @@
   "many": "الإنجاز التالي: {n} يومًا",
   "other": "الإنجاز التالي: {n} يوم"
  },
+ "Other moves: {n} games": {
+  "zero": "نقلات أخرى: لا مباريات",
+  "one": "نقلات أخرى: مباراة واحدة",
+  "two": "نقلات أخرى: مباراتان",
+  "few": "نقلات أخرى: {n} مباريات",
+  "many": "نقلات أخرى: {n} مباراة",
+  "other": "نقلات أخرى: {n} مباراة"
+ },
  "Practise today to keep your {n}-day streak.": {
   "zero": "تدرّب اليوم لتبدأ سلسلتك.",
   "one": "تدرّب اليوم لتحافظ على سلسلة اليوم الواحد.",
@@ -872,6 +904,14 @@
   "many": "إظهار {n} تفريعة",
   "other": "إظهار {n} تفريعة"
  },
+ "They’ve faced your {move} only {n} times here": {
+  "zero": "لم يواجه الخصم نقلتك {move} هنا",
+  "one": "واجه الخصم نقلتك {move} هنا مرة واحدة فقط",
+  "two": "واجه الخصم نقلتك {move} هنا مرتين فقط",
+  "few": "واجه الخصم نقلتك {move} هنا {n} مرات فقط",
+  "many": "واجه الخصم نقلتك {move} هنا {n} مرة فقط",
+  "other": "واجه الخصم نقلتك {move} هنا {n} مرة فقط"
+ },
  "Your {n}-day streak is at risk": {
   "zero": "سلسلتك في خطر",
   "one": "سلسلة اليوم الواحد في خطر",
@@ -903,6 +943,14 @@
   "few": "{due} تريد نظرة سريعة. واصل سلسلة {n} أيام.",
   "many": "{due} تريد نظرة سريعة. واصل سلسلة {n} يومًا.",
   "other": "{due} تريد نظرة سريعة. واصل سلسلة {n} يوم."
+ },
+ "{name}: {n} recent games": {
+  "zero": "{name}: لا مباريات حديثة",
+  "one": "{name}: مباراة حديثة واحدة",
+  "two": "{name}: مباراتان حديثتان",
+  "few": "{name}: آخر {n} مباريات",
+  "many": "{name}: آخر {n} مباراة",
+  "other": "{name}: آخر {n} مباراة"
  },
  "{n} alternates": {
   "zero": "لا بدائل",
@@ -960,6 +1008,14 @@
   "many": "{n} نقلة",
   "other": "{n} نقلة"
  },
+ "{n} of their games went this way": {
+  "zero": "لم تسلك أي مباراة للخصم هذا الطريق",
+  "one": "مباراة واحدة للخصم سلكت هذا الطريق",
+  "two": "مباراتان للخصم سلكتا هذا الطريق",
+  "few": "{n} مباريات للخصم سلكت هذا الطريق",
+  "many": "{n} مباراة للخصم سلكت هذا الطريق",
+  "other": "{n} مباراة للخصم سلكت هذا الطريق"
+ },
  "{n} positions had no explorer data and were split evenly.": {
   "zero": "كل الأوضاع لها بيانات في المستكشف.",
   "one": "وضع واحد بلا بيانات في المستكشف فقُسِّم بالتساوي.",
@@ -1007,14 +1063,6 @@
   "few": "{n} أوضاع",
   "many": "{n} وضعًا",
   "other": "{n} وضع"
- },
- "{n} recent games analysed.": {
-  "zero": "لم تُحلَّل أي مباراة حديثة.",
-  "one": "حُلِّلت مباراة حديثة واحدة.",
-  "two": "حُلِّلت مباراتان حديثتان.",
-  "few": "حُلِّلت {n} مباريات حديثة.",
-  "many": "حُلِّلت {n} مباراة حديثة.",
-  "other": "حُلِّلت {n} مباراة حديثة."
  },
  "{n} replies prepared": {
   "zero": "لا ردود محضّرة",
@@ -1184,6 +1232,14 @@
   "few": "اعرض {n} مجموعات جاهزة",
   "many": "اعرض {n} مجموعة جاهزة",
   "other": "اعرض {n} مجموعة جاهزة"
+ },
+ "Show {n} more lines": {
+  "zero": "عرض المزيد",
+  "one": "عرض خط آخر",
+  "two": "عرض خطين آخرين",
+  "few": "عرض {n} خطوط أخرى",
+  "many": "عرض {n} خطًا آخر",
+  "other": "عرض {n} خط آخر"
  },
  "You score {score} in {n} games: {w} won, {d} drawn, {l} lost.": {
   "zero": "نتيجتك {score} في {n} مباراة: {w} فوز، {d} تعادل، {l} خسارة.",
@@ -1398,6 +1454,7 @@
  "The line now ends after {move}": "ينتهي الخط الآن بعد {move}",
  "end": "النهاية",
  "{move} branches off this line": "{move} يتفرع عن هذا الخط",
+ "{move} isn’t in your repertoire": "{move} ليست في ذخيرتك",
  "{name} (branch)": "{name} (فرع)",
  "{n} branch points": {
   "zero": "{n} نقاط تفرع",
@@ -1439,6 +1496,8 @@
  "Where do my lines differ from each other?": "أين تختلف خطوطي عن بعضها؟",
  "Which line should I add next?": "أي خط عليّ أن أضيف بعد ذلك؟",
  "You decide how they play: pick a reply, or play any move for them on the board.": "أنت من يقرّر كيف يلعب الخصم: اختر ردًّا، أو العب أي نقلة نيابةً عنه على الرقعة.",
+ "You have no Black repertoire yet: these are the lines to build one for.": "ليست لديك ذخيرة بالأسود بعد: هذه هي الخطوط التي تبني ذخيرتك لمواجهتها.",
+ "You have no White repertoire yet: these are the lines to build one for.": "ليست لديك ذخيرة بالأبيض بعد: هذه هي الخطوط التي تبني ذخيرتك لمواجهتها.",
  "Your question": "سؤالك",
  "e.g. I like quiet positional lines, I hate theory-heavy gambits, I have little time to study.": "مثلًا: أحب الخطوط الموضعية الهادئة، وأكره الغامبيتات المليئة بالنظرية، ووقتي للدراسة قليل.",
  "Ask anything…": "اسأل عن أي شيء…",
@@ -1452,11 +1511,16 @@
  "Page not found": "الصفحة غير موجودة",
  "Something went wrong": "حدث خطأ ما",
  "There’s nothing at this address.": "لا يوجد شيء في هذا العنوان.",
+ "They have no games as Black here.": "لا توجد هنا مباريات للخصم بالأسود.",
+ "They have no games as White here.": "لا توجد هنا مباريات للخصم بالأبيض.",
+ "They haven’t faced it in these games.": "لم يواجه الخصم هذه النقلة في هذه المباريات.",
+ "They haven’t faced your {move} in these games": "لم يواجه الخصم نقلتك {move} في هذه المباريات",
  "Reload the app and try again. Your repertoire and training are saved.": "أعد تحميل التطبيق وحاول مرة أخرى. ذخيرتك وتدريبك محفوظان.",
  "Reload": "إعادة التحميل",
  "Loading…": "جارٍ التحميل…",
  "From the engine and game statistics": "من المحرك وإحصاءات المباريات",
  "the AI coach is resting until tomorrow": "مدرب الذكاء الاصطناعي في استراحة حتى الغد",
+ "they score {pct}": "نتيجة الخصم {pct}",
  "AI coach · grounded in this position’s engine lines and stats": "مدرب الذكاء الاصطناعي · مستند إلى خطوط المحرك وإحصاءات هذا الوضع",
  "{wrong} of {total} wrong": "{wrong} خطأ من {total}",
  "No games as White yet.": "لا توجد مباريات بالأبيض بعد.",

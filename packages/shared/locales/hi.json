@@ -30,6 +30,7 @@
  "Added {move} — now choose your reply": "{move} जोड़ा गया — अब अपना जवाब चुनें",
  "After the first import, new games are checked automatically.": "पहले इंपोर्ट के बाद नए गेम अपने-आप जाँचे जाते हैं।",
  "Again": "फिर से",
+ "All": "सभी",
  "All caught up": "सब पूरा",
  "All four start from Today. Pick the one that fits your time and mood.": "चारों आज स्क्रीन से शुरू होते हैं। जो आपके समय और मूड के हिसाब से ठीक हो, वह चुनें।",
  "All games and variations are merged. Comments become move notes.": "सभी गेम और वेरिएशन मिला दिए जाते हैं। टिप्पणियाँ चालों के नोट बन जाती हैं।",
@@ -222,6 +223,7 @@
  "In the Games tab, enter your Lichess or Chess.com username and import. MainLine only looks at the openings.": "गेम टैब में अपना Lichess या Chess.com यूज़रनेम डालें और इंपोर्ट करें। MainLine सिर्फ़ ओपनिंग देखता है।",
  "In your games": "आपके गेम में",
  "In your repertoire": "आपके रिपर्टरी में",
+ "In your repertoire all the way": "पूरी तरह आपके रिपर्टरी में",
  "In {guided} mode an arrow shows the top pick. Play it, play any other move, or tap a suggestion in the list.": "{guided} मोड में एक तीर सबसे अच्छा विकल्प दिखाता है। उसे चलें, कोई और चाल चलें, या सूची में किसी सुझाव पर टैप करें।",
  "Include replies played in at least": "कम से कम इतने में खेले गए जवाब शामिल करें",
  "Increase {setting}": "{setting} बढ़ाएँ",
@@ -257,6 +259,7 @@
  "Line complete": "लाइन पूरी",
  "Line story": "लाइन की कहानी",
  "Lines": "लाइनें",
+ "Lines to prepare": "तैयारी के लिए लाइनें",
  "Link your Chess.com account to import your games from it.": "अपने गेम इंपोर्ट करने के लिए अपना Chess.com खाता जोड़ें।",
  "Loading openings…": "ओपनिंग्स लोड हो रही हैं…",
  "London System": "लंदन सिस्टम",
@@ -313,8 +316,6 @@
  "No master games": "कोई मास्टर गेम नहीं",
  "No new moves to learn": "सीखने के लिए कोई नई चाल नहीं",
  "No opening matches “{query}”.": "“{query}” से कोई ओपनिंग मेल नहीं खाती।",
- "No overlap with your Black repertoire in their games.": "उनके गेम में आपके काले के रिपर्टरी से कोई मेल नहीं।",
- "No overlap with your White repertoire in their games.": "उनके गेम में आपके सफ़ेद के रिपर्टरी से कोई मेल नहीं।",
  "No positions learned yet": "अभी कोई पोज़िशन नहीं सीखी",
  "No repertoires yet.": "अभी कोई रिपर्टरी नहीं।",
  "No reviews are due. Learn new moves, or come back when positions are due again.": "कोई रिव्यू बाकी नहीं। नई चालें सीखें, या जब पोज़िशन फिर बाकी हों तब लौटें।",
@@ -325,6 +326,7 @@
  "Not enough data yet": "अभी पर्याप्त डेटा नहीं",
  "Not in your repertoire": "आपके रिपर्टरी में नहीं",
  "Not played at this level": "इस स्तर पर नहीं खेली गई",
+ "Not prepared": "तैयार नहीं",
  "Not quite — it’s {move}": "पूरी तरह नहीं — सही चाल {move} है",
  "Not quite. The move is {move}.": "पूरी तरह नहीं। सही चाल {move} है।",
  "Not trained yet": "अभी ट्रेन नहीं हुई",
@@ -549,6 +551,8 @@
  "The tab bar at the bottom of the screen takes you everywhere. On a tablet or a computer, the same tabs sit in the sidebar.": "स्क्रीन के नीचे का टैब बार आपको हर जगह ले जाता है। टैबलेट या कंप्यूटर पर वही टैब साइडबार में होते हैं।",
  "The whole line. Tap a move to jump to it.": "पूरी लाइन। किसी चाल पर टैप करके वहाँ जाएँ।",
  "The {board} (on Today) sets up any position or takes a pasted FEN, then analyses it with Stockfish.": "{board} (आज स्क्रीन पर) कोई भी पोज़िशन जमाता है या चिपकाया गया FEN लेता है, फिर उसका Stockfish से विश्लेषण करता है।",
+ "Their answer to {move}": "{move} पर उनका जवाब",
+ "Their first move": "उनकी पहली चाल",
  "Their move — no replies yet": "उनकी चाल — अभी कोई जवाब नहीं",
  "Their username": "उनका यूज़रनेम",
  "Themes, boards, piece sets and fonts, plus sound, vibration and language: pick what you like.": "थीम, बोर्ड, मोहरों के सेट और फ़ॉन्ट, साथ ही आवाज़, वाइब्रेशन और भाषा: जो पसंद हो चुनें।",
@@ -645,6 +649,7 @@
  "Your real games, checked against your preparation.": "आपके असली गेम, आपकी तैयारी से मिलाकर।",
  "Your repertoire": "आपकी रिपर्टरी",
  "Your repertoire and training sync across devices.": "आपका रिपर्टरी और ट्रेनिंग सभी डिवाइस पर सिंक होते हैं।",
+ "Your repertoire ends after {move}": "आपका रिपर्टरी {move} के बाद खत्म होता है",
  "Your repertoire is every move you have decided to play. The Repertoire tab keeps White and Black apart, and sorts each side into folders: first moves, then openings, then their lines.": "आपकी रिपर्टरी हर वह चाल है जो आपने खेलने का फ़ैसला किया है। रिपर्टरी टैब सफ़ेद और काले को अलग रखता है, और हर पक्ष को फ़ोल्डरों में बाँटता है: पहले पहली चालें, फिर ओपनिंग, फिर उनकी लाइनें।",
  "Your repertoire is waiting for you.": "आपका रिपर्टरी आपका इंतज़ार कर रहा है।",
  "Your repertoire misses you": "आपका रिपर्टरी आपको याद कर रहा है",
@@ -671,16 +676,14 @@
  "has a note": "नोट है",
  "in": "में",
  "in your repertoire": "आपके रिपर्टरी में",
+ "last played {date}": "आखिरी बार {date}",
  "median, correct answers": "माध्यिका, सही जवाब",
  "missed": "चूकी",
  "move {n}": "चाल {n}",
  "never trained": "कभी ट्रेन नहीं हुई",
  "newest first": "नया पहले",
- "not in your repertoire": "आपके रिपर्टरी में नहीं",
- "not prepared": "तैयार नहीं",
  "not yet": "अभी नहीं",
  "practised": "अभ्यास हुआ",
- "prepared": "तैयार",
  "promotes to bishop": "ऊँट में प्रमोट होता है",
  "promotes to knight": "घोड़े में प्रमोट होता है",
  "promotes to queen": "रानी में प्रमोट होता है",
@@ -693,7 +696,6 @@
  "still being learnt": "अभी सीखी जा रही",
  "streak freeze used": "स्ट्रीक फ़्रीज़ इस्तेमाल हुआ",
  "takes {square}": "{square} पर मारता है",
- "they play {move}": "वे {move} खेलते हैं",
  "transposition": "ट्रांसपोज़िशन",
  "unavailable": "उपलब्ध नहीं",
  "unknown": "अज्ञात",
@@ -704,7 +706,6 @@
  "you score {score}": "आपका स्कोर {score}",
  "your Apple ID": "आपकी Apple ID",
  "your account": "आपका खाता",
- "you’re prepared": "आप तैयार हैं",
  "{account} is optional. Sign in with Lichess, Chess.com or Apple to keep your repertoire and training in step across devices. Without an account, everything stays on this device and works offline.": "{account} वैकल्पिक है। Lichess, Chess.com या Apple से साइन इन करें ताकि आपकी रिपर्टरी और ट्रेनिंग सभी डिवाइस पर एक जैसी रहें। खाते के बिना सब कुछ इसी डिवाइस पर रहता है और ऑफ़लाइन काम करता है।",
  "{breaks} shows where each game left your preparation: {surprises} (your opponent played a move you hadn’t prepared, and you can add your answer right there), {forgotten} (you played something other than the move you learned, so that position becomes due again) and {ended} (the game outlasted your line).": "{breaks} दिखाता है कि हर गेम आपकी तैयारी से कहाँ बाहर निकला: {surprises} (विरोधी ने ऐसी चाल चली जिसकी आपने तैयारी नहीं की थी, और आप वहीं अपना जवाब जोड़ सकते हैं), {forgotten} (आपने सीखी हुई चाल के बजाय कुछ और चला, इसलिए वह पोज़िशन फिर से बाकी हो जाती है) और {ended} (गेम आपकी लाइन से आगे चला गया)।",
  "{build}: choose the moves you play and the replies you expect from your opponent.": "{build}: वे चालें चुनें जो आप खेलते हैं और वे जवाब जिनकी आप विरोधी से उम्मीद करते हैं।",
@@ -739,7 +740,6 @@
  "{pct} of games there": "वहाँ {pct} गेम",
  "{pct} of {games} · you score {score}": "{games} का {pct} · आपका स्कोर {score}",
  "{sec} s": "{sec} सेकंड",
- "{share} of their games here · reached in {reach}": "उनके {share} गेम यहाँ · {reach} में पहुँचते हैं",
  "{suggest} ranks your options. {replies} adds the replies you are most likely to meet, so your line is ready for them.": "{suggest} आपके विकल्पों को क्रम देता है। {replies} वे जवाब जोड़ता है जिनसे आपका सामना होने की सबसे ज़्यादा संभावना है, ताकि आपकी लाइन उनके लिए तैयार रहे।",
  "{train} appears when positions are due for review. {learn} appears when there are new moves to learn. When neither is needed, you are all caught up.": "{train} तब दिखता है जब पोज़िशन रिव्यू के लिए बाकी हों। {learn} तब दिखता है जब सीखने को नई चालें हों। जब दोनों की ज़रूरत न हो, तो सब पूरा है।",
  "{train}: the app tests you on each position just before you would forget it.": "{train}: ऐप हर पोज़िशन ठीक उससे पहले पूछता है जब आप उसे भूलने वाले हों।",
@@ -752,6 +752,10 @@
  "❄️ Streak freeze used": "❄️ स्ट्रीक फ़्रीज़ इस्तेमाल हुआ",
  "🔥 Day {day} is waiting": "🔥 दिन {day} इंतज़ार कर रहा है",
  "🔥 Still time today": "🔥 आज अभी भी समय है",
+ "A line goes on while at least {n} of their games follow it.": {
+  "one": "जब तक उनके कम से कम {n} गेम किसी लाइन पर चलते हैं, वह लाइन आगे बढ़ती है।",
+  "other": "जब तक उनके कम से कम {n} गेम किसी लाइन पर चलते हैं, वह लाइन आगे बढ़ती है।"
+ },
  "A streak freeze saved your {n}-day streak. Practise today to keep it.": {
   "one": "एक स्ट्रीक फ़्रीज़ ने आपकी {n} दिन की स्ट्रीक बचा ली। इसे बनाए रखने के लिए आज अभ्यास करें।",
   "other": "एक स्ट्रीक फ़्रीज़ ने आपकी {n} दिन की स्ट्रीक बचा ली। इसे बनाए रखने के लिए आज अभ्यास करें।"
@@ -767,6 +771,14 @@
  "Don’t let {n} days slip": {
   "one": "{n} दिन हाथ से न जाने दें",
   "other": "{n} दिन हाथ से न जाने दें"
+ },
+ "From {n} games where they had Black": {
+  "one": "{n} गेम से, जिसमें वे काले थे",
+  "other": "{n} गेम से, जिनमें वे काले थे"
+ },
+ "From {n} games where they had White": {
+  "one": "{n} गेम से, जिसमें वे सफ़ेद थे",
+  "other": "{n} गेम से, जिनमें वे सफ़ेद थे"
  },
  "Imported {added} moves · {n} problems: {first}": {
   "one": "{added} चालें इंपोर्ट हुईं · {n} समस्या: {first}",
@@ -792,6 +804,10 @@
   "one": "अगला पड़ाव: {n} दिन",
   "other": "अगला पड़ाव: {n} दिन"
  },
+ "Other moves: {n} games": {
+  "one": "दूसरी चालें: {n} गेम",
+  "other": "दूसरी चालें: {n} गेम"
+ },
  "Practise today to keep your {n}-day streak.": {
   "one": "अपनी {n} दिन की स्ट्रीक बनाए रखने के लिए आज अभ्यास करें।",
   "other": "अपनी {n} दिन की स्ट्रीक बनाए रखने के लिए आज अभ्यास करें।"
@@ -812,6 +828,10 @@
   "one": "{n} वेरिएशन दिखाएँ",
   "other": "{n} वेरिएशन दिखाएँ"
  },
+ "They’ve faced your {move} only {n} times here": {
+  "one": "यहाँ आपकी {move} से उनका सामना सिर्फ़ एक बार हुआ",
+  "other": "यहाँ आपकी {move} से उनका सामना सिर्फ़ {n} बार हुआ"
+ },
  "Your {n}-day streak is at risk": {
   "one": "आपकी {n} दिन की स्ट्रीक ख़तरे में है",
   "other": "आपकी {n} दिन की स्ट्रीक ख़तरे में है"
@@ -827,6 +847,10 @@
  "{due} want a quick look. Keep the {n}-day streak going.": {
   "one": "{due} एक नज़र चाहती हैं। {n} दिन की स्ट्रीक जारी रखें।",
   "other": "{due} एक नज़र चाहती हैं। {n} दिन की स्ट्रीक जारी रखें।"
+ },
+ "{name}: {n} recent games": {
+  "one": "{name}: हाल के {n} गेम",
+  "other": "{name}: हाल के {n} गेम"
  },
  "{n} alternates": {
   "one": "{n} विकल्प",
@@ -856,6 +880,10 @@
   "one": "{n} चाल",
   "other": "{n} चालें"
  },
+ "{n} of their games went this way": {
+  "one": "उनका {n} गेम इसी तरह चला",
+  "other": "उनके {n} गेम इसी तरह चले"
+ },
  "{n} positions had no explorer data and were split evenly.": {
   "one": "{n} पोज़िशन का एक्सप्लोरर डेटा नहीं था और उसे बराबर बाँटा गया।",
   "other": "{n} पोज़िशन का एक्सप्लोरर डेटा नहीं था और उन्हें बराबर बाँटा गया।"
@@ -879,10 +907,6 @@
  "{n} positions": {
   "one": "{n} पोज़िशन",
   "other": "{n} पोज़िशन"
- },
- "{n} recent games analysed.": {
-  "one": "हाल का {n} गेम विश्लेषित।",
-  "other": "हाल के {n} गेम विश्लेषित।"
  },
  "{n} replies prepared": {
   "one": "{n} जवाब तैयार",
@@ -1004,6 +1028,10 @@
  "See {n} ready-made sets": {
   "one": "{n} तैयार सेट देखें",
   "other": "{n} तैयार सेट देखें"
+ },
+ "Show {n} more lines": {
+  "one": "{n} और लाइन दिखाएँ",
+  "other": "{n} और लाइनें दिखाएँ"
  },
  "You score {score} in {n} games: {w} won, {d} drawn, {l} lost.": {
   "one": "{n} गेम में आपका स्कोर {score}: {w} जीते, {d} ड्रॉ, {l} हारे।",
@@ -1154,6 +1182,7 @@
  "The line now ends after {move}": "लाइन अब {move} के बाद ख़त्म होती है",
  "end": "अंत",
  "{move} branches off this line": "{move} इस लाइन से अलग शाखा है",
+ "{move} isn’t in your repertoire": "{move} आपके रिपर्टरी में नहीं है",
  "{name} (branch)": "{name} (शाखा)",
  "{n} branch points": {
   "one": "{n} शाखा बिंदु",
@@ -1187,6 +1216,8 @@
  "Where do my lines differ from each other?": "मेरी लाइनें आपस में कहाँ अलग होती हैं?",
  "Which line should I add next?": "अब मुझे कौन-सी लाइन जोड़नी चाहिए?",
  "You decide how they play: pick a reply, or play any move for them on the board.": "वे कैसे खेलें, यह आप तय करते हैं: कोई जवाब चुनें, या बोर्ड पर उनकी ओर से कोई भी चाल चलें।",
+ "You have no Black repertoire yet: these are the lines to build one for.": "आपके पास अभी काले का रिपर्टरी नहीं है: इन्हीं लाइनों के लिए एक बनाइए।",
+ "You have no White repertoire yet: these are the lines to build one for.": "आपके पास अभी सफ़ेद का रिपर्टरी नहीं है: इन्हीं लाइनों के लिए एक बनाइए।",
  "Your question": "आपका सवाल",
  "e.g. I like quiet positional lines, I hate theory-heavy gambits, I have little time to study.": "जैसे: मुझे शांत पोज़िशनल लाइनें पसंद हैं, ढेर सारी थ्योरी वाले गैम्बिट नापसंद हैं, पढ़ने का समय कम है।",
  "Ask anything…": "कुछ भी पूछें…",
@@ -1200,11 +1231,16 @@
  "Page not found": "पेज नहीं मिला",
  "Something went wrong": "कुछ गलत हो गया",
  "There’s nothing at this address.": "इस पते पर कुछ नहीं है।",
+ "They have no games as Black here.": "यहाँ उनका काले मोहरों से कोई गेम नहीं है।",
+ "They have no games as White here.": "यहाँ उनका सफ़ेद मोहरों से कोई गेम नहीं है।",
+ "They haven’t faced it in these games.": "इन गेम्स में उनका इससे सामना नहीं हुआ।",
+ "They haven’t faced your {move} in these games": "इन गेम्स में आपकी {move} से उनका सामना नहीं हुआ",
  "Reload the app and try again. Your repertoire and training are saved.": "ऐप को फिर से लोड करें और दोबारा कोशिश करें। आपका रिपर्टोयर और ट्रेनिंग सहेजे गए हैं।",
  "Reload": "फिर से लोड करें",
  "Loading…": "लोड हो रहा है…",
  "From the engine and game statistics": "इंजन और गेम आँकड़ों से",
  "the AI coach is resting until tomorrow": "AI कोच कल तक आराम कर रहा है",
+ "they score {pct}": "उनका स्कोर {pct}",
  "AI coach · grounded in this position’s engine lines and stats": "AI कोच · इस पोज़िशन की इंजन लाइनों और आँकड़ों पर आधारित",
  "{wrong} of {total} wrong": "{total} में से {wrong} गलत",
  "No games as White yet.": "अभी सफ़ेद से कोई गेम नहीं।",

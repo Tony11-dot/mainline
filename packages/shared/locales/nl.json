@@ -30,6 +30,7 @@
  "Added {move} — now choose your reply": "{move} toegevoegd — kies nu je antwoord",
  "After the first import, new games are checked automatically.": "Na de eerste import worden nieuwe partijen automatisch gecontroleerd.",
  "Again": "Opnieuw",
+ "All": "Alle",
  "All caught up": "Helemaal bij",
  "All four start from Today. Pick the one that fits your time and mood.": "Alle vier start je vanuit Vandaag. Kies wat past bij je tijd en je stemming.",
  "All games and variations are merged. Comments become move notes.": "Alle partijen en varianten worden samengevoegd. Commentaar wordt een notitie bij de zet.",
@@ -222,6 +223,7 @@
  "In the Games tab, enter your Lichess or Chess.com username and import. MainLine only looks at the openings.": "Vul op het tabblad Partijen je gebruikersnaam van Lichess of Chess.com in en importeer. MainLine kijkt alleen naar de openingen.",
  "In your games": "In je partijen",
  "In your repertoire": "In je repertoire",
+ "In your repertoire all the way": "Helemaal in je repertoire",
  "In {guided} mode an arrow shows the top pick. Play it, play any other move, or tap a suggestion in the list.": "In de modus {guided} wijst een pijl de beste keuze aan. Speel die, speel een andere zet of tik op een suggestie in de lijst.",
  "Include replies played in at least": "Antwoorden opnemen die minstens gespeeld worden in",
  "Increase {setting}": "{setting} verhogen",
@@ -257,6 +259,7 @@
  "Line complete": "Variant voltooid",
  "Line story": "Verhaal van de variant",
  "Lines": "Varianten",
+ "Lines to prepare": "Varianten om voor te bereiden",
  "Link your Chess.com account to import your games from it.": "Koppel je Chess.com-account om je partijen daarvandaan te importeren.",
  "Loading openings…": "Openingen laden…",
  "London System": "Londen-systeem",
@@ -313,8 +316,6 @@
  "No master games": "Geen meesterpartijen",
  "No new moves to learn": "Geen nieuwe zetten om te leren",
  "No opening matches “{query}”.": "Geen opening gevonden voor “{query}”.",
- "No overlap with your Black repertoire in their games.": "Geen overlap met je repertoire met zwart in diens partijen.",
- "No overlap with your White repertoire in their games.": "Geen overlap met je repertoire met wit in diens partijen.",
  "No positions learned yet": "Nog geen stellingen geleerd",
  "No repertoires yet.": "Nog geen repertoires.",
  "No reviews are due. Learn new moves, or come back when positions are due again.": "Er staat niets te herhalen. Leer nieuwe zetten of kom terug wanneer stellingen weer aan de beurt zijn.",
@@ -325,6 +326,7 @@
  "Not enough data yet": "Nog niet genoeg gegevens",
  "Not in your repertoire": "Niet in je repertoire",
  "Not played at this level": "Niet gespeeld op dit niveau",
+ "Not prepared": "Niet voorbereid",
  "Not quite — it’s {move}": "Net niet — het is {move}",
  "Not quite. The move is {move}.": "Net niet. De zet is {move}.",
  "Not trained yet": "Nog niet getraind",
@@ -549,6 +551,8 @@
  "The tab bar at the bottom of the screen takes you everywhere. On a tablet or a computer, the same tabs sit in the sidebar.": "De tabbalk onderaan het scherm brengt je overal. Op een tablet of computer staan dezelfde tabbladen in de zijbalk.",
  "The whole line. Tap a move to jump to it.": "De hele variant. Tik op een zet om ernaartoe te springen.",
  "The {board} (on Today) sets up any position or takes a pasted FEN, then analyses it with Stockfish.": "Het {board} (op Vandaag) zet elke stelling op of neemt een geplakte FEN over, en analyseert die dan met Stockfish.",
+ "Their answer to {move}": "Antwoord op {move}",
+ "Their first move": "Eerste zet",
  "Their move — no replies yet": "Hun zet — nog geen antwoorden",
  "Their username": "Diens gebruikersnaam",
  "Themes, boards, piece sets and fonts, plus sound, vibration and language: pick what you like.": "Thema’s, borden, stukkensets en lettertypen, plus geluid, trillen en taal: kies wat je mooi vindt.",
@@ -645,6 +649,7 @@
  "Your real games, checked against your preparation.": "Je echte partijen, vergeleken met je voorbereiding.",
  "Your repertoire": "Je repertoire",
  "Your repertoire and training sync across devices.": "Je repertoire en training worden gesynchroniseerd tussen apparaten.",
+ "Your repertoire ends after {move}": "Je repertoire eindigt na {move}",
  "Your repertoire is every move you have decided to play. The Repertoire tab keeps White and Black apart, and sorts each side into folders: first moves, then openings, then their lines.": "Je repertoire is elke zet die je hebt besloten te spelen. Het tabblad Repertoire houdt Wit en Zwart gescheiden en sorteert elke kant in mappen: eerst de eerste zetten, dan de openingen, dan hun varianten.",
  "Your repertoire is waiting for you.": "Je repertoire wacht op je.",
  "Your repertoire misses you": "Je repertoire mist je",
@@ -671,16 +676,14 @@
  "has a note": "heeft een notitie",
  "in": "in",
  "in your repertoire": "in je repertoire",
+ "last played {date}": "laatst gespeeld op {date}",
  "median, correct answers": "mediaan, juiste antwoorden",
  "missed": "gemist",
  "move {n}": "zet {n}",
  "never trained": "nooit getraind",
  "newest first": "nieuwste eerst",
- "not in your repertoire": "niet in je repertoire",
- "not prepared": "niet voorbereid",
  "not yet": "nog niet",
  "practised": "geoefend",
- "prepared": "voorbereid",
  "promotes to bishop": "promoveert tot loper",
  "promotes to knight": "promoveert tot paard",
  "promotes to queen": "promoveert tot dame",
@@ -693,7 +696,6 @@
  "still being learnt": "nog aan het leren",
  "streak freeze used": "reeksbevriezing gebruikt",
  "takes {square}": "slaat op {square}",
- "they play {move}": "zij spelen {move}",
  "transposition": "zetverwisseling",
  "unavailable": "niet beschikbaar",
  "unknown": "onbekend",
@@ -704,7 +706,6 @@
  "you score {score}": "je scoort {score}",
  "your Apple ID": "je Apple ID",
  "your account": "je account",
- "you’re prepared": "je bent voorbereid",
  "{account} is optional. Sign in with Lichess, Chess.com or Apple to keep your repertoire and training in step across devices. Without an account, everything stays on this device and works offline.": "Een {account} is optioneel. Log in met Lichess, Chess.com of Apple om je repertoire en training op al je apparaten gelijk te houden. Zonder account blijft alles op dit apparaat en werkt het offline.",
  "{breaks} shows where each game left your preparation: {surprises} (your opponent played a move you hadn’t prepared, and you can add your answer right there), {forgotten} (you played something other than the move you learned, so that position becomes due again) and {ended} (the game outlasted your line).": "{breaks} laat zien waar elke partij je voorbereiding verliet: {surprises} (je tegenstander speelde een zet die je niet had voorbereid, en je kunt je antwoord daar meteen toevoegen), {forgotten} (je speelde iets anders dan de zet die je leerde, dus die stelling komt weer aan de beurt) en {ended} (de partij ging verder dan je variant).",
  "{build}: choose the moves you play and the replies you expect from your opponent.": "{build}: kies de zetten die je speelt en de antwoorden die je van je tegenstander verwacht.",
@@ -739,7 +740,6 @@
  "{pct} of games there": "{pct} van de partijen daar",
  "{pct} of {games} · you score {score}": "{pct} van {games} · je scoort {score}",
  "{sec} s": "{sec} s",
- "{share} of their games here · reached in {reach}": "{share} van diens partijen hier · bereikt in {reach}",
  "{suggest} ranks your options. {replies} adds the replies you are most likely to meet, so your line is ready for them.": "{suggest} rangschikt je opties. {replies} voegt de antwoorden toe die je het vaakst zult tegenkomen, zodat je variant er klaar voor is.",
  "{train} appears when positions are due for review. {learn} appears when there are new moves to learn. When neither is needed, you are all caught up.": "{train} verschijnt als er stellingen klaarstaan om te herhalen. {learn} verschijnt als er nieuwe zetten te leren zijn. Is geen van beide nodig, dan ben je bij.",
  "{train}: the app tests you on each position just before you would forget it.": "{train}: de app overhoort je op elke stelling net voordat je die zou vergeten.",
@@ -752,6 +752,10 @@
  "❄️ Streak freeze used": "❄️ Reeksbevriezing gebruikt",
  "🔥 Day {day} is waiting": "🔥 Dag {day} wacht op je",
  "🔥 Still time today": "🔥 Vandaag is er nog tijd",
+ "A line goes on while at least {n} of their games follow it.": {
+  "one": "Een variant gaat door zolang minstens {n} van hun partijen hem volgt.",
+  "other": "Een variant gaat door zolang minstens {n} van hun partijen hem volgen."
+ },
  "A streak freeze saved your {n}-day streak. Practise today to keep it.": {
   "one": "Een reeksbevriezing redde je reeks van {n} dag. Oefen vandaag om hem te behouden.",
   "other": "Een reeksbevriezing redde je reeks van {n} dagen. Oefen vandaag om hem te behouden."
@@ -767,6 +771,14 @@
  "Don’t let {n} days slip": {
   "one": "Laat {n} dag niet verloren gaan",
   "other": "Laat {n} dagen niet verloren gaan"
+ },
+ "From {n} games where they had Black": {
+  "one": "Uit {n} partij waarin de tegenstander zwart had",
+  "other": "Uit {n} partijen waarin de tegenstander zwart had"
+ },
+ "From {n} games where they had White": {
+  "one": "Uit {n} partij waarin de tegenstander wit had",
+  "other": "Uit {n} partijen waarin de tegenstander wit had"
  },
  "Imported {added} moves · {n} problems: {first}": {
   "one": "{added} zetten geïmporteerd · {n} probleem: {first}",
@@ -792,6 +804,10 @@
   "one": "Volgende mijlpaal: {n} dag",
   "other": "Volgende mijlpaal: {n} dagen"
  },
+ "Other moves: {n} games": {
+  "one": "Andere zetten: {n} partij",
+  "other": "Andere zetten: {n} partijen"
+ },
  "Practise today to keep your {n}-day streak.": {
   "one": "Oefen vandaag om je reeks van {n} dag te behouden.",
   "other": "Oefen vandaag om je reeks van {n} dagen te behouden."
@@ -812,6 +828,10 @@
   "one": "{n} variant tonen",
   "other": "{n} varianten tonen"
  },
+ "They’ve faced your {move} only {n} times here": {
+  "one": "Je {move} kwam hier maar één keer voor",
+  "other": "Je {move} kwam hier maar {n} keer voor"
+ },
  "Your {n}-day streak is at risk": {
   "one": "Je reeks van {n} dag loopt gevaar",
   "other": "Je reeks van {n} dagen loopt gevaar"
@@ -827,6 +847,10 @@
  "{due} want a quick look. Keep the {n}-day streak going.": {
   "one": "{due} willen een snelle blik. Houd de reeks van {n} dag vast.",
   "other": "{due} willen een snelle blik. Houd de reeks van {n} dagen vast."
+ },
+ "{name}: {n} recent games": {
+  "one": "{name}: {n} recente partij",
+  "other": "{name}: {n} recente partijen"
  },
  "{n} alternates": {
   "one": "{n} alternatief",
@@ -856,6 +880,10 @@
   "one": "{n} zet",
   "other": "{n} zetten"
  },
+ "{n} of their games went this way": {
+  "one": "{n} van hun partijen ging zo",
+  "other": "{n} van hun partijen gingen zo"
+ },
  "{n} positions had no explorer data and were split evenly.": {
   "one": "{n} stelling had geen explorer-gegevens en is gelijk verdeeld.",
   "other": "{n} stellingen hadden geen explorer-gegevens en zijn gelijk verdeeld."
@@ -879,10 +907,6 @@
  "{n} positions": {
   "one": "{n} stelling",
   "other": "{n} stellingen"
- },
- "{n} recent games analysed.": {
-  "one": "{n} recente partij geanalyseerd.",
-  "other": "{n} recente partijen geanalyseerd."
  },
  "{n} replies prepared": {
   "one": "{n} antwoord voorbereid",
@@ -1004,6 +1028,10 @@
  "See {n} ready-made sets": {
   "one": "{n} kant-en-klare set bekijken",
   "other": "{n} kant-en-klare sets bekijken"
+ },
+ "Show {n} more lines": {
+  "one": "Nog {n} variant tonen",
+  "other": "Nog {n} varianten tonen"
  },
  "You score {score} in {n} games: {w} won, {d} drawn, {l} lost.": {
   "one": "Je scoort {score} in {n} partij: {w} gewonnen, {d} remise, {l} verloren.",
@@ -1154,6 +1182,7 @@
  "The line now ends after {move}": "De variant eindigt nu na {move}",
  "end": "einde",
  "{move} branches off this line": "{move} takt af van deze variant",
+ "{move} isn’t in your repertoire": "{move} staat niet in je repertoire",
  "{name} (branch)": "{name} (aftakking)",
  "{n} branch points": {
   "one": "{n} aftakking",
@@ -1187,6 +1216,8 @@
  "Where do my lines differ from each other?": "Waarin verschillen mijn lijnen van elkaar?",
  "Which line should I add next?": "Welke lijn moet ik nu toevoegen?",
  "You decide how they play: pick a reply, or play any move for them on the board.": "Jij bepaalt hoe zij spelen: kies een antwoord of speel een willekeurige zet voor hen op het bord.",
+ "You have no Black repertoire yet: these are the lines to build one for.": "Je hebt nog geen repertoire met zwart: dit zijn de varianten om er een voor op te bouwen.",
+ "You have no White repertoire yet: these are the lines to build one for.": "Je hebt nog geen repertoire met wit: dit zijn de varianten om er een voor op te bouwen.",
  "Your question": "Je vraag",
  "e.g. I like quiet positional lines, I hate theory-heavy gambits, I have little time to study.": "bijv. Ik hou van rustige positionele lijnen, ik haat gambieten met veel theorie, ik heb weinig tijd om te studeren.",
  "Ask anything…": "Vraag maar raak…",
@@ -1200,11 +1231,16 @@
  "Page not found": "Pagina niet gevonden",
  "Something went wrong": "Er is iets misgegaan",
  "There’s nothing at this address.": "Er is niets op dit adres.",
+ "They have no games as Black here.": "Geen partijen met zwart hier.",
+ "They have no games as White here.": "Geen partijen met wit hier.",
+ "They haven’t faced it in these games.": "Kwam in deze partijen niet voor.",
+ "They haven’t faced your {move} in these games": "Je {move} kwam in deze partijen niet voor",
  "Reload the app and try again. Your repertoire and training are saved.": "Laad de app opnieuw en probeer het nog eens. Je repertoire en training zijn opgeslagen.",
  "Reload": "Opnieuw laden",
  "Loading…": "Laden…",
  "From the engine and game statistics": "Uit de engine en de partijstatistieken",
  "the AI coach is resting until tomorrow": "de AI-coach rust tot morgen",
+ "they score {pct}": "tegenstander scoort {pct}",
  "AI coach · grounded in this position’s engine lines and stats": "AI-coach · gebaseerd op de engine-varianten en statistieken van deze stelling",
  "{wrong} of {total} wrong": "{wrong} van {total} fout",
  "No games as White yet.": "Nog geen partijen met wit.",

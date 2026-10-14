@@ -30,6 +30,7 @@
  "Added {move} — now choose your reply": "{move} ditambahkan — sekarang pilih balasanmu",
  "After the first import, new games are checked automatically.": "Setelah impor pertama, permainan baru diperiksa otomatis.",
  "Again": "Lagi",
+ "All": "Semua",
  "All caught up": "Semua beres",
  "All four start from Today. Pick the one that fits your time and mood.": "Keempatnya dimulai dari Hari Ini. Pilih yang cocok dengan waktu dan suasana hatimu.",
  "All games and variations are merged. Comments become move notes.": "Semua permainan dan variasi digabung. Komentar menjadi catatan langkah.",
@@ -222,6 +223,7 @@
  "In the Games tab, enter your Lichess or Chess.com username and import. MainLine only looks at the openings.": "Di tab Permainan, masukkan nama pengguna Lichess atau Chess.com-mu lalu impor. MainLine hanya melihat pembukaannya.",
  "In your games": "Dalam permainanmu",
  "In your repertoire": "Dalam repertoarmu",
+ "In your repertoire all the way": "Seluruhnya ada di repertoarmu",
  "In {guided} mode an arrow shows the top pick. Play it, play any other move, or tap a suggestion in the list.": "Dalam mode {guided}, panah menunjukkan pilihan teratas. Mainkan itu, mainkan langkah lain, atau ketuk saran di daftar.",
  "Include replies played in at least": "Sertakan balasan yang dimainkan setidaknya dalam",
  "Increase {setting}": "Tambah {setting}",
@@ -257,6 +259,7 @@
  "Line complete": "Variasi selesai",
  "Line story": "Kisah variasi",
  "Lines": "Variasi",
+ "Lines to prepare": "Variasi untuk dipersiapkan",
  "Link your Chess.com account to import your games from it.": "Tautkan akun Chess.com-mu untuk mengimpor permainanmu dari sana.",
  "Loading openings…": "Memuat pembukaan…",
  "London System": "Sistem London",
@@ -313,8 +316,6 @@
  "No master games": "Tidak ada permainan master",
  "No new moves to learn": "Tidak ada langkah baru untuk dipelajari",
  "No opening matches “{query}”.": "Tidak ada pembukaan yang cocok dengan “{query}”.",
- "No overlap with your Black repertoire in their games.": "Tidak ada irisan dengan repertoar Hitam-mu dalam permainannya.",
- "No overlap with your White repertoire in their games.": "Tidak ada irisan dengan repertoar Putih-mu dalam permainannya.",
  "No positions learned yet": "Belum ada posisi yang dipelajari",
  "No repertoires yet.": "Belum ada repertoar.",
  "No reviews are due. Learn new moves, or come back when positions are due again.": "Tidak ada ulasan yang jatuh tempo. Pelajari langkah baru, atau kembali saat posisi jatuh tempo lagi.",
@@ -325,6 +326,7 @@
  "Not enough data yet": "Data belum cukup",
  "Not in your repertoire": "Tidak ada di repertoarmu",
  "Not played at this level": "Tidak dimainkan di level ini",
+ "Not prepared": "Belum dipersiapkan",
  "Not quite — it’s {move}": "Belum tepat — jawabannya {move}",
  "Not quite. The move is {move}.": "Belum tepat. Langkahnya adalah {move}.",
  "Not trained yet": "Belum dilatih",
@@ -549,6 +551,8 @@
  "The tab bar at the bottom of the screen takes you everywhere. On a tablet or a computer, the same tabs sit in the sidebar.": "Bilah tab di bagian bawah layar membawamu ke mana saja. Di tablet atau komputer, tab yang sama ada di bilah samping.",
  "The whole line. Tap a move to jump to it.": "Seluruh variasi. Ketuk langkah untuk melompat ke sana.",
  "The {board} (on Today) sets up any position or takes a pasted FEN, then analyses it with Stockfish.": "{board} (di Hari Ini) menyusun posisi apa pun atau menerima FEN yang ditempel, lalu menganalisisnya dengan Stockfish.",
+ "Their answer to {move}": "Jawaban mereka atas {move}",
+ "Their first move": "Langkah pertama mereka",
  "Their move — no replies yet": "Langkah mereka — belum ada balasan",
  "Their username": "Nama penggunanya",
  "Themes, boards, piece sets and fonts, plus sound, vibration and language: pick what you like.": "Tema, papan, set bidak, dan fon, ditambah suara, getaran, dan bahasa: pilih yang kamu suka.",
@@ -645,6 +649,7 @@
  "Your real games, checked against your preparation.": "Permainan nyatamu, dibandingkan dengan persiapanmu.",
  "Your repertoire": "Repertoarmu",
  "Your repertoire and training sync across devices.": "Repertoar dan latihanmu tersinkron di semua perangkat.",
+ "Your repertoire ends after {move}": "Repertoarmu berakhir setelah {move}",
  "Your repertoire is every move you have decided to play. The Repertoire tab keeps White and Black apart, and sorts each side into folders: first moves, then openings, then their lines.": "Repertoarmu adalah setiap langkah yang sudah kamu putuskan untuk dimainkan. Tab Repertoar memisahkan Putih dan Hitam, dan menata tiap sisi ke dalam folder: dulu langkah pertama, lalu pembukaan, lalu variasinya.",
  "Your repertoire is waiting for you.": "Repertoarmu menunggumu.",
  "Your repertoire misses you": "Repertoarmu merindukanmu",
@@ -671,16 +676,14 @@
  "has a note": "ada catatan",
  "in": "di",
  "in your repertoire": "di repertoarmu",
+ "last played {date}": "terakhir dimainkan {date}",
  "median, correct answers": "median, jawaban benar",
  "missed": "terlewat",
  "move {n}": "langkah {n}",
  "never trained": "belum pernah dilatih",
  "newest first": "terbaru dulu",
- "not in your repertoire": "tidak ada di repertoarmu",
- "not prepared": "belum disiapkan",
  "not yet": "belum",
  "practised": "sudah dilatih",
- "prepared": "sudah disiapkan",
  "promotes to bishop": "promosi menjadi gajah",
  "promotes to knight": "promosi menjadi kuda",
  "promotes to queen": "promosi menjadi menteri",
@@ -693,7 +696,6 @@
  "still being learnt": "masih dipelajari",
  "streak freeze used": "pembeku runtunan terpakai",
  "takes {square}": "memakan di {square}",
- "they play {move}": "mereka memainkan {move}",
  "transposition": "transposisi",
  "unavailable": "tidak tersedia",
  "unknown": "tidak diketahui",
@@ -704,7 +706,6 @@
  "you score {score}": "skormu {score}",
  "your Apple ID": "Apple ID-mu",
  "your account": "akunmu",
- "you’re prepared": "kamu siap",
  "{account} is optional. Sign in with Lichess, Chess.com or Apple to keep your repertoire and training in step across devices. Without an account, everything stays on this device and works offline.": "{account} bersifat opsional. Masuk dengan Lichess, Chess.com, atau Apple agar repertoar dan latihanmu sama di semua perangkat. Tanpa akun, semuanya tetap di perangkat ini dan bisa dipakai luring.",
  "{breaks} shows where each game left your preparation: {surprises} (your opponent played a move you hadn’t prepared, and you can add your answer right there), {forgotten} (you played something other than the move you learned, so that position becomes due again) and {ended} (the game outlasted your line).": "{breaks} menunjukkan di mana setiap permainan keluar dari persiapanmu: {surprises} (lawan memainkan langkah yang belum kamu siapkan, dan kamu bisa menambahkan balasanmu di situ juga), {forgotten} (kamu memainkan langkah lain dari yang kamu pelajari, jadi posisi itu kembali jatuh tempo) dan {ended} (permainan melewati ujung variasimu).",
  "{build}: choose the moves you play and the replies you expect from your opponent.": "{build}: pilih langkah yang kamu mainkan dan balasan yang kamu harapkan dari lawan.",
@@ -739,7 +740,6 @@
  "{pct} of games there": "{pct} permainan di sana",
  "{pct} of {games} · you score {score}": "{pct} dari {games} · skormu {score}",
  "{sec} s": "{sec} dtk",
- "{share} of their games here · reached in {reach}": "{share} permainannya di sini · dicapai dalam {reach}",
  "{suggest} ranks your options. {replies} adds the replies you are most likely to meet, so your line is ready for them.": "{suggest} mengurutkan pilihanmu. {replies} menambahkan balasan yang paling mungkin kamu temui, agar variasimu siap.",
  "{train} appears when positions are due for review. {learn} appears when there are new moves to learn. When neither is needed, you are all caught up.": "{train} muncul saat ada posisi yang jatuh tempo untuk diulas. {learn} muncul saat ada langkah baru untuk dipelajari. Kalau keduanya tidak perlu, semuanya sudah beres.",
  "{train}: the app tests you on each position just before you would forget it.": "{train}: aplikasi mengujimu di setiap posisi tepat sebelum kamu lupa.",
@@ -752,6 +752,9 @@
  "❄️ Streak freeze used": "❄️ Pembeku runtunan terpakai",
  "🔥 Day {day} is waiting": "🔥 Hari ke-{day} menunggu",
  "🔥 Still time today": "🔥 Masih ada waktu hari ini",
+ "A line goes on while at least {n} of their games follow it.": {
+  "other": "Variasi berlanjut selama setidaknya {n} permainan mereka mengikutinya."
+ },
  "A streak freeze saved your {n}-day streak. Practise today to keep it.": {
   "other": "Pembeku runtunan menyelamatkan runtunan {n} harimu. Berlatihlah hari ini untuk mempertahankannya."
  },
@@ -763,6 +766,12 @@
  },
  "Don’t let {n} days slip": {
   "other": "Jangan biarkan {n} hari terlewat"
+ },
+ "From {n} games where they had Black": {
+  "other": "Dari {n} permainan saat mereka bermain Hitam"
+ },
+ "From {n} games where they had White": {
+  "other": "Dari {n} permainan saat mereka bermain Putih"
  },
  "Imported {added} moves · {n} problems: {first}": {
   "other": "{added} langkah diimpor · {n} masalah: {first}"
@@ -782,6 +791,9 @@
  "Next milestone: {n} days": {
   "other": "Pencapaian berikutnya: {n} hari"
  },
+ "Other moves: {n} games": {
+  "other": "Langkah lain: {n} permainan"
+ },
  "Practise today to keep your {n}-day streak.": {
   "other": "Berlatihlah hari ini untuk mempertahankan runtunan {n} harimu."
  },
@@ -797,6 +809,9 @@
  "Show {n} variations": {
   "other": "Tampilkan {n} variasi"
  },
+ "They’ve faced your {move} only {n} times here": {
+  "other": "Mereka hanya {n} kali menghadapi {move} milikmu di sini"
+ },
  "Your {n}-day streak is at risk": {
   "other": "Runtunan {n} harimu terancam"
  },
@@ -808,6 +823,9 @@
  },
  "{due} want a quick look. Keep the {n}-day streak going.": {
   "other": "{due} menunggu dilihat sebentar. Pertahankan runtunan {n} hari."
+ },
+ "{name}: {n} recent games": {
+  "other": "{name}: {n} permainan terbaru"
  },
  "{n} alternates": {
   "other": "{n} alternatif"
@@ -830,6 +848,9 @@
  "{n} moves": {
   "other": "{n} langkah"
  },
+ "{n} of their games went this way": {
+  "other": "{n} permainan mereka berjalan seperti ini"
+ },
  "{n} positions had no explorer data and were split evenly.": {
   "other": "{n} posisi tidak memiliki data penjelajah dan dibagi rata."
  },
@@ -847,9 +868,6 @@
  },
  "{n} positions": {
   "other": "{n} posisi"
- },
- "{n} recent games analysed.": {
-  "other": "{n} permainan terbaru dianalisis."
  },
  "{n} replies prepared": {
   "other": "{n} balasan disiapkan"
@@ -959,6 +977,9 @@
  },
  "See {n} ready-made sets": {
   "other": "Lihat {n} set siap pakai"
+ },
+ "Show {n} more lines": {
+  "other": "Tampilkan {n} variasi lagi"
  },
  "You score {score} in {n} games: {w} won, {d} drawn, {l} lost.": {
   "other": "Skormu {score} dalam {n} partai: {w} menang, {d} remis, {l} kalah."
@@ -1093,6 +1114,7 @@
  "The line now ends after {move}": "Variasi kini berakhir setelah {move}",
  "end": "akhir",
  "{move} branches off this line": "{move} bercabang dari variasi ini",
+ "{move} isn’t in your repertoire": "{move} tidak ada di repertoarmu",
  "{name} (branch)": "{name} (cabang)",
  "{n} branch points": {
   "other": "{n} titik cabang"
@@ -1124,6 +1146,8 @@
  "Where do my lines differ from each other?": "Di mana line-line saya berbeda satu sama lain?",
  "Which line should I add next?": "Line mana yang sebaiknya saya tambahkan berikutnya?",
  "You decide how they play: pick a reply, or play any move for them on the board.": "Kamu yang menentukan cara mereka bermain: pilih balasan, atau mainkan langkah apa pun untuk mereka di papan.",
+ "You have no Black repertoire yet: these are the lines to build one for.": "Kamu belum punya repertoar Hitam: ini variasi yang perlu kamu siapkan.",
+ "You have no White repertoire yet: these are the lines to build one for.": "Kamu belum punya repertoar Putih: ini variasi yang perlu kamu siapkan.",
  "Your question": "Pertanyaanmu",
  "e.g. I like quiet positional lines, I hate theory-heavy gambits, I have little time to study.": "mis. Saya suka line posisional yang tenang, benci gambit yang penuh teori, waktu belajar saya sedikit.",
  "Ask anything…": "Tanya apa saja…",
@@ -1137,11 +1161,16 @@
  "Page not found": "Halaman tidak ditemukan",
  "Something went wrong": "Terjadi kesalahan",
  "There’s nothing at this address.": "Tidak ada apa-apa di alamat ini.",
+ "They have no games as Black here.": "Mereka tidak punya permainan sebagai Hitam di sini.",
+ "They have no games as White here.": "Mereka tidak punya permainan sebagai Putih di sini.",
+ "They haven’t faced it in these games.": "Mereka belum pernah menghadapinya di permainan ini.",
+ "They haven’t faced your {move} in these games": "Mereka belum pernah menghadapi {move} milikmu di permainan ini",
  "Reload the app and try again. Your repertoire and training are saved.": "Muat ulang aplikasi dan coba lagi. Repertoar dan latihanmu tersimpan.",
  "Reload": "Muat ulang",
  "Loading…": "Memuat…",
  "From the engine and game statistics": "Dari mesin dan statistik permainan",
  "the AI coach is resting until tomorrow": "pelatih AI sedang istirahat sampai besok",
+ "they score {pct}": "skor mereka {pct}",
  "AI coach · grounded in this position’s engine lines and stats": "Pelatih AI · berdasarkan jalur mesin dan statistik posisi ini",
  "{wrong} of {total} wrong": "{wrong} dari {total} salah",
  "No games as White yet.": "Belum ada permainan sebagai Putih.",

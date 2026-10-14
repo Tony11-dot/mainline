@@ -30,6 +30,7 @@
  "Added {move} — now choose your reply": "Se añadió {move}: ahora elige tu respuesta",
  "After the first import, new games are checked automatically.": "Tras la primera importación, las partidas nuevas se revisan automáticamente.",
  "Again": "Otra vez",
+ "All": "Todos",
  "All caught up": "Todo al día",
  "All four start from Today. Pick the one that fits your time and mood.": "Las cuatro empiezan en Hoy. Elige la que encaje con tu tiempo y tu ánimo.",
  "All games and variations are merged. Comments become move notes.": "Se combinan todas las partidas y variantes. Los comentarios se convierten en notas de las jugadas.",
@@ -222,6 +223,7 @@
  "In the Games tab, enter your Lichess or Chess.com username and import. MainLine only looks at the openings.": "En la pestaña Partidas, escribe tu usuario de Lichess o Chess.com e importa. MainLine solo mira las aperturas.",
  "In your games": "En tus partidas",
  "In your repertoire": "En tu repertorio",
+ "In your repertoire all the way": "En tu repertorio de principio a fin",
  "In {guided} mode an arrow shows the top pick. Play it, play any other move, or tap a suggestion in the list.": "En el modo {guided}, una flecha muestra la mejor opción. Juégala, juega cualquier otra jugada o toca una sugerencia de la lista.",
  "Include replies played in at least": "Incluir respuestas jugadas en al menos el",
  "Increase {setting}": "Aumentar {setting}",
@@ -257,6 +259,7 @@
  "Line complete": "Línea completada",
  "Line story": "Historia de la línea",
  "Lines": "Líneas",
+ "Lines to prepare": "Líneas para preparar",
  "Link your Chess.com account to import your games from it.": "Vincula tu cuenta de Chess.com para importar tus partidas desde ella.",
  "Loading openings…": "Cargando aperturas…",
  "London System": "Sistema Londres",
@@ -313,8 +316,6 @@
  "No master games": "Sin partidas de maestros",
  "No new moves to learn": "No hay jugadas nuevas que aprender",
  "No opening matches “{query}”.": "Ninguna apertura coincide con «{query}».",
- "No overlap with your Black repertoire in their games.": "No coincide con tu repertorio con negras en sus partidas.",
- "No overlap with your White repertoire in their games.": "No coincide con tu repertorio con blancas en sus partidas.",
  "No positions learned yet": "Aún no has aprendido posiciones",
  "No repertoires yet.": "Aún no hay repertorios.",
  "No reviews are due. Learn new moves, or come back when positions are due again.": "No tienes repasos pendientes. Aprende jugadas nuevas o vuelve cuando haya posiciones pendientes.",
@@ -325,6 +326,7 @@
  "Not enough data yet": "Aún no hay datos suficientes",
  "Not in your repertoire": "No está en tu repertorio",
  "Not played at this level": "No se juega a este nivel",
+ "Not prepared": "Sin preparar",
  "Not quite — it’s {move}": "Casi: es {move}",
  "Not quite. The move is {move}.": "Casi. La jugada es {move}.",
  "Not trained yet": "Aún sin entrenar",
@@ -549,6 +551,8 @@
  "The tab bar at the bottom of the screen takes you everywhere. On a tablet or a computer, the same tabs sit in the sidebar.": "La barra de pestañas de abajo te lleva a todas partes. En una tableta o un ordenador, las mismas pestañas están en la barra lateral.",
  "The whole line. Tap a move to jump to it.": "La línea completa. Toca una jugada para saltar a ella.",
  "The {board} (on Today) sets up any position or takes a pasted FEN, then analyses it with Stockfish.": "El {board} (en Hoy) prepara cualquier posición o acepta un FEN pegado, y luego la analiza con Stockfish.",
+ "Their answer to {move}": "Su respuesta a {move}",
+ "Their first move": "Su primera jugada",
  "Their move — no replies yet": "Juega el rival: aún sin respuestas",
  "Their username": "Su usuario",
  "Themes, boards, piece sets and fonts, plus sound, vibration and language: pick what you like.": "Temas, tableros, juegos de piezas y fuentes, además de sonido, vibración e idioma: elige lo que te guste.",
@@ -645,6 +649,7 @@
  "Your real games, checked against your preparation.": "Tus partidas reales, comparadas con tu preparación.",
  "Your repertoire": "Tu repertorio",
  "Your repertoire and training sync across devices.": "Tu repertorio y tu entrenamiento se sincronizan entre dispositivos.",
+ "Your repertoire ends after {move}": "Tu repertorio termina después de {move}",
  "Your repertoire is every move you have decided to play. The Repertoire tab keeps White and Black apart, and sorts each side into folders: first moves, then openings, then their lines.": "Tu repertorio es cada jugada que has decidido jugar. La pestaña Repertorio separa blancas y negras, y ordena cada lado en carpetas: primero las primeras jugadas, luego las aperturas y luego sus líneas.",
  "Your repertoire is waiting for you.": "Tu repertorio te está esperando.",
  "Your repertoire misses you": "Tu repertorio te echa de menos",
@@ -671,16 +676,14 @@
  "has a note": "tiene una nota",
  "in": "en",
  "in your repertoire": "en tu repertorio",
+ "last played {date}": "última vez el {date}",
  "median, correct answers": "mediana, respuestas correctas",
  "missed": "perdido",
  "move {n}": "jugada {n}",
  "never trained": "nunca entrenadas",
  "newest first": "más recientes primero",
- "not in your repertoire": "no está en tu repertorio",
- "not prepared": "sin preparar",
  "not yet": "todavía no",
  "practised": "practicado",
- "prepared": "preparado",
  "promotes to bishop": "corona alfil",
  "promotes to knight": "corona caballo",
  "promotes to queen": "corona dama",
@@ -693,7 +696,6 @@
  "still being learnt": "aún en aprendizaje",
  "streak freeze used": "protector de racha usado",
  "takes {square}": "captura en {square}",
- "they play {move}": "juega {move}",
  "transposition": "transposición",
  "unavailable": "no disponible",
  "unknown": "desconocido",
@@ -704,7 +706,6 @@
  "you score {score}": "tu puntuación {score}",
  "your Apple ID": "tu ID de Apple",
  "your account": "tu cuenta",
- "you’re prepared": "estás preparado",
  "{account} is optional. Sign in with Lichess, Chess.com or Apple to keep your repertoire and training in step across devices. Without an account, everything stays on this device and works offline.": "La {account} es opcional. Inicia sesión con Lichess, Chess.com o Apple para mantener tu repertorio y tu entrenamiento al día en todos tus dispositivos. Sin cuenta, todo se queda en este dispositivo y funciona sin conexión.",
  "{breaks} shows where each game left your preparation: {surprises} (your opponent played a move you hadn’t prepared, and you can add your answer right there), {forgotten} (you played something other than the move you learned, so that position becomes due again) and {ended} (the game outlasted your line).": "{breaks} muestra dónde cada partida salió de tu preparación: {surprises} (tu rival jugó algo que no tenías preparado, y puedes añadir tu respuesta ahí mismo), {forgotten} (jugaste algo distinto de la jugada que aprendiste, así que esa posición vuelve a tocar) y {ended} (la partida fue más allá de tu línea).",
  "{build}: choose the moves you play and the replies you expect from your opponent.": "{build}: elige las jugadas que haces y las respuestas que esperas de tu rival.",
@@ -739,7 +740,6 @@
  "{pct} of games there": "{pct} de las partidas ahí",
  "{pct} of {games} · you score {score}": "{pct} de {games} · tu puntuación {score}",
  "{sec} s": "{sec} s",
- "{share} of their games here · reached in {reach}": "{share} de sus partidas aquí · se llega en el {reach}",
  "{suggest} ranks your options. {replies} adds the replies you are most likely to meet, so your line is ready for them.": "{suggest} ordena tus opciones. {replies} añade las respuestas que más probablemente te encontrarás, para que tu línea esté lista.",
  "{train} appears when positions are due for review. {learn} appears when there are new moves to learn. When neither is needed, you are all caught up.": "{train} aparece cuando hay posiciones pendientes de repaso. {learn} aparece cuando hay jugadas nuevas que aprender. Si no hace falta ninguna, estás al día.",
  "{train}: the app tests you on each position just before you would forget it.": "{train}: la app te pregunta cada posición justo antes de que la olvides.",
@@ -752,6 +752,10 @@
  "❄️ Streak freeze used": "❄️ Protector de racha usado",
  "🔥 Day {day} is waiting": "🔥 El día {day} te espera",
  "🔥 Still time today": "🔥 Aún hay tiempo hoy",
+ "A line goes on while at least {n} of their games follow it.": {
+  "one": "Una línea sigue mientras al menos {n} de sus partidas la siga.",
+  "other": "Una línea sigue mientras al menos {n} de sus partidas la sigan."
+ },
  "A streak freeze saved your {n}-day streak. Practise today to keep it.": {
   "one": "Un protector de racha salvó tu racha de {n} día. Practica hoy para mantenerla.",
   "other": "Un protector de racha salvó tu racha de {n} días. Practica hoy para mantenerla."
@@ -767,6 +771,14 @@
  "Don’t let {n} days slip": {
   "one": "No dejes escapar {n} día",
   "other": "No dejes escapar {n} días"
+ },
+ "From {n} games where they had Black": {
+  "one": "De {n} partida en la que llevó negras",
+  "other": "De {n} partidas en las que llevó negras"
+ },
+ "From {n} games where they had White": {
+  "one": "De {n} partida en la que llevó blancas",
+  "other": "De {n} partidas en las que llevó blancas"
  },
  "Imported {added} moves · {n} problems: {first}": {
   "one": "Se importaron {added} jugadas · {n} problema: {first}",
@@ -792,6 +804,10 @@
   "one": "Próximo hito: {n} día",
   "other": "Próximo hito: {n} días"
  },
+ "Other moves: {n} games": {
+  "one": "Otras jugadas: {n} partida",
+  "other": "Otras jugadas: {n} partidas"
+ },
  "Practise today to keep your {n}-day streak.": {
   "one": "Practica hoy para mantener tu racha de {n} día.",
   "other": "Practica hoy para mantener tu racha de {n} días."
@@ -812,6 +828,10 @@
   "one": "Mostrar {n} variante",
   "other": "Mostrar {n} variantes"
  },
+ "They’ve faced your {move} only {n} times here": {
+  "one": "Se ha enfrentado a tu {move} solo una vez aquí",
+  "other": "Se ha enfrentado a tu {move} solo {n} veces aquí"
+ },
  "Your {n}-day streak is at risk": {
   "one": "Tu racha de {n} día está en peligro",
   "other": "Tu racha de {n} días está en peligro"
@@ -827,6 +847,10 @@
  "{due} want a quick look. Keep the {n}-day streak going.": {
   "one": "{due} quieren un vistazo rápido. Mantén la racha de {n} día.",
   "other": "{due} quieren un vistazo rápido. Mantén la racha de {n} días."
+ },
+ "{name}: {n} recent games": {
+  "one": "{name}: {n} partida reciente",
+  "other": "{name}: {n} partidas recientes"
  },
  "{n} alternates": {
   "one": "{n} alternativa",
@@ -856,6 +880,10 @@
   "one": "{n} jugada",
   "other": "{n} jugadas"
  },
+ "{n} of their games went this way": {
+  "one": "{n} de sus partidas fue así",
+  "other": "{n} de sus partidas fueron así"
+ },
  "{n} positions had no explorer data and were split evenly.": {
   "one": "{n} posición no tenía datos del explorador y se repartió por igual.",
   "other": "{n} posiciones no tenían datos del explorador y se repartieron por igual."
@@ -879,10 +907,6 @@
  "{n} positions": {
   "one": "{n} posición",
   "other": "{n} posiciones"
- },
- "{n} recent games analysed.": {
-  "one": "Se analizó {n} partida reciente.",
-  "other": "Se analizaron {n} partidas recientes."
  },
  "{n} replies prepared": {
   "one": "{n} respuesta preparada",
@@ -1004,6 +1028,10 @@
  "See {n} ready-made sets": {
   "one": "Ver {n} set preparado",
   "other": "Ver {n} sets preparados"
+ },
+ "Show {n} more lines": {
+  "one": "Mostrar {n} línea más",
+  "other": "Mostrar {n} líneas más"
  },
  "You score {score} in {n} games: {w} won, {d} drawn, {l} lost.": {
   "one": "Puntúas {score} en {n} partida: {w} ganadas, {d} tablas, {l} perdidas.",
@@ -1154,6 +1182,7 @@
  "The line now ends after {move}": "La línea ahora termina tras {move}",
  "end": "fin",
  "{move} branches off this line": "{move} se separa de esta línea",
+ "{move} isn’t in your repertoire": "{move} no está en tu repertorio",
  "{name} (branch)": "{name} (rama)",
  "{n} branch points": {
   "one": "{n} punto de ramificación",
@@ -1187,6 +1216,8 @@
  "Where do my lines differ from each other?": "¿En qué se diferencian mis líneas?",
  "Which line should I add next?": "¿Qué línea debería añadir ahora?",
  "You decide how they play: pick a reply, or play any move for them on the board.": "Tú decides cómo juegan: elige una respuesta o juega cualquier jugada por ellos en el tablero.",
+ "You have no Black repertoire yet: these are the lines to build one for.": "Aún no tienes repertorio con negras: estas son las líneas para las que construir uno.",
+ "You have no White repertoire yet: these are the lines to build one for.": "Aún no tienes repertorio con blancas: estas son las líneas para las que construir uno.",
  "Your question": "Tu pregunta",
  "e.g. I like quiet positional lines, I hate theory-heavy gambits, I have little time to study.": "p. ej. Me gustan las líneas posicionales tranquilas, odio los gambitos con mucha teoría, tengo poco tiempo para estudiar.",
  "Ask anything…": "Pregunta lo que quieras…",
@@ -1200,11 +1231,16 @@
  "Page not found": "Página no encontrada",
  "Something went wrong": "Algo salió mal",
  "There’s nothing at this address.": "No hay nada en esta dirección.",
+ "They have no games as Black here.": "No tiene partidas con negras aquí.",
+ "They have no games as White here.": "No tiene partidas con blancas aquí.",
+ "They haven’t faced it in these games.": "No se ha enfrentado a ella en estas partidas.",
+ "They haven’t faced your {move} in these games": "No se ha enfrentado a tu {move} en estas partidas",
  "Reload the app and try again. Your repertoire and training are saved.": "Recarga la app e inténtalo de nuevo. Tu repertorio y tu entrenamiento están guardados.",
  "Reload": "Recargar",
  "Loading…": "Cargando…",
  "From the engine and game statistics": "Del motor y las estadísticas de partidas",
  "the AI coach is resting until tomorrow": "el entrenador IA descansa hasta mañana",
+ "they score {pct}": "su puntuación {pct}",
  "AI coach · grounded in this position’s engine lines and stats": "Entrenador IA · basado en las líneas del motor y las estadísticas de esta posición",
  "{wrong} of {total} wrong": "{wrong} de {total} mal",
  "No games as White yet.": "Aún no hay partidas con blancas.",

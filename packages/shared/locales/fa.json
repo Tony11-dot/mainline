@@ -30,6 +30,7 @@
  "Added {move} — now choose your reply": "{move} اضافه شد — حالا پاسخ خود را انتخاب کنید",
  "After the first import, new games are checked automatically.": "پس از نخستین وارد کردن، بازی‌های تازه خودکار بررسی می‌شوند.",
  "Again": "دوباره",
+ "All": "همه",
  "All caught up": "همه‌چیز به‌روز است",
  "All four start from Today. Pick the one that fits your time and mood.": "هر چهار از صفحهٔ «امروز» شروع می‌شوند. آن را که با وقت و حال‌تان جور است انتخاب کنید.",
  "All games and variations are merged. Comments become move notes.": "همهٔ بازی‌ها و شاخه‌ها ادغام می‌شوند. توضیحات به یادداشت حرکت تبدیل می‌شوند.",
@@ -222,6 +223,7 @@
  "In the Games tab, enter your Lichess or Chess.com username and import. MainLine only looks at the openings.": "در زبانهٔ «بازی‌ها» نام کاربری Lichess یا Chess.com خود را بنویسید و وارد کنید. MainLine فقط به گشایش‌ها نگاه می‌کند.",
  "In your games": "در بازی‌های شما",
  "In your repertoire": "در رپرتوار شما",
+ "In your repertoire all the way": "کاملاً در رپرتوار شما",
  "In {guided} mode an arrow shows the top pick. Play it, play any other move, or tap a suggestion in the list.": "در حالت «{guided}» یک پیکان بهترین انتخاب را نشان می‌دهد. آن را بازی کنید، حرکت دیگری بزنید یا روی یکی از پیشنهادهای فهرست بزنید.",
  "Include replies played in at least": "شامل پاسخ‌هایی که دست‌کم در این سهم بازی شده‌اند",
  "Increase {setting}": "افزایش {setting}",
@@ -257,6 +259,7 @@
  "Line complete": "خط کامل شد",
  "Line story": "داستان خط",
  "Lines": "خطوط",
+ "Lines to prepare": "خطوط برای آمادگی",
  "Link your Chess.com account to import your games from it.": "حساب Chess.com خود را پیوند دهید تا بازی‌هایتان از آن درون‌ریزی شود.",
  "Loading openings…": "در حال بارگیری گشایش‌ها…",
  "London System": "سیستم لندن",
@@ -313,8 +316,6 @@
  "No master games": "بازی استادی نیست",
  "No new moves to learn": "حرکت جدیدی برای یادگیری نیست",
  "No opening matches “{query}”.": "هیچ گشایشی با «{query}» مطابقت ندارد.",
- "No overlap with your Black repertoire in their games.": "در بازی‌هایش هم‌پوشانی با رپرتوار سیاه شما نیست.",
- "No overlap with your White repertoire in their games.": "در بازی‌هایش هم‌پوشانی با رپرتوار سفید شما نیست.",
  "No positions learned yet": "هنوز وضعیتی آموخته نشده",
  "No repertoires yet.": "هنوز رپرتواری نیست.",
  "No reviews are due. Learn new moves, or come back when positions are due again.": "مروری سررسید نشده. حرکت‌های جدید یاد بگیرید یا وقتی وضعیت‌ها دوباره سررسید شدند برگردید.",
@@ -325,6 +326,7 @@
  "Not enough data yet": "هنوز داده کافی نیست",
  "Not in your repertoire": "در رپرتوار شما نیست",
  "Not played at this level": "در این سطح بازی نشده",
+ "Not prepared": "آماده نشده",
  "Not quite — it’s {move}": "نه دقیقاً — {move} است",
  "Not quite. The move is {move}.": "نه دقیقاً. حرکت {move} است.",
  "Not trained yet": "هنوز تمرین نشده",
@@ -549,6 +551,8 @@
  "The tab bar at the bottom of the screen takes you everywhere. On a tablet or a computer, the same tabs sit in the sidebar.": "نوار زبانه‌های پایین صفحه شما را به همه‌جا می‌برد. در تبلت یا رایانه، همین زبانه‌ها در نوار کناری هستند.",
  "The whole line. Tap a move to jump to it.": "کل خط. روی یک حرکت بزنید تا به آن بروید.",
  "The {board} (on Today) sets up any position or takes a pasted FEN, then analyses it with Stockfish.": "{board} (در «امروز») هر وضعیتی را می‌چیند یا FEN چسبانده‌شده را می‌پذیرد و سپس با Stockfish تحلیلش می‌کند.",
+ "Their answer to {move}": "پاسخ او به {move}",
+ "Their first move": "اولین حرکت او",
  "Their move — no replies yet": "نوبت حریف — هنوز پاسخی نیست",
  "Their username": "نام کاربری او",
  "Themes, boards, piece sets and fonts, plus sound, vibration and language: pick what you like.": "پوسته‌ها، صفحه‌ها، دست‌مهره‌ها و قلم‌ها، به‌علاوهٔ صدا، لرزش و زبان: هرچه دوست دارید انتخاب کنید.",
@@ -645,6 +649,7 @@
  "Your real games, checked against your preparation.": "بازی‌های واقعی شما، در مقایسه با آمادگی‌تان.",
  "Your repertoire": "رپرتوار شما",
  "Your repertoire and training sync across devices.": "رپرتوار و تمرین شما بین دستگاه‌ها همگام است.",
+ "Your repertoire ends after {move}": "رپرتوار شما بعد از {move} تمام می‌شود",
  "Your repertoire is every move you have decided to play. The Repertoire tab keeps White and Black apart, and sorts each side into folders: first moves, then openings, then their lines.": "رپرتوار شما همهٔ حرکت‌هایی است که تصمیم گرفته‌اید بازی کنید. زبانهٔ «رپرتوار» سفید و سیاه را جدا نگه می‌دارد و هر طرف را در پوشه‌ها مرتب می‌کند: اول حرکت‌های نخست، بعد گشایش‌ها، بعد خط‌هایشان.",
  "Your repertoire is waiting for you.": "رپرتوار شما منتظر شماست.",
  "Your repertoire misses you": "رپرتوار دلش برایتان تنگ شده",
@@ -671,16 +676,14 @@
  "has a note": "یادداشت دارد",
  "in": "در",
  "in your repertoire": "در رپرتوار شما",
+ "last played {date}": "آخرین بار {date}",
  "median, correct answers": "میانه، پاسخ‌های درست",
  "missed": "ازدست‌رفته",
  "move {n}": "حرکت {n}",
  "never trained": "هرگز تمرین نشده",
  "newest first": "جدیدترین اول",
- "not in your repertoire": "در رپرتوار شما نیست",
- "not prepared": "آماده نیست",
  "not yet": "هنوز نه",
  "practised": "تمرین‌شده",
- "prepared": "آماده",
  "promotes to bishop": "به فیل ارتقا می‌یابد",
  "promotes to knight": "به اسب ارتقا می‌یابد",
  "promotes to queen": "به وزیر ارتقا می‌یابد",
@@ -693,7 +696,6 @@
  "still being learnt": "هنوز در حال یادگیری",
  "streak freeze used": "یخ‌زدگی زنجیره استفاده شد",
  "takes {square}": "می‌زند {square}",
- "they play {move}": "{move} بازی می‌کند",
  "transposition": "جابه‌جایی ترتیب",
  "unavailable": "در دسترس نیست",
  "unknown": "نامعلوم",
@@ -704,7 +706,6 @@
  "you score {score}": "امتیاز شما {score}",
  "your Apple ID": "Apple ID شما",
  "your account": "حساب شما",
- "you’re prepared": "آماده‌اید",
  "{account} is optional. Sign in with Lichess, Chess.com or Apple to keep your repertoire and training in step across devices. Without an account, everything stays on this device and works offline.": "{account} اختیاری است. با Lichess، Chess.com یا Apple وارد شوید تا رپرتوار و تمرین‌تان روی همهٔ دستگاه‌ها یکسان بماند. بدون حساب، همه‌چیز روی همین دستگاه می‌ماند و آفلاین کار می‌کند.",
  "{breaks} shows where each game left your preparation: {surprises} (your opponent played a move you hadn’t prepared, and you can add your answer right there), {forgotten} (you played something other than the move you learned, so that position becomes due again) and {ended} (the game outlasted your line).": "{breaks} نشان می‌دهد هر بازی کجا از آمادگی شما بیرون رفت: {surprises} (حریف حرکتی زد که برایش آماده نبودید و می‌توانید همان‌جا پاسخ‌تان را اضافه کنید)، {forgotten} (چیزی جز حرکتی که یاد گرفته بودید بازی کردید، پس آن وضعیت دوباره سررسید می‌شود) و {ended} (بازی از انتهای خط شما فراتر رفت).",
  "{build}: choose the moves you play and the replies you expect from your opponent.": "{build}: حرکت‌هایی را که بازی می‌کنید و پاسخ‌هایی را که از حریف انتظار دارید انتخاب کنید.",
@@ -739,7 +740,6 @@
  "{pct} of games there": "{pct} از بازی‌های آنجا",
  "{pct} of {games} · you score {score}": "{pct} از {games} · امتیاز شما {score}",
  "{sec} s": "{sec} ثانیه",
- "{share} of their games here · reached in {reach}": "{share} از بازی‌هایش اینجا · رسیدن در {reach}",
  "{suggest} ranks your options. {replies} adds the replies you are most likely to meet, so your line is ready for them.": "{suggest} گزینه‌هایتان را رتبه‌بندی می‌کند. {replies} پاسخ‌هایی را اضافه می‌کند که به احتمال زیاد با آن‌ها روبه‌رو می‌شوید تا خط‌تان آماده باشد.",
  "{train} appears when positions are due for review. {learn} appears when there are new moves to learn. When neither is needed, you are all caught up.": "وقتی وضعیت‌هایی سررسید مرور باشند، {train} ظاهر می‌شود. وقتی حرکت تازه‌ای برای یادگیری باشد، {learn} ظاهر می‌شود. اگر هیچ‌کدام لازم نباشد، همه‌چیز انجام شده است.",
  "{train}: the app tests you on each position just before you would forget it.": "{train}: برنامه هر وضعیت را درست پیش از آنکه فراموشش کنید از شما می‌پرسد.",
@@ -752,6 +752,10 @@
  "❄️ Streak freeze used": "❄️ یخ‌زدگی زنجیره استفاده شد",
  "🔥 Day {day} is waiting": "🔥 روز {day} منتظر است",
  "🔥 Still time today": "🔥 امروز هنوز وقت هست",
+ "A line goes on while at least {n} of their games follow it.": {
+  "one": "یک خط تا وقتی ادامه دارد که دست‌کم {n} بازی او از آن پیروی کند.",
+  "other": "یک خط تا وقتی ادامه دارد که دست‌کم {n} بازی او از آن پیروی کند."
+ },
  "A streak freeze saved your {n}-day streak. Practise today to keep it.": {
   "one": "یخ‌زدگی، زنجیرهٔ {n} روزهٔ شما را نجات داد. امروز تمرین کنید تا ادامه یابد.",
   "other": "یخ‌زدگی، زنجیرهٔ {n} روزهٔ شما را نجات داد. امروز تمرین کنید تا ادامه یابد."
@@ -767,6 +771,14 @@
  "Don’t let {n} days slip": {
   "one": "نگذارید {n} روز از دست برود",
   "other": "نگذارید {n} روز از دست برود"
+ },
+ "From {n} games where they had Black": {
+  "one": "از {n} بازی که او سیاه بود",
+  "other": "از {n} بازی که او سیاه بود"
+ },
+ "From {n} games where they had White": {
+  "one": "از {n} بازی که او سفید بود",
+  "other": "از {n} بازی که او سفید بود"
  },
  "Imported {added} moves · {n} problems: {first}": {
   "one": "{added} حرکت درون‌ریزی شد · {n} مشکل: {first}",
@@ -792,6 +804,10 @@
   "one": "نقطهٔ عطف بعدی: {n} روز",
   "other": "نقطهٔ عطف بعدی: {n} روز"
  },
+ "Other moves: {n} games": {
+  "one": "حرکت‌های دیگر: {n} بازی",
+  "other": "حرکت‌های دیگر: {n} بازی"
+ },
  "Practise today to keep your {n}-day streak.": {
   "one": "امروز تمرین کنید تا زنجیرهٔ {n} روزه بماند.",
   "other": "امروز تمرین کنید تا زنجیرهٔ {n} روزه بماند."
@@ -812,6 +828,10 @@
   "one": "نمایش {n} شاخه",
   "other": "نمایش {n} شاخه"
  },
+ "They’ve faced your {move} only {n} times here": {
+  "one": "او اینجا فقط یک بار با {move} شما روبه‌رو شده است",
+  "other": "او اینجا فقط {n} بار با {move} شما روبه‌رو شده است"
+ },
  "Your {n}-day streak is at risk": {
   "one": "زنجیرهٔ {n} روزهٔ شما در خطر است",
   "other": "زنجیرهٔ {n} روزهٔ شما در خطر است"
@@ -827,6 +847,10 @@
  "{due} want a quick look. Keep the {n}-day streak going.": {
   "one": "{due} یک نگاه کوتاه می‌خواهند. زنجیرهٔ {n} روزه را ادامه دهید.",
   "other": "{due} یک نگاه کوتاه می‌خواهند. زنجیرهٔ {n} روزه را ادامه دهید."
+ },
+ "{name}: {n} recent games": {
+  "one": "{name}: {n} بازی اخیر",
+  "other": "{name}: {n} بازی اخیر"
  },
  "{n} alternates": {
   "one": "{n} جایگزین",
@@ -856,6 +880,10 @@
   "one": "{n} حرکت",
   "other": "{n} حرکت"
  },
+ "{n} of their games went this way": {
+  "one": "{n} بازی او این‌طور پیش رفت",
+  "other": "{n} بازی او این‌طور پیش رفت"
+ },
  "{n} positions had no explorer data and were split evenly.": {
   "one": "{n} وضعیت دادهٔ کاوشگر نداشت و به‌طور مساوی تقسیم شد.",
   "other": "{n} وضعیت دادهٔ کاوشگر نداشتند و به‌طور مساوی تقسیم شدند."
@@ -879,10 +907,6 @@
  "{n} positions": {
   "one": "{n} وضعیت",
   "other": "{n} وضعیت"
- },
- "{n} recent games analysed.": {
-  "one": "{n} بازی اخیر تحلیل شد.",
-  "other": "{n} بازی اخیر تحلیل شد."
  },
  "{n} replies prepared": {
   "one": "{n} پاسخ آماده",
@@ -1004,6 +1028,10 @@
  "See {n} ready-made sets": {
   "one": "دیدن {n} مجموعهٔ آماده",
   "other": "دیدن {n} مجموعهٔ آماده"
+ },
+ "Show {n} more lines": {
+  "one": "نمایش {n} خط دیگر",
+  "other": "نمایش {n} خط دیگر"
  },
  "You score {score} in {n} games: {w} won, {d} drawn, {l} lost.": {
   "one": "امتیاز شما {score} در {n} بازی: {w} برد، {d} تساوی، {l} باخت.",
@@ -1154,6 +1182,7 @@
  "The line now ends after {move}": "خط اکنون پس از {move} تمام می‌شود",
  "end": "پایان",
  "{move} branches off this line": "{move} از این خط جدا می‌شود",
+ "{move} isn’t in your repertoire": "{move} در رپرتوار شما نیست",
  "{name} (branch)": "{name} (شاخه)",
  "{n} branch points": {
   "one": "{n} نقطهٔ انشعاب",
@@ -1187,6 +1216,8 @@
  "Where do my lines differ from each other?": "خط‌های من کجا با هم فرق دارند؟",
  "Which line should I add next?": "خط بعدی را چه اضافه کنم؟",
  "You decide how they play: pick a reply, or play any move for them on the board.": "تو تصمیم می‌گیری حریف چطور بازی کند: یک پاسخ انتخاب کن یا هر حرکتی را به جای او روی صفحه بازی کن.",
+ "You have no Black repertoire yet: these are the lines to build one for.": "هنوز رپرتوار سیاه ندارید: این‌ها خطوطی هستند که باید برایشان رپرتوار بسازید.",
+ "You have no White repertoire yet: these are the lines to build one for.": "هنوز رپرتوار سفید ندارید: این‌ها خطوطی هستند که باید برایشان رپرتوار بسازید.",
  "Your question": "سؤالت",
  "e.g. I like quiet positional lines, I hate theory-heavy gambits, I have little time to study.": "مثلاً: خط‌های پوزیسیونی آرام را دوست دارم، از گامبیت‌های پرتئوری بدم می‌آید، وقت کمی برای مطالعه دارم.",
  "Ask anything…": "هر چه می‌خواهی بپرس…",
@@ -1200,11 +1231,16 @@
  "Page not found": "صفحه پیدا نشد",
  "Something went wrong": "مشکلی پیش آمد",
  "There’s nothing at this address.": "در این نشانی چیزی وجود ندارد.",
+ "They have no games as Black here.": "اینجا بازی‌ای با سیاه از او نیست.",
+ "They have no games as White here.": "اینجا بازی‌ای با سفید از او نیست.",
+ "They haven’t faced it in these games.": "در این بازی‌ها با آن روبه‌رو نشده است.",
+ "They haven’t faced your {move} in these games": "در این بازی‌ها با {move} شما روبه‌رو نشده است",
  "Reload the app and try again. Your repertoire and training are saved.": "برنامه را دوباره بارگذاری کنید و دوباره امتحان کنید. رپرتوار و تمرین شما ذخیره شده‌اند.",
  "Reload": "بارگذاری مجدد",
  "Loading…": "در حال بارگذاری…",
  "From the engine and game statistics": "بر پایهٔ موتور و آمار بازی‌ها",
  "the AI coach is resting until tomorrow": "مربی هوش مصنوعی تا فردا استراحت می‌کند",
+ "they score {pct}": "امتیاز او {pct}",
  "AI coach · grounded in this position’s engine lines and stats": "مربی هوش مصنوعی · بر پایهٔ خطوط موتور و آمار این وضعیت",
  "{wrong} of {total} wrong": "{wrong} اشتباه از {total}",
  "No games as White yet.": "هنوز بازی‌ای با سفید نیست.",

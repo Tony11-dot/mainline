@@ -30,6 +30,7 @@
  "Added {move} — now choose your reply": "{move} eklendi — şimdi yanıtını seç",
  "After the first import, new games are checked automatically.": "İlk içe aktarmadan sonra yeni oyunlar otomatik olarak kontrol edilir.",
  "Again": "Tekrar",
+ "All": "Tümü",
  "All caught up": "Hepsi tamam",
  "All four start from Today. Pick the one that fits your time and mood.": "Dördü de Bugün ekranından başlar. Vaktine ve keyfine uyanı seç.",
  "All games and variations are merged. Comments become move notes.": "Tüm oyunlar ve varyantlar birleştirilir. Yorumlar hamle notlarına dönüşür.",
@@ -222,6 +223,7 @@
  "In the Games tab, enter your Lichess or Chess.com username and import. MainLine only looks at the openings.": "Oyunlar sekmesinde Lichess veya Chess.com kullanıcı adını gir ve içe aktar. MainLine yalnızca açılışlara bakar.",
  "In your games": "Oyunlarında",
  "In your repertoire": "Repertuvarında",
+ "In your repertoire all the way": "Baştan sona repertuvarında",
  "In {guided} mode an arrow shows the top pick. Play it, play any other move, or tap a suggestion in the list.": "«{guided}» modunda bir ok en iyi seçimi gösterir. Onu oyna, başka bir hamle oyna ya da listeden bir öneriye dokun.",
  "Include replies played in at least": "En az şu oranda oynanan yanıtları dahil et",
  "Increase {setting}": "{setting} artır",
@@ -257,6 +259,7 @@
  "Line complete": "Varyant tamamlandı",
  "Line story": "Varyantın hikâyesi",
  "Lines": "Varyantlar",
+ "Lines to prepare": "Hazırlanacak varyantlar",
  "Link your Chess.com account to import your games from it.": "Oyunlarını içe aktarmak için Chess.com hesabını bağla.",
  "Loading openings…": "Açılışlar yükleniyor…",
  "London System": "Londra Sistemi",
@@ -313,8 +316,6 @@
  "No master games": "Usta oyunu yok",
  "No new moves to learn": "Öğrenilecek yeni hamle yok",
  "No opening matches “{query}”.": "“{query}” ile eşleşen açılış yok.",
- "No overlap with your Black repertoire in their games.": "Rakibin oyunlarında Siyah repertuvarınla kesişme yok.",
- "No overlap with your White repertoire in their games.": "Rakibin oyunlarında Beyaz repertuvarınla kesişme yok.",
  "No positions learned yet": "Henüz öğrenilen pozisyon yok",
  "No repertoires yet.": "Henüz repertuvar yok.",
  "No reviews are due. Learn new moves, or come back when positions are due again.": "Tekrar zamanı gelen yok. Yeni hamleler öğren ya da pozisyonların tekrar zamanı geldiğinde dön.",
@@ -325,6 +326,7 @@
  "Not enough data yet": "Henüz yeterli veri yok",
  "Not in your repertoire": "Repertuvarında değil",
  "Not played at this level": "Bu seviyede oynanmamış",
+ "Not prepared": "Hazırlıksız",
  "Not quite — it’s {move}": "Tam değil — doğrusu {move}",
  "Not quite. The move is {move}.": "Tam değil. Doğru hamle {move}.",
  "Not trained yet": "Henüz çalışılmadı",
@@ -549,6 +551,8 @@
  "The tab bar at the bottom of the screen takes you everywhere. On a tablet or a computer, the same tabs sit in the sidebar.": "Ekranın altındaki sekme çubuğu seni her yere götürür. Tablette veya bilgisayarda aynı sekmeler kenar çubuğundadır.",
  "The whole line. Tap a move to jump to it.": "Varyantın tamamı. Bir hamleye gitmek için ona dokun.",
  "The {board} (on Today) sets up any position or takes a pasted FEN, then analyses it with Stockfish.": "{board} (Bugün ekranında) herhangi bir pozisyonu kurar ya da yapıştırılan bir FEN’i alır, sonra Stockfish ile analiz eder.",
+ "Their answer to {move}": "Rakibin {move} hamlesine cevabı",
+ "Their first move": "Rakibin ilk hamlesi",
  "Their move — no replies yet": "Rakibin hamlesi — henüz yanıt yok",
  "Their username": "Rakibin kullanıcı adı",
  "Themes, boards, piece sets and fonts, plus sound, vibration and language: pick what you like.": "Temalar, tahtalar, taş setleri ve yazı tipleri; ayrıca ses, titreşim ve dil: beğendiğini seç.",
@@ -645,6 +649,7 @@
  "Your real games, checked against your preparation.": "Hazırlığınla karşılaştırılan gerçek oyunların.",
  "Your repertoire": "Repertuvarın",
  "Your repertoire and training sync across devices.": "Repertuvarın ve antrenmanın cihazlar arasında eşitlenir.",
+ "Your repertoire ends after {move}": "Repertuvarın {move} hamlesinden sonra bitiyor",
  "Your repertoire is every move you have decided to play. The Repertoire tab keeps White and Black apart, and sorts each side into folders: first moves, then openings, then their lines.": "Repertuvarın, oynamaya karar verdiğin her hamledir. Repertuvar sekmesi Beyaz ile Siyahı ayrı tutar ve her tarafı klasörlere ayırır: önce ilk hamleler, sonra açılışlar, sonra onların varyantları.",
  "Your repertoire is waiting for you.": "Repertuvarın seni bekliyor.",
  "Your repertoire misses you": "Repertuvarın seni özledi",
@@ -671,16 +676,14 @@
  "has a note": "notu var",
  "in": "içinde",
  "in your repertoire": "repertuvarında",
+ "last played {date}": "son oynanış: {date}",
  "median, correct answers": "medyan, doğru cevaplar",
  "missed": "kaçırıldı",
  "move {n}": "{n}. hamle",
  "never trained": "hiç çalışılmadı",
  "newest first": "en yeni önce",
- "not in your repertoire": "repertuvarında değil",
- "not prepared": "hazırlıksız",
  "not yet": "henüz değil",
  "practised": "çalışıldı",
- "prepared": "hazır",
  "promotes to bishop": "file terfi eder",
  "promotes to knight": "ata terfi eder",
  "promotes to queen": "vezire terfi eder",
@@ -693,7 +696,6 @@
  "still being learnt": "hâlâ öğreniliyor",
  "streak freeze used": "seri dondurma kullanıldı",
  "takes {square}": "{square} karesinde alır",
- "they play {move}": "{move} oynuyorlar",
  "transposition": "transpozisyon",
  "unavailable": "kullanılamıyor",
  "unknown": "bilinmiyor",
@@ -704,7 +706,6 @@
  "you score {score}": "skorun {score}",
  "your Apple ID": "Apple kimliğin",
  "your account": "hesabın",
- "you’re prepared": "hazırsın",
  "{account} is optional. Sign in with Lichess, Chess.com or Apple to keep your repertoire and training in step across devices. Without an account, everything stays on this device and works offline.": "{account} isteğe bağlıdır. Repertuvarın ve antrenmanın tüm cihazlarda aynı kalsın diye Lichess, Chess.com ya da Apple ile giriş yap. Hesap olmadan her şey bu cihazda kalır ve çevrimdışı çalışır.",
  "{breaks} shows where each game left your preparation: {surprises} (your opponent played a move you hadn’t prepared, and you can add your answer right there), {forgotten} (you played something other than the move you learned, so that position becomes due again) and {ended} (the game outlasted your line).": "{breaks} her oyunun hazırlığından nerede ayrıldığını gösterir: {surprises} (rakibin hazırlanmadığın bir hamle oynadı; cevabını hemen orada ekleyebilirsin), {forgotten} (öğrendiğin hamleden farklı bir şey oynadın, bu yüzden o pozisyonun tekrarı yeniden gelir) ve {ended} (oyun varyantının sonunu aştı).",
  "{build}: choose the moves you play and the replies you expect from your opponent.": "{build}: oynadığın hamleleri ve rakibinden beklediğin cevapları seç.",
@@ -739,7 +740,6 @@
  "{pct} of games there": "Oradaki oyunların {pct} kadarı",
  "{pct} of {games} · you score {score}": "{games} oyunun {pct} kadarı · skorun {score}",
  "{sec} s": "{sec} sn",
- "{share} of their games here · reached in {reach}": "Oyunlarının {share} kadarı burada · {reach} oranında ulaşılıyor",
  "{suggest} ranks your options. {replies} adds the replies you are most likely to meet, so your line is ready for them.": "{suggest} seçeneklerini sıralar. {replies} karşılaşma ihtimalin en yüksek cevapları ekler; böylece varyantın onlara hazır olur.",
  "{train} appears when positions are due for review. {learn} appears when there are new moves to learn. When neither is needed, you are all caught up.": "{train}, tekrar zamanı gelen pozisyonlar olduğunda görünür. {learn}, öğrenilecek yeni hamleler olduğunda görünür. İkisine de gerek yoksa her şey tamam demektir.",
  "{train}: the app tests you on each position just before you would forget it.": "{train}: uygulama her pozisyonu tam unutacağın sırada sorar.",
@@ -752,6 +752,10 @@
  "❄️ Streak freeze used": "❄️ Seri dondurma kullanıldı",
  "🔥 Day {day} is waiting": "🔥 {day}. gün seni bekliyor",
  "🔥 Still time today": "🔥 Bugün hâlâ vakit var",
+ "A line goes on while at least {n} of their games follow it.": {
+  "one": "Bir varyant, rakibin en az {n} oyunu onu izlediği sürece devam eder.",
+  "other": "Bir varyant, rakibin en az {n} oyunu onu izlediği sürece devam eder."
+ },
  "A streak freeze saved your {n}-day streak. Practise today to keep it.": {
   "one": "Bir seri dondurma {n} günlük serini kurtardı. Korumak için bugün çalış.",
   "other": "Bir seri dondurma {n} günlük serini kurtardı. Korumak için bugün çalış."
@@ -767,6 +771,14 @@
  "Don’t let {n} days slip": {
   "one": "{n} günün boşa gitmesin",
   "other": "{n} günün boşa gitmesin"
+ },
+ "From {n} games where they had Black": {
+  "one": "Rakibin siyahla oynadığı {n} oyuna göre",
+  "other": "Rakibin siyahla oynadığı {n} oyuna göre"
+ },
+ "From {n} games where they had White": {
+  "one": "Rakibin beyazla oynadığı {n} oyuna göre",
+  "other": "Rakibin beyazla oynadığı {n} oyuna göre"
  },
  "Imported {added} moves · {n} problems: {first}": {
   "one": "{added} hamle içe aktarıldı · {n} sorun: {first}",
@@ -792,6 +804,10 @@
   "one": "Sonraki dönüm noktası: {n} gün",
   "other": "Sonraki dönüm noktası: {n} gün"
  },
+ "Other moves: {n} games": {
+  "one": "Diğer hamleler: {n} oyun",
+  "other": "Diğer hamleler: {n} oyun"
+ },
  "Practise today to keep your {n}-day streak.": {
   "one": "{n} günlük serini korumak için bugün çalış.",
   "other": "{n} günlük serini korumak için bugün çalış."
@@ -812,6 +828,10 @@
   "one": "{n} varyantı göster",
   "other": "{n} varyantı göster"
  },
+ "They’ve faced your {move} only {n} times here": {
+  "one": "Senin {move} hamlenle burada yalnızca bir kez karşılaşmış",
+  "other": "Senin {move} hamlenle burada yalnızca {n} kez karşılaşmış"
+ },
  "Your {n}-day streak is at risk": {
   "one": "{n} günlük serin risk altında",
   "other": "{n} günlük serin risk altında"
@@ -827,6 +847,10 @@
  "{due} want a quick look. Keep the {n}-day streak going.": {
   "one": "{due} kısa bir bakış bekliyor. {n} günlük seriyi sürdür.",
   "other": "{due} kısa bir bakış bekliyor. {n} günlük seriyi sürdür."
+ },
+ "{name}: {n} recent games": {
+  "one": "{name}: son {n} oyun",
+  "other": "{name}: son {n} oyun"
  },
  "{n} alternates": {
   "one": "{n} alternatif",
@@ -856,6 +880,10 @@
   "one": "{n} hamle",
   "other": "{n} hamle"
  },
+ "{n} of their games went this way": {
+  "one": "Rakibin {n} oyunu bu yoldan gitti",
+  "other": "Rakibin {n} oyunu bu yoldan gitti"
+ },
  "{n} positions had no explorer data and were split evenly.": {
   "one": "{n} pozisyonun gezgin verisi yoktu ve eşit bölündü.",
   "other": "{n} pozisyonun gezgin verisi yoktu ve eşit bölündü."
@@ -879,10 +907,6 @@
  "{n} positions": {
   "one": "{n} pozisyon",
   "other": "{n} pozisyon"
- },
- "{n} recent games analysed.": {
-  "one": "Son {n} oyun analiz edildi.",
-  "other": "Son {n} oyun analiz edildi."
  },
  "{n} replies prepared": {
   "one": "{n} yanıt hazır",
@@ -1004,6 +1028,10 @@
  "See {n} ready-made sets": {
   "one": "{n} hazır seti gör",
   "other": "{n} hazır seti gör"
+ },
+ "Show {n} more lines": {
+  "one": "{n} varyant daha göster",
+  "other": "{n} varyant daha göster"
  },
  "You score {score} in {n} games: {w} won, {d} drawn, {l} lost.": {
   "one": "{n} oyunda {score} puan aldın: {w} galibiyet, {d} beraberlik, {l} yenilgi.",
@@ -1154,6 +1182,7 @@
  "The line now ends after {move}": "Varyant artık {move} sonrasında bitiyor",
  "end": "son",
  "{move} branches off this line": "{move} bu varyanttan ayrılıyor",
+ "{move} isn’t in your repertoire": "{move} hamlesi repertuvarında yok",
  "{name} (branch)": "{name} (dal)",
  "{n} branch points": {
   "one": "{n} ayrılma noktası",
@@ -1187,6 +1216,8 @@
  "Where do my lines differ from each other?": "Varyantlarım birbirinden nerede ayrılıyor?",
  "Which line should I add next?": "Sırada hangi varyantı eklemeliyim?",
  "You decide how they play: pick a reply, or play any move for them on the board.": "Nasıl oynayacaklarına sen karar verirsin: bir yanıt seç ya da tahtada onlar için herhangi bir hamle oyna.",
+ "You have no Black repertoire yet: these are the lines to build one for.": "Henüz siyahla bir repertuvarın yok: bunlar, repertuvar kurman gereken varyantlar.",
+ "You have no White repertoire yet: these are the lines to build one for.": "Henüz beyazla bir repertuvarın yok: bunlar, repertuvar kurman gereken varyantlar.",
  "Your question": "Sorun",
  "e.g. I like quiet positional lines, I hate theory-heavy gambits, I have little time to study.": "ör. Sakin pozisyonel varyantları severim, teorisi ağır gambitlerden nefret ederim, çalışmaya az vaktim var.",
  "Ask anything…": "Ne istersen sor…",
@@ -1200,11 +1231,16 @@
  "Page not found": "Sayfa bulunamadı",
  "Something went wrong": "Bir şeyler ters gitti",
  "There’s nothing at this address.": "Bu adreste bir şey yok.",
+ "They have no games as Black here.": "Burada rakibin siyahla oyunu yok.",
+ "They have no games as White here.": "Burada rakibin beyazla oyunu yok.",
+ "They haven’t faced it in these games.": "Bu oyunlarda bununla hiç karşılaşmamış.",
+ "They haven’t faced your {move} in these games": "Bu oyunlarda senin {move} hamlenle hiç karşılaşmamış",
  "Reload the app and try again. Your repertoire and training are saved.": "Uygulamayı yeniden yükleyip tekrar deneyin. Repertuarınız ve antrenmanınız kayıtlı.",
  "Reload": "Yeniden yükle",
  "Loading…": "Yükleniyor…",
  "From the engine and game statistics": "Motor ve oyun istatistiklerinden",
  "the AI coach is resting until tomorrow": "yapay zekâ koçu yarına kadar dinleniyor",
+ "they score {pct}": "rakibin skoru {pct}",
  "AI coach · grounded in this position’s engine lines and stats": "Yapay zekâ koçu · bu konumun motor varyantlarına ve istatistiklerine dayanır",
  "{wrong} of {total} wrong": "{total} denemede {wrong} yanlış",
  "No games as White yet.": "Henüz beyazla oyun yok.",

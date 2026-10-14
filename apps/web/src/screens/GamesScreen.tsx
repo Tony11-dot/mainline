@@ -1,21 +1,25 @@
-import { useEffect, useMemo, useState } from 'react';
+import { Fragment, useEffect, useMemo, useState } from 'react';
 import { Link, useNavigate } from 'react-router';
-import { BarChart3, Download, ExternalLink, Plus, Search, Swords, Target } from 'lucide-react';
+import { BarChart3, Check, Compass, Download, ExternalLink, Flag, Info, Plus, Search, Swords, Target, TriangleAlert } from 'lucide-react';
 import {
   INITIAL_FEN,
   breakPoints,
   buildBook,
   epdToFen,
-  opponentMeets,
+  opponentPrep,
+  playUci,
   positionFromFen,
   resultsByLine,
+  toEpd,
   uciLineToSan,
   uciToSan,
   type BreakPoint,
   type Color,
   type Deviation,
-  type OpponentMeet,
+  type OpponentPrep,
   type PlayedGame,
+  type PrepFork,
+  type PrepLine,
 } from '@mainline/shared';
 import { accounts, analyse, useGames } from '../lib/games';
 import { useLibrary } from '../lib/library';
@@ -176,11 +180,14 @@ function Tile({ label, value, tone }: { label: string; value: string | number; t
   );
 }
 
-function repFor(color: Color, epd: string): string | undefined {
+/** A repertoire of that colour with the position in its moves. */
+function repWith(color: Color, epd: string): string | undefined {
   const lib = useLibrary.getState();
-  const reps = lib.reps.filter((r) => !r.deleted && r.color === color);
-  const withPos = reps.find((r) => lib.moves.some((m) => m.repertoireId === r.id && !m.deleted && (m.fromEpd === epd || m.toEpd === epd)));
-  return (withPos ?? reps[0])?.id;
+  return lib.reps.find((r) => !r.deleted && r.color === color && lib.moves.some((m) => m.repertoireId === r.id && !m.deleted && (m.fromEpd === epd || m.toEpd === epd)))?.id;
+}
+
+function repFor(color: Color, epd: string): string | undefined {
+  return repWith(color, epd) ?? useLibrary.getState().reps.find((r) => !r.deleted && r.color === color)?.id;
 }
 
 function BreakList({ bps }: { bps: BreakPoint[] }) {
@@ -285,20 +292,33 @@ function OpponentPrep() {
   const lib = useLibrary();
   const [site, setSite] = useState<'lichess' | 'chesscom'>('lichess');
   const [user, setUser] = useState('');
-  const [state, setState] = useState<{ loading: boolean; games?: number; meets?: { color: Color; meets: OpponentMeet[] }[]; error?: string }>({ loading: false });
+  const [state, setState] = useState<{ loading: boolean; name?: string; games?: PlayedGame[]; error?: string }>({ loading: false });
+  const [speed, setSpeed] = useState('all');
   const run = async () => {
     setState({ loading: true });
     try {
-      const { games } = await api<{ games: PlayedGame[] }>(`/api/games?${new URLSearchParams({ site, user, max: '300' })}`);
-      const data = { reps: lib.reps, moves: lib.moves };
-      const meets = (['white', 'black'] as const).map((color) => ({ color, meets: opponentMeets(games, buildBook(data, color)).slice(0, 8) }));
-      setState({ loading: false, games: games.length, meets });
+      const { games } = await api<{ games: PlayedGame[] }>(`/api/games?${new URLSearchParams({ site, user, max: '500' })}`);
+      setSpeed('all');
+      setState({ loading: false, name: user, games });
     } catch (e) {
       setState({ loading: false, error: e instanceof ApiError ? e.message : String(e) });
     }
   };
+  const speeds = useMemo(() => {
+    const n = new Map<string, number>();
+    for (const g of state.games ?? []) n.set(g.speed, (n.get(g.speed) ?? 0) + 1);
+    // A time control gets its own tab once there's enough of it to prepare from.
+    return [...n].filter(([, k]) => k >= 10).sort((a, b) => b[1] - a[1]);
+  }, [state.games]);
+  const preps = useMemo(() => {
+    if (!state.games) return undefined;
+    const games = speed === 'all' ? state.games : state.games.filter((g) => g.speed === speed);
+    const data = { reps: lib.reps, moves: lib.moves };
+    return (['white', 'black'] as const).map((color) => opponentPrep(games, buildBook(data, color)));
+  }, [state.games, speed, lib.version]); // eslint-disable-line react-hooks/exhaustive-deps
   return (
-    <section className="mt-[var(--section-gap)] rounded-[var(--radius-l)] bg-surface p-5 shadow-card">
+    // Insets in px, like the kit's rows: at 2× text, rem padding on three nested boxes left the moves a few letters wide.
+    <section className="mt-[var(--section-gap)] rounded-[var(--radius-l)] bg-surface p-[20px] shadow-card">
       <h2 className="flex items-center gap-2.5 text-lg font-bold">
         <span className="flex size-9 items-center justify-center rounded-[var(--radius-s)] bg-brand-soft text-brand-ink" aria-hidden>
           <Target size={19} aria-hidden />
@@ -320,40 +340,209 @@ function OpponentPrep() {
         </Button>
       </form>
       {state.error && <p role="alert" className="mt-3 text-sm font-medium text-bad-ink">{state.error}</p>}
-      {state.meets && (
-        <div className="mt-4 flex flex-col gap-4">
-          <p className="tnum text-sm text-ink-2">{tn(state.games ?? 0, '{n} recent game analysed.', '{n} recent games analysed.')}</p>
-          {state.meets.map(({ color, meets }) => (
-            <div key={color}>
-              <h3 className="mb-2 text-md font-bold">{color === 'white' ? t('When you’re White') : t('When you’re Black')}</h3>
-              {meets.length === 0 ? (
-                <p className="text-sm text-ink-2">{color === 'white' ? t('No overlap with your White repertoire in their games.') : t('No overlap with your Black repertoire in their games.')}</p>
-              ) : (
-                <ul className="divide-y divide-line overflow-hidden rounded-[var(--radius-m)] bg-surface-2">
-                  {meets.map((m) => {
-                    const san = uciToSan(positionFromFen(m.fen), m.theirMove);
-                    return (
-                      <li key={m.epd + m.theirMove} className="flex items-center gap-3 px-4 py-3 text-base">
-                        <span role="img" className={`size-2.5 shrink-0 rounded-full ${m.prepared ? 'bg-good' : 'bg-warn'}`} aria-label={m.prepared ? t('prepared') : t('not prepared')} />
-                        <span className="min-w-0 flex-1">
-                          <span className="block [overflow-wrap:anywhere]">
-                            <bdi>{lineText(m.path)}</bdi> … {tx('they play {move}', { move: <b>{san}</b> })}
-                          </span>
-                          <span className="tnum text-sm text-ink-2">
-                            {t('{share} of their games here · reached in {reach}', { share: fmtPercent(m.theirShare), reach: fmtPercent(m.reach) })} · {m.prepared ? t('you’re prepared') : t('not in your repertoire')}
-                          </span>
-                        </span>
-                      </li>
-                    );
-                  })}
-                </ul>
-              )}
-            </div>
+      {state.games && preps && (
+        <div className="mt-5 flex flex-col gap-7">
+          <div className="flex flex-col gap-2.5">
+            <p className="tnum text-base font-semibold [overflow-wrap:anywhere]">{tn(state.games.length, '{name}: {n} recent game', '{name}: {n} recent games', { name: state.name ?? '' })}</p>
+            {speeds.length > 1 && (
+              <Segmented
+                className="sm:self-start"
+                label={t('Time controls')}
+                value={speed}
+                onChange={setSpeed}
+                options={[{ value: 'all', label: t('All') }, ...speeds.map(([s, n]) => ({ value: s, label: <span className="tnum">{`${speedName(s)} · ${n.toLocaleString(intlLocale())}`}</span> }))]}
+              />
+            )}
+          </div>
+          {preps.map((p) => (
+            <PrepSide key={p.color + speed} prep={p} />
           ))}
         </div>
       )}
     </section>
   );
+}
+
+/** "1…c5" — one move of a line from the start, numbered. */
+function moveText(path: string[], ply: number) {
+  const san = uciLineToSan(INITIAL_FEN, path.slice(0, ply + 1))[ply] ?? '';
+  return `${Math.floor(ply / 2) + 1}${ply % 2 === 0 ? '.' : '…'}${san}`;
+}
+
+function PrepSide({ prep }: { prep: OpponentPrep }) {
+  const [more, setMore] = useState(false);
+  const white = prep.color === 'white';
+  const hasRep = useLibrary((s) => s.reps.some((r) => !r.deleted && r.color === prep.color));
+  const shown = prep.lines.slice(0, more ? 8 : 3);
+  const extra = Math.min(prep.lines.length, 8) - 3;
+  return (
+    <section aria-label={white ? t('When you’re White') : t('When you’re Black')}>
+      <h3 className="flex items-center gap-2.5 text-md font-bold">
+        <span className={`size-3.5 shrink-0 rounded-full ring-1 ring-line-strong ${white ? 'bg-chess-white' : 'bg-chess-black'}`} aria-hidden />
+        {white ? t('When you’re White') : t('When you’re Black')}
+      </h3>
+      {prep.games === 0 ? (
+        <p className="mt-1 text-sm text-ink-2">{white ? t('They have no games as Black here.') : t('They have no games as White here.')}</p>
+      ) : (
+        <>
+          <p className="tnum mt-0.5 text-sm text-ink-2">{white ? tn(prep.games, 'From {n} game where they had Black', 'From {n} games where they had Black') : tn(prep.games, 'From {n} game where they had White', 'From {n} games where they had White')}</p>
+          {!hasRep && <p className="mt-2 text-sm text-ink-2">{white ? t('You have no White repertoire yet: these are the lines to build one for.') : t('You have no Black repertoire yet: these are the lines to build one for.')}</p>}
+          {prep.forks.map((f) => (
+            <PrepForkCard key={f.path.join()} fork={f} marks={hasRep} />
+          ))}
+          {shown.length > 0 && (
+            <>
+              <h4 className="mt-5 mb-2 text-base font-bold">{t('Lines to prepare')}</h4>
+              <ol className="flex flex-col gap-2">
+                {shown.map((l, i) => (
+                  <PrepLineRow key={l.path.join()} line={l} n={i + 1} color={prep.color} />
+                ))}
+              </ol>
+              <div className="mt-2 flex flex-wrap items-center justify-between gap-x-3 gap-y-1">
+                <p className="tnum text-sm text-ink-3">{tn(prep.minGames, 'A line goes on while at least {n} of their games follow it.', 'A line goes on while at least {n} of their games follow it.')}</p>
+                {extra > 0 && (
+                  <Button size="sm" variant="ghost" onClick={() => setMore(!more)}>
+                    {more ? t('Show fewer') : tn(extra, 'Show {n} more line', 'Show {n} more lines')}
+                  </Button>
+                )}
+              </div>
+            </>
+          )}
+        </>
+      )}
+    </section>
+  );
+}
+
+/** Their choices at one of their first decisions, as counts of their games. */
+function PrepForkCard({ fork, marks }: { fork: PrepFork; marks: boolean }) {
+  const top = fork.choices.slice(0, 4);
+  const rest = fork.games - top.reduce((a, c) => a + c.games, 0);
+  return (
+    <div className="mt-3 rounded-[var(--radius-m)] bg-surface-2 px-[16px] py-[14px]">
+      <p className="text-base font-semibold">
+        {fork.path.length ? tx('Their answer to {move}', { move: <bdi>{lineText(fork.path)}</bdi> }) : t('Their first move')} <span className="tnum text-sm font-normal text-ink-2">· {tn(fork.games, '{n} game', '{n} games')}</span>
+      </p>
+      {fork.games === 0 ? (
+        <p className="mt-1 text-sm text-ink-2">{t('They haven’t faced it in these games.')}</p>
+      ) : (
+        <ul className="mt-2.5 flex flex-col gap-2">
+          {top.map((c) => (
+            // Phones: the move and its count on one line, the bar under them; wider: one row of move, bar, count.
+            <li key={c.uci} className="grid grid-cols-[1fr_auto] items-center gap-x-3 gap-y-1.5 sm:grid-cols-[minmax(4.5rem,max-content)_minmax(3rem,1fr)_auto]">
+              <span className="flex flex-wrap items-center gap-x-1.5 gap-y-1">
+                <b className="text-base">
+                  <bdi>{moveText([...fork.path, c.uci], fork.path.length)}</bdi>
+                </b>
+                {marks && (c.prepared ? <Check size={16} className="text-good-ink" role="img" aria-label={t('In your repertoire')} /> : <Pill tone="warn">{t('Not prepared')}</Pill>)}
+              </span>
+              <span className="order-last col-span-2 h-2 overflow-hidden rounded-full bg-surface-3 sm:order-none sm:col-span-1" aria-hidden>
+                <span className="block h-full rounded-full bg-brand" style={{ width: `${(c.games / fork.games) * 100}%` }} />
+              </span>
+              <span className="tnum text-end text-sm text-ink-2">
+                <b className="font-semibold text-ink">{fmtPercent(c.games / fork.games)}</b> · {tn(c.games, '{n} game', '{n} games')}
+              </span>
+            </li>
+          ))}
+          {rest > 0 && <li className="tnum text-sm text-ink-3">{tn(rest, 'Other moves: {n} game', 'Other moves: {n} games')}</li>}
+        </ul>
+      )}
+    </div>
+  );
+}
+
+function PrepLineRow({ line, n, color }: { line: PrepLine; n: number; color: Color }) {
+  const nav = useNavigate();
+  const lib = useLibrary();
+  const sans = uciLineToSan(INITIAL_FEN, line.path);
+  // The position where the line leaves your repertoire, and whose move it is there.
+  let pos = positionFromFen(INITIAL_FEN);
+  for (const u of line.path.slice(0, line.ply)) pos = playUci(pos, u).pos;
+  const epd = toEpd(pos);
+  const leaves = line.book === 'they_leave' || line.book === 'prep_ends';
+  const theirs = pos.turn !== color;
+  const next = line.path[line.ply];
+  const repId = leaves ? repWith(color, epd) : undefined;
+  const nextSan = next ? moveText(line.path, line.ply) : '';
+  const scoreTone = line.games >= 5 && line.score <= 0.4 ? 'text-good-ink' : line.games >= 5 && line.score >= 0.6 ? 'text-bad-ink' : '';
+  return (
+    <li className="rounded-[var(--radius-m)] bg-surface-2 px-[16px] py-[14px]">
+      <div className="min-w-0">
+        <p className="text-base leading-relaxed font-semibold [overflow-wrap:anywhere]">
+          <span className="tnum me-2 inline-flex min-w-[1.6em] justify-center rounded-full bg-surface-3 px-1.5 text-sm font-bold text-ink-2" aria-hidden>
+            {n}
+          </span>
+          <bdi>
+            {sans.map((s, i) => (
+              <Fragment key={i}>
+                {i > 0 && ' '}
+                <span className={leaves && i >= line.ply ? (i === line.ply && line.book === 'they_leave' ? 'font-bold text-warn-ink' : 'font-medium text-ink-2') : undefined}>{i % 2 === 0 ? `${i / 2 + 1}.${s}` : s}</span>
+              </Fragment>
+            ))}
+          </bdi>
+        </p>
+        <p className="tnum mt-1 text-sm text-ink-2">
+          {tn(line.games, '{n} of their games went this way', '{n} of their games went this way')} · <span className={scoreTone}>{t('they score {pct}', { pct: fmtPercent(line.score) })}</span> · {t('last played {date}', { date: fmtDay(line.lastPlayed) })}
+        </p>
+        <p className="mt-2 flex items-start gap-1.5 text-sm font-medium">
+          {line.book === 'covered' && !line.rare && (
+            <>
+              <Check size={16} className="mt-0.5 shrink-0 text-good-ink" aria-hidden />
+              <span className="text-good-ink">{t('In your repertoire all the way')}</span>
+            </>
+          )}
+          {line.book === 'covered' && line.rare && (
+            <>
+              <Info size={16} className="mt-0.5 shrink-0 text-ink-2" aria-hidden />
+              <span>{line.rare.games ? tn(line.rare.games, 'They’ve faced your {move} only once here', 'They’ve faced your {move} only {n} times here', { move: moveText([...line.path, line.rare.uci], line.path.length) }) : t('They haven’t faced your {move} in these games', { move: moveText([...line.path, line.rare.uci], line.path.length) })}</span>
+            </>
+          )}
+          {line.book === 'they_leave' && (
+            <>
+              <TriangleAlert size={16} className="mt-0.5 shrink-0 text-warn-ink" aria-hidden />
+              <span className="text-warn-ink">{tx('{move} isn’t in your repertoire', { move: <bdi>{nextSan}</bdi> })}</span>
+            </>
+          )}
+          {line.book === 'prep_ends' && (
+            <>
+              <Flag size={16} className="mt-0.5 shrink-0 text-ink-2" aria-hidden />
+              <span>{tx('Your repertoire ends after {move}', { move: <bdi>{moveText(line.path, line.ply - 1)}</bdi> })}</span>
+            </>
+          )}
+          {line.book === 'none' && <span className="text-ink-2">{t('Not in your repertoire')}</span>}
+        </p>
+        <div className="mt-2.5 flex flex-wrap gap-1.5">
+          {repId && theirs && next && (
+            <Button
+              size="sm"
+              icon={Plus}
+              onClick={async () => {
+                await lib.addMove(repId, epdToFen(epd), next);
+                // A numbered move ("1…c5") is isolated so right-to-left text keeps it in order.
+                toast(t('Added {move} — choose your reply', { move: `\u2068${nextSan}\u2069` }), { kind: 'success', action: { label: t('Open'), run: () => nav(`/rep/${repId}?at=${encodeURIComponent(epd)}`) } });
+              }}
+            >
+              {tx('Add {move}', { move: <bdi>{nextSan}</bdi> })}
+            </Button>
+          )}
+          {repId && !theirs && (
+            <Button size="sm" variant="ghost" onClick={() => nav(`/rep/${repId}?at=${encodeURIComponent(epd)}`)}>
+              {t('Open')}
+            </Button>
+          )}
+          <Button size="sm" variant="ghost" icon={Compass} onClick={() => nav(`/explore?${new URLSearchParams({ moves: line.path.join(','), color })}`)}>
+            {t('Explore')}
+          </Button>
+        </div>
+      </div>
+    </li>
+  );
+}
+
+/** "12 Oct", with the year when it isn't this year. */
+function fmtDay(ts: number) {
+  const d = new Date(ts);
+  return d.toLocaleDateString(intlLocale(), { day: 'numeric', month: 'short', year: d.getFullYear() === new Date().getFullYear() ? undefined : 'numeric' });
 }
 
 /** Your own results: wins green, draws grey, losses red. */

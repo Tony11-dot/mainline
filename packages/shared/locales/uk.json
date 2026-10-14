@@ -30,6 +30,7 @@
  "Added {move} — now choose your reply": "Додано хід {move} — тепер виберіть свою відповідь",
  "After the first import, new games are checked automatically.": "Після першого імпорту нові партії перевіряються автоматично.",
  "Again": "Ще раз",
+ "All": "Усі",
  "All caught up": "Усе повторено",
  "All four start from Today. Pick the one that fits your time and mood.": "Усі чотири запускаються з екрана «Сьогодні». Виберіть той, що пасує вашому часу й настрою.",
  "All games and variations are merged. Comments become move notes.": "Усі партії та варіанти об’єднуються. Коментарі стають нотатками до ходів.",
@@ -222,6 +223,7 @@
  "In the Games tab, enter your Lichess or Chess.com username and import. MainLine only looks at the openings.": "На вкладці «Партії» введіть свій логін на Lichess або Chess.com та імпортуйте. MainLine дивиться лише на дебюти.",
  "In your games": "У ваших партіях",
  "In your repertoire": "У вашому репертуарі",
+ "In your repertoire all the way": "Повністю у вашому репертуарі",
  "In {guided} mode an arrow shows the top pick. Play it, play any other move, or tap a suggestion in the list.": "У режимі «{guided}» стрілка показує найкращий вибір. Зіграйте його, зіграйте інший хід або натисніть підказку в списку.",
  "Include replies played in at least": "Включати відповіді, зіграні щонайменше в",
  "Increase {setting}": "Збільшити: {setting}",
@@ -257,6 +259,7 @@
  "Line complete": "Варіант пройдено",
  "Line story": "Історія варіанта",
  "Lines": "Варіанти",
+ "Lines to prepare": "Варіанти для підготовки",
  "Link your Chess.com account to import your games from it.": "Під’єднайте обліковий запис Chess.com, щоб імпортувати звідти свої партії.",
  "Loading openings…": "Завантаження дебютів…",
  "London System": "Лондонська система",
@@ -313,8 +316,6 @@
  "No master games": "Немає партій майстрів",
  "No new moves to learn": "Немає нових ходів для вивчення",
  "No opening matches “{query}”.": "Немає дебютів за запитом «{query}».",
- "No overlap with your Black repertoire in their games.": "У його партіях немає перетинів із вашим репертуаром за чорних.",
- "No overlap with your White repertoire in their games.": "У його партіях немає перетинів із вашим репертуаром за білих.",
  "No positions learned yet": "Поки не вивчено жодної позиції",
  "No repertoires yet.": "Репертуарів поки немає.",
  "No reviews are due. Learn new moves, or come back when positions are due again.": "Повторювати поки нічого. Вивчіть нові ходи або повертайтеся, коли настане час повторення.",
@@ -325,6 +326,7 @@
  "Not enough data yet": "Поки замало даних",
  "Not in your repertoire": "Немає у вашому репертуарі",
  "Not played at this level": "Не грається на цьому рівні",
+ "Not prepared": "Не підготовлено",
  "Not quite — it’s {move}": "Не зовсім — правильно {move}",
  "Not quite. The move is {move}.": "Не зовсім. Правильний хід — {move}.",
  "Not trained yet": "Ще не тренувалося",
@@ -549,6 +551,8 @@
  "The tab bar at the bottom of the screen takes you everywhere. On a tablet or a computer, the same tabs sit in the sidebar.": "Панель вкладок унизу екрана веде будь-куди. На планшеті чи комп’ютері ті самі вкладки — на бічній панелі.",
  "The whole line. Tap a move to jump to it.": "Увесь варіант. Натисніть хід, щоб перейти до нього.",
  "The {board} (on Today) sets up any position or takes a pasted FEN, then analyses it with Stockfish.": "{board} (на екрані «Сьогодні») розставить будь-яку позицію або прийме вставлений FEN, а потім проаналізує її зі Stockfish.",
+ "Their answer to {move}": "Відповідь суперника на {move}",
+ "Their first move": "Перший хід суперника",
  "Their move — no replies yet": "Хід суперника — відповідей поки немає",
  "Their username": "Його нік",
  "Themes, boards, piece sets and fonts, plus sound, vibration and language: pick what you like.": "Теми, дошки, набори фігур і шрифти, а також звук, вібрація й мова — обирайте, що до вподоби.",
@@ -645,6 +649,7 @@
  "Your real games, checked against your preparation.": "Ваші справжні партії в порівнянні з вашою підготовкою.",
  "Your repertoire": "Ваш репертуар",
  "Your repertoire and training sync across devices.": "Репертуар і тренування синхронізуються між пристроями.",
+ "Your repertoire ends after {move}": "Ваш репертуар закінчується після {move}",
  "Your repertoire is every move you have decided to play. The Repertoire tab keeps White and Black apart, and sorts each side into folders: first moves, then openings, then their lines.": "Ваш репертуар — це всі ходи, які ви вирішили грати. Вкладка «Репертуар» розділяє білих і чорних і розкладає кожну сторону по теках: спершу перші ходи, далі дебюти, далі їхні варіанти.",
  "Your repertoire is waiting for you.": "Ваш репертуар чекає на вас.",
  "Your repertoire misses you": "Ваш репертуар сумує",
@@ -671,16 +676,14 @@
  "has a note": "є нотатка",
  "in": "у",
  "in your repertoire": "у вашому репертуарі",
+ "last played {date}": "востаннє {date}",
  "median, correct answers": "медіана, правильні відповіді",
  "missed": "помилка",
  "move {n}": "хід {n}",
  "never trained": "ще жодного разу не тренувалося",
  "newest first": "спершу нові",
- "not in your repertoire": "немає у вашому репертуарі",
- "not prepared": "не підготовлено",
  "not yet": "ще ні",
  "practised": "відпрацьовано",
- "prepared": "підготовлено",
  "promotes to bishop": "перетворюється на слона",
  "promotes to knight": "перетворюється на коня",
  "promotes to queen": "перетворюється на ферзя",
@@ -693,7 +696,6 @@
  "still being learnt": "ще вивчаються",
  "streak freeze used": "заморозку серії використано",
  "takes {square}": "б’є на {square}",
- "they play {move}": "суперник грає {move}",
  "transposition": "перестановка",
  "unavailable": "недоступно",
  "unknown": "невідомо",
@@ -704,7 +706,6 @@
  "you score {score}": "ваш результат {score}",
  "your Apple ID": "ваш Apple ID",
  "your account": "ваш обліковий запис",
- "you’re prepared": "ви готові",
  "{account} is optional. Sign in with Lichess, Chess.com or Apple to keep your repertoire and training in step across devices. Without an account, everything stays on this device and works offline.": "{account} не обов’язковий. Увійдіть через Lichess, Chess.com або Apple, щоб репертуар і тренування збігалися на всіх пристроях. Без облікового запису все зберігається на цьому пристрої й працює офлайн.",
  "{breaks} shows where each game left your preparation: {surprises} (your opponent played a move you hadn’t prepared, and you can add your answer right there), {forgotten} (you played something other than the move you learned, so that position becomes due again) and {ended} (the game outlasted your line).": "{breaks} показує, де кожна партія вийшла за межі вашої підготовки: {surprises} (суперник зіграв хід, до якого ви не готувалися, — відповідь можна додати просто там), {forgotten} (ви зіграли не той хід, що вивчили, тож позиція знову чекає повторення) і {ended} (партія вийшла за межі вашого варіанта).",
  "{build}: choose the moves you play and the replies you expect from your opponent.": "{build}: виберіть ходи, які граєте, і відповіді, яких чекаєте від суперника.",
@@ -739,7 +740,6 @@
  "{pct} of games there": "{pct} партій там",
  "{pct} of {games} · you score {score}": "{pct} з {games} · ваш результат {score}",
  "{sec} s": "{sec} с",
- "{share} of their games here · reached in {reach}": "{share} його партій тут · досягається в {reach}",
  "{suggest} ranks your options. {replies} adds the replies you are most likely to meet, so your line is ready for them.": "{suggest} ранжує ваші можливості. {replies} додає відповіді, які ви найімовірніше зустрінете, щоб варіант був до них готовий.",
  "{train} appears when positions are due for review. {learn} appears when there are new moves to learn. When neither is needed, you are all caught up.": "{train} з’являється, коли позиції чекають повторення. {learn} з’являється, коли є нові ходи для вивчення. Якщо ні те, ні інше не потрібне, у вас усе зроблено.",
  "{train}: the app tests you on each position just before you would forget it.": "{train}: застосунок питає кожну позицію саме перед тим, як ви б її забули.",
@@ -752,6 +752,12 @@
  "❄️ Streak freeze used": "❄️ Заморозку серії використано",
  "🔥 Day {day} is waiting": "🔥 День {day} чекає",
  "🔥 Still time today": "🔥 Сьогодні ще є час",
+ "A line goes on while at least {n} of their games follow it.": {
+  "one": "Варіант триває, доки ним іде щонайменше {n} партія суперника.",
+  "few": "Варіант триває, доки ним ідуть щонайменше {n} партії суперника.",
+  "many": "Варіант триває, доки ним ідуть щонайменше {n} партій суперника.",
+  "other": "Варіант триває, доки ним ідуть щонайменше {n} партії суперника."
+ },
  "A streak freeze saved your {n}-day streak. Practise today to keep it.": {
   "one": "Заморозка врятувала вашу серію в {n} день. Позаймайтеся сьогодні, щоб її зберегти.",
   "few": "Заморозка врятувала вашу серію в {n} дні. Позаймайтеся сьогодні, щоб її зберегти.",
@@ -775,6 +781,18 @@
   "few": "Не втратьте {n} дні",
   "many": "Не втратьте {n} днів",
   "other": "Не втратьте {n} дня"
+ },
+ "From {n} games where they had Black": {
+  "one": "За {n} партією, де суперник грав чорними",
+  "few": "За {n} партіями, де суперник грав чорними",
+  "many": "За {n} партіями, де суперник грав чорними",
+  "other": "За {n} партіями, де суперник грав чорними"
+ },
+ "From {n} games where they had White": {
+  "one": "За {n} партією, де суперник грав білими",
+  "few": "За {n} партіями, де суперник грав білими",
+  "many": "За {n} партіями, де суперник грав білими",
+  "other": "За {n} партіями, де суперник грав білими"
  },
  "Imported {added} moves · {n} problems: {first}": {
   "one": "Імпортовано ходів: {added} · {n} проблема: {first}",
@@ -812,6 +830,12 @@
   "many": "Наступний рубіж: {n} днів",
   "other": "Наступний рубіж: {n} дня"
  },
+ "Other moves: {n} games": {
+  "one": "Інші ходи: {n} партія",
+  "few": "Інші ходи: {n} партії",
+  "many": "Інші ходи: {n} партій",
+  "other": "Інші ходи: {n} партії"
+ },
  "Practise today to keep your {n}-day streak.": {
   "one": "Позаймайтеся сьогодні, щоб зберегти серію в {n} день.",
   "few": "Позаймайтеся сьогодні, щоб зберегти серію в {n} дні.",
@@ -842,6 +866,12 @@
   "many": "Показати {n} варіантів",
   "other": "Показати {n} варіанта"
  },
+ "They’ve faced your {move} only {n} times here": {
+  "one": "Ваш хід {move} траплявся тут лише {n} раз",
+  "few": "Ваш хід {move} траплявся тут лише {n} рази",
+  "many": "Ваш хід {move} траплявся тут лише {n} разів",
+  "other": "Ваш хід {move} траплявся тут лише {n} рази"
+ },
  "Your {n}-day streak is at risk": {
   "one": "Ваша серія в {n} день під загрозою",
   "few": "Ваша серія в {n} дні під загрозою",
@@ -865,6 +895,12 @@
   "few": "{due} чекають на швидкий погляд. Збережіть серію в {n} дні.",
   "many": "{due} чекають на швидкий погляд. Збережіть серію в {n} днів.",
   "other": "{due} чекають на швидкий погляд. Збережіть серію в {n} дня."
+ },
+ "{name}: {n} recent games": {
+  "one": "{name}: {n} остання партія",
+  "few": "{name}: {n} останні партії",
+  "many": "{name}: {n} останніх партій",
+  "other": "{name}: {n} останні партії"
  },
  "{n} alternates": {
   "one": "{n} альтернатива",
@@ -908,6 +944,12 @@
   "many": "{n} ходів",
   "other": "{n} ходу"
  },
+ "{n} of their games went this way": {
+  "one": "{n} партія суперника йшла так",
+  "few": "{n} партії суперника йшли так",
+  "many": "{n} партій суперника йшли так",
+  "other": "{n} партії суперника йшли так"
+ },
  "{n} positions had no explorer data and were split evenly.": {
   "one": "{n} позиція не мала даних бази, тож вагу розділено порівну.",
   "few": "{n} позиції не мали даних бази, тож вагу розділено порівну.",
@@ -943,12 +985,6 @@
   "few": "{n} позиції",
   "many": "{n} позицій",
   "other": "{n} позиції"
- },
- "{n} recent games analysed.": {
-  "one": "Проаналізовано {n} недавню партію.",
-  "few": "Проаналізовано {n} недавні партії.",
-  "many": "Проаналізовано {n} недавніх партій.",
-  "other": "Проаналізовано {n} недавньої партії."
  },
  "{n} replies prepared": {
   "one": "Підготовлено {n} відповідь",
@@ -1094,6 +1130,12 @@
   "few": "Переглянути {n} готові набори",
   "many": "Переглянути {n} готових наборів",
   "other": "Переглянути {n} готового набору"
+ },
+ "Show {n} more lines": {
+  "one": "Показати ще {n} варіант",
+  "few": "Показати ще {n} варіанти",
+  "many": "Показати ще {n} варіантів",
+  "other": "Показати ще {n} варіанта"
  },
  "You score {score} in {n} games: {w} won, {d} drawn, {l} lost.": {
   "one": "Ваш результат {score} у {n} партії: {w} перемог, {d} нічиїх, {l} поразок.",
@@ -1276,6 +1318,7 @@
  "The line now ends after {move}": "Тепер варіант закінчується після {move}",
  "end": "кінець",
  "{move} branches off this line": "{move} відгалужується від цього варіанта",
+ "{move} isn’t in your repertoire": "{move} немає у вашому репертуарі",
  "{name} (branch)": "{name} (відгалуження)",
  "{n} branch points": {
   "one": "{n} точка розгалуження",
@@ -1313,6 +1356,8 @@
  "Where do my lines differ from each other?": "Чим мої лінії відрізняються одна від одної?",
  "Which line should I add next?": "Яку лінію додати наступною?",
  "You decide how they play: pick a reply, or play any move for them on the board.": "Ви вирішуєте, як грає суперник: виберіть відповідь або зробіть за нього будь-який хід на дошці.",
+ "You have no Black repertoire yet: these are the lines to build one for.": "У вас ще немає репертуару за чорних: ось варіанти, під які варто його зібрати.",
+ "You have no White repertoire yet: these are the lines to build one for.": "У вас ще немає репертуару за білих: ось варіанти, під які варто його зібрати.",
  "Your question": "Ваше питання",
  "e.g. I like quiet positional lines, I hate theory-heavy gambits, I have little time to study.": "наприклад: люблю спокійні позиційні лінії, не терплю гамбітів із купою теорії, маю мало часу на навчання.",
  "Ask anything…": "Запитайте будь-що…",
@@ -1326,11 +1371,16 @@
  "Page not found": "Сторінку не знайдено",
  "Something went wrong": "Щось пішло не так",
  "There’s nothing at this address.": "За цією адресою нічого немає.",
+ "They have no games as Black here.": "Тут немає партій суперника чорними.",
+ "They have no games as White here.": "Тут немає партій суперника білими.",
+ "They haven’t faced it in these games.": "У цих партіях такого не траплялося.",
+ "They haven’t faced your {move} in these games": "Ваш хід {move} у цих партіях не траплявся",
  "Reload the app and try again. Your repertoire and training are saved.": "Перезавантажте застосунок і спробуйте ще раз. Ваш репертуар і тренування збережено.",
  "Reload": "Перезавантажити",
  "Loading…": "Завантаження…",
  "From the engine and game statistics": "За даними рушія та статистикою партій",
  "the AI coach is resting until tomorrow": "ШІ-тренер відпочиває до завтра",
+ "they score {pct}": "результат суперника {pct}",
  "AI coach · grounded in this position’s engine lines and stats": "ШІ-тренер · спирається на лінії рушія та статистику цієї позиції",
  "{wrong} of {total} wrong": "{wrong} з {total} неправильно",
  "No games as White yet.": "Поки немає партій білими.",

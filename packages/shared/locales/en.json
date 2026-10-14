@@ -47,6 +47,7 @@
   "After": "After",
   "After the first import, new games are checked automatically.": "After the first import, new games are checked automatically.",
   "Again": "Again",
+  "All": "All",
   "All caught up": "All caught up",
   "All four start from Today. Pick the one that fits your time and mood.": "All four start from Today. Pick the one that fits your time and mood.",
   "All games and variations are merged. Comments become move notes.": "All games and variations are merged. Comments become move notes.",
@@ -299,6 +300,7 @@
   "In your own games from this position, you scored 40% or less after this move (at least 3 games).": "In your own games from this position, you scored 40% or less after this move (at least 3 games).",
   "In your own games from this position, you scored 60% or more after this move (at least 5 games).": "In your own games from this position, you scored 60% or more after this move (at least 5 games).",
   "In your repertoire": "In your repertoire",
+  "In your repertoire all the way": "In your repertoire all the way",
   "In {guided} mode an arrow shows the top pick. Play it, play any other move, or tap a suggestion in the list.": "In {guided} mode an arrow shows the top pick. Play it, play any other move, or tap a suggestion in the list.",
   "Include replies played in at least": "Include replies played in at least",
   "Increase {setting}": "Increase {setting}",
@@ -340,6 +342,7 @@
   "Line story": "Line story",
   "Line {n}": "Line {n}",
   "Lines": "Lines",
+  "Lines to prepare": "Lines to prepare",
   "Lines you make inside start from here.": "Lines you make inside start from here.",
   "Link your Chess.com account to import your games from it.": "Link your Chess.com account to import your games from it.",
   "Loading openings…": "Loading openings…",
@@ -427,8 +430,6 @@
   "No master games": "No master games",
   "No new moves to learn": "No new moves to learn",
   "No opening matches “{query}”.": "No opening matches “{query}”.",
-  "No overlap with your Black repertoire in their games.": "No overlap with your Black repertoire in their games.",
-  "No overlap with your White repertoire in their games.": "No overlap with your White repertoire in their games.",
   "No plan yet": "No plan yet",
   "No positions learned yet": "No positions learned yet",
   "No repertoires yet.": "No repertoires yet.",
@@ -441,6 +442,7 @@
   "Not in your repertoire": "Not in your repertoire",
   "Not learned yet": "Not learned yet",
   "Not played at this level": "Not played at this level",
+  "Not prepared": "Not prepared",
   "Not quite — it’s {move}": "Not quite — it’s {move}",
   "Not quite. The move is {move}.": "Not quite. The move is {move}.",
   "Not trained yet": "Not trained yet",
@@ -712,12 +714,18 @@
   "The tab bar at the bottom of the screen takes you everywhere. On a tablet or a computer, the same tabs sit in the sidebar.": "The tab bar at the bottom of the screen takes you everywhere. On a tablet or a computer, the same tabs sit in the sidebar.",
   "The whole line. Tap a move to jump to it.": "The whole line. Tap a move to jump to it.",
   "The {board} (on Today) sets up any position or takes a pasted FEN, then analyses it with Stockfish.": "The {board} (on Today) sets up any position or takes a pasted FEN, then analyses it with Stockfish.",
+  "Their answer to {move}": "Their answer to {move}",
+  "Their first move": "Their first move",
   "Their move": "Their move",
   "Their move — no replies yet": "Their move — no replies yet",
   "Their score at your rating": "Their score at your rating",
   "Their username": "Their username",
   "Themes, boards, piece sets and fonts, plus sound, vibration and language: pick what you like.": "Themes, boards, piece sets and fonts, plus sound, vibration and language: pick what you like.",
   "There’s nothing at this address.": "There’s nothing at this address.",
+  "They have no games as Black here.": "They have no games as Black here.",
+  "They have no games as White here.": "They have no games as White here.",
+  "They haven’t faced it in these games.": "They haven’t faced it in these games.",
+  "They haven’t faced your {move} in these games": "They haven’t faced your {move} in these games",
   "They played {move}": "They played {move}",
   "Thinking…": "Thinking…",
   "This browser can’t show reminders.": "This browser can’t show reminders.",
@@ -812,6 +820,8 @@
   "Works for you": "Works for you",
   "You can take this tour again any time: it’s under {tools} on Today, and in Settings.": "You can take this tour again any time: it’s under {tools} on Today, and in Settings.",
   "You decide how they play: pick a reply, or play any move for them on the board.": "You decide how they play: pick a reply, or play any move for them on the board.",
+  "You have no Black repertoire yet: these are the lines to build one for.": "You have no Black repertoire yet: these are the lines to build one for.",
+  "You have no White repertoire yet: these are the lines to build one for.": "You have no White repertoire yet: these are the lines to build one for.",
   "You have ready-made lines for it. Test yourself until they stick.": "You have ready-made lines for it. Test yourself until they stick.",
   "You left book": "You left book",
   "You miss {pct} of your moves ({misses} of {n})": "You miss {pct} of your moves ({misses} of {n})",
@@ -839,6 +849,7 @@
   "Your real games, checked against your preparation.": "Your real games, checked against your preparation.",
   "Your repertoire": "Your repertoire",
   "Your repertoire and training sync across devices.": "Your repertoire and training sync across devices.",
+  "Your repertoire ends after {move}": "Your repertoire ends after {move}",
   "Your repertoire is every move you have decided to play. The Repertoire tab keeps White and Black apart, and sorts each side into folders: first moves, then openings, then their lines.": "Your repertoire is every move you have decided to play. The Repertoire tab keeps White and Black apart, and sorts each side into folders: first moves, then openings, then their lines.",
   "Your repertoire is waiting for you.": "Your repertoire is waiting for you.",
   "Your repertoire misses you": "Your repertoire misses you",
@@ -870,16 +881,14 @@
   "has a note": "has a note",
   "in": "in",
   "in your repertoire": "in your repertoire",
+  "last played {date}": "last played {date}",
   "median, correct answers": "median, correct answers",
   "missed": "missed",
   "move {n}": "move {n}",
   "never trained": "never trained",
   "newest first": "newest first",
-  "not in your repertoire": "not in your repertoire",
-  "not prepared": "not prepared",
   "not yet": "not yet",
   "practised": "practised",
-  "prepared": "prepared",
   "promotes to bishop": "promotes to bishop",
   "promotes to knight": "promotes to knight",
   "promotes to queen": "promotes to queen",
@@ -893,7 +902,7 @@
   "streak freeze used": "streak freeze used",
   "takes {square}": "takes {square}",
   "the AI coach is resting until tomorrow": "the AI coach is resting until tomorrow",
-  "they play {move}": "they play {move}",
+  "they score {pct}": "they score {pct}",
   "transposition": "transposition",
   "unavailable": "unavailable",
   "unknown": "unknown",
@@ -904,7 +913,6 @@
   "you score {score}": "you score {score}",
   "your Apple ID": "your Apple ID",
   "your account": "your account",
-  "you’re prepared": "you’re prepared",
   "{account} is optional. Sign in with Lichess, Chess.com or Apple to keep your repertoire and training in step across devices. Without an account, everything stays on this device and works offline.": "{account} is optional. Sign in with Lichess, Chess.com or Apple to keep your repertoire and training in step across devices. Without an account, everything stays on this device and works offline.",
   "{breaks} shows where each game left your preparation: {surprises} (your opponent played a move you hadn’t prepared, and you can add your answer right there), {forgotten} (you played something other than the move you learned, so that position becomes due again) and {ended} (the game outlasted your line).": "{breaks} shows where each game left your preparation: {surprises} (your opponent played a move you hadn’t prepared, and you can add your answer right there), {forgotten} (you played something other than the move you learned, so that position becomes due again) and {ended} (the game outlasted your line).",
   "{build}: choose the moves you play and the replies you expect from your opponent.": "{build}: choose the moves you play and the replies you expect from your opponent.",
@@ -928,6 +936,7 @@
   "{level}: your rating and the time controls you play. Statistics and suggestions use players around your rating. This is also where you set new moves per day and the daily goal.": "{level}: your rating and the time controls you play. Statistics and suggestions use players around your rating. This is also where you set new moves per day and the daily goal.",
   "{min} min {sec} s": "{min} min {sec} s",
   "{move} branches off this line": "{move} branches off this line",
+  "{move} isn’t in your repertoire": "{move} isn’t in your repertoire",
   "{name} (branch)": "{name} (branch)",
   "{name} actions": "{name} actions",
   "{n} active days / 30": "{n} active days / 30",
@@ -944,7 +953,6 @@
   "{pct} of your moves right": "{pct} of your moves right",
   "{pct} of {games} · you score {score}": "{pct} of {games} · you score {score}",
   "{sec} s": "{sec} s",
-  "{share} of their games here · reached in {reach}": "{share} of their games here · reached in {reach}",
   "{suggest} ranks your options. {replies} adds the replies you are most likely to meet, so your line is ready for them.": "{suggest} ranks your options. {replies} adds the replies you are most likely to meet, so your line is ready for them.",
   "{train} appears when positions are due for review. {learn} appears when there are new moves to learn. When neither is needed, you are all caught up.": "{train} appears when positions are due for review. {learn} appears when there are new moves to learn. When neither is needed, you are all caught up.",
   "{train}: the app tests you on each position just before you would forget it.": "{train}: the app tests you on each position just before you would forget it.",
@@ -958,6 +966,10 @@
   "❄️ Streak freeze used": "❄️ Streak freeze used",
   "🔥 Day {day} is waiting": "🔥 Day {day} is waiting",
   "🔥 Still time today": "🔥 Still time today",
+  "A line goes on while at least {n} of their games follow it.": {
+    "one": "A line goes on while at least {n} of their games follow it.",
+    "other": "A line goes on while at least {n} of their games follow it."
+  },
   "A streak freeze saved your {n}-day streak. Practise today to keep it.": {
     "one": "A streak freeze saved your {n}-day streak. Practise today to keep it.",
     "other": "A streak freeze saved your {n}-day streak. Practise today to keep it."
@@ -989,6 +1001,14 @@
   "Don’t let {n} days slip": {
     "one": "Don’t let {n} day slip",
     "other": "Don’t let {n} days slip"
+  },
+  "From {n} games where they had Black": {
+    "one": "From {n} game where they had Black",
+    "other": "From {n} games where they had Black"
+  },
+  "From {n} games where they had White": {
+    "one": "From {n} game where they had White",
+    "other": "From {n} games where they had White"
   },
   "Imported {added} moves · {n} problems: {first}": {
     "one": "Imported {added} moves · {n} problem: {first}",
@@ -1022,6 +1042,10 @@
     "one": "Next milestone: {n} day",
     "other": "Next milestone: {n} days"
   },
+  "Other moves: {n} games": {
+    "one": "Other moves: {n} game",
+    "other": "Other moves: {n} games"
+  },
   "Practise today to keep your {n}-day streak.": {
     "one": "Practise today to keep your {n}-day streak.",
     "other": "Practise today to keep your {n}-day streak."
@@ -1046,9 +1070,17 @@
     "one": "See {n} ready-made set",
     "other": "See {n} ready-made sets"
   },
+  "Show {n} more lines": {
+    "one": "Show {n} more line",
+    "other": "Show {n} more lines"
+  },
   "Show {n} variations": {
     "one": "Show {n} variation",
     "other": "Show {n} variations"
+  },
+  "They’ve faced your {move} only {n} times here": {
+    "one": "They’ve faced your {move} only once here",
+    "other": "They’ve faced your {move} only {n} times here"
   },
   "You score {score} in {n} games: {w} won, {d} drawn, {l} lost.": {
     "one": "You score {score} in {n} game: {w} won, {d} drawn, {l} lost.",
@@ -1077,6 +1109,10 @@
   "{due} want a quick look. Keep the {n}-day streak going.": {
     "one": "{due} want a quick look. Keep the {n}-day streak going.",
     "other": "{due} want a quick look. Keep the {n}-day streak going."
+  },
+  "{name}: {n} recent games": {
+    "one": "{name}: {n} recent game",
+    "other": "{name}: {n} recent games"
   },
   "{n} alternates": {
     "one": "{n} alternate",
@@ -1126,6 +1162,10 @@
     "one": "{n} move",
     "other": "{n} moves"
   },
+  "{n} of their games went this way": {
+    "one": "{n} of their games went this way",
+    "other": "{n} of their games went this way"
+  },
   "{n} other moves here": {
     "one": "{n} other move here",
     "other": "{n} other moves here"
@@ -1157,10 +1197,6 @@
   "{n} ready-made sets": {
     "one": "{n} ready-made set",
     "other": "{n} ready-made sets"
-  },
-  "{n} recent games analysed.": {
-    "one": "{n} recent game analysed.",
-    "other": "{n} recent games analysed."
   },
   "{n} replies prepared": {
     "one": "{n} reply prepared",

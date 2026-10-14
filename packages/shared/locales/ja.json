@@ -30,6 +30,7 @@
  "Added {move} — now choose your reply": "{move}を追加しました — 次に応手を選んでください",
  "After the first import, new games are checked automatically.": "最初のインポート以降、新しい対局は自動でチェックされます。",
  "Again": "もう一度",
+ "All": "すべて",
  "All caught up": "すべて完了",
  "All four start from Today. Pick the one that fits your time and mood.": "4つとも「今日」から始められます。時間と気分に合うものを選びましょう。",
  "All games and variations are merged. Comments become move notes.": "すべての対局と変化がまとめられます。コメントは指し手のメモになります。",
@@ -222,6 +223,7 @@
  "In the Games tab, enter your Lichess or Chess.com username and import. MainLine only looks at the openings.": "「対局」タブでLichessまたはChess.comのユーザー名を入力してインポートします。MainLineが見るのはオープニングだけです。",
  "In your games": "あなたの対局で",
  "In your repertoire": "レパートリー内",
+ "In your repertoire all the way": "最後までレパートリーにあります",
  "In {guided} mode an arrow shows the top pick. Play it, play any other move, or tap a suggestion in the list.": "{guided}モードでは、矢印が最善の候補を示します。それを指しても、ほかの手を指しても、リストの候補をタップしてもかまいません。",
  "Include replies played in at least": "次の割合以上で指された応手を含める",
  "Increase {setting}": "{setting}を増やす",
@@ -257,6 +259,7 @@
  "Line complete": "ライン完了",
  "Line story": "ラインの流れ",
  "Lines": "ライン",
+ "Lines to prepare": "準備すべきライン",
  "Link your Chess.com account to import your games from it.": "Chess.comアカウントを連携すると、そこから対局をインポートできます。",
  "Loading openings…": "オープニングを読み込み中…",
  "London System": "ロンドン・システム",
@@ -313,8 +316,6 @@
  "No master games": "マスターの対局なし",
  "No new moves to learn": "学ぶ新しい手はありません",
  "No opening matches “{query}”.": "「{query}」に一致するオープニングはありません。",
- "No overlap with your Black repertoire in their games.": "相手の対局に黒番レパートリーとの重なりはありません。",
- "No overlap with your White repertoire in their games.": "相手の対局に白番レパートリーとの重なりはありません。",
  "No positions learned yet": "まだ学習した局面はありません",
  "No repertoires yet.": "レパートリーはまだありません。",
  "No reviews are due. Learn new moves, or come back when positions are due again.": "復習予定はありません。新しい手を学ぶか、復習の時期になったらまた来てください。",
@@ -325,6 +326,7 @@
  "Not enough data yet": "まだデータが足りません",
  "Not in your repertoire": "レパートリーにありません",
  "Not played at this level": "このレベルでは指されていません",
+ "Not prepared": "未準備",
  "Not quite — it’s {move}": "惜しい — 正解は{move}",
  "Not quite. The move is {move}.": "惜しい。正解は{move}です。",
  "Not trained yet": "まだトレーニングしていません",
@@ -549,6 +551,8 @@
  "The tab bar at the bottom of the screen takes you everywhere. On a tablet or a computer, the same tabs sit in the sidebar.": "画面下のタブバーからどこへでも行けます。タブレットやパソコンでは、同じタブがサイドバーにあります。",
  "The whole line. Tap a move to jump to it.": "ライン全体です。手をタップするとそこへ移動します。",
  "The {board} (on Today) sets up any position or takes a pasted FEN, then analyses it with Stockfish.": "{board}（「今日」にあります）は、どんな局面でも配置でき、貼り付けたFENも読み込んで、Stockfishで解析します。",
+ "Their answer to {move}": "{move}への相手の応手",
+ "Their first move": "相手の初手",
  "Their move — no replies yet": "相手の手番 — まだ応手がありません",
  "Their username": "相手のユーザー名",
  "Themes, boards, piece sets and fonts, plus sound, vibration and language: pick what you like.": "テーマ、盤、駒セット、フォント、さらにサウンド、振動、言語も。好きなものを選べます。",
@@ -645,6 +649,7 @@
  "Your real games, checked against your preparation.": "あなたの準備と照らし合わせた実戦。",
  "Your repertoire": "あなたのレパートリー",
  "Your repertoire and training sync across devices.": "レパートリーとトレーニングは端末間で同期されます。",
+ "Your repertoire ends after {move}": "レパートリーは{move}の後で終わります",
  "Your repertoire is every move you have decided to play. The Repertoire tab keeps White and Black apart, and sorts each side into folders: first moves, then openings, then their lines.": "レパートリーとは、あなたが指すと決めたすべての手です。「レパートリー」タブは白と黒を分け、それぞれをフォルダーに整理します：最初の一手、次にオープニング、そしてそのライン。",
  "Your repertoire is waiting for you.": "レパートリーが待っています。",
  "Your repertoire misses you": "レパートリーが寂しがっています",
@@ -671,16 +676,14 @@
  "has a note": "メモあり",
  "in": "内",
  "in your repertoire": "レパートリー内",
+ "last played {date}": "最終対局 {date}",
  "median, correct answers": "中央値、正解",
  "missed": "不正解",
  "move {n}": "{n}手目",
  "never trained": "未トレーニング",
  "newest first": "新しい順",
- "not in your repertoire": "レパートリーにない",
- "not prepared": "未準備",
  "not yet": "まだ",
  "practised": "練習済み",
- "prepared": "準備済み",
  "promotes to bishop": "ビショップに昇格",
  "promotes to knight": "ナイトに昇格",
  "promotes to queen": "クイーンに昇格",
@@ -693,7 +696,6 @@
  "still being learnt": "学習中",
  "streak freeze used": "記録フリーズ使用",
  "takes {square}": "{square}で取る",
- "they play {move}": "相手は{move}",
  "transposition": "手順前後",
  "unavailable": "利用不可",
  "unknown": "不明",
@@ -704,7 +706,6 @@
  "you score {score}": "あなたのスコア {score}",
  "your Apple ID": "あなたのApple ID",
  "your account": "あなたのアカウント",
- "you’re prepared": "準備済み",
  "{account} is optional. Sign in with Lichess, Chess.com or Apple to keep your repertoire and training in step across devices. Without an account, everything stays on this device and works offline.": "{account}は任意です。Lichess、Chess.com、Appleでサインインすると、レパートリーとトレーニングをすべての端末で同期できます。アカウントがなくても、すべてこの端末に保存され、オフラインで使えます。",
  "{breaks} shows where each game left your preparation: {surprises} (your opponent played a move you hadn’t prepared, and you can add your answer right there), {forgotten} (you played something other than the move you learned, so that position becomes due again) and {ended} (the game outlasted your line).": "{breaks}は、各対局があなたの準備から外れた場所を示します：{surprises}（相手が準備していない手を指した。その場で応手を追加できます）、{forgotten}（覚えた手と違う手を指した。その局面はまた復習予定になります）、{ended}（対局があなたのラインの先まで続いた）。",
  "{build}: choose the moves you play and the replies you expect from your opponent.": "{build}：自分が指す手と、相手に予想する応手を選びます。",
@@ -739,7 +740,6 @@
  "{pct} of games there": "そこでの対局の{pct}",
  "{pct} of {games} · you score {score}": "{games}局中{pct} · あなたのスコア {score}",
  "{sec} s": "{sec}秒",
- "{share} of their games here · reached in {reach}": "相手の対局の{share}がここ · 到達率 {reach}",
  "{suggest} ranks your options. {replies} adds the replies you are most likely to meet, so your line is ready for them.": "{suggest}は選択肢をランク付けします。{replies}は最も出会いそうな応手を追加し、ラインを備えさせます。",
  "{train} appears when positions are due for review. {learn} appears when there are new moves to learn. When neither is needed, you are all caught up.": "{train}は、復習予定の局面があるときに表示されます。{learn}は、新しく覚える手があるときに表示されます。どちらもなければ、すべて完了しています。",
  "{train}: the app tests you on each position just before you would forget it.": "{train}：忘れる直前に、アプリが各局面を出題します。",
@@ -752,6 +752,9 @@
  "❄️ Streak freeze used": "❄️ 記録フリーズを使用",
  "🔥 Day {day} is waiting": "🔥 {day}日目が待っています",
  "🔥 Still time today": "🔥 今日はまだ間に合います",
+ "A line goes on while at least {n} of their games follow it.": {
+  "other": "相手の対局が{n}局以上たどる間、ラインは続きます。"
+ },
  "A streak freeze saved your {n}-day streak. Practise today to keep it.": {
   "other": "記録フリーズが{n}日の連続記録を守りました。今日練習して続けましょう。"
  },
@@ -763,6 +766,12 @@
  },
  "Don’t let {n} days slip": {
   "other": "{n}日の記録を無駄にしないで"
+ },
+ "From {n} games where they had Black": {
+  "other": "相手が黒番だった{n}局から"
+ },
+ "From {n} games where they had White": {
+  "other": "相手が白番だった{n}局から"
  },
  "Imported {added} moves · {n} problems: {first}": {
   "other": "{added}手をインポート · 問題{n}件：{first}"
@@ -782,6 +791,9 @@
  "Next milestone: {n} days": {
   "other": "次の節目：{n}日"
  },
+ "Other moves: {n} games": {
+  "other": "その他の手：{n}局"
+ },
  "Practise today to keep your {n}-day streak.": {
   "other": "今日練習して{n}日の連続記録を保ちましょう。"
  },
@@ -797,6 +809,9 @@
  "Show {n} variations": {
   "other": "{n}件の変化を表示"
  },
+ "They’ve faced your {move} only {n} times here": {
+  "other": "あなたの{move}に相手が当たったのは、ここでは{n}回だけです"
+ },
  "Your {n}-day streak is at risk": {
   "other": "{n}日の連続記録が途切れそうです"
  },
@@ -808,6 +823,9 @@
  },
  "{due} want a quick look. Keep the {n}-day streak going.": {
   "other": "{due}をさっと確認しましょう。{n}日の記録を続けましょう。"
+ },
+ "{name}: {n} recent games": {
+  "other": "{name}：最近の{n}局"
  },
  "{n} alternates": {
   "other": "代替手 {n}"
@@ -830,6 +848,9 @@
  "{n} moves": {
   "other": "{n}手"
  },
+ "{n} of their games went this way": {
+  "other": "相手の{n}局がこの進行でした"
+ },
  "{n} positions had no explorer data and were split evenly.": {
   "other": "{n}局面はエクスプローラーのデータがなかったため均等に配分しました。"
  },
@@ -847,9 +868,6 @@
  },
  "{n} positions": {
   "other": "{n}局面"
- },
- "{n} recent games analysed.": {
-  "other": "最近の{n}局を解析しました。"
  },
  "{n} replies prepared": {
   "other": "応手{n}件を準備済み"
@@ -959,6 +977,9 @@
  },
  "See {n} ready-made sets": {
   "other": "用意済みセットを {n} 件見る"
+ },
+ "Show {n} more lines": {
+  "other": "あと{n}ラインを表示"
  },
  "You score {score} in {n} games: {w} won, {d} drawn, {l} lost.": {
   "other": "{n} 局で {score}：{w} 勝 {d} 分 {l} 敗。"
@@ -1093,6 +1114,7 @@
  "The line now ends after {move}": "ラインは {move} の後で終わります",
  "end": "終わり",
  "{move} branches off this line": "{move} はこのラインからの分岐です",
+ "{move} isn’t in your repertoire": "{move}はレパートリーにありません",
  "{name} (branch)": "{name}（分岐）",
  "{n} branch points": {
   "other": "分岐点 {n} か所"
@@ -1124,6 +1146,8 @@
  "Where do my lines differ from each other?": "私のラインはどこで違っていますか？",
  "Which line should I add next?": "次にどのラインを追加すべき？",
  "You decide how they play: pick a reply, or play any move for them on the board.": "相手の指し方はあなたが決めます：応手を選ぶか、盤上で相手の手を自由に指してください。",
+ "You have no Black repertoire yet: these are the lines to build one for.": "黒番のレパートリーはまだありません。これらのラインに備えて作りましょう。",
+ "You have no White repertoire yet: these are the lines to build one for.": "白番のレパートリーはまだありません。これらのラインに備えて作りましょう。",
  "Your question": "質問",
  "e.g. I like quiet positional lines, I hate theory-heavy gambits, I have little time to study.": "例：静かなポジショナルなラインが好き、理論だらけのギャンビットは苦手、勉強時間は少なめ。",
  "Ask anything…": "何でも質問…",
@@ -1137,11 +1161,16 @@
  "Page not found": "ページが見つかりません",
  "Something went wrong": "問題が発生しました",
  "There’s nothing at this address.": "このアドレスには何もありません。",
+ "They have no games as Black here.": "ここには相手の黒番の対局がありません。",
+ "They have no games as White here.": "ここには相手の白番の対局がありません。",
+ "They haven’t faced it in these games.": "これらの対局では出てきていません。",
+ "They haven’t faced your {move} in these games": "これらの対局で、あなたの{move}に相手が当たったことはありません",
  "Reload the app and try again. Your repertoire and training are saved.": "アプリを再読み込みしてもう一度お試しください。レパートリーとトレーニングは保存されています。",
  "Reload": "再読み込み",
  "Loading…": "読み込み中…",
  "From the engine and game statistics": "エンジンと対局統計より",
  "the AI coach is resting until tomorrow": "AIコーチは明日まで休憩中です",
+ "they score {pct}": "相手のスコア {pct}",
  "AI coach · grounded in this position’s engine lines and stats": "AIコーチ · この局面のエンジン読み筋と統計に基づく",
  "{wrong} of {total} wrong": "{total} 回中 {wrong} 回ミス",
  "No games as White yet.": "白番の対局はまだありません。",

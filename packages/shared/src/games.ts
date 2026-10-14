@@ -212,60 +212,171 @@ export function resultsByLine(games: PlayedGame[], devs: Map<string, Deviation>,
 
 /* ---------------- Opponent prep ---------------- */
 
-export interface OpponentMeet {
-  /** Where the opponent's usual play meets your repertoire. */
-  epd: string;
-  fen: string;
-  path: string[];
-  /** Share of the opponent's games (with this colour) that reach this position. */
-  reach: number;
-  /** Their most common move here and how often they play it. */
-  theirMove: string;
-  theirShare: number;
+/** One move they chose, counted over their games. */
+export interface PrepChoice {
+  uci: string;
   games: number;
+  /** In your repertoire as a reply you've prepared. */
   prepared: boolean;
 }
 
+/** One of their first decisions: their first move (you're Black), or their answer to one of your first moves (you're White). */
+export interface PrepFork {
+  /** Moves leading here; empty at the start. */
+  path: string[];
+  /** Their games that reached this position. */
+  games: number;
+  choices: PrepChoice[];
+}
+
 /**
- * Builds the opponent's opening tree from their games (as the colour opposite yours) and walks it
- * together with your book: at their turn follow their frequent moves, at yours follow your trained
- * move. Returns where they commonly go, flagging moves you haven't prepared.
+ * How a line meets your repertoire:
+ * - covered: every move of it is in your repertoire
+ * - they_leave: at `ply` they play a move you haven't prepared (you have other replies there)
+ * - prep_ends: your repertoire stops at `ply`
+ * - none: your repertoire for this colour doesn't reach it
  */
-export function opponentMeets(theirGames: PlayedGame[], book: Book, opts = { minShare: 0.1, maxPly: 24 }): OpponentMeet[] {
+export type PrepBook = 'covered' | 'they_leave' | 'prep_ends' | 'none';
+
+export interface PrepLine {
+  /** From the start, UCI. */
+  path: string[];
+  /** Their games that followed every move of the line. */
+  games: number;
+  win: number;
+  draw: number;
+  loss: number;
+  /** Their score in those games (win + ½ draw), 0..1. */
+  score: number;
+  lastPlayed: number;
+  book: PrepBook;
+  ply: number;
+  /** The line stops because they've rarely faced your next move: that move and in how many of these games. */
+  rare?: { uci: string; games: number };
+}
+
+export interface OpponentPrep {
+  /** Your colour. */
+  color: Color;
+  /** Their games with the other colour. */
+  games: number;
+  /** A line goes on while at least this many of their games follow it. */
+  minGames: number;
+  forks: PrepFork[];
+  /** Most played first. */
+  lines: PrepLine[];
+}
+
+/**
+ * Prep against one opponent, from their games with the colour opposite yours. Their opening tree is walked
+ * the way your game would go: at your turn your repertoire move (each, if you have several; once your
+ * repertoire ends, the move most of their opponents played, if most did), at theirs every move they play often
+ * enough. A line ends where their games thin out (under `minGames` follow the next move), where play branches
+ * after your repertoire, at `maxPly`, or where they've rarely faced your move.
+ * Every count is a count of their real games, so "12 games" means 12 of their games went exactly that way.
+ */
+export function opponentPrep(theirGames: PlayedGame[], book: Book, opts: { maxPly?: number; minGames?: number; branch?: number } = {}): OpponentPrep {
   const theirColor: Color = book.color === 'white' ? 'black' : 'white';
-  const relevant = theirGames.filter((g) => g.color === theirColor);
-  if (!relevant.length) return [];
-  const out: OpponentMeet[] = [];
-  const walk = (games: PlayedGame[], ply: number, path: string[], reach: number) => {
-    if (ply >= opts.maxPly || games.length === 0) return;
-    let pos = positionFromFen(INITIAL_FEN);
-    for (const u of path) pos = playUci(pos, u).pos;
-    const epd = toEpd(pos);
-    if (!book.positions.has(epd)) return;
-    if (pos.turn === theirColor) {
-      const counts = new Map<string, PlayedGame[]>();
-      for (const g of games) {
-        const u = g.ucis[ply];
-        if (u) (counts.get(u) ?? counts.set(u, []).get(u)!).push(g);
-      }
-      const total = [...counts.values()].reduce((a, b) => a + b.length, 0);
-      for (const [u, gs] of [...counts].sort((a, b) => b[1].length - a[1].length)) {
-        const share = gs.length / total;
-        if (share < opts.minShare) break;
-        const prepared = !!book.replies.get(epd)?.has(u);
-        out.push({ epd, fen: toFen(pos), path: [...path], reach: reach * share, theirMove: u, theirShare: share, games: gs.length, prepared });
-        if (prepared) walk(gs, ply + 1, [...path, u], reach * share);
-      }
-    } else {
-      const own = book.own.get(epd);
-      const mine = own?.[0]?.uci;
-      if (!mine) return;
-      // Continue with games where they faced your move.
-      walk(games.filter((g) => g.ucis[ply] === mine), ply + 1, [...path, mine], reach);
+  const games = theirGames.filter((g) => g.color === theirColor);
+  const minGames = opts.minGames ?? Math.max(2, Math.round(games.length * 0.02));
+  const maxPly = opts.maxPly ?? 20;
+  const branch = opts.branch ?? 0.1;
+  const start = positionFromFen(INITIAL_FEN);
+
+  const byMove = (gs: PlayedGame[], ply: number) => {
+    const m = new Map<string, PlayedGame[]>();
+    for (const g of gs) {
+      const u = g.ucis[ply];
+      if (u) (m.get(u) ?? m.set(u, []).get(u)!).push(g);
     }
+    return [...m].sort((a, b) => b[1].length - a[1].length);
   };
-  walk(relevant, 0, [], 1);
-  return out.sort((a, b) => Number(a.prepared) - Number(b.prepared) || b.reach - a.reach);
+  const ownMoves = (epd: string) => [...new Set((book.own.get(epd) ?? []).map((o) => o.uci))];
+
+  // Their first decisions.
+  const fork = (gs: PlayedGame[], path: string[], pos: ReturnType<typeof positionFromFen>): PrepFork => {
+    const replies = book.replies.get(toEpd(pos));
+    return { path, games: gs.length, choices: byMove(gs, path.length).map(([uci, list]) => ({ uci, games: list.length, prepared: !!replies?.has(uci) })) };
+  };
+  const forks: PrepFork[] = [];
+  if (theirColor === 'white') forks.push(fork(games, [], start));
+  else {
+    const first = byMove(games, 0);
+    const mine = ownMoves(toEpd(start));
+    const yours = mine.length ? mine.map((u) => [u, first.find(([x]) => x === u)?.[1] ?? []] as const) : first.filter(([, gs]) => gs.length >= minGames).slice(0, 3);
+    for (const [u, gs] of yours) forks.push(fork(gs, [u], playUci(start, u).pos));
+  }
+
+  // Their lines.
+  const leaves: { path: string[]; games: PlayedGame[]; rare?: PrepLine['rare'] }[] = [];
+  const walk = (gs: PlayedGame[], path: string[], pos: ReturnType<typeof positionFromFen>) => {
+    const ply = path.length;
+    const moves = byMove(gs, ply);
+    let next: (readonly [string, PlayedGame[]])[] = [];
+    let rare: PrepLine['rare'];
+    if (ply < maxPly) {
+      if (pos.turn === theirColor) {
+        next = moves.filter(([, list], i) => list.length >= minGames && (i === 0 || list.length >= gs.length * branch)).slice(0, 3);
+      } else {
+        const mine = ownMoves(toEpd(pos));
+        if (mine.length) {
+          const faced = mine.map((u) => [u, moves.find(([x]) => x === u)?.[1] ?? []] as const);
+          next = faced.filter(([, list]) => list.length >= minGames);
+          if (!next.length) {
+            const best = faced.reduce((a, b) => (b[1].length > a[1].length ? b : a));
+            rare = { uci: best[0], games: best[1].length };
+          }
+        } else {
+          // Past your repertoire the line goes on only while one move is what most of their opponents played.
+          next = moves.slice(0, 1).filter(([, list]) => list.length >= minGames && list.length * 2 >= gs.length);
+        }
+      }
+    }
+    if (!next.length) {
+      if (ply > 0) leaves.push({ path, games: gs, rare });
+      return;
+    }
+    for (const [u, list] of next) walk(list, [...path, u], playUci(pos, u).pos);
+  };
+  walk(games, [], start);
+
+  const lines = leaves.map(({ path, games: gs, rare }): PrepLine => {
+    const win = gs.filter((g) => g.result === 'win').length;
+    const draw = gs.filter((g) => g.result === 'draw').length;
+    return {
+      path,
+      games: gs.length,
+      win,
+      draw,
+      loss: gs.length - win - draw,
+      score: (win + draw / 2) / gs.length,
+      lastPlayed: Math.max(...gs.map((g) => g.playedAt)),
+      ...prepBook(path, book),
+      rare,
+    };
+  });
+  lines.sort((a, b) => b.games - a.games || b.path.length - a.path.length);
+  return { color: book.color, games: games.length, minGames, forks, lines };
+}
+
+/** Where a line (from the start) leaves your repertoire. */
+export function prepBook(path: string[], book: Book): { book: PrepBook; ply: number } {
+  let pos = positionFromFen(INITIAL_FEN);
+  for (let ply = 0; ply < path.length; ply++) {
+    const epd = toEpd(pos);
+    const u = path[ply]!;
+    const ends = { book: ply === 0 ? 'none' : 'prep_ends', ply } as const;
+    if (!book.positions.has(epd)) return ends;
+    if (pos.turn === book.color) {
+      if (!book.own.get(epd)?.some((o) => o.uci === u)) return ends;
+    } else {
+      const replies = book.replies.get(epd);
+      if (!replies?.size) return ends;
+      if (!replies.has(u)) return { book: 'they_leave', ply };
+    }
+    pos = playUci(pos, u).pos;
+  }
+  return { book: 'covered', ply: path.length };
 }
 
 /* ---------------- Your own results, per position ---------------- */
