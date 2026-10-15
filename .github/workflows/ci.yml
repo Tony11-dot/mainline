@@ -1,8 +1,8 @@
 name: CI
+# Manual only while GitHub Actions is unavailable on this account (billing). Every PR is checked on the Mac
+# with `sh scripts/check.sh` (the same steps) before it's merged. To run here by hand: Actions → CI → Run workflow.
 on:
-  push:
-    branches: [main]
-  pull_request:
+  workflow_dispatch:
 
 concurrency:
   group: ci-${{ github.ref }}
