@@ -30,6 +30,7 @@
  "Added {move} — now choose your reply": "已添加 {move}——现在选择你的应着",
  "After the first import, new games are checked automatically.": "首次导入之后，新对局会自动检查。",
  "Again": "再来",
+ "All": "全部",
  "All caught up": "全部完成",
  "All four start from Today. Pick the one that fits your time and mood.": "四种方式都从“今日”开始。选一个适合你时间和心情的。",
  "All games and variations are merged. Comments become move notes.": "所有对局和变化都会合并。注释会变成着法笔记。",
@@ -222,6 +223,7 @@
  "In the Games tab, enter your Lichess or Chess.com username and import. MainLine only looks at the openings.": "在“对局”标签中输入你的 Lichess 或 Chess.com 用户名并导入。MainLine 只看开局部分。",
  "In your games": "在你的对局中",
  "In your repertoire": "在你的开局库中",
+ "In your repertoire all the way": "完全在你的开局库中",
  "In {guided} mode an arrow shows the top pick. Play it, play any other move, or tap a suggestion in the list.": "在{guided}模式下，箭头会标出首选着法。你可以走它、走其他着法，或点按列表中的建议。",
  "Include replies played in at least": "包含出现比例至少为以下值的应着",
  "Increase {setting}": "增加{setting}",
@@ -257,6 +259,7 @@
  "Line complete": "变化完成",
  "Line story": "变化解说",
  "Lines": "变化",
+ "Lines to prepare": "需要准备的变例",
  "Link your Chess.com account to import your games from it.": "关联你的 Chess.com 账户，从那里导入你的对局。",
  "Loading openings…": "正在加载开局…",
  "London System": "伦敦体系",
@@ -313,8 +316,6 @@
  "No master games": "无大师对局",
  "No new moves to learn": "没有可学习的新着法",
  "No opening matches “{query}”.": "没有与“{query}”匹配的开局。",
- "No overlap with your Black repertoire in their games.": "对方的对局与你的黑方开局库没有交集。",
- "No overlap with your White repertoire in their games.": "对方的对局与你的白方开局库没有交集。",
  "No positions learned yet": "还没有学会任何局面",
  "No repertoires yet.": "还没有开局库。",
  "No reviews are due. Learn new moves, or come back when positions are due again.": "没有待复习的内容。学习新着法，或等局面到期后再来。",
@@ -325,6 +326,7 @@
  "Not enough data yet": "数据还不够",
  "Not in your repertoire": "不在你的开局库中",
  "Not played at this level": "这个水平没人走",
+ "Not prepared": "未准备",
  "Not quite — it’s {move}": "差一点——正确的是 {move}",
  "Not quite. The move is {move}.": "差一点。正确着法是 {move}。",
  "Not trained yet": "尚未训练",
@@ -549,6 +551,8 @@
  "The tab bar at the bottom of the screen takes you everywhere. On a tablet or a computer, the same tabs sit in the sidebar.": "屏幕底部的标签栏能带你去任何地方。在平板或电脑上，同样的标签位于侧边栏中。",
  "The whole line. Tap a move to jump to it.": "整条变例。点按某步着法即可跳转。",
  "The {board} (on Today) sets up any position or takes a pasted FEN, then analyses it with Stockfish.": "{board}（在“今日”中）可以摆出任何局面，或粘贴 FEN，然后用 Stockfish 分析。",
+ "Their answer to {move}": "对方对 {move} 的应着",
+ "Their first move": "对方的第一步",
  "Their move — no replies yet": "对方走棋——尚无应着",
  "Their username": "对方的用户名",
  "Themes, boards, piece sets and fonts, plus sound, vibration and language: pick what you like.": "主题、棋盘、棋子样式和字体，还有声音、振动和语言：选你喜欢的。",
@@ -645,6 +649,7 @@
  "Your real games, checked against your preparation.": "你的真实对局，与你的准备逐一对照。",
  "Your repertoire": "你的开局库",
  "Your repertoire and training sync across devices.": "你的开局库和训练会在各设备间同步。",
+ "Your repertoire ends after {move}": "你的开局库在 {move} 之后结束",
  "Your repertoire is every move you have decided to play. The Repertoire tab keeps White and Black apart, and sorts each side into folders: first moves, then openings, then their lines.": "开局库就是你决定要走的每一步棋。“开局库”标签把白方和黑方分开，并把每一方整理成文件夹：先是第一步，然后是开局，再是它们的变例。",
  "Your repertoire is waiting for you.": "你的开局库在等你。",
  "Your repertoire misses you": "你的开局库想你了",
@@ -671,16 +676,14 @@
  "has a note": "有笔记",
  "in": "于",
  "in your repertoire": "在你的开局库中",
+ "last played {date}": "最近一次 {date}",
  "median, correct answers": "中位数，正确回答",
  "missed": "出错",
  "move {n}": "第 {n} 步",
  "never trained": "从未训练",
  "newest first": "最新优先",
- "not in your repertoire": "不在你的开局库中",
- "not prepared": "未准备",
  "not yet": "尚未",
  "practised": "已练习",
- "prepared": "已准备",
  "promotes to bishop": "升变为象",
  "promotes to knight": "升变为马",
  "promotes to queen": "升变为后",
@@ -693,7 +696,6 @@
  "still being learnt": "仍在学习",
  "streak freeze used": "已使用连续记录保护",
  "takes {square}": "吃 {square}",
- "they play {move}": "对方走 {move}",
  "transposition": "换序",
  "unavailable": "不可用",
  "unknown": "未知",
@@ -704,7 +706,6 @@
  "you score {score}": "你的得分 {score}",
  "your Apple ID": "你的 Apple ID",
  "your account": "你的账户",
- "you’re prepared": "你已准备好",
  "{account} is optional. Sign in with Lichess, Chess.com or Apple to keep your repertoire and training in step across devices. Without an account, everything stays on this device and works offline.": "{account}是可选的。用 Lichess、Chess.com 或 Apple 登录，可让开局库和训练在所有设备间保持同步。没有账户时，一切都保存在本设备上，并可离线使用。",
  "{breaks} shows where each game left your preparation: {surprises} (your opponent played a move you hadn’t prepared, and you can add your answer right there), {forgotten} (you played something other than the move you learned, so that position becomes due again) and {ended} (the game outlasted your line).": "{breaks}会显示每局棋在哪里偏离了你的准备：{surprises}（对手走了你没准备的着法，你可以当场添加应着）、{forgotten}（你走的不是学过的着法，所以这个局面会重新到期）和{ended}（对局超出了你的变例）。",
  "{build}: choose the moves you play and the replies you expect from your opponent.": "{build}：选择你要走的着法，以及你预期对手的应着。",
@@ -739,7 +740,6 @@
  "{pct} of games there": "那里 {pct} 的对局",
  "{pct} of {games} · you score {score}": "{games} 局中的 {pct} · 你的得分 {score}",
  "{sec} s": "{sec} 秒",
- "{share} of their games here · reached in {reach}": "对方 {share} 的对局在这里 · 到达率 {reach}",
  "{suggest} ranks your options. {replies} adds the replies you are most likely to meet, so your line is ready for them.": "{suggest}会为你的选择排序。{replies}会添加你最可能遇到的应着，让你的变例做好准备。",
  "{train} appears when positions are due for review. {learn} appears when there are new moves to learn. When neither is needed, you are all caught up.": "有局面到期需要复习时，会显示{train}。有新着法要学时，会显示{learn}。两者都不需要时，说明你已全部完成。",
  "{train}: the app tests you on each position just before you would forget it.": "{train}：应用会在你快要忘记之前考你每个局面。",
@@ -752,6 +752,9 @@
  "❄️ Streak freeze used": "❄️ 已使用连续记录保护",
  "🔥 Day {day} is waiting": "🔥 第 {day} 天在等你",
  "🔥 Still time today": "🔥 今天还来得及",
+ "A line goes on while at least {n} of their games follow it.": {
+  "other": "只要至少有 {n} 局对方的对局沿着它走，变例就会继续。"
+ },
  "A streak freeze saved your {n}-day streak. Practise today to keep it.": {
   "other": "连续记录保护救下了你 {n} 天的连续记录。今天练习一下来保住它。"
  },
@@ -763,6 +766,12 @@
  },
  "Don’t let {n} days slip": {
   "other": "别让 {n} 天的努力白费"
+ },
+ "From {n} games where they had Black": {
+  "other": "来自对方执黑的 {n} 局"
+ },
+ "From {n} games where they had White": {
+  "other": "来自对方执白的 {n} 局"
  },
  "Imported {added} moves · {n} problems: {first}": {
   "other": "已导入 {added} 步 · {n} 个问题：{first}"
@@ -782,6 +791,9 @@
  "Next milestone: {n} days": {
   "other": "下一个里程碑：{n} 天"
  },
+ "Other moves: {n} games": {
+  "other": "其他着法：{n} 局"
+ },
  "Practise today to keep your {n}-day streak.": {
   "other": "今天练习一下，保住你 {n} 天的连续记录。"
  },
@@ -797,6 +809,9 @@
  "Show {n} variations": {
   "other": "显示 {n} 个变化"
  },
+ "They’ve faced your {move} only {n} times here": {
+  "other": "对方在这里只遇到过 {n} 次你的 {move}"
+ },
  "Your {n}-day streak is at risk": {
   "other": "你 {n} 天的连续记录有中断风险"
  },
@@ -808,6 +823,9 @@
  },
  "{due} want a quick look. Keep the {n}-day streak going.": {
   "other": "{due}需要你快速看一眼。保持 {n} 天的连续记录。"
+ },
+ "{name}: {n} recent games": {
+  "other": "{name}：最近 {n} 局"
  },
  "{n} alternates": {
   "other": "{n} 个备选"
@@ -830,6 +848,9 @@
  "{n} moves": {
   "other": "{n} 步"
  },
+ "{n} of their games went this way": {
+  "other": "对方有 {n} 局走了这条路"
+ },
  "{n} positions had no explorer data and were split evenly.": {
   "other": "{n} 个局面没有开局浏览器数据，已平均分配。"
  },
@@ -847,9 +868,6 @@
  },
  "{n} positions": {
   "other": "{n} 个局面"
- },
- "{n} recent games analysed.": {
-  "other": "已分析最近 {n} 局对局。"
  },
  "{n} replies prepared": {
   "other": "已准备 {n} 个应着"
@@ -959,6 +977,9 @@
  },
  "See {n} ready-made sets": {
   "other": "查看 {n} 套现成变例"
+ },
+ "Show {n} more lines": {
+  "other": "再显示 {n} 个变例"
  },
  "You score {score} in {n} games: {w} won, {d} drawn, {l} lost.": {
   "other": "{n} 局得分 {score}：胜 {w}，和 {d}，负 {l}。"
@@ -1093,6 +1114,7 @@
  "The line now ends after {move}": "变例现在在 {move} 之后结束",
  "end": "结束",
  "{move} branches off this line": "{move} 从此变例分出",
+ "{move} isn’t in your repertoire": "{move} 不在你的开局库中",
  "{name} (branch)": "{name}（分支）",
  "{n} branch points": {
   "other": "{n} 个分支点"
@@ -1124,6 +1146,8 @@
  "Where do my lines differ from each other?": "我的各条变化在哪里分开？",
  "Which line should I add next?": "接下来我该添加哪条变化？",
  "You decide how they play: pick a reply, or play any move for them on the board.": "对手怎么走由你决定：选一个应着，或在棋盘上替他们走任意一步。",
+ "You have no Black repertoire yet: these are the lines to build one for.": "你还没有执黑的开局库：可以针对这些变例建立一个。",
+ "You have no White repertoire yet: these are the lines to build one for.": "你还没有执白的开局库：可以针对这些变例建立一个。",
  "Your question": "你的问题",
  "e.g. I like quiet positional lines, I hate theory-heavy gambits, I have little time to study.": "例如：我喜欢平稳的局面型变化，讨厌理论繁重的弃兵，学习时间不多。",
  "Ask anything…": "随便问…",
@@ -1137,11 +1161,16 @@
  "Page not found": "找不到页面",
  "Something went wrong": "出了点问题",
  "There’s nothing at this address.": "此地址没有任何内容。",
+ "They have no games as Black here.": "这里没有对方执黑的对局。",
+ "They have no games as White here.": "这里没有对方执白的对局。",
+ "They haven’t faced it in these games.": "这些对局中对方没遇到过这步。",
+ "They haven’t faced your {move} in these games": "这些对局中对方没遇到过你的 {move}",
  "Reload the app and try again. Your repertoire and training are saved.": "请重新加载应用后再试。你的开局库和训练记录已保存。",
  "Reload": "重新加载",
  "Loading…": "加载中…",
  "From the engine and game statistics": "来自引擎和对局统计",
  "the AI coach is resting until tomorrow": "AI 教练明天之前在休息",
+ "they score {pct}": "对方得分 {pct}",
  "AI coach · grounded in this position’s engine lines and stats": "AI 教练 · 依据此局面的引擎变着和统计",
  "{wrong} of {total} wrong": "{total} 次中错 {wrong} 次",
  "No games as White yet.": "还没有执白的对局。",

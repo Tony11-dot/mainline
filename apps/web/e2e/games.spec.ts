@@ -51,9 +51,16 @@ test('games vs prep: import, breaks, add reply, forgotten move becomes due, oppo
   await page.goto('/games');
   await page.getByLabel('Opponent username').fill('Rival');
   await page.getByRole('button', { name: 'Analyse' }).click();
-  await expect(page.getByText('3 recent games analysed.')).toBeVisible();
-  await expect(page.getByText(/they play c5/)).toBeVisible();
-  await expect(page.getByText(/not in your repertoire/).first()).toBeVisible();
+  await expect(page.getByText('Rival: 3 recent games')).toBeVisible();
+  // They answer 1.e4 with c5 in 2 of 3 games (not prepared) and e5 once (prepared); they never had White.
+  await expect(page.getByText('Their answer to 1.e4')).toBeVisible();
+  await expect(page.getByText('67% · 2 games')).toBeVisible();
+  await expect(page.getByText('They have no games as White here.')).toBeVisible();
+  await expect(page.getByText('2 of their games went this way')).toBeVisible();
+  await expect(page.getByText('1…c5 isn’t in your repertoire')).toBeVisible();
+  await page.getByRole('button', { name: 'Add 1…c5' }).click();
+  await expect(page.getByText(/Added \u20681…c5\u2069/)).toBeVisible();
+  await expect(page.getByText('In your repertoire all the way')).toBeVisible();
   if (process.env.SHOTS) {
     await page.setViewportSize({ width: 393, height: 852 });
     await page.screenshot({ path: `${process.env.SHOTS}/games-phone.png`, fullPage: true });

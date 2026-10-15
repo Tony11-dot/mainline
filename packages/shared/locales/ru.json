@@ -30,6 +30,7 @@
  "Added {move} — now choose your reply": "Добавлен ход {move} — теперь выберите свой ответ",
  "After the first import, new games are checked automatically.": "После первого импорта новые партии проверяются автоматически.",
  "Again": "Снова",
+ "All": "Все",
  "All caught up": "Всё повторено",
  "All four start from Today. Pick the one that fits your time and mood.": "Все четыре запускаются с экрана «Сегодня». Выберите тот, что подходит по времени и настроению.",
  "All games and variations are merged. Comments become move notes.": "Все партии и варианты объединяются. Комментарии становятся заметками к ходам.",
@@ -222,6 +223,7 @@
  "In the Games tab, enter your Lichess or Chess.com username and import. MainLine only looks at the openings.": "На вкладке «Партии» введите свой логин на Lichess или Chess.com и импортируйте. MainLine смотрит только на дебюты.",
  "In your games": "В ваших партиях",
  "In your repertoire": "В вашем репертуаре",
+ "In your repertoire all the way": "Полностью в вашем репертуаре",
  "In {guided} mode an arrow shows the top pick. Play it, play any other move, or tap a suggestion in the list.": "В режиме «{guided}» стрелка показывает лучший выбор. Сыграйте его, сыграйте другой ход или нажмите на подсказку в списке.",
  "Include replies played in at least": "Включать ответы, сыгранные минимум в",
  "Increase {setting}": "Увеличить: {setting}",
@@ -257,6 +259,7 @@
  "Line complete": "Вариант пройден",
  "Line story": "История варианта",
  "Lines": "Варианты",
+ "Lines to prepare": "Варианты для подготовки",
  "Link your Chess.com account to import your games from it.": "Привяжите аккаунт Chess.com, чтобы импортировать оттуда свои партии.",
  "Loading openings…": "Загрузка дебютов…",
  "London System": "Лондонская система",
@@ -313,8 +316,6 @@
  "No master games": "Нет партий мастеров",
  "No new moves to learn": "Нет новых ходов для изучения",
  "No opening matches “{query}”.": "Нет дебютов по запросу «{query}».",
- "No overlap with your Black repertoire in their games.": "В его партиях нет пересечений с вашим репертуаром за чёрных.",
- "No overlap with your White repertoire in their games.": "В его партиях нет пересечений с вашим репертуаром за белых.",
  "No positions learned yet": "Пока не выучено ни одной позиции",
  "No repertoires yet.": "Репертуаров пока нет.",
  "No reviews are due. Learn new moves, or come back when positions are due again.": "Повторять пока нечего. Изучите новые ходы или возвращайтесь, когда подойдёт время повторения.",
@@ -325,6 +326,7 @@
  "Not enough data yet": "Пока недостаточно данных",
  "Not in your repertoire": "Нет в вашем репертуаре",
  "Not played at this level": "Не играется на этом уровне",
+ "Not prepared": "Не подготовлено",
  "Not quite — it’s {move}": "Не совсем — правильно {move}",
  "Not quite. The move is {move}.": "Не совсем. Правильный ход — {move}.",
  "Not trained yet": "Ещё не тренировалось",
@@ -549,6 +551,8 @@
  "The tab bar at the bottom of the screen takes you everywhere. On a tablet or a computer, the same tabs sit in the sidebar.": "Панель вкладок внизу экрана ведёт куда угодно. На планшете или компьютере те же вкладки — на боковой панели.",
  "The whole line. Tap a move to jump to it.": "Весь вариант целиком. Нажмите на ход, чтобы перейти к нему.",
  "The {board} (on Today) sets up any position or takes a pasted FEN, then analyses it with Stockfish.": "{board} (на экране «Сегодня») расставит любую позицию или примет вставленный FEN, а затем проанализирует её со Stockfish.",
+ "Their answer to {move}": "Ответ соперника на {move}",
+ "Their first move": "Первый ход соперника",
  "Their move — no replies yet": "Ход соперника — ответов пока нет",
  "Their username": "Его ник",
  "Themes, boards, piece sets and fonts, plus sound, vibration and language: pick what you like.": "Темы, доски, наборы фигур и шрифты, а также звук, вибрация и язык — выбирайте, что нравится.",
@@ -645,6 +649,7 @@
  "Your real games, checked against your preparation.": "Ваши настоящие партии в сравнении с вашей подготовкой.",
  "Your repertoire": "Ваш репертуар",
  "Your repertoire and training sync across devices.": "Репертуар и тренировки синхронизируются между устройствами.",
+ "Your repertoire ends after {move}": "Ваш репертуар заканчивается после {move}",
  "Your repertoire is every move you have decided to play. The Repertoire tab keeps White and Black apart, and sorts each side into folders: first moves, then openings, then their lines.": "Ваш репертуар — это все ходы, которые вы решили играть. Вкладка «Репертуар» разделяет белых и чёрных и раскладывает каждую сторону по папкам: сначала первые ходы, потом дебюты, потом их варианты.",
  "Your repertoire is waiting for you.": "Ваш репертуар ждёт вас.",
  "Your repertoire misses you": "Ваш репертуар скучает",
@@ -671,16 +676,14 @@
  "has a note": "есть заметка",
  "in": "в",
  "in your repertoire": "в вашем репертуаре",
+ "last played {date}": "последняя {date}",
  "median, correct answers": "медиана, правильные ответы",
  "missed": "ошибка",
  "move {n}": "ход {n}",
  "never trained": "ни разу не тренировалось",
  "newest first": "сначала новые",
- "not in your repertoire": "нет в вашем репертуаре",
- "not prepared": "не подготовлено",
  "not yet": "ещё нет",
  "practised": "отработано",
- "prepared": "подготовлено",
  "promotes to bishop": "превращается в слона",
  "promotes to knight": "превращается в коня",
  "promotes to queen": "превращается в ферзя",
@@ -693,7 +696,6 @@
  "still being learnt": "ещё изучаются",
  "streak freeze used": "заморозка серии использована",
  "takes {square}": "берёт на {square}",
- "they play {move}": "соперник играет {move}",
  "transposition": "перестановка",
  "unavailable": "недоступно",
  "unknown": "неизвестно",
@@ -704,7 +706,6 @@
  "you score {score}": "ваш результат {score}",
  "your Apple ID": "ваш Apple ID",
  "your account": "ваш аккаунт",
- "you’re prepared": "вы готовы",
  "{account} is optional. Sign in with Lichess, Chess.com or Apple to keep your repertoire and training in step across devices. Without an account, everything stays on this device and works offline.": "{account} не обязателен. Войдите через Lichess, Chess.com или Apple, чтобы репертуар и тренировки совпадали на всех устройствах. Без аккаунта всё хранится на этом устройстве и работает офлайн.",
  "{breaks} shows where each game left your preparation: {surprises} (your opponent played a move you hadn’t prepared, and you can add your answer right there), {forgotten} (you played something other than the move you learned, so that position becomes due again) and {ended} (the game outlasted your line).": "{breaks} показывает, где каждая партия ушла от вашей подготовки: {surprises} (соперник сыграл ход, к которому вы не готовились, — ответ можно добавить прямо там), {forgotten} (вы сыграли не тот ход, что выучили, поэтому позиция снова ждёт повторения) и {ended} (партия вышла за пределы вашего варианта).",
  "{build}: choose the moves you play and the replies you expect from your opponent.": "{build}: выберите ходы, которые играете, и ответы, которых ждёте от соперника.",
@@ -739,7 +740,6 @@
  "{pct} of games there": "{pct} партий там",
  "{pct} of {games} · you score {score}": "{pct} из {games} · ваш результат {score}",
  "{sec} s": "{sec} с",
- "{share} of their games here · reached in {reach}": "{share} его партий здесь · достигается в {reach}",
  "{suggest} ranks your options. {replies} adds the replies you are most likely to meet, so your line is ready for them.": "{suggest} ранжирует ваши варианты хода. {replies} добавляет ответы, которые вы скорее всего встретите, чтобы вариант был к ним готов.",
  "{train} appears when positions are due for review. {learn} appears when there are new moves to learn. When neither is needed, you are all caught up.": "{train} появляется, когда позиции ждут повторения. {learn} появляется, когда есть новые ходы для изучения. Если ни то ни другое не нужно, у вас всё сделано.",
  "{train}: the app tests you on each position just before you would forget it.": "{train}: приложение спрашивает каждую позицию прямо перед тем, как вы бы её забыли.",
@@ -752,6 +752,12 @@
  "❄️ Streak freeze used": "❄️ Заморозка серии использована",
  "🔥 Day {day} is waiting": "🔥 День {day} ждёт",
  "🔥 Still time today": "🔥 Сегодня ещё есть время",
+ "A line goes on while at least {n} of their games follow it.": {
+  "one": "Вариант продолжается, пока по нему идёт хотя бы {n} партия соперника.",
+  "few": "Вариант продолжается, пока по нему идут хотя бы {n} партии соперника.",
+  "many": "Вариант продолжается, пока по нему идут хотя бы {n} партий соперника.",
+  "other": "Вариант продолжается, пока по нему идут хотя бы {n} партии соперника."
+ },
  "A streak freeze saved your {n}-day streak. Practise today to keep it.": {
   "one": "Заморозка спасла вашу серию в {n} день. Позанимайтесь сегодня, чтобы её сохранить.",
   "few": "Заморозка спасла вашу серию в {n} дня. Позанимайтесь сегодня, чтобы её сохранить.",
@@ -775,6 +781,18 @@
   "few": "Не упустите {n} дня",
   "many": "Не упустите {n} дней",
   "other": "Не упустите {n} дня"
+ },
+ "From {n} games where they had Black": {
+  "one": "По {n} партии, где соперник играл чёрными",
+  "few": "По {n} партиям, где соперник играл чёрными",
+  "many": "По {n} партиям, где соперник играл чёрными",
+  "other": "По {n} партиям, где соперник играл чёрными"
+ },
+ "From {n} games where they had White": {
+  "one": "По {n} партии, где соперник играл белыми",
+  "few": "По {n} партиям, где соперник играл белыми",
+  "many": "По {n} партиям, где соперник играл белыми",
+  "other": "По {n} партиям, где соперник играл белыми"
  },
  "Imported {added} moves · {n} problems: {first}": {
   "one": "Импортировано ходов: {added} · {n} проблема: {first}",
@@ -812,6 +830,12 @@
   "many": "Следующий рубеж: {n} дней",
   "other": "Следующий рубеж: {n} дня"
  },
+ "Other moves: {n} games": {
+  "one": "Другие ходы: {n} партия",
+  "few": "Другие ходы: {n} партии",
+  "many": "Другие ходы: {n} партий",
+  "other": "Другие ходы: {n} партии"
+ },
  "Practise today to keep your {n}-day streak.": {
   "one": "Позанимайтесь сегодня, чтобы сохранить серию в {n} день.",
   "few": "Позанимайтесь сегодня, чтобы сохранить серию в {n} дня.",
@@ -842,6 +866,12 @@
   "many": "Показать {n} вариантов",
   "other": "Показать {n} варианта"
  },
+ "They’ve faced your {move} only {n} times here": {
+  "one": "Ваш ход {move} встречался здесь всего {n} раз",
+  "few": "Ваш ход {move} встречался здесь всего {n} раза",
+  "many": "Ваш ход {move} встречался здесь всего {n} раз",
+  "other": "Ваш ход {move} встречался здесь всего {n} раза"
+ },
  "Your {n}-day streak is at risk": {
   "one": "Ваша серия в {n} день под угрозой",
   "few": "Ваша серия в {n} дня под угрозой",
@@ -865,6 +895,12 @@
   "few": "{due} ждут быстрого взгляда. Сохраните серию в {n} дня.",
   "many": "{due} ждут быстрого взгляда. Сохраните серию в {n} дней.",
   "other": "{due} ждут быстрого взгляда. Сохраните серию в {n} дня."
+ },
+ "{name}: {n} recent games": {
+  "one": "{name}: {n} последняя партия",
+  "few": "{name}: {n} последние партии",
+  "many": "{name}: {n} последних партий",
+  "other": "{name}: {n} последних партии"
  },
  "{n} alternates": {
   "one": "{n} альтернатива",
@@ -908,6 +944,12 @@
   "many": "{n} ходов",
   "other": "{n} хода"
  },
+ "{n} of their games went this way": {
+  "one": "{n} партия соперника шла так",
+  "few": "{n} партии соперника шли так",
+  "many": "{n} партий соперника шли так",
+  "other": "{n} партии соперника шли так"
+ },
  "{n} positions had no explorer data and were split evenly.": {
   "one": "У {n} позиции не было данных базы, поэтому вес разделён поровну.",
   "few": "У {n} позиций не было данных базы, поэтому вес разделён поровну.",
@@ -943,12 +985,6 @@
   "few": "{n} позиции",
   "many": "{n} позиций",
   "other": "{n} позиции"
- },
- "{n} recent games analysed.": {
-  "one": "Проанализирована {n} недавняя партия.",
-  "few": "Проанализировано {n} недавние партии.",
-  "many": "Проанализировано {n} недавних партий.",
-  "other": "Проанализировано {n} недавней партии."
  },
  "{n} replies prepared": {
   "one": "Подготовлен {n} ответ",
@@ -1094,6 +1130,12 @@
   "few": "Смотреть {n} готовых набора",
   "many": "Смотреть {n} готовых наборов",
   "other": "Смотреть {n} готового набора"
+ },
+ "Show {n} more lines": {
+  "one": "Показать ещё {n} вариант",
+  "few": "Показать ещё {n} варианта",
+  "many": "Показать ещё {n} вариантов",
+  "other": "Показать ещё {n} варианта"
  },
  "You score {score} in {n} games: {w} won, {d} drawn, {l} lost.": {
   "one": "Ваш результат {score} в {n} партии: {w} побед, {d} ничьих, {l} поражений.",
@@ -1276,6 +1318,7 @@
  "The line now ends after {move}": "Теперь вариант заканчивается после {move}",
  "end": "конец",
  "{move} branches off this line": "{move} ответвляется от этого варианта",
+ "{move} isn’t in your repertoire": "{move} нет в вашем репертуаре",
  "{name} (branch)": "{name} (ответвление)",
  "{n} branch points": {
   "one": "{n} точка ветвления",
@@ -1313,6 +1356,8 @@
  "Where do my lines differ from each other?": "Чем мои линии отличаются друг от друга?",
  "Which line should I add next?": "Какую линию добавить следующей?",
  "You decide how they play: pick a reply, or play any move for them on the board.": "Вы решаете, как играет соперник: выберите ответ или сделайте за него любой ход на доске.",
+ "You have no Black repertoire yet: these are the lines to build one for.": "У вас ещё нет репертуара за чёрных: вот варианты, под которые стоит его собрать.",
+ "You have no White repertoire yet: these are the lines to build one for.": "У вас ещё нет репертуара за белых: вот варианты, под которые стоит его собрать.",
  "Your question": "Ваш вопрос",
  "e.g. I like quiet positional lines, I hate theory-heavy gambits, I have little time to study.": "например: люблю спокойные позиционные линии, терпеть не могу гамбиты с горой теории, мало времени на учёбу.",
  "Ask anything…": "Спросите что угодно…",
@@ -1326,11 +1371,16 @@
  "Page not found": "Страница не найдена",
  "Something went wrong": "Что-то пошло не так",
  "There’s nothing at this address.": "По этому адресу ничего нет.",
+ "They have no games as Black here.": "Здесь нет партий соперника чёрными.",
+ "They have no games as White here.": "Здесь нет партий соперника белыми.",
+ "They haven’t faced it in these games.": "В этих партиях такого не встречалось.",
+ "They haven’t faced your {move} in these games": "Ваш ход {move} в этих партиях не встречался",
  "Reload the app and try again. Your repertoire and training are saved.": "Перезагрузите приложение и попробуйте снова. Ваш репертуар и тренировки сохранены.",
  "Reload": "Перезагрузить",
  "Loading…": "Загрузка…",
  "From the engine and game statistics": "По данным движка и статистике партий",
  "the AI coach is resting until tomorrow": "ИИ-тренер отдыхает до завтра",
+ "they score {pct}": "результат соперника {pct}",
  "AI coach · grounded in this position’s engine lines and stats": "ИИ-тренер · опирается на линии движка и статистику этой позиции",
  "{wrong} of {total} wrong": "{wrong} из {total} неверно",
  "No games as White yet.": "Пока нет партий белыми.",

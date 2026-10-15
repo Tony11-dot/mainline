@@ -30,6 +30,7 @@
  "Added {move} — now choose your reply": "Đã thêm {move} — giờ hãy chọn nước đáp của bạn",
  "After the first import, new games are checked automatically.": "Sau lần nhập đầu tiên, ván mới được kiểm tra tự động.",
  "Again": "Lại",
+ "All": "Tất cả",
  "All caught up": "Đã ôn xong hết",
  "All four start from Today. Pick the one that fits your time and mood.": "Cả bốn đều bắt đầu từ Hôm nay. Chọn cái hợp với thời gian và tâm trạng của bạn.",
  "All games and variations are merged. Comments become move notes.": "Mọi ván và biến sẽ được gộp lại. Bình luận trở thành ghi chú cho nước đi.",
@@ -222,6 +223,7 @@
  "In the Games tab, enter your Lichess or Chess.com username and import. MainLine only looks at the openings.": "Trong thẻ Ván đấu, nhập tên người dùng Lichess hoặc Chess.com rồi nhập ván. MainLine chỉ xem phần khai cuộc.",
  "In your games": "Trong ván đấu của bạn",
  "In your repertoire": "Trong bộ khai cuộc của bạn",
+ "In your repertoire all the way": "Nằm trọn trong bộ khai cuộc của bạn",
  "In {guided} mode an arrow shows the top pick. Play it, play any other move, or tap a suggestion in the list.": "Ở chế độ {guided}, mũi tên chỉ lựa chọn hàng đầu. Đi nước đó, đi nước khác, hoặc chạm một gợi ý trong danh sách.",
  "Include replies played in at least": "Bao gồm các nước đáp được chơi ít nhất trong",
  "Increase {setting}": "Tăng {setting}",
@@ -257,6 +259,7 @@
  "Line complete": "Đã xong biến",
  "Line story": "Câu chuyện của biến",
  "Lines": "Các biến",
+ "Lines to prepare": "Các biến cần chuẩn bị",
  "Link your Chess.com account to import your games from it.": "Liên kết tài khoản Chess.com để nhập ván đấu từ đó.",
  "Loading openings…": "Đang tải khai cuộc…",
  "London System": "Hệ thống London",
@@ -313,8 +316,6 @@
  "No master games": "Không có ván của kiện tướng",
  "No new moves to learn": "Không có nước mới để học",
  "No opening matches “{query}”.": "Không có khai cuộc nào khớp “{query}”.",
- "No overlap with your Black repertoire in their games.": "Ván của họ không trùng với bộ khai cuộc Đen của bạn.",
- "No overlap with your White repertoire in their games.": "Ván của họ không trùng với bộ khai cuộc Trắng của bạn.",
  "No positions learned yet": "Chưa học thế cờ nào",
  "No repertoires yet.": "Chưa có bộ khai cuộc nào.",
  "No reviews are due. Learn new moves, or come back when positions are due again.": "Chưa có gì cần ôn. Hãy học nước mới, hoặc quay lại khi đến hạn ôn.",
@@ -325,6 +326,7 @@
  "Not enough data yet": "Chưa đủ dữ liệu",
  "Not in your repertoire": "Không có trong bộ khai cuộc",
  "Not played at this level": "Không được chơi ở trình độ này",
+ "Not prepared": "Chưa chuẩn bị",
  "Not quite — it’s {move}": "Chưa đúng — đáp án là {move}",
  "Not quite. The move is {move}.": "Chưa đúng. Nước đúng là {move}.",
  "Not trained yet": "Chưa luyện tập",
@@ -549,6 +551,8 @@
  "The tab bar at the bottom of the screen takes you everywhere. On a tablet or a computer, the same tabs sit in the sidebar.": "Thanh thẻ ở cuối màn hình đưa bạn đến mọi nơi. Trên máy tính bảng hoặc máy tính, các thẻ đó nằm ở thanh bên.",
  "The whole line. Tap a move to jump to it.": "Toàn bộ biến. Chạm một nước để nhảy tới đó.",
  "The {board} (on Today) sets up any position or takes a pasted FEN, then analyses it with Stockfish.": "{board} (ở Hôm nay) dựng bất kỳ thế cờ nào hoặc nhận FEN được dán vào, rồi phân tích bằng Stockfish.",
+ "Their answer to {move}": "Họ đáp {move} thế nào",
+ "Their first move": "Nước đi đầu tiên của họ",
  "Their move — no replies yet": "Lượt của họ — chưa có nước đáp",
  "Their username": "Tên người dùng của họ",
  "Themes, boards, piece sets and fonts, plus sound, vibration and language: pick what you like.": "Chủ đề, bàn cờ, bộ quân và phông chữ, cùng âm thanh, rung và ngôn ngữ: chọn cái bạn thích.",
@@ -645,6 +649,7 @@
  "Your real games, checked against your preparation.": "Các ván đấu thật của bạn, đối chiếu với phần chuẩn bị.",
  "Your repertoire": "Bộ khai cuộc của bạn",
  "Your repertoire and training sync across devices.": "Bộ khai cuộc và luyện tập được đồng bộ giữa các thiết bị.",
+ "Your repertoire ends after {move}": "Bộ khai cuộc của bạn kết thúc sau {move}",
  "Your repertoire is every move you have decided to play. The Repertoire tab keeps White and Black apart, and sorts each side into folders: first moves, then openings, then their lines.": "Bộ khai cuộc là mọi nước bạn đã quyết định sẽ đi. Thẻ Bộ khai cuộc tách riêng Trắng và Đen, và xếp mỗi bên vào thư mục: trước là nước đầu, rồi khai cuộc, rồi các biến của chúng.",
  "Your repertoire is waiting for you.": "Bộ khai cuộc đang chờ bạn.",
  "Your repertoire misses you": "Bộ khai cuộc nhớ bạn",
@@ -671,16 +676,14 @@
  "has a note": "có ghi chú",
  "in": "trong",
  "in your repertoire": "trong bộ khai cuộc",
+ "last played {date}": "lần cuối {date}",
  "median, correct answers": "trung vị, câu trả lời đúng",
  "missed": "sai",
  "move {n}": "nước {n}",
  "never trained": "chưa từng luyện",
  "newest first": "mới nhất trước",
- "not in your repertoire": "không có trong bộ khai cuộc",
- "not prepared": "chưa chuẩn bị",
  "not yet": "chưa",
  "practised": "đã luyện",
- "prepared": "đã chuẩn bị",
  "promotes to bishop": "phong thành tượng",
  "promotes to knight": "phong thành mã",
  "promotes to queen": "phong thành hậu",
@@ -693,7 +696,6 @@
  "still being learnt": "vẫn đang học",
  "streak freeze used": "đã dùng đóng băng chuỗi",
  "takes {square}": "ăn ở {square}",
- "they play {move}": "họ đi {move}",
  "transposition": "hoán vị",
  "unavailable": "không khả dụng",
  "unknown": "không rõ",
@@ -704,7 +706,6 @@
  "you score {score}": "bạn đạt {score}",
  "your Apple ID": "Apple ID của bạn",
  "your account": "tài khoản của bạn",
- "you’re prepared": "bạn đã chuẩn bị",
  "{account} is optional. Sign in with Lichess, Chess.com or Apple to keep your repertoire and training in step across devices. Without an account, everything stays on this device and works offline.": "{account} là tùy chọn. Đăng nhập bằng Lichess, Chess.com hoặc Apple để bộ khai cuộc và việc luyện tập đồng bộ trên mọi thiết bị. Không có tài khoản, mọi thứ ở lại trên thiết bị này và hoạt động ngoại tuyến.",
  "{breaks} shows where each game left your preparation: {surprises} (your opponent played a move you hadn’t prepared, and you can add your answer right there), {forgotten} (you played something other than the move you learned, so that position becomes due again) and {ended} (the game outlasted your line).": "{breaks} cho thấy mỗi ván rời khỏi phần chuẩn bị ở đâu: {surprises} (đối thủ đi một nước bạn chưa chuẩn bị, và bạn có thể thêm nước đáp ngay tại đó), {forgotten} (bạn đi khác với nước đã học, nên thế cờ đó lại đến hạn ôn) và {ended} (ván đấu vượt quá biến của bạn).",
  "{build}: choose the moves you play and the replies you expect from your opponent.": "{build}: chọn các nước bạn đi và những nước đáp bạn chờ từ đối thủ.",
@@ -739,7 +740,6 @@
  "{pct} of games there": "{pct} số ván ở đó",
  "{pct} of {games} · you score {score}": "{pct} trong {games} · bạn đạt {score}",
  "{sec} s": "{sec} giây",
- "{share} of their games here · reached in {reach}": "{share} số ván của họ ở đây · đạt tới trong {reach}",
  "{suggest} ranks your options. {replies} adds the replies you are most likely to meet, so your line is ready for them.": "{suggest} xếp hạng các lựa chọn của bạn. {replies} thêm những nước đáp bạn dễ gặp nhất, để biến của bạn sẵn sàng.",
  "{train} appears when positions are due for review. {learn} appears when there are new moves to learn. When neither is needed, you are all caught up.": "{train} xuất hiện khi có thế cờ đến hạn ôn. {learn} xuất hiện khi có nước mới để học. Khi không cần cái nào, bạn đã hoàn thành hết.",
  "{train}: the app tests you on each position just before you would forget it.": "{train}: ứng dụng hỏi bạn từng thế cờ ngay trước khi bạn quên.",
@@ -752,6 +752,9 @@
  "❄️ Streak freeze used": "❄️ Đã dùng đóng băng chuỗi",
  "🔥 Day {day} is waiting": "🔥 Ngày {day} đang chờ",
  "🔥 Still time today": "🔥 Hôm nay vẫn còn thời gian",
+ "A line goes on while at least {n} of their games follow it.": {
+  "other": "Một biến còn tiếp tục khi có ít nhất {n} ván của họ đi theo."
+ },
  "A streak freeze saved your {n}-day streak. Practise today to keep it.": {
   "other": "Một lượt đóng băng đã cứu chuỗi {n} ngày của bạn. Hãy luyện tập hôm nay để giữ nó."
  },
@@ -763,6 +766,12 @@
  },
  "Don’t let {n} days slip": {
   "other": "Đừng để {n} ngày trôi mất"
+ },
+ "From {n} games where they had Black": {
+  "other": "Từ {n} ván họ cầm Đen"
+ },
+ "From {n} games where they had White": {
+  "other": "Từ {n} ván họ cầm Trắng"
  },
  "Imported {added} moves · {n} problems: {first}": {
   "other": "Đã nhập {added} nước · {n} vấn đề: {first}"
@@ -782,6 +791,9 @@
  "Next milestone: {n} days": {
   "other": "Cột mốc tiếp theo: {n} ngày"
  },
+ "Other moves: {n} games": {
+  "other": "Nước khác: {n} ván"
+ },
  "Practise today to keep your {n}-day streak.": {
   "other": "Hãy luyện tập hôm nay để giữ chuỗi {n} ngày."
  },
@@ -797,6 +809,9 @@
  "Show {n} variations": {
   "other": "Hiện {n} biến"
  },
+ "They’ve faced your {move} only {n} times here": {
+  "other": "Họ chỉ gặp nước {move} của bạn {n} lần ở đây"
+ },
  "Your {n}-day streak is at risk": {
   "other": "Chuỗi {n} ngày của bạn đang gặp nguy"
  },
@@ -808,6 +823,9 @@
  },
  "{due} want a quick look. Keep the {n}-day streak going.": {
   "other": "{due} cần xem nhanh. Giữ vững chuỗi {n} ngày."
+ },
+ "{name}: {n} recent games": {
+  "other": "{name}: {n} ván gần đây"
  },
  "{n} alternates": {
   "other": "{n} nước thay thế"
@@ -830,6 +848,9 @@
  "{n} moves": {
   "other": "{n} nước"
  },
+ "{n} of their games went this way": {
+  "other": "{n} ván của họ đi theo hướng này"
+ },
  "{n} positions had no explorer data and were split evenly.": {
   "other": "{n} thế cờ không có dữ liệu khám phá và được chia đều."
  },
@@ -847,9 +868,6 @@
  },
  "{n} positions": {
   "other": "{n} thế cờ"
- },
- "{n} recent games analysed.": {
-  "other": "Đã phân tích {n} ván gần đây."
  },
  "{n} replies prepared": {
   "other": "Đã chuẩn bị {n} nước đáp"
@@ -959,6 +977,9 @@
  },
  "See {n} ready-made sets": {
   "other": "Xem {n} bộ soạn sẵn"
+ },
+ "Show {n} more lines": {
+  "other": "Hiện thêm {n} biến"
  },
  "You score {score} in {n} games: {w} won, {d} drawn, {l} lost.": {
   "other": "Bạn đạt {score} trong {n} ván: thắng {w}, hòa {d}, thua {l}."
@@ -1093,6 +1114,7 @@
  "The line now ends after {move}": "Biến giờ kết thúc sau {move}",
  "end": "hết",
  "{move} branches off this line": "{move} rẽ nhánh khỏi biến này",
+ "{move} isn’t in your repertoire": "{move} không có trong bộ khai cuộc của bạn",
  "{name} (branch)": "{name} (nhánh)",
  "{n} branch points": {
   "other": "{n} điểm rẽ nhánh"
@@ -1124,6 +1146,8 @@
  "Where do my lines differ from each other?": "Các biến của tôi khác nhau ở đâu?",
  "Which line should I add next?": "Tôi nên thêm biến nào tiếp theo?",
  "You decide how they play: pick a reply, or play any move for them on the board.": "Bạn quyết định đối thủ đi thế nào: chọn một nước đáp, hoặc đi bất kỳ nước nào cho họ trên bàn cờ.",
+ "You have no Black repertoire yet: these are the lines to build one for.": "Bạn chưa có bộ khai cuộc cho quân Đen: đây là các biến để bạn xây dựng.",
+ "You have no White repertoire yet: these are the lines to build one for.": "Bạn chưa có bộ khai cuộc cho quân Trắng: đây là các biến để bạn xây dựng.",
  "Your question": "Câu hỏi của bạn",
  "e.g. I like quiet positional lines, I hate theory-heavy gambits, I have little time to study.": "ví dụ: Tôi thích các biến thế trận êm, ghét các gambit nặng lý thuyết, có ít thời gian học.",
  "Ask anything…": "Hỏi bất cứ điều gì…",
@@ -1137,11 +1161,16 @@
  "Page not found": "Không tìm thấy trang",
  "Something went wrong": "Đã xảy ra lỗi",
  "There’s nothing at this address.": "Không có gì ở địa chỉ này.",
+ "They have no games as Black here.": "Ở đây họ không có ván nào cầm Đen.",
+ "They have no games as White here.": "Ở đây họ không có ván nào cầm Trắng.",
+ "They haven’t faced it in these games.": "Họ chưa gặp nước này trong các ván này.",
+ "They haven’t faced your {move} in these games": "Họ chưa gặp nước {move} của bạn trong các ván này",
  "Reload the app and try again. Your repertoire and training are saved.": "Tải lại ứng dụng và thử lại. Kho khai cuộc và quá trình luyện tập của bạn đã được lưu.",
  "Reload": "Tải lại",
  "Loading…": "Đang tải…",
  "From the engine and game statistics": "Từ máy và thống kê ván đấu",
  "the AI coach is resting until tomorrow": "huấn luyện viên AI nghỉ đến ngày mai",
+ "they score {pct}": "họ đạt {pct}",
  "AI coach · grounded in this position’s engine lines and stats": "Huấn luyện viên AI · dựa trên các diễn biến của máy và thống kê thế cờ này",
  "{wrong} of {total} wrong": "Sai {wrong}/{total}",
  "No games as White yet.": "Chưa có ván nào cầm Trắng.",

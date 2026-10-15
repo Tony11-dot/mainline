@@ -454,3 +454,8 @@ Visual checks: `VISUAL=1 pnpm e2e visual` (add `--update-snapshots` after an int
 - **How MainLine works.** A step-by-step tour of everything in the app, in 16 short chapters: getting around, Today, your repertoire and its folders, building a line, the tools under the board, training (with a board to try it on), the four ways to practise, goal and streak, your games, weak spots and study plans, looking things up, Ask AI and Settings. Each chapter has a picture of the screen it explains and a link to open it.
 - **First run.** The tour follows the welcome setup, and you can skip it at any point. Afterwards it's under Tools on Today and in Settings, and it reopens where you left it.
 - **In every language.** The tour is in all 20 languages, using the app's own words for every button it mentions.
+
+## Opponent prep, rebuilt (2026-10-15)
+- **Lines to prepare.** Enter your next opponent and see, as White and as Black, the lines they really play: the moves, how many of their games went that way, how they score and when they last played it.
+- **Your repertoire.** Each line shows where your preparation ends or which of their moves you haven't prepared, with a button to add it.
+- **Clear numbers.** Real game counts replace the old percentages, with a filter by time control.

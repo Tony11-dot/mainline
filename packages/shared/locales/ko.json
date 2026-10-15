@@ -30,6 +30,7 @@
  "Added {move} — now choose your reply": "{move} 추가됨 — 이제 응수를 고르세요",
  "After the first import, new games are checked automatically.": "처음 가져온 뒤로는 새 대국을 자동으로 확인해요.",
  "Again": "다시",
+ "All": "전체",
  "All caught up": "모두 끝냈어요",
  "All four start from Today. Pick the one that fits your time and mood.": "네 가지 모두 '오늘'에서 시작해요. 시간과 기분에 맞는 걸 고르세요.",
  "All games and variations are merged. Comments become move notes.": "모든 대국과 변화가 합쳐져요. 코멘트는 수에 대한 메모가 돼요.",
@@ -222,6 +223,7 @@
  "In the Games tab, enter your Lichess or Chess.com username and import. MainLine only looks at the openings.": "'대국' 탭에서 Lichess나 Chess.com 사용자 이름을 입력하고 가져오세요. MainLine은 오프닝만 봐요.",
  "In your games": "내 대국에서",
  "In your repertoire": "내 레퍼토리에",
+ "In your repertoire all the way": "끝까지 레퍼토리에 있음",
  "In {guided} mode an arrow shows the top pick. Play it, play any other move, or tap a suggestion in the list.": "{guided} 모드에서는 화살표가 최선의 선택을 보여 줘요. 그 수를 두거나, 다른 수를 두거나, 목록의 추천을 누르세요.",
  "Include replies played in at least": "최소 이 비율 이상 둔 응수 포함",
  "Increase {setting}": "{setting} 늘리기",
@@ -257,6 +259,7 @@
  "Line complete": "라인 완료",
  "Line story": "라인 이야기",
  "Lines": "라인",
+ "Lines to prepare": "준비할 라인",
  "Link your Chess.com account to import your games from it.": "Chess.com 계정을 연결하면 그곳의 대국을 가져올 수 있어요.",
  "Loading openings…": "오프닝 불러오는 중…",
  "London System": "런던 시스템",
@@ -313,8 +316,6 @@
  "No master games": "마스터 대국 없음",
  "No new moves to learn": "배울 새 수가 없어요",
  "No opening matches “{query}”.": "“{query}”와 일치하는 오프닝이 없어요.",
- "No overlap with your Black repertoire in their games.": "상대의 대국에서 내 흑 레퍼토리와 겹치는 부분이 없어요.",
- "No overlap with your White repertoire in their games.": "상대의 대국에서 내 백 레퍼토리와 겹치는 부분이 없어요.",
  "No positions learned yet": "아직 학습한 포지션이 없어요",
  "No repertoires yet.": "아직 레퍼토리가 없어요.",
  "No reviews are due. Learn new moves, or come back when positions are due again.": "복습할 것이 없어요. 새 수를 배우거나 복습할 때가 되면 다시 오세요.",
@@ -325,6 +326,7 @@
  "Not enough data yet": "아직 데이터가 부족해요",
  "Not in your repertoire": "레퍼토리에 없음",
  "Not played at this level": "이 수준에서는 두지 않음",
+ "Not prepared": "준비 안 됨",
  "Not quite — it’s {move}": "아쉬워요 — 정답은 {move}",
  "Not quite. The move is {move}.": "아쉬워요. 정답은 {move}예요.",
  "Not trained yet": "아직 훈련 안 함",
@@ -549,6 +551,8 @@
  "The tab bar at the bottom of the screen takes you everywhere. On a tablet or a computer, the same tabs sit in the sidebar.": "화면 아래 탭 바로 어디든 갈 수 있어요. 태블릿이나 컴퓨터에서는 같은 탭이 사이드바에 있어요.",
  "The whole line. Tap a move to jump to it.": "라인 전체예요. 수를 누르면 그 위치로 이동해요.",
  "The {board} (on Today) sets up any position or takes a pasted FEN, then analyses it with Stockfish.": "{board}('오늘'에 있어요)에서는 어떤 포지션이든 배치하거나 FEN을 붙여 넣은 뒤 Stockfish로 분석할 수 있어요.",
+ "Their answer to {move}": "{move} 수에 대한 상대의 응수",
+ "Their first move": "상대의 첫 수",
  "Their move — no replies yet": "상대 차례 — 아직 응수 없음",
  "Their username": "상대 사용자 이름",
  "Themes, boards, piece sets and fonts, plus sound, vibration and language: pick what you like.": "테마, 보드, 기물 세트, 글꼴은 물론 소리, 진동, 언어까지: 마음에 드는 걸 고르세요.",
@@ -645,6 +649,7 @@
  "Your real games, checked against your preparation.": "내 준비와 비교한 실제 대국.",
  "Your repertoire": "내 레퍼토리",
  "Your repertoire and training sync across devices.": "레퍼토리와 훈련이 기기 간에 동기화돼요.",
+ "Your repertoire ends after {move}": "레퍼토리가 {move} 수 다음에서 끝나요",
  "Your repertoire is every move you have decided to play. The Repertoire tab keeps White and Black apart, and sorts each side into folders: first moves, then openings, then their lines.": "레퍼토리는 내가 두기로 정한 모든 수예요. '레퍼토리' 탭은 백과 흑을 나누고, 각각을 폴더로 정리해요: 먼저 첫 수, 그다음 오프닝, 그리고 그 라인들.",
  "Your repertoire is waiting for you.": "레퍼토리가 기다리고 있어요.",
  "Your repertoire misses you": "레퍼토리가 당신을 그리워해요",
@@ -671,16 +676,14 @@
  "has a note": "메모 있음",
  "in": "안",
  "in your repertoire": "레퍼토리에 있음",
+ "last played {date}": "마지막 대국 {date}",
  "median, correct answers": "중앙값, 정답",
  "missed": "틀림",
  "move {n}": "{n}수",
  "never trained": "훈련한 적 없음",
  "newest first": "최신순",
- "not in your repertoire": "레퍼토리에 없음",
- "not prepared": "준비 안 됨",
  "not yet": "아직",
  "practised": "연습함",
- "prepared": "준비됨",
  "promotes to bishop": "비숍으로 승진",
  "promotes to knight": "나이트로 승진",
  "promotes to queen": "퀸으로 승진",
@@ -693,7 +696,6 @@
  "still being learnt": "아직 학습 중",
  "streak freeze used": "기록 보호권 사용",
  "takes {square}": "{square}에서 잡음",
- "they play {move}": "상대는 {move}",
  "transposition": "트랜스포지션",
  "unavailable": "사용 불가",
  "unknown": "알 수 없음",
@@ -704,7 +706,6 @@
  "you score {score}": "내 점수 {score}",
  "your Apple ID": "내 Apple ID",
  "your account": "내 계정",
- "you’re prepared": "준비 완료",
  "{account} is optional. Sign in with Lichess, Chess.com or Apple to keep your repertoire and training in step across devices. Without an account, everything stays on this device and works offline.": "{account}은 선택 사항이에요. Lichess, Chess.com 또는 Apple로 로그인하면 레퍼토리와 훈련이 모든 기기에서 동기화돼요. 계정이 없어도 모든 것이 이 기기에 저장되고 오프라인으로 작동해요.",
  "{breaks} shows where each game left your preparation: {surprises} (your opponent played a move you hadn’t prepared, and you can add your answer right there), {forgotten} (you played something other than the move you learned, so that position becomes due again) and {ended} (the game outlasted your line).": "{breaks}은 각 대국이 내 준비에서 벗어난 곳을 보여 줘요: {surprises}(상대가 준비하지 않은 수를 뒀어요. 그 자리에서 응수를 추가할 수 있어요), {forgotten}(배운 수와 다른 수를 뒀어요. 그래서 그 포지션이 다시 복습 대상이 돼요), {ended}(대국이 내 라인보다 더 길어졌어요).",
  "{build}: choose the moves you play and the replies you expect from your opponent.": "{build}: 내가 둘 수와 상대에게 예상하는 응수를 골라요.",
@@ -739,7 +740,6 @@
  "{pct} of games there": "그곳 대국의 {pct}",
  "{pct} of {games} · you score {score}": "{games}판 중 {pct} · 내 점수 {score}",
  "{sec} s": "{sec}초",
- "{share} of their games here · reached in {reach}": "상대 대국의 {share}가 여기 · 도달률 {reach}",
  "{suggest} ranks your options. {replies} adds the replies you are most likely to meet, so your line is ready for them.": "{suggest}은 선택지에 순위를 매겨요. {replies}는 가장 마주칠 법한 응수를 추가해서 라인이 대비하게 해 줘요.",
  "{train} appears when positions are due for review. {learn} appears when there are new moves to learn. When neither is needed, you are all caught up.": "복습할 포지션이 있으면 {train}이 나타나요. 새로 배울 수가 있으면 {learn}이 나타나요. 둘 다 필요 없으면 다 끝낸 거예요.",
  "{train}: the app tests you on each position just before you would forget it.": "{train}: 잊어버리기 직전에 앱이 각 포지션을 물어봐요.",
@@ -752,6 +752,9 @@
  "❄️ Streak freeze used": "❄️ 기록 보호권 사용됨",
  "🔥 Day {day} is waiting": "🔥 {day}일째가 기다려요",
  "🔥 Still time today": "🔥 오늘 아직 시간 있어요",
+ "A line goes on while at least {n} of their games follow it.": {
+  "other": "상대 대국이 {n}판 이상 따라가는 동안 라인이 이어져요."
+ },
  "A streak freeze saved your {n}-day streak. Practise today to keep it.": {
   "other": "기록 보호권이 {n}일 연속 기록을 지켰어요. 오늘 연습해서 이어 가세요."
  },
@@ -763,6 +766,12 @@
  },
  "Don’t let {n} days slip": {
   "other": "{n}일을 놓치지 마세요"
+ },
+ "From {n} games where they had Black": {
+  "other": "상대가 흑을 잡은 {n}판 기준"
+ },
+ "From {n} games where they had White": {
+  "other": "상대가 백을 잡은 {n}판 기준"
  },
  "Imported {added} moves · {n} problems: {first}": {
   "other": "{added}수 가져옴 · 문제 {n}개: {first}"
@@ -782,6 +791,9 @@
  "Next milestone: {n} days": {
   "other": "다음 목표: {n}일"
  },
+ "Other moves: {n} games": {
+  "other": "다른 수: {n}판"
+ },
  "Practise today to keep your {n}-day streak.": {
   "other": "오늘 연습해서 {n}일 연속 기록을 지키세요."
  },
@@ -797,6 +809,9 @@
  "Show {n} variations": {
   "other": "변화 {n}개 보기"
  },
+ "They’ve faced your {move} only {n} times here": {
+  "other": "상대가 여기서 내 {move} 수를 만난 건 {n}번뿐이에요"
+ },
  "Your {n}-day streak is at risk": {
   "other": "{n}일 연속 기록이 위험해요"
  },
@@ -808,6 +823,9 @@
  },
  "{due} want a quick look. Keep the {n}-day streak going.": {
   "other": "{due}을(를) 잠깐 확인하세요. {n}일 기록을 이어 가세요."
+ },
+ "{name}: {n} recent games": {
+  "other": "{name}: 최근 {n}판"
  },
  "{n} alternates": {
   "other": "대체 수 {n}개"
@@ -830,6 +848,9 @@
  "{n} moves": {
   "other": "{n}수"
  },
+ "{n} of their games went this way": {
+  "other": "상대 대국 {n}판이 이렇게 진행됐어요"
+ },
  "{n} positions had no explorer data and were split evenly.": {
   "other": "{n}개 포지션은 탐색기 데이터가 없어 균등하게 나눴어요."
  },
@@ -847,9 +868,6 @@
  },
  "{n} positions": {
   "other": "포지션 {n}개"
- },
- "{n} recent games analysed.": {
-  "other": "최근 대국 {n}판 분석함."
  },
  "{n} replies prepared": {
   "other": "응수 {n}개 준비됨"
@@ -959,6 +977,9 @@
  },
  "See {n} ready-made sets": {
   "other": "준비된 세트 {n}개 보기"
+ },
+ "Show {n} more lines": {
+  "other": "라인 {n}개 더 보기"
  },
  "You score {score} in {n} games: {w} won, {d} drawn, {l} lost.": {
   "other": "{n}판에서 {score}: {w}승 {d}무 {l}패."
@@ -1093,6 +1114,7 @@
  "The line now ends after {move}": "이제 라인은 {move} 다음에 끝납니다",
  "end": "끝",
  "{move} branches off this line": "{move}는 이 라인에서 갈라집니다",
+ "{move} isn’t in your repertoire": "{move} 수는 레퍼토리에 없어요",
  "{name} (branch)": "{name} (분기)",
  "{n} branch points": {
   "other": "분기점 {n}곳"
@@ -1124,6 +1146,8 @@
  "Where do my lines differ from each other?": "내 라인들은 서로 어디서 달라지나요?",
  "Which line should I add next?": "다음에 어떤 라인을 추가해야 할까요?",
  "You decide how they play: pick a reply, or play any move for them on the board.": "상대가 어떻게 둘지는 당신이 정합니다: 응수를 고르거나 보드에서 상대의 수를 아무거나 두세요.",
+ "You have no Black repertoire yet: these are the lines to build one for.": "아직 흑 레퍼토리가 없어요. 이 라인들에 대비해 만들어 보세요.",
+ "You have no White repertoire yet: these are the lines to build one for.": "아직 백 레퍼토리가 없어요. 이 라인들에 대비해 만들어 보세요.",
  "Your question": "질문",
  "e.g. I like quiet positional lines, I hate theory-heavy gambits, I have little time to study.": "예: 조용한 포지셔널 라인을 좋아하고, 이론이 많은 갬빗은 싫고, 공부할 시간이 적어요.",
  "Ask anything…": "무엇이든 물어보세요…",
@@ -1137,11 +1161,16 @@
  "Page not found": "페이지를 찾을 수 없습니다",
  "Something went wrong": "문제가 발생했습니다",
  "There’s nothing at this address.": "이 주소에는 아무것도 없습니다.",
+ "They have no games as Black here.": "여기에는 상대가 흑을 잡은 대국이 없어요.",
+ "They have no games as White here.": "여기에는 상대가 백을 잡은 대국이 없어요.",
+ "They haven’t faced it in these games.": "이 대국들에서는 나온 적이 없어요.",
+ "They haven’t faced your {move} in these games": "이 대국들에서 상대는 내 {move} 수를 만난 적이 없어요",
  "Reload the app and try again. Your repertoire and training are saved.": "앱을 다시 불러와서 다시 시도하세요. 레퍼토리와 훈련 기록은 저장되어 있습니다.",
  "Reload": "다시 불러오기",
  "Loading…": "불러오는 중…",
  "From the engine and game statistics": "엔진과 대국 통계 기반",
  "the AI coach is resting until tomorrow": "AI 코치는 내일까지 쉬는 중입니다",
+ "they score {pct}": "상대 점수 {pct}",
  "AI coach · grounded in this position’s engine lines and stats": "AI 코치 · 이 포지션의 엔진 수순과 통계 기반",
  "{wrong} of {total} wrong": "{total}번 중 {wrong}번 틀림",
  "No games as White yet.": "아직 백으로 둔 대국이 없습니다.",

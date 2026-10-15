@@ -30,6 +30,7 @@
  "Added {move} — now choose your reply": "{move} נוסף — עכשיו בחרו את התגובה שלכם",
  "After the first import, new games are checked automatically.": "אחרי הייבוא הראשון, משחקים חדשים נבדקים אוטומטית.",
  "Again": "שוב",
+ "All": "הכול",
  "All caught up": "הכול מעודכן",
  "All four start from Today. Pick the one that fits your time and mood.": "כל הארבעה מתחילים ממסך „היום”. בחרו את מה שמתאים לזמן ולמצב הרוח שלכם.",
  "All games and variations are merged. Comments become move notes.": "כל המשחקים והווריאציות מתמזגים. הערות הופכות להערות למסעים.",
@@ -222,6 +223,7 @@
  "In the Games tab, enter your Lichess or Chess.com username and import. MainLine only looks at the openings.": "בלשונית „משחקים” הזינו את שם המשתמש שלכם ב־Lichess או ב־Chess.com וייבאו. MainLine מסתכלת רק על הפתיחות.",
  "In your games": "במשחקים שלך",
  "In your repertoire": "ברפרטואר שלך",
+ "In your repertoire all the way": "ברפרטואר שלכם עד הסוף",
  "In {guided} mode an arrow shows the top pick. Play it, play any other move, or tap a suggestion in the list.": "במצב „{guided}” חץ מראה את הבחירה המובילה. שחקו אותה, שחקו מסע אחר או הקישו על הצעה ברשימה.",
  "Include replies played in at least": "לכלול תגובות שנוגנו לפחות ב־",
  "Increase {setting}": "הגדלת {setting}",
@@ -257,6 +259,7 @@
  "Line complete": "השורה הושלמה",
  "Line story": "סיפור השורה",
  "Lines": "שורות",
+ "Lines to prepare": "שורות להכנה",
  "Link your Chess.com account to import your games from it.": "קשרו את חשבון Chess.com שלכם כדי לייבא ממנו משחקים.",
  "Loading openings…": "טוען פתיחות…",
  "London System": "מערך לונדון",
@@ -313,8 +316,6 @@
  "No master games": "אין משחקי אמנים",
  "No new moves to learn": "אין מסעים חדשים ללמוד",
  "No opening matches “{query}”.": "אין פתיחה שמתאימה ל„{query}”.",
- "No overlap with your Black repertoire in their games.": "אין חפיפה עם הרפרטואר שלכם לשחור במשחקים שלהם.",
- "No overlap with your White repertoire in their games.": "אין חפיפה עם הרפרטואר שלכם ללבן במשחקים שלהם.",
  "No positions learned yet": "עדיין לא נלמדו עמדות",
  "No repertoires yet.": "עדיין אין רפרטוארים.",
  "No reviews are due. Learn new moves, or come back when positions are due again.": "אין חזרות שמגיע זמנן. למדו מסעים חדשים, או חזרו כשעמדות יגיעו שוב לחזרה.",
@@ -325,6 +326,7 @@
  "Not enough data yet": "עדיין אין מספיק נתונים",
  "Not in your repertoire": "לא ברפרטואר שלך",
  "Not played at this level": "לא שוחק ברמה הזו",
+ "Not prepared": "לא מוכן",
  "Not quite — it’s {move}": "לא בדיוק — זה {move}",
  "Not quite. The move is {move}.": "לא בדיוק. המסע הוא {move}.",
  "Not trained yet": "עדיין לא אומן",
@@ -549,6 +551,8 @@
  "The tab bar at the bottom of the screen takes you everywhere. On a tablet or a computer, the same tabs sit in the sidebar.": "סרגל הלשוניות בתחתית המסך לוקח אתכם לכל מקום. בטאבלט או במחשב, אותן לשוניות נמצאות בסרגל הצד.",
  "The whole line. Tap a move to jump to it.": "השורה כולה. הקישו על מסע כדי לקפוץ אליו.",
  "The {board} (on Today) sets up any position or takes a pasted FEN, then analyses it with Stockfish.": "{board} (במסך „היום”) מעמיד כל עמדה או מקבל FEN מודבק, ואז מנתח אותה עם Stockfish.",
+ "Their answer to {move}": "התשובה של היריב ל־{move}",
+ "Their first move": "המסע הראשון של היריב",
  "Their move — no replies yet": "תור היריב — עדיין אין תגובות",
  "Their username": "שם המשתמש שלו",
  "Themes, boards, piece sets and fonts, plus sound, vibration and language: pick what you like.": "ערכות נושא, לוחות, ערכות כלים וגופנים, וגם צליל, רטט ושפה: בחרו מה שאתם אוהבים.",
@@ -645,6 +649,7 @@
  "Your real games, checked against your preparation.": "המשחקים האמיתיים שלכם, מול ההכנה שלכם.",
  "Your repertoire": "הרפרטואר שלכם",
  "Your repertoire and training sync across devices.": "הרפרטואר והאימון מסונכרנים בין המכשירים שלך.",
+ "Your repertoire ends after {move}": "הרפרטואר שלכם נגמר אחרי {move}",
  "Your repertoire is every move you have decided to play. The Repertoire tab keeps White and Black apart, and sorts each side into folders: first moves, then openings, then their lines.": "הרפרטואר שלכם הוא כל מסע שהחלטתם לשחק. הלשונית „רפרטואר” מפרידה בין לבן לשחור, ומסדרת כל צד בתיקיות: קודם המסעים הראשונים, אחר כך הפתיחות, ואז השורות שלהן.",
  "Your repertoire is waiting for you.": "הרפרטואר שלך מחכה לך.",
  "Your repertoire misses you": "הרפרטואר שלך מתגעגע אליך",
@@ -671,16 +676,14 @@
  "has a note": "יש הערה",
  "in": "ב־",
  "in your repertoire": "ברפרטואר שלך",
+ "last played {date}": "שוחק לאחרונה ב־{date}",
  "median, correct answers": "חציון, תשובות נכונות",
  "missed": "הוחמץ",
  "move {n}": "מסע {n}",
  "never trained": "לא אומנו מעולם",
  "newest first": "החדשים קודם",
- "not in your repertoire": "לא ברפרטואר שלך",
- "not prepared": "לא מוכן",
  "not yet": "עוד לא",
  "practised": "התאמנתם",
- "prepared": "מוכן",
  "promotes to bishop": "מוכתר לרץ",
  "promotes to knight": "מוכתר לפרש",
  "promotes to queen": "מוכתר למלכה",
@@ -693,7 +696,6 @@
  "still being learnt": "עדיין בלמידה",
  "streak freeze used": "נעשה שימוש בהקפאת רצף",
  "takes {square}": "לוקח ב־{square}",
- "they play {move}": "הוא משחק {move}",
  "transposition": "היפוך סדר מסעים",
  "unavailable": "לא זמין",
  "unknown": "לא ידוע",
@@ -704,7 +706,6 @@
  "you score {score}": "הניקוד שלך {score}",
  "your Apple ID": "ה־Apple ID שלך",
  "your account": "החשבון שלך",
- "you’re prepared": "אתם מוכנים",
  "{account} is optional. Sign in with Lichess, Chess.com or Apple to keep your repertoire and training in step across devices. Without an account, everything stays on this device and works offline.": "{account} הוא אופציונלי. התחברו עם Lichess, Chess.com או Apple כדי שהרפרטואר והאימון יהיו זהים בכל המכשירים. בלי חשבון, הכול נשאר במכשיר הזה ועובד גם בלי חיבור.",
  "{breaks} shows where each game left your preparation: {surprises} (your opponent played a move you hadn’t prepared, and you can add your answer right there), {forgotten} (you played something other than the move you learned, so that position becomes due again) and {ended} (the game outlasted your line).": "{breaks} מראה איפה כל משחק יצא מההכנה שלכם: {surprises} (היריב שיחק מסע שלא הכנתם, ואפשר להוסיף את התשובה שלכם ממש שם), {forgotten} (שיחקתם משהו אחר מהמסע שלמדתם, ולכן העמדה הזו שוב מחכה לחזרה) ו{ended} (המשחק נמשך מעבר לשורה שלכם).",
  "{build}: choose the moves you play and the replies you expect from your opponent.": "{build}: בחרו את המסעים שאתם משחקים ואת התשובות שאתם מצפים להן מהיריב.",
@@ -739,7 +740,6 @@
  "{pct} of games there": "{pct} מהמשחקים שם",
  "{pct} of {games} · you score {score}": "{pct} מתוך {games} · הניקוד שלך {score}",
  "{sec} s": "{sec} שנ׳",
- "{share} of their games here · reached in {reach}": "{share} מהמשחקים שלו כאן · מגיעים לכאן ב־{reach}",
  "{suggest} ranks your options. {replies} adds the replies you are most likely to meet, so your line is ready for them.": "{suggest} מדרג את האפשרויות שלכם. {replies} מוסיף את התשובות שסביר ביותר שתפגשו, כדי שהשורה שלכם תהיה מוכנה להן.",
  "{train} appears when positions are due for review. {learn} appears when there are new moves to learn. When neither is needed, you are all caught up.": "{train} מופיע כשיש עמדות שמחכות לחזרה. {learn} מופיע כשיש מסעים חדשים ללמוד. כשאין צורך באף אחד מהם, השלמתם הכול.",
  "{train}: the app tests you on each position just before you would forget it.": "{train}: האפליקציה בוחנת אתכם על כל עמדה רגע לפני שהייתם שוכחים אותה.",
@@ -752,6 +752,11 @@
  "❄️ Streak freeze used": "❄️ נעשה שימוש בהקפאת רצף",
  "🔥 Day {day} is waiting": "🔥 יום {day} מחכה",
  "🔥 Still time today": "🔥 עדיין יש זמן היום",
+ "A line goes on while at least {n} of their games follow it.": {
+  "one": "שורה נמשכת כל עוד לפחות משחק אחד של היריב הולך בה.",
+  "two": "שורה נמשכת כל עוד לפחות {n} משחקים של היריב הולכים בה.",
+  "other": "שורה נמשכת כל עוד לפחות {n} משחקים של היריב הולכים בה."
+ },
  "A streak freeze saved your {n}-day streak. Practise today to keep it.": {
   "one": "הקפאת רצף הצילה את רצף היום שלך. התאמנו היום כדי לשמור עליו.",
   "two": "הקפאת רצף הצילה את רצף היומיים שלך. התאמנו היום כדי לשמור עליו.",
@@ -771,6 +776,16 @@
   "one": "אל תתנו ליום אחד לחמוק",
   "two": "אל תתנו ליומיים לחמוק",
   "other": "אל תתנו ל־{n} ימים לחמוק"
+ },
+ "From {n} games where they had Black": {
+  "one": "ממשחק אחד שבו היריב שיחק בשחור",
+  "two": "מ־{n} משחקים שבהם היריב שיחק בשחור",
+  "other": "מ־{n} משחקים שבהם היריב שיחק בשחור"
+ },
+ "From {n} games where they had White": {
+  "one": "ממשחק אחד שבו היריב שיחק בלבן",
+  "two": "מ־{n} משחקים שבהם היריב שיחק בלבן",
+  "other": "מ־{n} משחקים שבהם היריב שיחק בלבן"
  },
  "Imported {added} moves · {n} problems: {first}": {
   "one": "יובאו {added} מסעים · בעיה אחת: {first}",
@@ -802,6 +817,11 @@
   "two": "אבן הדרך הבאה: יומיים",
   "other": "אבן הדרך הבאה: {n} ימים"
  },
+ "Other moves: {n} games": {
+  "one": "מסעים אחרים: משחק אחד",
+  "two": "מסעים אחרים: {n} משחקים",
+  "other": "מסעים אחרים: {n} משחקים"
+ },
  "Practise today to keep your {n}-day streak.": {
   "one": "התאמנו היום כדי לשמור על רצף של יום אחד.",
   "two": "התאמנו היום כדי לשמור על רצף של יומיים.",
@@ -827,6 +847,11 @@
   "two": "הצגת {n} וריאציות",
   "other": "הצגת {n} וריאציות"
  },
+ "They’ve faced your {move} only {n} times here": {
+  "one": "ה־{move} שלכם הופיע כאן רק פעם אחת",
+  "two": "ה־{move} שלכם הופיע כאן רק פעמיים",
+  "other": "ה־{move} שלכם הופיע כאן רק {n} פעמים"
+ },
  "Your {n}-day streak is at risk": {
   "one": "רצף של יום אחד בסכנה",
   "two": "רצף של יומיים בסכנה",
@@ -846,6 +871,11 @@
   "one": "{due} רוצות מבט קצר. המשיכו את רצף היום.",
   "two": "{due} רוצות מבט קצר. המשיכו את רצף היומיים.",
   "other": "{due} רוצות מבט קצר. המשיכו את רצף {n} הימים."
+ },
+ "{name}: {n} recent games": {
+  "one": "{name}: משחק אחרון אחד",
+  "two": "{name}: {n} משחקים אחרונים",
+  "other": "{name}: {n} משחקים אחרונים"
  },
  "{n} alternates": {
   "one": "חלופה אחת",
@@ -882,6 +912,11 @@
   "two": "{n} מסעים",
   "other": "{n} מסעים"
  },
+ "{n} of their games went this way": {
+  "one": "משחק אחד של היריב הלך כך",
+  "two": "{n} משחקים של היריב הלכו כך",
+  "other": "{n} משחקים של היריב הלכו כך"
+ },
  "{n} positions had no explorer data and were split evenly.": {
   "one": "לעמדה אחת לא היו נתוני סייר והיא חולקה שווה בשווה.",
   "two": "ל־{n} עמדות לא היו נתוני סייר והן חולקו שווה בשווה.",
@@ -911,11 +946,6 @@
   "one": "עמדה אחת",
   "two": "{n} עמדות",
   "other": "{n} עמדות"
- },
- "{n} recent games analysed.": {
-  "one": "נותח משחק אחרון אחד.",
-  "two": "נותחו {n} משחקים אחרונים.",
-  "other": "נותחו {n} משחקים אחרונים."
  },
  "{n} replies prepared": {
   "one": "תגובה אחת מוכנה",
@@ -1049,6 +1079,11 @@
   "one": "צפייה בסט מוכן אחד",
   "two": "צפייה ב-{n} סטים מוכנים",
   "other": "צפייה ב-{n} סטים מוכנים"
+ },
+ "Show {n} more lines": {
+  "one": "הצגת שורה אחת נוספת",
+  "two": "הצגת עוד {n} שורות",
+  "other": "הצגת עוד {n} שורות"
  },
  "You score {score} in {n} games: {w} won, {d} drawn, {l} lost.": {
   "one": "התוצאה שלך {score} במשחק אחד: {w} ניצחונות, {d} תיקו, {l} הפסדים.",
@@ -1215,6 +1250,7 @@
  "The line now ends after {move}": "השורה מסתיימת עכשיו אחרי {move}",
  "end": "סוף",
  "{move} branches off this line": "{move} מתפצל מהשורה הזו",
+ "{move} isn’t in your repertoire": "{move} לא ברפרטואר שלכם",
  "{name} (branch)": "{name} (הסתעפות)",
  "{n} branch points": {
   "one": "נקודת הסתעפות {n}",
@@ -1250,6 +1286,8 @@
  "Where do my lines differ from each other?": "איפה הקווים שלי שונים זה מזה?",
  "Which line should I add next?": "איזה קו כדאי לי להוסיף עכשיו?",
  "You decide how they play: pick a reply, or play any move for them on the board.": "אתה מחליט איך הם משחקים: בחר תשובה, או שחק בשבילם כל מסע על הלוח.",
+ "You have no Black repertoire yet: these are the lines to build one for.": "עדיין אין לכם רפרטואר בשחור: אלה השורות שכדאי לבנות אותו מולן.",
+ "You have no White repertoire yet: these are the lines to build one for.": "עדיין אין לכם רפרטואר בלבן: אלה השורות שכדאי לבנות אותו מולן.",
  "Your question": "השאלה שלך",
  "e.g. I like quiet positional lines, I hate theory-heavy gambits, I have little time to study.": "למשל: אני אוהב קווים פוזיציוניים שקטים, שונא גמביטים עמוסי תאוריה, ויש לי מעט זמן ללמוד.",
  "Ask anything…": "שאל כל דבר…",
@@ -1263,11 +1301,16 @@
  "Page not found": "הדף לא נמצא",
  "Something went wrong": "משהו השתבש",
  "There’s nothing at this address.": "אין כלום בכתובת הזו.",
+ "They have no games as Black here.": "אין כאן משחקים של היריב בשחור.",
+ "They have no games as White here.": "אין כאן משחקים של היריב בלבן.",
+ "They haven’t faced it in these games.": "זה לא הופיע במשחקים האלה.",
+ "They haven’t faced your {move} in these games": "ה־{move} שלכם לא הופיע במשחקים האלה",
  "Reload the app and try again. Your repertoire and training are saved.": "טענו מחדש את האפליקציה ונסו שוב. הרפרטואר והאימון שלכם שמורים.",
  "Reload": "טעינה מחדש",
  "Loading…": "טוען…",
  "From the engine and game statistics": "מהמנוע ומסטטיסטיקת המשחקים",
  "the AI coach is resting until tomorrow": "מאמן ה-AI נח עד מחר",
+ "they score {pct}": "היריב משיג {pct}",
  "AI coach · grounded in this position’s engine lines and stats": "מאמן AI · מבוסס על קווי המנוע והסטטיסטיקה של העמדה הזו",
  "{wrong} of {total} wrong": "{wrong} שגויים מתוך {total}",
  "No games as White yet.": "עדיין אין משחקים בלבן.",
