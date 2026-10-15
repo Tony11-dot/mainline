@@ -15,6 +15,15 @@ Version numbers:
 
 `native.yml` runs on the same tag and attaches desktop builds to a draft GitHub release.
 
+**While GitHub Actions is unavailable (billing):** tags don't build anything. Release from this Mac instead, after `sh scripts/check.sh` passes:
+```sh
+railway up --ci --service api                       # web + API
+cd apps/mobile
+JAVA_HOME="/Applications/Android Studio.app/Contents/jbr/Contents/Home" fastlane android internal
+fastlane ios beta                                    # TestFlight
+```
+Run the fastlane lanes with Node 22 on the PATH; `android internal` prints the versionCode it uploaded, which is the one to promote to production.
+
 Everything below is one-time setup, in order. Steps marked **(you)** need your accounts. Everything else is done already.
 
 ---
