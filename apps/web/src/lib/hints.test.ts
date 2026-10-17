@@ -35,7 +35,10 @@ describe('pack hint targets', () => {
 describe('shipped hint files', () => {
   const files = readdirSync(DATA).filter((f) => f.endsWith('.json'));
   const en = read('en.json');
-  const keys = new Set(packHintTargets(PACKS).map((t) => t.key));
+  const targets = packHintTargets(PACKS);
+  const keys = new Set(targets.map((t) => t.key));
+  // How the files were made: counts after the code checks and the judge review drop what failed.
+  const manifest = JSON.parse(readFileSync(resolve(DATA, '../../../scripts/hints/manifest.json'), 'utf8')) as { hints: number; languages: Record<string, { hints: number }> };
 
   it('ships English and every app language', () => {
     const langs = files.map((f) => f.replace('.json', '')).sort();
@@ -44,7 +47,9 @@ describe('shipped hint files', () => {
 
   it('English hints are current, one line each, and name only moves legal in the position', () => {
     expect(en.v).toBe(HINTS_VERSION);
-    expect(Object.keys(en.hints).length).toBeGreaterThan(1000);
+    expect(Object.keys(en.hints).length).toBe(manifest.hints);
+    // Hints are dropped, never invented: well over half the trained positions keep one.
+    expect(Object.keys(en.hints).length).toBeGreaterThan(targets.length / 2);
     for (const [key, text] of Object.entries(en.hints)) {
       expect(keys.has(key), `${key} is still a trained move`).toBe(true);
       expect(text).not.toMatch(/\n/);

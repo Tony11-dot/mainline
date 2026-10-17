@@ -17,10 +17,13 @@ How they were made (`manifest.json` has the numbers):
    English is translated, keeping every `[[move]]` token (checked with `sameMoveTokens`). These two steps spend
    money and are deliberately not part of the repo: they live in the owner's sprint harness (`~/Dev/ai-sprint/mainline`,
    with hard spend caps and a ledger) and were run once in October 2026.
-4. `assemble.mjs` (same place) writes the per-language files and `manifest.json`.
+4. Every English hint was then graded by an Opus judge (`judge-all.mjs` in the harness: grounded in the packet, true on the board,
+   useful, in voice). The ones that failed are left out of every language, with the reason in `manifest.json`
+   (`droppedAfterReviewByCategory`: false on the board, beyond the packet, vague, voice).
+5. `assemble.mjs` (same place) writes the per-language files and `manifest.json`.
 
 `src/lib/hints.test.ts` checks the shipped files on every run: keys are still trained positions, translations keep
 the English moves, every language is present.
 
-When the packs change, rerun steps 1–2 here, then 3–4 in the harness; positions whose packet did not change keep
+When the packs change, rerun steps 1–2 here, then 3–5 in the harness; positions whose packet did not change keep
 their hint. A move with no hint simply shows none.
