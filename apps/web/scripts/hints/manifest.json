@@ -1,0 +1,131 @@
+{
+ "generated": "2026-10-17T16:07:18.984Z",
+ "source": {
+  "model": "claude-opus-5-5",
+  "effort": "low",
+  "prompt_version": 3
+ },
+ "positions": 1307,
+ "hints": 1292,
+ "partialFacts": 0,
+ "dropped": [
+  "3.Nf6: invalid moves: c3",
+  "4.d4: names no move",
+  "6.Bg2: names no move",
+  "10.Bd2: names no move",
+  "11.Ne4: invalid moves: e5",
+  "12.a4: names no move",
+  "15.Be7: names no move"
+ ],
+ "droppedAfterReview": {
+  "rnbqk1nr/pp3ppp/2pb4/3pp3/4P3/3P1NP1/PPPN1P1P/R1BQKB1R b KQkq - g8f6": "accuracy 2",
+  "rnbqkb1r/p2ppppp/5n2/1ppP4/5B2/8/PPP1PPPP/RN1QKBNR w KQkq - e2e3": "accuracy 3",
+  "rnbqkb1r/ppp1pp1p/1n4p1/8/2PP4/5N2/PP3PPP/RNBQKB1R w KQkq - b1c3": "accuracy 3",
+  "rnbqkb1r/pp1ppppp/8/3nP3/2Bp4/2P5/PP3PPP/RNBQK1NR b KQkq - d5b6": "not grounded: The claim that Nb6 keeps the d4 pawn guarded against cxd4 is unsupported; neither the packet nor the board backs it.; accuracy 2; useful 2",
+  "rnbq1rk1/ppp1bppp/4pn2/3p4/2PP4/5NP1/PP2PPBP/RNBQ1RK1 b - - d5c4": "not grounded: The claim that only the queen can regain the pawn, and that dxc4 frees a diagonal for Black's light-squared bishop via e6; neither is in the packet.; accuracy 2; useful 2",
+  "rnbqk1nr/ppp2ppp/3p4/2b1p3/4PP2/5N2/PPPP2PP/RNBQKB1R w KQkq - c2c3": "not grounded: The d4 push plan is not in the packet; the engine's main line continues with fxe5 and d3, not d4.",
+  "rnbq1rk1/ppp1ppbp/3p1np1/8/2PPP3/2N2N2/PP2BPPP/R1BQK2R b KQ - e7e5": "accuracy 3",
+  "r2qkbnr/ppp3pp/2n1p3/8/3pP3/5N2/PP3PPP/RNBQ1RK1 w kq - d1b3": "not grounded: Says Qd7 defends b7, but it does not: the c7 pawn blocks the queen's path along the seventh rank. The engine line continues Qxb7, so Black is not defending b7 at all. Qd7 actually guards e6, which Qb3 also hits along the a2–g8 diagonal.; accuracy 2"
+ },
+ "languages": {
+  "ar": {
+   "hints": 1292,
+   "model": "claude-haiku-5-5",
+   "inEnglish": 0
+  },
+  "de": {
+   "hints": 1292,
+   "model": "claude-haiku-5-5",
+   "inEnglish": 0
+  },
+  "en": {
+   "hints": 1292,
+   "model": "claude-opus-5-5"
+  },
+  "es": {
+   "hints": 1292,
+   "model": "claude-haiku-5-5",
+   "inEnglish": 0
+  },
+  "fa": {
+   "hints": 1292,
+   "model": "claude-haiku-5-5",
+   "inEnglish": 0
+  },
+  "fr": {
+   "hints": 1292,
+   "model": "claude-haiku-5-5",
+   "inEnglish": 0
+  },
+  "he": {
+   "hints": 1292,
+   "model": "claude-sonnet-5-5",
+   "inEnglish": 0
+  },
+  "hi": {
+   "hints": 1292,
+   "model": "claude-haiku-5-5",
+   "inEnglish": 0
+  },
+  "id": {
+   "hints": 1292,
+   "model": "claude-haiku-5-5",
+   "inEnglish": 0
+  },
+  "it": {
+   "hints": 1292,
+   "model": "claude-haiku-5-5",
+   "inEnglish": 0
+  },
+  "ja": {
+   "hints": 1292,
+   "model": "claude-haiku-5-5",
+   "inEnglish": 0
+  },
+  "ko": {
+   "hints": 1292,
+   "model": "claude-haiku-5-5",
+   "inEnglish": 0
+  },
+  "nl": {
+   "hints": 1292,
+   "model": "claude-haiku-5-5",
+   "inEnglish": 0
+  },
+  "pl": {
+   "hints": 1292,
+   "model": "claude-haiku-5-5",
+   "inEnglish": 0
+  },
+  "pt": {
+   "hints": 1292,
+   "model": "claude-haiku-5-5",
+   "inEnglish": 0
+  },
+  "ru": {
+   "hints": 1292,
+   "model": "claude-haiku-5-5",
+   "inEnglish": 0
+  },
+  "tr": {
+   "hints": 1292,
+   "model": "claude-haiku-5-5",
+   "inEnglish": 0
+  },
+  "uk": {
+   "hints": 1292,
+   "model": "claude-haiku-5-5",
+   "inEnglish": 0
+  },
+  "vi": {
+   "hints": 1292,
+   "model": "claude-haiku-5-5",
+   "inEnglish": 0
+  },
+  "zh": {
+   "hints": 1292,
+   "model": "claude-haiku-5-5",
+   "inEnglish": 0
+  }
+ }
+}
