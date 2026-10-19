@@ -59,6 +59,16 @@ describe('tree', () => {
     expect(allLines(root)).toHaveLength(1);
   });
 
+  it('adds castling once, whichever way the king was dropped', () => {
+    const root = createRoot('r3k2r/pppppppp/8/8/8/8/PPPPPPPP/R3K2R w KQkq - 0 1');
+    expect(addMove(root, '', 'e1g1')).toMatchObject({ path: 'e1g1', created: true });
+    // Dragging the king onto its rook is the same move.
+    expect(addMove(root, '', 'e1h1')).toMatchObject({ path: 'e1g1', created: false });
+    expect(addMove(root, '', 'e1a1')).toMatchObject({ path: 'e1c1', created: true });
+    expect(addMove(root, '', 'e1c1').created).toBe(false);
+    expect(root.children.map((c) => c.san)).toEqual(['O-O', 'O-O-O']);
+  });
+
   it('tracks ply from a FEN root', () => {
     const root = createRoot('rnbqkbnr/pppppppp/8/8/4P3/8/PPPP1PPP/RNBQKBNR b KQkq - 0 1');
     expect(root.ply).toBe(1);

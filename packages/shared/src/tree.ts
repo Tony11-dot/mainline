@@ -78,6 +78,9 @@ export function addMove(root: TreeNode, path: string, uci: string): { path: stri
   const existing = parent.children.find((c) => c.uci === uci);
   if (existing) return { path: childPath(path, uci), node: existing, created: false };
   const played = playUci(positionFromFen(parent.fen), uci);
+  // Castling can arrive as king-onto-rook (e1h1); children store the standard form (e1g1).
+  const same = parent.children.find((c) => c.uci === played.uci);
+  if (same) return { path: childPath(path, played.uci), node: same, created: false };
   const node: TreeNode = {
     uci: played.uci,
     san: played.san,
