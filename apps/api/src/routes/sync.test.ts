@@ -1,24 +1,22 @@
 import { afterAll, beforeAll, describe, expect, it } from 'vitest';
 import type { FastifyInstance } from 'fastify';
 import { randomUUID } from 'node:crypto';
+import { testDatabaseUrl, useTestDatabase } from '../db/testing';
 
 // Needs Postgres: TEST_DATABASE_URL (CI provides one; locally `createdb mainline_test`).
-const url = process.env.TEST_DATABASE_URL ?? (process.env.CI ? undefined : 'postgres://localhost:5432/mainline_test');
-const run = url ? describe : describe.skip;
+const run = testDatabaseUrl ? describe : describe.skip;
 
 run('sync', () => {
   let app: FastifyInstance;
   let token = '';
   let otherToken = '';
   beforeAll(async () => {
-    process.env.DATABASE_URL = url;
     process.env.TOKEN_ENC_KEY ??= Buffer.alloc(32, 1).toString('base64');
     process.env.SESSION_SECRET ??= Buffer.alloc(32, 2).toString('base64');
-    const { runMigrations } = await import('../db/migrate');
+    await useTestDatabase();
     const { getDb, schema } = await import('../db/client');
     const { createSession } = await import('../lib/session');
     const { buildApp } = await import('../app');
-    await runMigrations();
     const db = getDb()!;
     const [u1] = await db.insert(schema.users).values({ lichessUsername: `t_${randomUUID()}` }).returning();
     const [u2] = await db.insert(schema.users).values({ lichessUsername: `t_${randomUUID()}` }).returning();
