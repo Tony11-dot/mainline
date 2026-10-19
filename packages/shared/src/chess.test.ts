@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest';
 import { INITIAL_FEN, positionFromFen } from './epd';
-import { isPromotion, playLine, playUci, sanToUci, uciLineToSan, uciToSan } from './chess';
+import { isPromotion, parseLegalUci, playLine, playUci, sanToUci, uciLineToSan, uciToSan } from './chess';
 import { addLine, addMove, allLines, createRoot, mainlineEnd, nodeAt, promoteAt, siblingPath, deleteAt } from './tree';
 import { evalSwing, formatEval, wdlPercents, winningChances } from './eval';
 import { ratingBandsFor } from './api';
@@ -40,6 +40,30 @@ describe('chess helpers', () => {
   it('rejects illegal moves', () => {
     expect(() => playUci(positionFromFen(INITIAL_FEN), 'e2e5')).toThrow();
     expect(uciLineToSan(INITIAL_FEN, ['e2e4', 'e2e4'])).toEqual(['e4']);
+  });
+
+  it('accepts castling in either encoding but never a move that stays put', () => {
+    const pos = positionFromFen('r3k2r/pppppppp/8/8/8/8/PPPPPPPP/R3K2R w KQkq - 0 1');
+    expect(parseLegalUci(pos, 'e1g1')).toEqual(parseLegalUci(pos, 'e1h1'));
+    expect(parseLegalUci(pos, 'e1c1')).toEqual(parseLegalUci(pos, 'e1a1'));
+    expect(parseLegalUci(pos, 'e1e1')).toBeUndefined();
+    expect(parseLegalUci(pos, 'a2a2')).toBeUndefined();
+    expect(() => playUci(pos, 'e1e1')).toThrow();
+  });
+
+  it('needs a real promotion piece on the last rank, and none elsewhere', () => {
+    const pos = positionFromFen('8/P7/8/8/8/7k/8/7K w - - 0 1');
+    expect(parseLegalUci(pos, 'a7a8')).toBeUndefined();
+    expect(parseLegalUci(pos, 'a7a8k')).toBeUndefined();
+    expect(parseLegalUci(pos, 'a7a8p')).toBeUndefined();
+    expect(parseLegalUci(pos, 'h1g1q')).toBeUndefined();
+    expect(parseLegalUci(pos, 'a7a8r')).toMatchObject({ promotion: 'rook' });
+  });
+
+  it('ignores drops and garbage', () => {
+    const pos = positionFromFen(INITIAL_FEN);
+    for (const u of ['', 'e2', 'e2e9', 'P@e4', 'zzzz']) expect(parseLegalUci(pos, u)).toBeUndefined();
+    expect(uciToSan(pos, 'e7e5')).toBeUndefined(); // not Black's turn
   });
 });
 

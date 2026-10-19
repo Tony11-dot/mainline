@@ -25,7 +25,8 @@ export function standardUci(pos: Chess, move: Move): string {
 /** Parse UCI in either castling encoding into a legal move for `pos`, or undefined if illegal. */
 export function parseLegalUci(pos: Chess, uci: string): NormalMove | undefined {
   const raw = parseUci(uci);
-  if (!raw || !('from' in raw)) return undefined;
+  // chessops reads a king "moving" to its own square (e1e1) as castling; no move stays put.
+  if (!raw || !('from' in raw) || raw.from === raw.to) return undefined;
   const move = normalizeMove(pos, raw) as NormalMove;
   return pos.isLegal(move) ? move : undefined;
 }
