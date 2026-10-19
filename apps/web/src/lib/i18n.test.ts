@@ -26,9 +26,11 @@ describe('language choice', () => {
     expect(systemLang()).toBe('en');
   });
 
-  it('reads old Android’s "iw" as Hebrew', () => {
+  it('reads old Android’s "iw" as Hebrew and "in" as Indonesian', () => {
     deviceLanguages(['iw-IL']);
     expect(systemLang()).toBe('he');
+    deviceLanguages(['in-ID']);
+    expect(systemLang()).toBe('id');
   });
 
   it('follows the device on "automatic" or an unknown setting', () => {

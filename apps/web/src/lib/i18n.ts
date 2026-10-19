@@ -58,8 +58,8 @@ export function systemLang(): Lang {
   const prefs = typeof navigator !== 'undefined' ? (navigator.languages ?? [navigator.language]) : [];
   for (const tag of prefs) {
     const base = tag.toLowerCase().split('-')[0]!;
-    // Hebrew used to be "iw" on older Android.
-    const id = base === 'iw' ? 'he' : base;
+    // Older Android reports Java's legacy codes: "iw" for Hebrew, "in" for Indonesian.
+    const id = base === 'iw' ? 'he' : base === 'in' ? 'id' : base;
     if (LANGS.has(id)) return id as Lang;
   }
   return 'en';
