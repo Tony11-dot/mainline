@@ -1,0 +1,1471 @@
+{
+ "generated": "2026-10-17T16:07:18.984Z",
+ "source": {
+  "model": "claude-opus-5-5",
+  "effort": "low",
+  "prompt_version": 3
+ },
+ "positions": 1307,
+ "hints": 1032,
+ "partialFacts": 0,
+ "review": "every hint judged by Opus 5.5 (results/judge-all)",
+ "dropped": [
+  "3.Nf6: invalid moves: c3",
+  "4.d4: names no move",
+  "6.Bg2: names no move",
+  "10.Bd2: names no move",
+  "11.Ne4: invalid moves: e5",
+  "12.a4: names no move",
+  "15.Be7: names no move"
+ ],
+ "droppedAfterReviewByCategory": {
+  "false on the board": 62,
+  "vague": 127,
+  "beyond the packet": 77,
+  "voice": 2
+ },
+ "droppedAfterReview": {
+  "rnbqk1nr/pp3ppp/2pb4/3pp3/4P3/3P1NP1/PPPN1P1P/R1BQKB1R b KQkq - g8f6": {
+   "category": "false on the board",
+   "review": "sample",
+   "detail": "accuracy 2; The pressure on e4 and the way it prepares O-O (as in the engine line) are correct, but calling Nf6 the 'last minor piece' is wrong, since the b8-knight and c8-bishop are both still undeveloped."
+  },
+  "rnbqkb1r/p2ppppp/5n2/1ppP4/5B2/8/PPP1PPPP/RN1QKBNR w KQkq - e2e3": {
+   "category": "vague",
+   "review": "sample",
+   "detail": "accuracy 3; The claim that e3 supports the d5 pawn's base is not in the packet and is not true on the board."
+  },
+  "rnbqkb1r/ppp1pp1p/1n4p1/8/2PP4/5N2/PP3PPP/RNBQKB1R w KQkq - b1c3": {
+   "category": "vague",
+   "review": "sample",
+   "detail": "accuracy 3; The link between d5 support and the later d5 advance after ...c5 matches the engine line, but calling Nc3 'the last minor piece' is false, since both bishops on c1 and f1 are still undeveloped."
+  },
+  "rnbqkb1r/pp1ppppp/8/3nP3/2Bp4/2P5/PP3PPP/RNBQK1NR b KQkq - d5b6": {
+   "category": "false on the board",
+   "review": "sample",
+   "detail": "accuracy 2; not grounded; useful 2; The claim that Nb6 keeps the d4 pawn guarded against cxd4 is unsupported; neither the packet nor the board backs it."
+  },
+  "rnbq1rk1/ppp1bppp/4pn2/3p4/2PP4/5NP1/PP2PPBP/RNBQ1RK1 b - - d5c4": {
+   "category": "false on the board",
+   "review": "sample",
+   "detail": "accuracy 2; not grounded; useful 2; The claim that only the queen can regain the pawn, and that dxc4 frees a diagonal for Black's light-squared bishop via e6; neither is in the packet."
+  },
+  "rnbqk1nr/ppp2ppp/3p4/2b1p3/4PP2/5N2/PPPP2PP/RNBQKB1R w KQkq - c2c3": {
+   "category": "beyond the packet",
+   "review": "sample",
+   "detail": "not grounded; The d4 push plan is not in the packet; the engine's main line continues with fxe5 and d3, not d4."
+  },
+  "rnbq1rk1/ppp1ppbp/3p1np1/8/2PPP3/2N2N2/PP2BPPP/R1BQK2R b KQ - e7e5": {
+   "category": "vague",
+   "review": "sample",
+   "detail": "accuracy 3; The claim that e5 frees the c8 bishop is false: the e7 pawn never blocked it, and with the pawn already on d6 the c8–h3 diagonal is open."
+  },
+  "r2qkbnr/ppp3pp/2n1p3/8/3pP3/5N2/PP3PPP/RNBQ1RK1 w kq - d1b3": {
+   "category": "false on the board",
+   "review": "sample",
+   "detail": "accuracy 2; not grounded; Says Qd7 defends b7, but it does not: the c7 pawn blocks the queen's path along the seventh rank. The engine line continues Qxb7, so Black is not defending b7 at all. Qd7 actually guards e6, which Qb3 also hits along the a2–g8 diagonal."
+  },
+  "r1b1kb1r/pp2pppp/1nnq4/8/3p4/1BP2N2/PP3PPP/RNBQ1RK1 b kq - c8e6": {
+   "category": "false on the board",
+   "review": "full",
+   "detail": "accuracy 2; not grounded; The claim that Black keeps the d4 pawn contradicts the engine line, where White wins it back with Nxd4 Nxd4 cxd4."
+  },
+  "r1b1kb1r/pp3ppp/2n1pn2/3q4/3P4/4BN2/PP3PPP/RN1QKB1R w KQkq - b1c3": {
+   "category": "false on the board",
+   "review": "full",
+   "detail": "accuracy 2; not grounded; useful 2; The claims that Nc3 supports d4 and that d4 is 'a key square for White's knight' are not in the packet; a knight on c3 does not defend d4."
+  },
+  "r1b1kbnr/1pqp1ppp/p1n1p3/8/3NP3/2N1B3/PPP2PPP/R2QKB1R w KQkq - d1f3": {
+   "category": "false on the board",
+   "review": "full",
+   "detail": "accuracy 2; useful 2; The idea that the queen aims down the long diagonal at Black's queenside is not in the packet, and White's own e4 pawn blocks that diagonal."
+  },
+  "r1b1kbnr/pp3ppp/1q2p3/n2pP3/2pP4/P1P2N2/1P1N1PPP/R1BQKB1R w KQkq - a1b1": {
+   "category": "beyond the packet",
+   "review": "full",
+   "detail": "not grounded; The 'later b-pawn push' plan does not appear in the engine lines or anywhere else in the packet."
+  },
+  "r1b1kbnr/pp3ppp/1qn1p3/2ppP3/3P4/2P2N2/PP2BPPP/RNBQK2R b KQkq - c5d4": {
+   "category": "vague",
+   "review": "full",
+   "detail": "accuracy 3; Releasing the tension before dxc5 is supported by the third engine line, and the Qxb2 idea is in the main line, but the causal link is wrong: the b6 queen already hit b2 down the open b-file, so the c3 pawn leaving changes nothing there; what the trade really opens is the c-file and pressure on d4."
+  },
+  "r1b1kbnr/pp3ppp/1qn1p3/2ppP3/3P4/2P2N2/PP3PPP/RNBQKB1R w KQkq - a2a3": {
+   "category": "vague",
+   "review": "full",
+   "detail": "accuracy 3; It correctly names the a3-b4 queenside space plan, which the engine line confirms, but tying it to easing pressure on d4 'after cxd4' is muddled: in that line Black has already traded on d4 and White castles instead of recapturing, so there is no white d4 pawn left to relieve."
+  },
+  "r1b1kbnr/pp3ppp/1qn1p3/3pP3/3P4/3B1N2/PP3PPP/RNBQK2R b KQkq - c8d7": {
+   "category": "vague",
+   "review": "full",
+   "detail": "accuracy 3; The claim that Bd7 'clears the way' for Nge7 is unsupported; the c8-bishop never blocked the g8-knight."
+  },
+  "r1b1kbnr/ppqp1ppp/2n1p3/8/3NP3/2N5/PPP2PPP/R1BQKB1R w KQkq - c1e3": {
+   "category": "beyond the packet",
+   "review": "full",
+   "detail": "not grounded; The queenside-castling plan is not in the engine lines; it is plausible since Be3 clears c1, but the queen on d1 would still have to move first."
+  },
+  "r1bQkb1r/ppp2ppp/2p5/4Pn2/8/5N2/PPP2PPP/RNB2RK1 b kq - e8d8": {
+   "category": "vague",
+   "review": "full",
+   "detail": "accuracy 3; The hint suggests Kxd8 gives up castling in exchange for the bishop pair, but Black already has the bishop pair and Kxd8 is simply forced."
+  },
+  "r1bk1b1r/ppp2ppp/2p5/4Pn2/8/2N2N2/PPP2PPP/R1B2RK1 b - - d8e8": {
+   "category": "beyond the packet",
+   "review": "full",
+   "detail": "accuracy 3; not grounded; The claim that Ke8 'connects the rook on h8 with the king near e7' is not in the packet and does not make sense: the king goes to e8, not e7, and the rooks stay cut off by the bishops on c8 and f8."
+  },
+  "r1bk1b1r/ppp2ppp/2p5/4Pn2/8/5N2/PPP2PPP/RNB2RK1 w - - b1c3": {
+   "category": "vague",
+   "review": "full",
+   "detail": "accuracy 3; It correctly says Nc3 covers e4 and prepares Rd1 against the king on d8, but calling the knight 'the last minor piece' is wrong because the c1 bishop is still undeveloped."
+  },
+  "r1bq1rk1/2p1bppp/p1n2n2/1p1pp3/4P3/1BP2N2/PP1P1PPP/RNBQR1K1 w - - e4d5": {
+   "category": "false on the board",
+   "review": "full",
+   "detail": "accuracy 2; The 'second pawn' claim is unsupported: Black's Nxd5 regains the first pawn, so White ends only one pawn up."
+  },
+  "r1bq1rk1/2p1bppp/p1n5/1p1np3/8/1BP2N2/PP1P1PPP/RNBQR1K1 w - - f3e5": {
+   "category": "vague",
+   "review": "full",
+   "detail": "accuracy 3; It rightly says White accepts the Marshall pawn and is a pawn up after Nxe5 Nxe5 Rxe5. Calling that 'clean' and the e5 rook 'active' overstates White's position, since Black gets well-known compensation (the eval is only +0.37) and the rook is usually harassed after Bb7/Bd6."
+  },
+  "r1bq1rk1/4bppp/p1p5/1p1nR3/8/1BP5/PP1P1PPP/RNBQ2K1 w - - d2d4": {
+   "category": "beyond the packet",
+   "review": "full",
+   "detail": "accuracy 3; not grounded; The claim that d4 'blunts' the bishop on d6 is unsupported, since the d6–h2 diagonal stays open after d4."
+  },
+  "r1bq1rk1/bpp2pp1/p1np1n1p/4p3/4P3/1BPP1N1P/PP3PP1/RNBQR1K1 w - - b1d2": {
+   "category": "vague",
+   "review": "full",
+   "detail": "accuracy 3; Nf1 is a real follow-up in the engine line, but calling the knight the 'last minor piece' is false because the c1 bishop is still undeveloped, and the c3/d4 clause is true but does not explain the move."
+  },
+  "r1bq1rk1/pp1n1pbp/2pp1np1/4p3/2PPP3/2N2N2/PP2BPPP/R1BQR1K1 w - - e2f1": {
+   "category": "vague",
+   "review": "full",
+   "detail": "accuracy 3; It rightly links the move to the rook on e1 supporting e4 and the bishop guarding the kingside, but 'tucks behind the rook' is wrong (f1 is beside e1), and 'keeping' misses the real point: moving the bishop off e2 newly opens the e-file so the rook can back e4."
+  },
+  "r1bq1rk1/pp1nbppp/2p2n2/3p2B1/3P4/2NBP3/PPQ2PPP/R3K1NR w KQ - g1e2": {
+   "category": "beyond the packet",
+   "review": "full",
+   "detail": "not grounded; The f3-and-e4 plan is not in the packet; none of the engine lines include f3 or e4. It is standard theory for this line, but it goes beyond the facts provided."
+  },
+  "r1bq1rk1/pp1pnpbp/2n1p1p1/2p5/2P5/2NP1NP1/PP2PPBP/R1BQ1RK1 w - - c1d2": {
+   "category": "false on the board",
+   "review": "full",
+   "detail": "accuracy 2; not grounded; The claim that Bd2 connects the rooks is false, since the queen on d1 still stands between a1 and f1. The timing link to ...d5 is only loosely supported by the engine lines."
+  },
+  "r1bq1rk1/pp2bppp/2n1pn2/2pp4/4P3/3P1NP1/PPPN1PBP/R1BQ1RK1 w - - f1e1": {
+   "category": "beyond the packet",
+   "review": "full",
+   "detail": "accuracy 3; not grounded; The claim that after dxe4 dxe4 White heads for a later e5 push is not supported: in the engine line Black answers with ...e5 himself, which takes that square."
+  },
+  "r1bq1rk1/pp3ppp/2n1pn2/2p5/1bBP4/P1N1PN2/1P3PPP/R1BQ1RK1 b - - b4a5": {
+   "category": "false on the board",
+   "review": "full",
+   "detail": "accuracy 2; not grounded; The claim that the bishop on a5 'pins' the c3 knight is false: e1 is empty and the king is on g1, so Ba5 only keeps pressure on c3."
+  },
+  "r1bq1rk1/pp3ppp/2nbpn2/2pp4/3P4/2P1PNB1/PP1N1PPP/R2QKB1R w KQ - f1d3": {
+   "category": "beyond the packet",
+   "review": "full",
+   "detail": "accuracy 3; not grounded; The claim that Bd3 'meets' the d6 bishop's pressure on g3 is not supported by the packet. Bd3 does nothing to stop that pressure, and the engine line simply allows Bxg3 hxg3."
+  },
+  "r1bq1rk1/ppp1bppp/2np1n2/4p3/2BPP3/2N2N1P/PPP2PP1/R1BQK2R w KQ - e1g1": {
+   "category": "false on the board",
+   "review": "full",
+   "detail": "accuracy 2; not grounded; useful 2; It presents the engine line Nxe4 Nxe4 d5 as a White 'fork trick' that wins the pawn back, but d5 is Black's move. It is Black's fork trick, used to regain the piece, and the line ends materially level."
+  },
+  "r1bq1rk1/ppp2pbp/2np1np1/4p3/2PPP3/2N2N2/PP2BPPP/R1BQ1RK1 w - - d4d5": {
+   "category": "beyond the packet",
+   "review": "full",
+   "detail": "accuracy 3; not grounded; The 'queenside play' plan is not in the packet: the engine line continues Ne1 and f3, not a queenside advance. 'Closing the long diagonal' is unsupported and misleading, since the g7 bishop was already blocked by Black's own e5 pawn."
+  },
+  "r1bq1rk1/ppp2ppp/2n5/2bnp3/2B5/2PP1N2/PP3PPP/RNBQ1RK1 w - - a2a4": {
+   "category": "false on the board",
+   "review": "full",
+   "detail": "accuracy 2; not grounded; useful 2; The idea that a4 is played to free a2 so the bishop can avoid a trade on c4 is not in the packet. The packet's a4 line has the bishop going to b5, and Bb3 was always available, so White was never forced to allow the trade."
+  },
+  "r1bq1rk1/pppn1pbp/3p1np1/4p3/2PPP3/2N2N2/PP2BPPP/R1BQ1RK1 w - - f1e1": {
+   "category": "false on the board",
+   "review": "full",
+   "detail": "accuracy 2; Linking the move to Black's ...exd4 break and pressure on e4 is a sensible, recognisable idea, but the bishop on e2 still blocks the e-file, so Re1 does not yet protect e4; it only does so once the bishop moves, typically to f1."
+  },
+  "r1bq1rk1/pppp1pp1/2n2n1p/8/2P1p3/2P3P1/PP2PPBP/R1BQNRK1 w - - e1c2": {
+   "category": "vague",
+   "review": "full",
+   "detail": "accuracy 3; The claim that the knight on e3 pressures the e4 pawn is false, since a knight on e3 does not attack e4."
+  },
+  "r1bq1rk1/pppp1ppp/1bn2n2/1B2p3/3PP3/2P2N2/PP3PPP/RNBQ1RK1 w - - c1g5": {
+   "category": "vague",
+   "review": "full",
+   "detail": "accuracy 3; The claim that Bg5 adds pressure on e5 and on 'the knight guarding it' is not supported by the board: Nf6 does not guard e5, and Bg5 does not bear on e5."
+  },
+  "r1bq1rk1/pppp1ppp/2n2n2/1Bb1p3/4P3/2P2N2/PP1P1PPP/RNBQ1RK1 w - - d2d4": {
+   "category": "beyond the packet",
+   "review": "full",
+   "detail": "not grounded; 'Usually' is a frequency claim; the packet gives no statistics on Black's replies, only that Bb6 is the engine's top response."
+  },
+  "r1bq1rk1/pppp1ppp/2n2n2/4p3/1bP5/2N2NP1/PP1PPPBP/R1BQK2R w KQ - e1g1": {
+   "category": "vague",
+   "review": "full",
+   "detail": "accuracy 3; The follow-up 1...e4 2.Ng5 matches the engine line, but the claim that castling connects the rooks is false, since the c1-bishop and d1-queen still sit between them, and the hint never mentions that e4 attacks the f3-knight."
+  },
+  "r1bq1rk1/pppp1ppp/2n2n2/8/1b2P3/2N1Q3/PPPB1PPP/2KR1BNR b - - f8e8": {
+   "category": "false on the board",
+   "review": "full",
+   "detail": "accuracy 2; not grounded; There is no pin: the c3 knight stands in front of White's own d2 bishop, not the king, so the claim that a pin leaves e4 short of defenders is false."
+  },
+  "r1bq1rk1/ppppbppp/2n2n2/8/2BNP3/2N5/PPP2PPP/R1BQK2R w KQ - e1g1": {
+   "category": "false on the board",
+   "review": "full",
+   "detail": "accuracy 2; not grounded; useful 2; The claim that e4 is 'covered tactically' against ...Nxe4 tricks is not in the packet; no engine line shows ...Nxe4 after O-O. The 0.00 line, where White delays castling and Black wins e4 via ...Bxc3 and ...Nxe4, if anything suggests e4 is a real concern."
+  },
+  "r1bqk1nr/2pnppbp/p2p2p1/1p6/3PP3/2N1BP2/PPPQ2PP/R3KBNR w KQkq - h2h4": {
+   "category": "vague",
+   "review": "full",
+   "detail": "accuracy 3; The claim that h4 marches toward Black's king is not supported, since the king is still uncastled on e8."
+  },
+  "r1bqk1nr/pp1pppbp/2n3p1/2p5/2P5/2N3P1/PP1PPPBP/R1BQK1NR w KQkq - g1f3": {
+   "category": "vague",
+   "review": "full",
+   "detail": "accuracy 3; Clearing the way for O-O (which follows in the engine line) and the d4/e5 control are correct, but calling Nf3 'the last minor piece' is false because the c1 bishop is still undeveloped."
+  },
+  "r1bqk1nr/pp1pppbp/2n3p1/8/2PNP3/8/PP3PPP/RNBQKB1R w KQkq - c1e3": {
+   "category": "vague",
+   "review": "full",
+   "detail": "accuracy 3; It correctly spots that the d4 knight was attacked twice (Bg7, Nc6) and defended only once, and that Be3 fixes this, with Qb6 Nb3 taken from the engine line; but saying the g7 bishop 'no longer pressures' d4 is wrong, since the diagonal pressure remains and is only adequately met, which is exactly why Qb6 forces Nb3."
+  },
+  "r1bqk1nr/pp1pppbp/6p1/1Bp5/3nPP2/2N2N2/PPPP2PP/R1BQK2R w KQkq - e1g1": {
+   "category": "vague",
+   "review": "full",
+   "detail": "accuracy 3; It draws on the engine line (O-O … Nxd4 Bxd4+ Kh1), but the reasoning is muddled: castling is what allows the Bxd4+ check in the first place, the line skips the intermediate moves Nh6, d3 and e6, and 'ignore the knight' overlooks that Nd4 hits the b5 bishop."
+  },
+  "r1bqk1nr/pp3pbp/2np2p1/2p1p3/4P3/2NPB1P1/PPPQ1PBP/R3K1NR b KQkq - g8e7": {
+   "category": "vague",
+   "review": "full",
+   "detail": "accuracy 3; The f-pawn idea and the engine line Bh6 Bxh6 Qxh6 Nd4 are correct and useful, but 'gives it the d4 outpost' reads as if the e7 knight goes to d4, when the c6 knight jumps there; d4 is also only a semi-outpost, since c2-c3 can still challenge it."
+  },
+  "r1bqk1nr/pppp1pbp/2n3p1/4p3/2P5/2N3P1/PP1PPPBP/R1BQK1NR w KQkq - d2d3": {
+   "category": "false on the board",
+   "review": "full",
+   "detail": "accuracy 2; not grounded; useful 2; The claim that d3 keeps d4 covered: a pawn on d3 controls c4 and e4, not d4."
+  },
+  "r1bqk1nr/pppp1ppp/2n5/2b1p3/2B1P3/3P1N2/PPP2PPP/RNBQK2R b KQkq - g8f6": {
+   "category": "vague",
+   "review": "full",
+   "detail": "accuracy 3; Hitting e4, preparing to castle kingside, and the 91.7% masters share are all correct and well chosen, but calling Nf6 the 'last minor piece' is wrong, since the c8 bishop is still undeveloped."
+  },
+  "r1bqk1nr/pppp1ppp/2n5/2b1p3/2B1P3/5N2/PPPP1PPP/RNBQ1RK1 b kq - g8f6": {
+   "category": "vague",
+   "review": "full",
+   "detail": "accuracy 3; It correctly says Nf6 hits e4 and clears g8 so Black can castle short, but calling it 'the last minor piece' is wrong, since the c8 bishop is still undeveloped."
+  },
+  "r1bqk2r/1pppbppp/p1n2n2/4p3/B3P3/5N2/PPPP1PPP/RNBQ1RK1 w kq - f1e1": {
+   "category": "beyond the packet",
+   "review": "full",
+   "detail": "accuracy 3; not grounded; The claim that a capture on e4 would be followed by a fork involving the a4 bishop is not in the packet and is not a real tactic here; ...Nxe4 simply wins a pawn, which White can usually regain."
+  },
+  "r1bqk2r/pp1nbppp/2p2n2/3p2B1/3P4/2N1P3/PPQ2PPP/R3KBNR w KQkq - f1d3": {
+   "category": "beyond the packet",
+   "review": "full",
+   "detail": "not grounded; The idea that the f-pawn can later advance is a strategic plan not in the packet; the engine line only shows Nge2 and castling."
+  },
+  "r1bqk2r/pp1pnpbp/2n3p1/2p1p3/2P5/2N2NP1/PP1PPPBP/R1BQ1RK1 w kq - d2d3": {
+   "category": "beyond the packet",
+   "review": "full",
+   "detail": "accuracy 3; not grounded; The claim that d3 'keeps the d4 square controlled' is unsupported and wrong: a pawn on d3 covers c4 and e4, not d4."
+  },
+  "r1bqk2r/pp2bppp/2n2n2/2pp4/3P4/2N2NP1/PP2PPBP/R1BQK2R w KQkq - e1g1": {
+   "category": "false on the board",
+   "review": "full",
+   "detail": "accuracy 2; not grounded; useful 2; The claim that capturing on c5 now 'only helps Black develop' is unsupported, and the packet contradicts it: the engine's top line is dxc5 Bxc5 at the same +0.25 evaluation."
+  },
+  "r1bqk2r/ppp1bppp/1nn5/4p3/8/2N2NP1/PP1PPPBP/R1BQ1RK1 w kq - d2d3": {
+   "category": "false on the board",
+   "review": "full",
+   "detail": "accuracy 2; The claim that d3 keeps Black's knights off d4 is false. A pawn on d3 covers c4 and e4, not d4, and the first engine line even shows ...Nd4 arriving."
+  },
+  "r1bqk2r/ppp1bppp/1nn5/4p3/8/2NP1NP1/PP2PPBP/R1BQ1RK1 b kq - e8g8": {
+   "category": "false on the board",
+   "review": "full",
+   "detail": "accuracy 2; not grounded; useful 2; The king on e8 is not 'facing' the g2 bishop, which points down the h1–a8 diagonal toward c6 and b7. Castling also does not 'link the rooks', because the queen on d8 and bishop on c8 still separate them."
+  },
+  "r1bqk2r/ppp2ppp/2n2n2/1BbpP3/3p4/2P2N2/PP3PPP/RNBQK2R b KQkq - f6e4": {
+   "category": "beyond the packet",
+   "review": "full",
+   "detail": "accuracy 3; not grounded; The claim that Ne4 holds the d5 pawn firm is unsupported and false: a knight on e4 does not defend d5, and leaving f6 actually removes a defender. Calling e4 an outpost is also a stretch, since f2-f3 can kick the knight."
+  },
+  "r1bqk2r/ppp2ppp/2n2n2/3Pp3/1bB5/2NP4/PPP1NPPP/R1BQK2R b KQkq - f6d5": {
+   "category": "false on the board",
+   "review": "full",
+   "detail": "accuracy 2; not grounded; useful 2; voice; The claim that Nxd5 leaves White with doubled d-pawns is false, because the capture removes the d5 pawn and undoubles them. The claim that Ne7 lets White keep the extra pawn contradicts the packet, whose Ne7 line has Black winning the pawn back with ...Nexd5."
+  },
+  "r1bqk2r/ppp2ppp/2n5/1BbpP3/3Pn3/5N2/PP3PPP/RNBQK2R b KQkq - c5b6": {
+   "category": "vague",
+   "review": "full",
+   "detail": "accuracy 3; It correctly says the d4 pawn hits c5 and that Bb6 avoids the bishop trade that follows Bb4+ Bd2 in the engine line, but a7–g1 is not 'the long diagonal', and f2 is blocked behind d4, so it is only x-rayed, not eyed directly."
+  },
+  "r1bqk2r/ppp2ppp/2np1n2/2b1p3/2B1PP2/2NP4/PPP3PP/R1BQK1NR w KQkq - g1f3": {
+   "category": "vague",
+   "review": "full",
+   "detail": "accuracy 3; The hint correctly says Nf3 adds a second attacker on e5 alongside f4 and clears g1 for kingside castling, but it wrongly calls the knight the last minor piece when the c1 bishop is still undeveloped."
+  },
+  "r1bqk2r/pppp1ppp/2n2n2/1Bb1p3/4P3/2P2N2/PP1P1PPP/RNBQK2R w KQkq - e1g1": {
+   "category": "beyond the packet",
+   "review": "full",
+   "detail": "accuracy 3; not grounded; The idea that castling makes the e4 pawn safe because of a rook on e1 comes from no engine line (Re1 is never played), and the packet does not support the claim about e4 hanging."
+  },
+  "r1bqk2r/pppp1ppp/2n2n2/1Bb1p3/4P3/2PP1N2/PP3PPP/RNBQK2R b KQkq - e8g8": {
+   "category": "beyond the packet",
+   "review": "full",
+   "detail": "accuracy 3; not grounded; The claim that castling first prevents e-file or check problems is unsupported. The e-file is closed by the e5 pawn, and the engine rates immediate ...d5 almost the same (+0.15 vs +0.12)."
+  },
+  "r1bqk2r/pppp1ppp/2n2n2/2b1p3/2B1P3/3P1N2/PPP2PPP/RNBQK2R w KQkq - c2c3": {
+   "category": "beyond the packet",
+   "review": "full",
+   "detail": "accuracy 3; not grounded; 'Masters choose it most here' is not established: the packet gives only c3's 42% master share, with no figures for other moves. The d-pawn push plan is not in the engine lines."
+  },
+  "r1bqk2r/pppp1ppp/2n5/4P3/1bP2Bn1/5N2/PP2PPPP/RN1QKB1R w KQkq - b1d2": {
+   "category": "beyond the packet",
+   "review": "full",
+   "detail": "accuracy 3; not grounded; The claim that Nbd2 keeps the extra e5 pawn protected is unsupported: the packet's Nbd2 line has Black win it back with ...Ngxe5 and ...Nxe5, and Nbd2 adds nothing to the defence of e5."
+  },
+  "r1bqk2r/ppppbppp/2n2n2/4p3/2B1P3/3P1N2/PPP2PPP/RNBQK2R w KQkq - e1g1": {
+   "category": "vague",
+   "review": "full",
+   "detail": "accuracy 3; The claim that castling connects the rook to the e-file is not true: the rook lands on f1, and the rooks are still separated by the b1-knight, c1-bishop and queen."
+  },
+  "r1bqk2r/ppppbppp/2n2n2/8/2BNP3/8/PPP2PPP/RNBQK2R w KQkq - b1c3": {
+   "category": "vague",
+   "review": "full",
+   "detail": "accuracy 3; Defending e4 against the f6 knight is a correct and useful reason, but calling Nc3 the 'last minor piece' is wrong because the c1 bishop is still undeveloped."
+  },
+  "r1bqk2r/ppppbppp/2nn4/4N3/8/8/PPPP1PPP/RNBQRBK1 b kq - c6e5": {
+   "category": "vague",
+   "review": "full",
+   "detail": "accuracy 3; It correctly spots the centralized e5 knight and the exposed Be7 and uncastled king on the e-file, but the trade does not really relieve e-file pressure, since Rxe5 puts the rook straight back on that file; the real point is removing an active piece so Black can play the engine's O-O next."
+  },
+  "r1bqk2r/ppppbppp/3n4/4R3/8/8/PPPP1PPP/RNBQ1BK1 b kq - e8g8": {
+   "category": "vague",
+   "review": "full",
+   "detail": "accuracy 3; It correctly explains that castling takes the king off the open e-file and frees the bishop on e7 from the Re5 pressure, but it wrongly implies castling puts the rook on e8, when it lands on f8 and only reaches e8 later (Bf6, Re8 in the engine line)."
+  },
+  "r1bqkb1r/1p3ppp/p1np1n2/1N2p1B1/4P3/2N5/PPP2PPP/R2QKB1R w KQkq - b5a3": {
+   "category": "beyond the packet",
+   "review": "full",
+   "detail": "accuracy 3; not grounded; The claim that the knight on a3 eyes d5 is false: a knight on a3 covers b1, c2, c4 and b5, not d5. In the engine line it is the c3 knight that jumps to d5."
+  },
+  "r1bqkb1r/2p2ppp/p1n5/1p1pp3/3Pn3/1B3N2/PPP2PPP/RNBQ1RK1 w kq - d4e5": {
+   "category": "vague",
+   "review": "full",
+   "detail": "accuracy 3; Winning back the pawn and the e5 pawn covering d6 and f6 are both correct, but the conclusion is muddled: d6 and f6 are the e4 knight's retreat squares, so the real point is that it loses its way back, not that it has less support, which still comes from the d5 pawn."
+  },
+  "r1bqkb1r/5p1p/p1np1p2/1p2p3/4P3/N1N5/PPP2PPP/R2QKB1R w KQkq - c3d5": {
+   "category": "vague",
+   "review": "full",
+   "detail": "accuracy 3; It is right that d5 is a permanent outpost no Black pawn can challenge, but the explanation is wrong: the real reason is that Black's c-pawn is gone and the e-pawn has already passed to e5, while the doubled f-pawns and the advanced b-pawn have nothing to do with d5."
+  },
+  "r1bqkb1r/p1pp1ppp/2p2n2/4P3/8/8/PPP2PPP/RNBQKB1R b KQkq - d8e7": {
+   "category": "false on the board",
+   "review": "full",
+   "detail": "accuracy 2; useful 2; It correctly notes that Qe7 hits e5 and that White answers Qe2, but it gets the key idea backwards: the queen pins the e5 pawn to the king on e1, so it cannot take f6, yet the hint says the pawn is 'pinned to nothing' and that something pins the knight."
+  },
+  "r1bqkb1r/p2npp1p/2pp1np1/1p6/3PP3/2N1BP2/PPPQ2PP/R3KBNR w KQkq - f1d3": {
+   "category": "vague",
+   "review": "full",
+   "detail": "accuracy 3; Contrasting the move with the engine's top line g4 is fair, and Bd3 does defend e4. However, 'clears the way to castle' is misleading: kingside castling is still blocked by the knight on g1, and queenside castling was already available, so the bishop move does not unlock either."
+  },
+  "r1bqkb1r/pp1n1ppp/2n1p3/2ppP3/3P1P2/2N1BN2/PPP3PP/R2QKB1R b KQkq - c5d4": {
+   "category": "vague",
+   "review": "full",
+   "detail": "accuracy 3; The hint correctly follows the engine line cxd4 Nxd4 Qb6 and the queen's real targets, the d4 knight and the b2 pawn (Qxb2 follows in the line); but 'the b2 pawn behind the bishop on e3' is muddled geometry, since it is the d4 knight that stands in front of the e3 bishop on the diagonal, not b2."
+  },
+  "r1bqkb1r/pp1n1ppp/2n1p3/2ppP3/3P4/2PB4/PP1N1PPP/R1BQK1NR w KQkq - g1e2": {
+   "category": "beyond the packet",
+   "review": "full",
+   "detail": "not grounded; The idea that White's f-pawn will advance to meet ...f6 (an f4 plan) is not in the packet; the engine line answers ...f6 with exf6."
+  },
+  "r1bqkb1r/pp1n1ppp/2n1p3/2ppP3/5P2/2N2NP1/PPPP3P/R1BQKB1R w KQkq - f1g2": {
+   "category": "vague",
+   "review": "full",
+   "detail": "accuracy 3; Clearing the way for O-O is correct and matches the engine line, but the claim that the bishop is eyeing d5 is overstated because White's own knight on f3 blocks the g2–d5 diagonal for now, so that pressure is only potential."
+  },
+  "r1bqkb1r/pp1p1ppp/2n1pn2/2p5/3P1B2/2P1P3/PP1N1PPP/R2QKBNR b KQkq - d7d5": {
+   "category": "vague",
+   "review": "full",
+   "detail": "accuracy 3; The central claim next to c5 and the follow-up ...Nh5 hitting the f4 bishop are correct and appear in the engine line, but 'frees the light-squared bishop' is misleading: with the e6 pawn in place, the c8 bishop only gains the d7 square."
+  },
+  "r1bqkb1r/pp1p1ppp/2n1pn2/8/3NP3/2N5/PPP2PPP/R1BQKB1R w KQkq - d4b5": {
+   "category": "false on the board",
+   "review": "full",
+   "detail": "accuracy 2; not grounded; The claim that the d7 pawn alone guards d6 is false: a pawn on d7 does not attack d6, and the f8 bishop does guard it. 'Weakened dark squares' is not in the packet."
+  },
+  "r1bqkb1r/pp1ppppp/1nn5/4P3/3p4/1BP2N2/PP3PPP/RNBQK2R b KQkq - d7d5": {
+   "category": "false on the board",
+   "review": "full",
+   "detail": "accuracy 2; not grounded; useful 2; The claim that Black stays a pawn up contradicts the engine line, where White regains the pawn with Nxd4 Nxd4 cxd4. The phrase 'hits the e5 pawn's base' is also unsupported and meaningless here."
+  },
+  "r1bqkb1r/pp1ppppp/2n2n2/2p5/4P3/2PP1N2/PP3PPP/RNBQKB1R b KQkq - g7g6": {
+   "category": "vague",
+   "review": "full",
+   "detail": "accuracy 3; The idea that the bishop 'presses on d4' is the hint's own interpretation; the packet doesn't say it, and on the board d4 is well covered by c3, Nf3 and the queen."
+  },
+  "r1bqkb1r/pp1ppppp/2n5/3nP3/3P4/5N2/PP3PPP/RNBQKB1R b KQkq - d7d6": {
+   "category": "vague",
+   "review": "full",
+   "detail": "accuracy 3; It rightly says d6 hits e5 at once and frees the c8 bishop's diagonal, but 'before it can be supported' is wrong because the d4 pawn already defends e5; the real point is to break up the wedge, as in the engine line d6 Bc4 dxe5 dxe5."
+  },
+  "r1bqkb1r/pp2nppp/2n1p3/1Bpp4/4PP2/2N2N2/PPPP2PP/R1BQK2R w KQkq - d1e2": {
+   "category": "vague",
+   "review": "full",
+   "detail": "accuracy 3; The claim that the queen recaptures 'without giving up the centre' is not supported by the packet or the engine lines."
+  },
+  "r1bqkb1r/pp2pppp/1nn5/3pP3/3p4/1BP2N2/PP3PPP/RNBQK2R w KQkq d6 e5d6": {
+   "category": "beyond the packet",
+   "review": "full",
+   "detail": "accuracy 3; not grounded; The claim that Black's last move (...d5) left the e5 pawn a target is not in the packet. It is also dubious, since a pawn on d5 does not attack e5."
+  },
+  "r1bqkb1r/pp2pppp/1nnP4/2p5/8/1BP2N2/PP1P1PPP/RNBQK2R b KQkq - d8d6": {
+   "category": "beyond the packet",
+   "review": "full",
+   "detail": "accuracy 3; not grounded; The claim that the queen takes the 'open d-file' contradicts the packet, which lists the d-file as only half-open for Black; White's d2 pawn remains. 'Before White can support it' is speculative, since White has no realistic way to support d6."
+  },
+  "r1bqkb1r/pp3ppp/2n1pn2/2pp4/3P1B2/2P1P3/PP1N1PPP/R2QKBNR w KQkq - g1f3": {
+   "category": "false on the board",
+   "review": "full",
+   "detail": "accuracy 2; useful 2; Pointing to Ne5 matches the engine line, but the knight is not the last undeveloped minor piece (the f1-bishop is still home), Ne5 does not 'support' the f4-bishop (the bishop supports e5), and castling still needs the bishop to move."
+  },
+  "r1bqkb1r/pp3ppp/2n1pn2/2pp4/3P1B2/2P1PN2/PP3PPP/RN1QKB1R w KQkq - b1d2": {
+   "category": "vague",
+   "review": "full",
+   "detail": "accuracy 3; The Nh5–Bg5 follow-up is correct and taken from the engine line, but calling Nbd2 the 'last minor piece' is wrong because the f1 bishop is still undeveloped, and a knight on d2 does not head toward e5."
+  },
+  "r1bqkb1r/ppp2p2/2np1npp/4p3/2B1P3/2PP1N2/PP3PPP/RNBQ1RK1 w kq - f1e1": {
+   "category": "beyond the packet",
+   "review": "full",
+   "detail": "not grounded; The 'later d4 break' plan is not in the packet's Re1 line, which continues a4, Nbd2, b4. The packet shows d4 only as an immediate alternative, which is in fact the engine's top move."
+  },
+  "r1bqkb1r/ppp2pp1/2np1n1p/4p3/2B1P3/3P1N2/PPP2PPP/RNBQ1RK1 w kq - c2c3": {
+   "category": "beyond the packet",
+   "review": "full",
+   "detail": "accuracy 3; not grounded; Neither the d4 break nor the c2 retreat appears in the packet's engine lines, which continue Be7, Re1, O-O, Bb3, Be6, Nbd2. The bishop on c4 also cannot reach c2 directly; it can only get there via b3."
+  },
+  "r1bqkb1r/ppp2ppp/2n5/3np3/8/2N2NP1/PP1PPP1P/R1BQKB1R w KQkq - f1g2": {
+   "category": "vague",
+   "review": "full",
+   "detail": "accuracy 3; The hint correctly says Bg2 completes the fianchetto and prepares O-O, which the engine line confirms, but it says the bishop aims at d5 without mentioning that White's own knight on f3 blocks the diagonal, so this is only an x-ray."
+  },
+  "r1bqkb1r/ppp2ppp/2n5/3np3/8/2N2NP1/PP1PPPBP/R1BQK2R b KQkq - d5b6": {
+   "category": "false on the board",
+   "review": "full",
+   "detail": "accuracy 2; not grounded; useful 2; The claim that the g2 bishop hits d5 along the long diagonal is false, because the f3 knight blocks it. The suggestion that Nb6 must retreat to avoid a trade is also unsupported: the engine's top line allows Nxd5 Qxd5."
+  },
+  "r1bqkb1r/ppp2ppp/2n5/3pP3/4n3/2N2N2/PPPP2PP/R1BQKB1R w KQkq - d1e2": {
+   "category": "false on the board",
+   "review": "full",
+   "detail": "accuracy 2; not grounded; useful 2; Calls the engine's preference for Bb5 'slight' when the packet shows a 1.06 swing (+0.12 to −0.94); the claim that the queen backs up e5 also ignores that the e4 knight blocks the e-file."
+  },
+  "r1bqkb1r/ppp2ppp/2np1n2/4p3/2B1P3/2P2N2/PP1P1PPP/RNBQK2R w KQkq - d2d4": {
+   "category": "vague",
+   "review": "full",
+   "detail": "accuracy 3; The c3-supports-d4 idea is real and visible on the board, but promising a full centre after cxd4 ignores that e4 is undefended against Nf6 (Nxe4), which helps explain why d4 drops the eval to about −0.01 and why the engine prepares it with Qe2 first."
+  },
+  "r1bqkb1r/ppp2ppp/2p2n2/8/2P1p3/2N5/PP1PPPPP/R1BQKB1R w KQkq - e2e3": {
+   "category": "beyond the packet",
+   "review": "full",
+   "detail": "not grounded; 'The most common master choice' is not established: the packet gives e3 a 39.6% master share but no shares for the alternatives."
+  },
+  "r1bqkb1r/pppn1ppp/4pn2/8/3PN3/5N2/PPP2PPP/R1BQKB1R w KQkq - e4f6": {
+   "category": "false on the board",
+   "review": "full",
+   "detail": "accuracy 2; not grounded; useful 2; The claims about the d7 knight no longer supporting the e5 and c5 breaks are not in the packet. The claim that the move 'saves the e4 knight from being exchanged' is false, since the e4 knight is itself traded off."
+  },
+  "r1bqkb1r/pppp1ppp/2n2n2/1B2p3/4P3/2N2N2/PPPP1PPP/R1BQK2R b KQkq - c6d4": {
+   "category": "beyond the packet",
+   "review": "full",
+   "detail": "accuracy 3; not grounded; The 'bishop's pin threat' is not in the packet, and it is false on the board: the d7 pawn stands between c6 and e8, so Bb5 cannot pin the c6 knight."
+  },
+  "r1bqkb1r/pppp1ppp/2n2n2/4p3/2B1P3/2NP4/PPP2PPP/R1BQK1NR b KQkq - f8b4": {
+   "category": "vague",
+   "review": "full",
+   "detail": "accuracy 3; The claim that the c3 knight is the 'main defender' of e4 is an overstatement: the d3 pawn also defends e4, so the pin creates no real pressure on that pawn."
+  },
+  "r1bqkb1r/pppp1ppp/2n2n2/4p3/2P5/2N1PN2/PP1P1PPP/R1BQKB1R b KQkq - f8b4": {
+   "category": "false on the board",
+   "review": "full",
+   "detail": "accuracy 2; not grounded; useful 2; The claim that the c3 knight is pinned to the king: the d2 pawn sits between c3 and e1, so there is no pin. 'Damage' is also unsupported, since the engine line recaptures Bxc3 with Qxc3 and leaves White's pawns intact."
+  },
+  "r1bqkb1r/pppp1ppp/2n2n2/4p3/2P5/2N2N2/PP1PPPPP/R1BQKB1R w KQkq - g2g3": {
+   "category": "vague",
+   "review": "full",
+   "detail": "accuracy 3; The hint correctly follows the engine line g3 d5 cxd5 Nxd5 Bg2 and the long-diagonal idea, but it overstates the effect: White's own knight on f3 sits on the g2–d5 diagonal, so the bishop only x-rays the centre and the d5 knight rather than bearing on them directly."
+  },
+  "r1bqkb1r/pppp1ppp/2n2n2/8/2PNp3/2N5/PP1PPPPP/R1BQKB1R w KQkq - d4c6": {
+   "category": "false on the board",
+   "review": "full",
+   "detail": "accuracy 1; not grounded; useful 2; Says the d4 knight is attacked by nothing, but Black's Nc6 attacks it. Says it has few retreats, but it has several (c2, b3, b5, f3, f5, e6). Says d4 hits the e4 pawn, but a pawn on d4 attacks c5 and e5; Black simply answers exd3 en passant."
+  },
+  "r1bqkb1r/pppp1ppp/2n2n2/8/4P3/2N1Q3/PPP2PPP/R1B1KBNR b KQkq - f8b4": {
+   "category": "false on the board",
+   "review": "full",
+   "detail": "accuracy 2; not grounded; The claim that a3 Bxc3+ leaves White with doubled pawns; the engine line recaptures Qxc3, so no pawns are doubled."
+  },
+  "r1bqkb1r/pppp1ppp/5P2/1B6/8/2p5/PPPP1PPP/R1BQK2R b KQkq - d8f6": {
+   "category": "vague",
+   "review": "full",
+   "detail": "accuracy 3; It correctly uses the engine evals to show that cxd2+ (+1.64) and gxf6 (+2.35) are clearly worse, but 'the c3 pawn still hanging' is muddled: it is Black's own pawn, about to be taken by dxc3, and the hint presents this as if it were an advantage."
+  },
+  "r1bqkbnr/pp1p1ppp/2n1p3/2p1P3/2P5/2N2N2/PP1P1PPP/R1BQKB1R w KQkq - d2d4": {
+   "category": "vague",
+   "review": "full",
+   "detail": "accuracy 3; The Ndb5 and Nd6+ plan comes from the engine line, but a knight on d4 does not attack d6 (it reaches d6 only via b5), and the hint skips Black's Nxe5, which wins the e5 pawn before Ndb5."
+  },
+  "r1bqkbnr/pp1ppppp/2n5/2p5/4P3/2N5/PPPP1PPP/R1BQKBNR w KQkq - f2f4": {
+   "category": "beyond the packet",
+   "review": "full",
+   "detail": "accuracy 3; not grounded; The 'Grand Prix-style setup' label and the 'quick attack with the knight from f3' plan are not in the packet, which names the opening 'Closed, Traditional' and gives no line after f4. The claim that f4 'backs up the e4 pawn' is also inaccurate, since f4 does not defend e4."
+  },
+  "r1bqkbnr/pp2pppp/2n5/2pp4/3PP3/2P5/PP3PPP/RNBQKBNR w KQkq - e4d5": {
+   "category": "beyond the packet",
+   "review": "full",
+   "detail": "accuracy 3; not grounded; The claim that the black queen on d5 'can be harassed' is not shown in the engine line: Nf3, Be3 and dxc5 never attack the queen, and c3 blocks Nc3."
+  },
+  "r1bqkbnr/pppn1ppp/4p3/8/3PN3/8/PPP2PPP/R1BQKBNR w KQkq - g1f3": {
+   "category": "beyond the packet",
+   "review": "full",
+   "detail": "accuracy 3; not grounded; useful 2; It says Black trades on f6 and White recaptures, but in the engine line White plays Nxf6+ and Black recaptures. The 'nothing loose' payoff has no support in the packet."
+  },
+  "r1bqkbnr/pppp1ppp/2N5/8/2P1p3/8/PP1PPPPP/RNBQKB1R b KQkq - d7c6": {
+   "category": "vague",
+   "review": "full",
+   "detail": "accuracy 3; Opening the d-file and the c8 bishop's diagonal is correct and useful, but dxc6 captures away from the centre (bxc6 is the capture toward it), so that phrase is wrong and teaches a backwards rule; it also misses the engine's clear preference for dxc6 over bxc6 (−0.34 vs +0.29)."
+  },
+  "r1bqkbnr/pppp1ppp/2n5/8/3NP3/8/PPP2PPP/RNBQKB1R b KQkq - g8f6": {
+   "category": "vague",
+   "review": "full",
+   "detail": "accuracy 3; The phrase 'no longer defends' implies the knight once guarded e4, which neither the f3 nor the d4 knight ever did."
+  },
+  "r2qkb1r/2p2ppp/p1n1b3/1p1pP3/4n3/1B3N2/PPP2PPP/RNBQ1RK1 w kq - b1d2": {
+   "category": "beyond the packet",
+   "review": "full",
+   "detail": "accuracy 3; not grounded; The claim that Nbd2 develops the 'last minor piece' is false: the c1 bishop is still undeveloped on the board."
+  },
+  "r2qkb1r/pp1n1ppp/2p2n2/3pp3/6b1/3P1NP1/PPPNPPBP/R1BQ1RK1 w kq - e2e4": {
+   "category": "beyond the packet",
+   "review": "full",
+   "detail": "accuracy 3; not grounded; The claim that the g2 bishop and knights get free play after dxe4 dxe4 is not in the packet, and it is doubtful on the board."
+  },
+  "r2qkb1r/pp1nnppp/4p3/2ppPb2/3P4/4BN2/PPP1BPPP/RN1Q1RK1 w kq - c2c4": {
+   "category": "beyond the packet",
+   "review": "full",
+   "detail": "accuracy 3; not grounded; The claim that Nc3 comes 'with tempo' is unsupported: after dxc4 Nc3 the knight attacks nothing."
+  },
+  "r2qkb1r/pp2pppp/2n2n2/2pp1b2/3P1B2/2P1P3/PP1N1PPP/R2QKBNR w KQkq - g1f3": {
+   "category": "vague",
+   "review": "full",
+   "detail": "accuracy 3; The Qb6/dxc5/Nd4 follow-up matches the engine line and Nf3 does eye e5, but Ngf3 is not the last minor piece (the f1-bishop is still at home), and 'active counterplay' oversells a line that liquidates queens at equality."
+  },
+  "r2qkb1r/pppb1ppp/2np1n2/1B2p3/3PP3/2N2N2/PPP2PPP/R1BQK2R w KQkq - e1g1": {
+   "category": "vague",
+   "review": "full",
+   "detail": "accuracy 3; Tucking the king away and keeping tension on c6 and e5 fit the position, but 'connects the rooks' is false because the c1-bishop and d1-queen still sit between a1 and f1."
+  },
+  "r2qkbnr/pp1n1pp1/2p1p2p/7P/3P4/3Q1NN1/PPPB1PP1/R3K2R b KQkq - g8f6": {
+   "category": "vague",
+   "review": "full",
+   "detail": "accuracy 3; It correctly notes that Nf6 covers e4, where White's knight goes in the engine line (Ne4, Nxf6+), but it wrongly calls the knight Black's last minor piece when the f8 bishop is still undeveloped."
+  },
+  "r2qkbnr/pp1n1ppp/4p3/2ppPb2/3P4/4BN2/PPP1BPPP/RN1Q1RK1 b kq - g8e7": {
+   "category": "beyond the packet",
+   "review": "full",
+   "detail": "accuracy 3; not grounded; The route to f5 appears nowhere in the packet, and f5 is occupied by Black's own bishop. 'Clearing the way to castle' is unsupported: Ne7 actually blocks the f8 bishop."
+  },
+  "r2qkbnr/pp1npppb/2p4p/7P/3P4/3B1NN1/PPP2PP1/R1BQK2R b KQkq - h7d3": {
+   "category": "false on the board",
+   "review": "full",
+   "detail": "accuracy 2; not grounded; useful 2; The claim that Ngf6 'loses the light-squared bishop pair' is unsupported: in the engine line Ngf6 Bxh7 Nxh7 the bishops are simply traded, and Ngf6 is rated almost the same as Bxd3 (+0.33 vs +0.29)."
+  },
+  "r2qkbnr/ppp2ppp/2n1b3/8/2BpP3/5N2/PP3PPP/RNBQ1RK1 w kq - c4e6": {
+   "category": "vague",
+   "review": "full",
+   "detail": "accuracy 3; The claim that fxe6 'loosens b7' is unsupported; b7 was never guarded by the e6 bishop. The 'shuts the c8–h3 diagonal' point is irrelevant because Black's light-squared bishop is already gone."
+  },
+  "r2qkbnr/pppb1ppp/2np4/1B2p3/3PP3/5N2/PPP2PPP/RNBQK2R w KQkq - b1c3": {
+   "category": "false on the board",
+   "review": "full",
+   "detail": "accuracy 2; not grounded; The 'pin on the c6 knight' is not supported by the packet or the board: the Bd7 stands between c6 and the king on e8, so there is no pin."
+  },
+  "r2qr1k1/1bp1bppp/p1np1n2/1p2p3/3PP3/1BP2N1P/PP3PP1/RNBQR1K1 w - - b1d2": {
+   "category": "vague",
+   "review": "full",
+   "detail": "accuracy 3; The claim that the rook on e8 is pressing e4 is not true: Black's own pawn on e5 blocks the e-file."
+  },
+  "r2qrbk1/1bp2ppp/p1np1n2/1p2p3/3PP3/1BP2N1P/PP1N1PP1/R1BQR1K1 w - - a2a3": {
+   "category": "false on the board",
+   "review": "full",
+   "detail": "accuracy 1; not grounded; useful 2; The idea that a3 is needed to stop ...Nb4 is not in the packet. The claim that a knight on b4 would hit the bishop on b3 is false."
+  },
+  "r3kb1r/pp1qpppp/2n2n2/3p4/3P1Bb1/1QPB4/PP1N1PPP/R3K1NR b KQkq - e7e6": {
+   "category": "false on the board",
+   "review": "full",
+   "detail": "accuracy 2; not grounded; The claim that e6 blocks the queen's attack on b7 'via the d5 pawn chain' is unsupported and false: Qb3 hits b7 along the b-file, which e6 cannot block."
+  },
+  "r3kb1r/pp3ppp/2n1pn2/2pq4/3P2b1/2P2N2/PP2BPPP/RNBQ1RK1 w kq - h2h3": {
+   "category": "vague",
+   "review": "full",
+   "detail": "accuracy 3; The h3 Bh5 Be3 sequence matches the engine line and the idea of challenging the g4 bishop is right, but calling it a pin is wrong: the e2 bishop stands behind the f3 knight, so Bg4 only pressures the knight that defends d4."
+  },
+  "r3kbnr/p1pq1ppp/np2p3/3pP3/3P4/2P2N2/PP3PPP/RNBQK2R w KQkq - e1g1": {
+   "category": "vague",
+   "review": "full",
+   "detail": "accuracy 3; The missing light-squared bishop (f1 is clear) and the follow-up Ne7 from the engine line are both correct, but castling does not link the rooks because the b1 knight, c1 bishop and d1 queen still sit between them."
+  },
+  "r3kbnr/pp1b1ppp/1q2p3/n2pP3/2pP4/P1P2N2/1P1N1PPP/1RBQKB1R w Kkq - h2h4": {
+   "category": "beyond the packet",
+   "review": "full",
+   "detail": "accuracy 3; not grounded; The claim that h5 hinders Black's knight from using g8 is not supported by the packet and is not a real effect of the move; the knight already sits on g8 and heads to e7/f5."
+  },
+  "r3kbnr/pp2pppp/2n5/3q4/3p2b1/2P2N2/PP2BPPP/RNBQK2R w KQkq - c3d4": {
+   "category": "vague",
+   "review": "full",
+   "detail": "accuracy 3; The claim that ...d3 'forks' the bishop is wrong: the pawn on d3 would attack only the bishop on e2, because c2 is empty."
+  },
+  "r3kbnr/pp3ppp/2n1p3/3q4/3P2b1/5N2/PP2BPPP/RNBQK2R w KQkq - b1c3": {
+   "category": "false on the board",
+   "review": "full",
+   "detail": "accuracy 2; The tempo on the d5 queen is correct, but a knight on c3 does not defend d4 (it covers b5, d5, e4, and so on), so the second half of the hint is false."
+  },
+  "rn1q1rk1/1bp1bppp/p3pn2/1p6/3P4/5NP1/PPQ1PPBP/RNB2RK1 w - - c1d2": {
+   "category": "false on the board",
+   "review": "full",
+   "detail": "accuracy 2; not grounded; useful 2; The idea of targeting queenside squares loosened by ...a6/...b5 is not in the packet, since the engine line continues Qc1 and Bf4 rather than any queenside play; the claim that Bd2 connects the rooks is false because the knight on b1 still sits between a1 and f1."
+  },
+  "rn1q1rk1/1p2bppp/p2pbn2/4p3/4P3/1NN1BP2/PPPQ2PP/2KR1B1R b - - b8d7": {
+   "category": "false on the board",
+   "review": "full",
+   "detail": "accuracy 2; not grounded; The idea that Nbd7 stops e5 from being loose when the f6 knight goes to h5 is not in the packet and is false: the f6 knight never guards e5, and d6 already protects it. The 'g4 g5' shorthand also drops Black's ...b5 from the engine line."
+  },
+  "rn1q1rk1/pbpp1pp1/1p2pn1p/8/2PP3B/P1Q2P2/1P2P1PP/R3KBNR b KQ - d7d5": {
+   "category": "beyond the packet",
+   "review": "full",
+   "detail": "accuracy 3; not grounded; The claim that Black gets an 'open game' that benefits the b7 bishop is not supported by the packet: after cxd5 exd5 the b7 bishop is blocked by its own d5 pawn, and no file is fully open."
+  },
+  "rn1q1rk1/pp3ppp/2p1pn2/5b2/PbBP4/2N1PN2/1P2QPPP/R1B2RK1 b - - b8d7": {
+   "category": "vague",
+   "review": "full",
+   "detail": "accuracy 3; The claim that Nbd7 links the rooks is false, because the queen on d8 still stands between a8 and f8."
+  },
+  "rn1qk2r/p1pp1ppp/bp2pn2/8/1bPP4/1P3NP1/P2BPP1P/RN1QKB1R b KQkq - b4e7": {
+   "category": "vague",
+   "review": "full",
+   "detail": "accuracy 3; The claim that Be7 'prepares to castle' is unsupported: f8 and g8 are already empty, so Black can castle now."
+  },
+  "rn1qk2r/pb1pbppp/1p2pn2/2p5/3P1B2/2P1PN2/PP1N1PPP/R2QKB1R w KQkq - h2h3": {
+   "category": "vague",
+   "review": "full",
+   "detail": "accuracy 3; The idea of giving the f4-bishop an h2 retreat against ...Nh5 is a real, board-visible purpose of h3, but a knight on e4 does not attack f4, so that half of the claim is wrong."
+  },
+  "rn1qk2r/pbpp1p2/1p2p2p/6p1/2PPn3/2P1PNB1/P1Q2PPP/R3KB1R b KQkq - d7d6": {
+   "category": "vague",
+   "review": "full",
+   "detail": "accuracy 3; Calling e4 an 'outpost' is a stretch, since White can still kick the knight with f3, and d6 does nothing in particular to let the knight stay there."
+  },
+  "rn1qk2r/pp3ppp/2p1pn2/5b2/PbBP4/2N1PN2/1P3PPP/R1BQK2R w KQkq - e1g1": {
+   "category": "vague",
+   "review": "full",
+   "detail": "accuracy 3; It correctly points out that the b4 bishop pins the c3 knight to the king, that castling breaks the pin, and that Qe2 and Ne5 follow in the engine line; but the claim that castling connects the rooks is false, because the c1 bishop and d1 queen still stand between a1 and f1."
+  },
+  "rn1qk2r/ppp1bppp/1n1pp3/4P2b/2PP4/5N1P/PP2BPP1/RNBQ1RK1 w kq - b1c3": {
+   "category": "vague",
+   "review": "full",
+   "detail": "accuracy 3; Linking Nc3's control of d5 to the later d5 push in the engine line is a useful, memorable idea, but calling the knight 'the last minor piece' is false because the c1-bishop is still undeveloped (Be3 follows in the line)."
+  },
+  "rn1qk2r/ppp2ppp/4pn2/3p1b2/1bPP1B2/2N1P3/PP3PPP/R2QKBNR w KQkq - d1b3": {
+   "category": "false on the board",
+   "review": "full",
+   "detail": "accuracy 2; not grounded; useful 2; That Qb3 hits b7 and adds pressure on d5; neither comes from the packet, and both are false on the board."
+  },
+  "rn1qkb1r/1p3ppp/p2pbn2/4p3/4P3/1NN1BP2/PPP3PP/R2QKB1R b KQkq - f8e7": {
+   "category": "beyond the packet",
+   "review": "full",
+   "detail": "not grounded; The packet gives a 38.6% master share but no ranking against other moves, so calling Be7 the most common master choice is not supported. Only the club figure of 60% clearly backs 'most common'."
+  },
+  "rn1qkb1r/pb1p1ppp/1p2pn2/2p5/3P1B2/2P1P3/PP1N1PPP/R2QKBNR w KQkq - g1f3": {
+   "category": "false on the board",
+   "review": "full",
+   "detail": "accuracy 2; Calling the knight 'the last minor piece' is false, since the f1 bishop is still undeveloped; tying e5 control to the b7 bishop's diagonal is also confused."
+  },
+  "rn1qkb1r/pbpp1ppp/1p2pn2/8/2PP4/3BPN2/PP3PPP/RNBQK2R b KQkq - c7c5": {
+   "category": "beyond the packet",
+   "review": "full",
+   "detail": "accuracy 3; not grounded; The claim that c5 opens the long diagonal further for the b7 bishop has no support in the packet and is false: the c7 pawn does not stand on the b7–h1 diagonal."
+  },
+  "rn1qkb1r/pbpp1ppp/1p2pn2/8/2PP4/P1N2N2/1P2PPPP/R1BQKB1R b KQkq - d7d5": {
+   "category": "false on the board",
+   "review": "full",
+   "detail": "accuracy 2; The core idea of stopping White's d4-d5 push, which would cramp the b7 bishop, is sound and loosely backed by the engine's ...d6 line where White plays d5; but the phrasing is garbled, since ...d5 actually blocks Black's own b7 bishop's long diagonal rather than shielding it, and 'against d5 by White' reads as a self-reference."
+  },
+  "rn1qkb1r/pbpp1ppp/1p2pn2/8/8/5NP1/PPPPPPBP/RNBQ1RK1 w kq - d2d3": {
+   "category": "false on the board",
+   "review": "full",
+   "detail": "accuracy 2; not grounded; useful 2; The plan of d3 followed by e4 is not in the packet; the engine line continues d3 d5 c4. The claim that d3 blunts the b7 bishop is also unsupported, since d3 is not on the a8–h1 diagonal."
+  },
+  "rn1qkb1r/pp1bpppp/3p1n2/1Bp5/P3P3/5N2/1PPPQPPP/RNB1K2R b KQkq - b8c6": {
+   "category": "false on the board",
+   "review": "full",
+   "detail": "accuracy 1; not grounded; useful 2; The claim that Nc6 adds a defender of d7 is false; a knight on c6 does not cover d7. The packet does not support it either."
+  },
+  "rn1qkb1r/pp2nppp/4p3/3pPb2/3N4/4B3/PPP1BPPP/RN1QK2R w KQkq - e1g1": {
+   "category": "beyond the packet",
+   "review": "full",
+   "detail": "accuracy 3; not grounded; Castling does not connect the rooks: the b1 knight and the d1 queen still stand between a1 and f1."
+  },
+  "rn1qkb1r/pp2pppp/2p5/3nNb2/3P4/8/PPP1BPPP/RNBQK2R w KQkq - e1g1": {
+   "category": "vague",
+   "review": "full",
+   "detail": "accuracy 3; It correctly notes that the e2 bishop has cleared f1 and names the engine's reply Nd7, but 'before Black can challenge' is misleading: castling does nothing to stop Nd7, which is simply Black's next move in the line and is met by Nf3."
+  },
+  "rn1qkb1r/pp3ppp/2p1pn2/3p1b2/2PP1B2/1QN1P3/PP3PPP/R3KBNR b KQkq - d8b6": {
+   "category": "beyond the packet",
+   "review": "full",
+   "detail": "not grounded; The claim that Qb6 is 'the most common choice' is not established: the packet gives only its own share (46.4% and 40.4%), not the other moves' shares."
+  },
+  "rn1qkb1r/pp3ppp/2p1pn2/3p1b2/2PP3N/2N1P3/PP3PPP/R1BQKB1R b KQkq - f5g6": {
+   "category": "vague",
+   "review": "full",
+   "detail": "accuracy 3; The knight attack on f5 and the half-open h-file after Nxg6 hxg6 are correct and match the engine line, but saying Bg6 'keeps the pair intact' contradicts the same line, where Nxg6 gives up the bishop pair."
+  },
+  "rn1qkb1r/pp3ppp/2p1pn2/3p4/4P3/2NP1Q1P/PPPB1PP1/R3KB1R b KQkq - b8d7": {
+   "category": "beyond the packet",
+   "review": "full",
+   "detail": "accuracy 3; not grounded; useful 2; The follow-up of ...dxe4 with the d7-knight 'recapturing toward e5 or f6' is not in any engine line and does not describe a concrete sequence."
+  },
+  "rn1qkb1r/ppp1pppp/5n2/3p1b2/3P1B2/4P3/PPP2PPP/RN1QKBNR w KQkq - c2c4": {
+   "category": "beyond the packet",
+   "review": "full",
+   "detail": "accuracy 3; not grounded; The claim that c4 puts pressure on the queenside, especially b7, is not supported by the packet's c4 line (e6, Nd2, Nbd7...). After c4 alone nothing attacks b7; the Qb3 idea only appears in the Bd3 line."
+  },
+  "rn1qkb1r/ppp2ppp/4p3/3n4/3P2b1/5N2/PPP1BPPP/RNBQK2R w KQkq - e1g1": {
+   "category": "vague",
+   "review": "full",
+   "detail": "accuracy 3; It rightly ties castling to the engine's follow-ups h3 and c4, but calling the f3 knight 'pinned' is wrong: the e2 bishop stands between it and the queen, so there is no pin, only a bishop defending the knight."
+  },
+  "rn1qkb1r/ppp2ppp/4pn2/3p1b2/2PP1B2/2N1P3/PP3PPP/R2QKBNR b KQkq - c7c6": {
+   "category": "vague",
+   "review": "full",
+   "detail": "accuracy 3; The hint rightly says c4 and the c3 knight press d5 and that c6 shores up the centre, but 'second guard' is wrong: d5 is already defended by e6, the f6 knight and the d8 queen, so c6 is a fourth defender, and it skips the reinforcing idea of meeting cxd5 with a pawn recapture."
+  },
+  "rn1qkbnr/pp2ppp1/2p3bp/8/7P/5NN1/PPPP1PP1/R1BQKB1R w KQkq - f3e5": {
+   "category": "false on the board",
+   "review": "full",
+   "detail": "accuracy 2; not grounded; The claim that the g6 bishop has no retreat to h7 is false: h7 is empty, and the packet's own second engine line plays h5 Bh7. The idea that the h5 threat removes this retreat is also unsupported."
+  },
+  "rn1qkbnr/pp2pppp/2p3b1/8/3P3P/6N1/PPP2PP1/R1BQKBNR b KQkq - h7h6": {
+   "category": "false on the board",
+   "review": "full",
+   "detail": "accuracy 2; not grounded; The claim that White threatens to trap the bishop is not supported by the packet: line 3 shows Nf6 h5 Be4, so the bishop escapes. The claim that h6 'stops the h-pawn' is contradicted by the main line, where White still plays h5."
+  },
+  "rn1qkbnr/pp2pppp/2p5/3p4/4P1b1/2N2N2/PPPP1PPP/R1BQKB1R w KQkq - h2h3": {
+   "category": "vague",
+   "review": "full",
+   "detail": "accuracy 3; The pin and the Bxf3 Qxf3 bishop-pair idea are correct and come from the engine line, but the queen on f3 does not directly eye d5 because White's own e4 pawn blocks that diagonal, and Black's natural Nf6 soon shuts the f-file toward f7."
+  },
+  "rn1qkbnr/pp2pppp/2p5/3pPb2/3P3P/8/PPP2PP1/RNBQKBNR b KQkq - h7h5": {
+   "category": "beyond the packet",
+   "review": "full",
+   "detail": "accuracy 3; not grounded; The claim that ...h5 'leaves the g5 square for Black' is not in the packet and is wrong: ...h5 makes g5 a hole that White's pieces (e.g. Bg5) can use."
+  },
+  "rn1qkbnr/pp3ppp/2p1p3/3pPb2/3P4/5N2/PPP2PPP/RNBQKB1R w KQkq - f1e2": {
+   "category": "beyond the packet",
+   "review": "full",
+   "detail": "accuracy 3; not grounded; The '...c5 tricks' claim is vague and is not supported by the packet. 'Leaving the c-pawn free' is padding with no clear point."
+  },
+  "rn1qkbnr/ppp1ppp1/6bp/8/7P/6N1/PPPP1PP1/R1BQKBNR w KQkq - g1f3": {
+   "category": "vague",
+   "review": "full",
+   "detail": "accuracy 3; The d4 and h5 follow-ups match the engine line, but calling Nf3 the development of 'the last minor piece' is wrong because both white bishops on c1 and f1 are still at home."
+  },
+  "rn1qkbnr/ppp1pppp/8/3p1b2/2PP4/8/PP2PPPP/RNBQKBNR w KQkq - b1c3": {
+   "category": "vague",
+   "review": "full",
+   "detail": "accuracy 3; The implied link that the bishop's departure from c8 weakened d5 is unsupported; a bishop on c8 never defended d5."
+  },
+  "rn1qkbnr/ppp2ppp/4p3/3p1b2/3P1B2/4P3/PPP2PPP/RN1QKBNR w KQkq - c2c4": {
+   "category": "beyond the packet",
+   "review": "full",
+   "detail": "accuracy 3; not grounded; 'Before the knights come out' is unsupported: in the engine line both sides develop knights (Nf6, Nf3) before cxd5 is played."
+  },
+  "rn2k2r/pp3ppp/2p1pn2/q4b2/1bBP4/2N2N2/PPPBQPPP/R3K2R w KQkq - e1c1": {
+   "category": "vague",
+   "review": "full",
+   "detail": "accuracy 3; The board claims about king safety and Bd2 defending Nc3 are correct, but the rook on d1 is screened from d4 by the d2 bishop, and the hint misses the real point: castling to c1 takes the king off the b4–e1 diagonal and so breaks the pin."
+  },
+  "rn2kb1r/pp3ppp/2p1pn2/q4b2/2BP4/2N2N2/PPPB1PPP/R2QK2R w KQkq - d1e2": {
+   "category": "beyond the packet",
+   "review": "full",
+   "detail": "not grounded; Calling Qe2 'the main choice in master games' goes beyond the packet: it gives a 35.1% master share but no shares for other moves, so it can't confirm Qe2 is the most played."
+  },
+  "rn2kb1r/pp3ppp/4pn2/2pq4/3P2b1/2P2N2/PP2BPPP/RNBQK2R w KQkq - e1g1": {
+   "category": "false on the board",
+   "review": "full",
+   "detail": "accuracy 2; not grounded; The claim that the e2 bishop is guarded by the knight; the knight on f3 does not cover e2, which is protected by the queen on d1."
+  },
+  "rnb1kb1r/pp1ppppp/8/q1p5/3PnB2/2P2P2/PP2P1PP/RN1QKBNR b KQkq - e4f6": {
+   "category": "beyond the packet",
+   "review": "full",
+   "detail": "accuracy 3; not grounded; The packet does not support d5 as the reason Nd6 is worse. The engine's main line after Nf6 also continues with d5, so 'lets White gain space with d5' does not set the two moves apart."
+  },
+  "rnb1kb1r/pp2pppp/1q6/2ppP3/3Pn3/5N2/PPP1NPPP/R1BQKB1R w KQkq - c2c3": {
+   "category": "vague",
+   "review": "full",
+   "detail": "accuracy 3; Correctly says c3 bolsters d4 and the c3-d4-e5 chain against ...cxd4, but the b6 queen does not hit d4 directly because its own c5 pawn blocks the diagonal (it is at most an x-ray); the hint also omits that c3 is engine-third, about 0.7 pawns worse than dxc5."
+  },
+  "rnb1kb1r/ppp1pppp/5n2/q7/3P4/2N5/PPP2PPP/R1BQKBNR w KQkq - g1f3": {
+   "category": "false on the board",
+   "review": "full",
+   "detail": "accuracy 2; not grounded; The claim that e5 is out of reach of the queen on a5 is not in the packet and is false."
+  },
+  "rnb1kbnr/1p2pppp/p7/2pq4/8/2P2N2/PP1P1PPP/RNBQKB1R w KQkq - d2d4": {
+   "category": "false on the board",
+   "review": "full",
+   "detail": "accuracy 2; not grounded; useful 2; A 'broad centre backed by the c3 pawn' is not in the packet and is false: after cxd4 cxd4 the c-pawn has moved to d4, and with no e-pawn White has only a lone d4 pawn."
+  },
+  "rnbq1rk1/1pp2pb1/3p1npp/p2Pp3/2P1P2B/2N2N2/PP2BPPP/R2QK2R b KQ - b8a6": {
+   "category": "vague",
+   "review": "full",
+   "detail": "accuracy 3; The claim that the a5 pawn 'supports' c5 is wrong as stated: a5 does not defend c5. The d6 pawn does, and a5 only stops b4 from kicking the knight. The c5 route is inferred from the board, not stated in the packet."
+  },
+  "rnbq1rk1/2p1bppp/p3pn2/1p6/3P4/5NP1/PPQ1PPBP/RNB2RK1 b - - c8b7": {
+   "category": "vague",
+   "review": "full",
+   "detail": "accuracy 3; The claim that Bb7 backs up the b5 pawn is false: a bishop on b7 does not defend b5, which is protected by the a6 pawn."
+  },
+  "rnbq1rk1/p1p1bpp1/1p2pn1p/3p4/2PP3B/2N1PN2/PP2BPPP/R2QK2R b KQ - c8b7": {
+   "category": "vague",
+   "review": "full",
+   "detail": "accuracy 3; The claim that the bishop eyes e4 after cxd5 exd5 is false, because its own d5 pawn blocks the diagonal."
+  },
+  "rnbq1rk1/p1pp1ppp/1p2pn2/8/2PP4/P1Q5/1P2PPPP/R1B1KBNR w KQ - c1g5": {
+   "category": "vague",
+   "review": "full",
+   "detail": "accuracy 3; The implied link between the pin and Black's undeveloped bishop is not supported by the packet."
+  },
+  "rnbq1rk1/pp1p1ppp/4pn2/2P5/1bP5/2N5/PPQ1PPPP/R1B1KBNR w KQ - a2a3": {
+   "category": "vague",
+   "review": "full",
+   "detail": "accuracy 3; The claim that Black could double White's c-pawns with ...Bxc3 is wrong: White's c-pawns are already doubled on c4/c5, and ...Bxc3 would just be met by Qxc3."
+  },
+  "rnbq1rk1/pp1p1ppp/4pn2/2b5/2P5/P1N5/1PQ1PPPP/R1B1KBNR w KQ - g1f3": {
+   "category": "false on the board",
+   "review": "full",
+   "detail": "accuracy 2; It correctly says Nf3 covers d4 and e5, the squares Black's ...Bd4 and ...e5 ideas target in the Bf4 line, but 'develops the last minor piece' is false because both white bishops (c1 and f1) are still at home."
+  },
+  "rnbq1rk1/pp2ppbp/3p1np1/2p5/3P1B2/4PN1P/PPP1BPP1/RN1QK2R w KQ - c2c3": {
+   "category": "vague",
+   "review": "full",
+   "detail": "accuracy 3; The core idea, that c3 supports d4 against the c5 pawn, is correct and visible on the board, but the follow-up logic is shaky: exd4 was already possible without c3, so 'so cxd4 can be met by exd4' is no real consequence, and exd4 would actually remove the e3 pawn from the London chain rather than keep it intact."
+  },
+  "rnbq1rk1/pp3pbp/3ppnp1/2pP4/2P1PP2/2N2N2/PP2B1PP/R1BQK2R b KQ - e6d5": {
+   "category": "beyond the packet",
+   "review": "full",
+   "detail": "accuracy 3; not grounded; The claim that the e-file pressure is aimed at the uncastled white king is unsupported: in the engine line White castles (O-O) before Black plays Re8, so the target is really the e4 pawn."
+  },
+  "rnbq1rk1/ppp1bppp/4pn2/3p4/2PP4/5NP1/PP1BPPBP/RN1QK2R w KQ - e1g1": {
+   "category": "vague",
+   "review": "full",
+   "detail": "accuracy 3; Castling behind the g2 bishop and following with Qc2 are correct and match the engine line, but the claim that O-O connects the rooks is false because the knight on b1 and queen on d1 still stand between a1 and f1."
+  },
+  "rnbq1rk1/ppp1p1bp/3p1np1/5p2/2PP4/5NP1/PP2PPBP/RNBQ1RK1 w - - b1c3": {
+   "category": "vague",
+   "review": "full",
+   "detail": "accuracy 3; The point that Nc3 covers e4 and d5 and prepares d5 and e4 against c6 matches the engine line (Nc3 c6 d5 e5 e4), but calling it the 'last minor piece' is wrong because the c1-bishop is still undeveloped."
+  },
+  "rnbq1rk1/ppp1ppbp/3p1np1/8/2PPP3/2N1B2P/PP3PP1/R2QKBNR b KQ - e7e5": {
+   "category": "false on the board",
+   "review": "full",
+   "detail": "accuracy 2; not grounded; The claim that e5 'offers a pawn the bishop on g7 eyes' is not in the packet and is not true: e5 is defended by d6, and dxe5 dxe5 wins nothing."
+  },
+  "rnbq1rk1/ppp1ppbp/3p1np1/8/2PPP3/2N1BP2/PP4PP/R2QKBNR b KQ - e7e5": {
+   "category": "vague",
+   "review": "full",
+   "detail": "accuracy 3; The claim that e5 frees the g7 bishop's long diagonal is not in the packet; e5 actually sits on that diagonal, so it blocks the bishop rather than freeing it."
+  },
+  "rnbq1rk1/ppp1ppbp/3p1np1/8/2PPPP2/2N2N2/PP4PP/R1BQKB1R b KQ - c7c5": {
+   "category": "vague",
+   "review": "full",
+   "detail": "accuracy 3; The claim that ...e6 opens the e-file against the white king is an interpretation the packet does not support: after exd5 cxd5 the file is only half-open, blocked by White's e4 pawn, and White castles in the engine line."
+  },
+  "rnbq1rk1/ppp1ppbp/3p1np1/8/3P1B2/4PN1P/PPP1BPP1/RN1QK2R b KQ - c7c5": {
+   "category": "vague",
+   "review": "full",
+   "detail": "accuracy 3; Correctly says c5 hits d4, a concrete and memorable idea, but the g7 bishop's 'aim' at d4 is currently blocked by Black's own knight on f6, so it is only an x-ray, and the uncastled-king remark is true yet never tied to any concrete consequence."
+  },
+  "rnbq1rk1/ppp1ppbp/3p1np1/8/3P1B2/4PN2/PPP1BPPP/RN1QK2R w KQ - h2h3": {
+   "category": "vague",
+   "review": "full",
+   "detail": "accuracy 3; The suggestion that without h3 the bishop would be lost to ...Nh5 overstates the packet; the O-O line only shows it being chased by ...Nh5, ...h6 and ...g5."
+  },
+  "rnbq1rk1/ppp2pbp/3p1np1/3Pp3/2P1P3/2N2N2/PP2BPPP/R1BQK2R b KQ - a7a5": {
+   "category": "beyond the packet",
+   "review": "full",
+   "detail": "not grounded; The Na6 knight-route plan does not appear in the packet's engine lines, which show only ...Ng4, ...Nbd7 and ...Nh5 ideas."
+  },
+  "rnbq1rk1/ppp2pbp/3p1np1/4p3/2P5/2NP1NP1/PP2PPBP/R1BQ1RK1 b - - b8c6": {
+   "category": "vague",
+   "review": "full",
+   "detail": "accuracy 3; The point about adding a second defender to e5 and eyeing d4 is correct and useful, but calling the knight the 'last minor piece' is wrong because the c8 bishop is still undeveloped."
+  },
+  "rnbq1rk1/ppp2pbp/3p1np1/4p3/2PPP3/2N2N2/PP2BPPP/R1BQ1RK1 b - - b8c6": {
+   "category": "beyond the packet",
+   "review": "full",
+   "detail": "not grounded; The claim that White 'often' answers with d5 is a frequency/theory claim. No engine line or explorer data in the packet covers White's reply to Nc6."
+  },
+  "rnbq1rk1/ppp2pbp/3p1np1/4p3/4P3/3P1NP1/PPP2PBP/RNBQ1RK1 w - - b1c3": {
+   "category": "vague",
+   "review": "full",
+   "detail": "accuracy 3; Defending e4 and eyeing d5 are correct, but calling Nc3 'the last minor piece' is false because the c1 bishop is still undeveloped; the hint also skips that Nc3 blocks the c-pawn, while the engine's top line starts with c4."
+  },
+  "rnbq1rk1/pppp1ppp/4pn2/8/1bPP4/2NBP3/PP3PPP/R1BQK1NR b KQ - d7d5": {
+   "category": "beyond the packet",
+   "review": "full",
+   "detail": "accuracy 3; not grounded; The claim that d5 blunts the d3 bishop's diagonal toward the black king is not in the packet, and the d5 pawn does not stand on the b1–h7 diagonal."
+  },
+  "rnbq1rk1/pppp1ppp/4pn2/8/2PP4/P1Q5/1P2PPPP/R1B1KBNR b KQ - b7b6": {
+   "category": "false on the board",
+   "review": "full",
+   "detail": "accuracy 2; The claim that the light bishop would aim at the queen on c3; c3 is not on the a8-h1 diagonal."
+  },
+  "rnbq1rk1/ppppb1pp/4pn2/5p2/3P4/5NP1/PPP1PPBP/RNBQ1RK1 w - - c2c4": {
+   "category": "beyond the packet",
+   "review": "full",
+   "detail": "accuracy 3; not grounded; The claim that after ...d5 the light squares behind f5 come under fire is not in the packet, and it is chess-dubious: the Stonewall's usual weakness is the dark square e5."
+  },
+  "rnbq1rk1/ppppppbp/5np1/8/2P5/2N2NP1/PP1PPPBP/R1BQK2R b KQ - d7d6": {
+   "category": "vague",
+   "review": "full",
+   "detail": "accuracy 3; The e5 plan is not in the engine lines, though it follows plainly from the board. The packet names the opening Anglo-Indian rather than King's Indian, but the setup is visibly King's Indian-style."
+  },
+  "rnbqk1nr/pp1pppbp/2p3p1/8/3PP3/2N5/PPP2PPP/R1BQKBNR w KQkq - g1f3": {
+   "category": "beyond the packet",
+   "review": "full",
+   "detail": "not grounded; The packet gives only Nf3's master share (39.3%), not other moves' shares, so 'the most common choice in master games' is unsupported."
+  },
+  "rnbqk1nr/ppp2ppp/3p4/2b1p3/4P3/2N2N2/PPPP1PPP/R1BQKB1R w KQkq - d2d4": {
+   "category": "vague",
+   "review": "full",
+   "detail": "accuracy 3; The exd4 Nxd4 follow-up and the resulting central knight match the engine line, but 'attacks the bishop on c5 through the e5 pawn's capture' is garbled: the d4 pawn hits c5 and e5 directly, forking bishop and pawn, which is the clearer and more memorable point."
+  },
+  "rnbqk1nr/pppp1ppp/8/2b1p3/4PP2/8/PPPP2PP/RNBQKBNR w KQkq - g1f3": {
+   "category": "beyond the packet",
+   "review": "full",
+   "detail": "not grounded; The plan of d4 with fxe5 held in reserve is not in the packet; the engine line plays c3 followed by fxe5 at once (after ...Nc6), with no d4."
+  },
+  "rnbqk1nr/pppp1ppp/8/4p3/1bP5/2N5/PP1PPPPP/R1BQKBNR w KQkq - c3d5": {
+   "category": "vague",
+   "review": "full",
+   "detail": "accuracy 3; Nd5 does attack the b4 bishop and avoids Bxc3 doubling the c-pawns, but the hint wrongly calls Bb4 a pin: the d2 pawn stands between c3 and the king on e1, so the c3 knight is not pinned."
+  },
+  "rnbqk1nr/ppppppbp/6p1/8/3PP3/8/PPP2PPP/RNBQKBNR w KQkq - b1c3": {
+   "category": "beyond the packet",
+   "review": "full",
+   "detail": "accuracy 3; not grounded; The claim that White 'keeps the broad center' after ...d5 exd5 is an interpretive plan the packet does not support; the e-pawn is gone and the engine line has Black recovering d5 with ...Nb6."
+  },
+  "rnbqk2r/1p2bppp/p2p1n2/4p3/4P3/1NN5/PPP1BPPP/R1BQ1RK1 b kq - e8g8": {
+   "category": "vague",
+   "review": "full",
+   "detail": "accuracy 3; Keeping the c8-bishop's choice open fits the engine line (Be3 Be6), but castling does not link the rooks, since the b8-knight, c8-bishop and d8-queen still sit between a8 and f8."
+  },
+  "rnbqk2r/1p2bppp/p2ppn2/6B1/3NPP2/2N2Q2/PPP3PP/R3KB1R b KQkq - d8c7": {
+   "category": "false on the board",
+   "review": "full",
+   "detail": "accuracy 2; useful 2; The e5 claim is false: the d6 pawn blocks the c7–e5 diagonal. The idea that clearing d8 lets the b8 knight reach d7 is also wrong, since Nbd7 never needed d8."
+  },
+  "rnbqk2r/pp1p1pp1/4pn1p/2pP4/1bP4B/2N5/PP2PPPP/R2QKBNR b KQkq - d7d6": {
+   "category": "vague",
+   "review": "full",
+   "detail": "accuracy 3; The 'keeps the dark squares covered' claim is a loose interpretation not drawn from the packet."
+  },
+  "rnbqk2r/pp1p1ppp/4pn2/2p5/1bPP4/2N2NP1/PP2PP1P/R1BQKB1R b KQkq - c5d4": {
+   "category": "vague",
+   "review": "full",
+   "detail": "accuracy 3; 'Forces Nxd4' overstates it: Qxd4 is also legal, and the packet only shows Nxd4 as the engine's choice."
+  },
+  "rnbqk2r/pp1pppbp/5np1/2p5/2P5/2N3P1/PP1PPPBP/R1BQK1NR w KQkq - g1f3": {
+   "category": "vague",
+   "review": "full",
+   "detail": "accuracy 3; Castling preparation and the d4 break are correct and supported by the engine line (Nf3 d5 d4 O-O), but calling Nf3 the 'last minor piece' is wrong, since the c1-bishop is still undeveloped."
+  },
+  "rnbqk2r/pp2bppp/2p2n2/3p2B1/3P4/2N1P3/PPQ2PPP/R3KBNR b KQkq - b8d7": {
+   "category": "false on the board",
+   "review": "full",
+   "detail": "accuracy 2; useful 2; The master-games claim is right (64.6% share), but the f6 knight is not pinned because the e7 bishop sits behind it, and it is already defended by Be7 and the g7 pawn, so Nbd7 adds a third defender rather than a second."
+  },
+  "rnbqk2r/pp2ppbp/3p1np1/2pP4/4P3/2N2N2/PPP2PPP/R1BQKB1R w KQkq - f1e2": {
+   "category": "false on the board",
+   "review": "full",
+   "detail": "accuracy 2; not grounded; The claim that a knight would hit c4 is not in the engine lines. The claim that Be2 backs e4 is false: a bishop on e2 does not defend e4."
+  },
+  "rnbqk2r/pp2ppbp/3p1np1/2pP4/4PB2/2N5/PPP2PPP/R2QKBNR w KQkq - g1f3": {
+   "category": "vague",
+   "review": "full",
+   "detail": "accuracy 3; Nf3 does develop toward kingside castling and covers e5, but calling it the 'last minor piece' is wrong because the f1 bishop is still undeveloped, and the ...e5 framing is a bit forced since dxe6 en passant is also available."
+  },
+  "rnbqk2r/pp3pp1/3ppn1p/2pP4/1bP4B/2N1P3/PP3PPP/R2QKBNR b KQkq - e6d5": {
+   "category": "vague",
+   "review": "full",
+   "detail": "accuracy 3; It correctly names the Benoni-type structure after exd5 cxd5, but 'stands alone in the centre' is misleading, since the d5 pawn is not isolated with e3 beside it. 'Build around it' is vague, and the hint never mentions that the engine rates exd5 about half a pawn worse than Bxc3+."
+  },
+  "rnbqk2r/pp3pp1/5n1p/2pp4/1b1P3B/2N5/PPQ1PPPP/R3KBNR w KQkq - d4c5": {
+   "category": "vague",
+   "review": "full",
+   "detail": "accuracy 3; It rightly notes that dxc5 takes the attacked d4 pawn and removes the c5 pawn that defended the b4 bishop, but 'keeping the c-file pawn tension' is wrong because the capture resolves that tension, and the hint does not say how the loose bishop can be exploited."
+  },
+  "rnbqk2r/pp3ppp/4pn2/2pP4/3P4/P1P2P2/4P1PP/R1BQKBNR b KQkq - f6d5": {
+   "category": "false on the board",
+   "review": "full",
+   "detail": "accuracy 2; not grounded; The claim that White's doubled d-pawns remain as targets; Nxd5 captures the d5 pawn, so the doubling disappears."
+  },
+  "rnbqk2r/ppp1bppp/4pn2/3pP1B1/3P4/2N5/PPP2PPP/R2QKBNR b KQkq - f6d7": {
+   "category": "beyond the packet",
+   "review": "full",
+   "detail": "not grounded; The plan of following up with c5 does not appear in the engine's Nfd7 line, which continues h4 Bxg5 hxg5 Qxg5. c5 only shows up in the Ne4 and Ng8 lines."
+  },
+  "rnbqk2r/ppp1bppp/8/3pP3/3Pn3/2N2N2/PPP3PP/R1BQKB1R b KQkq - e8g8": {
+   "category": "vague",
+   "review": "full",
+   "detail": "accuracy 3; It correctly names the half-open f-file and the strong e4 knight, but 'getting off the e-file' is a weak rationale since the e-file is blocked, and castling short moves the king toward the f-file pressure, not away from it, so the logic is muddled; it also skips that the engine prefers Bb4."
+  },
+  "rnbqk2r/ppp1bppp/8/3pP3/4n3/2N2N2/PPPP2PP/R1BQKB1R w KQkq - d2d4": {
+   "category": "beyond the packet",
+   "review": "full",
+   "detail": "accuracy 3; not grounded; The claim that the e4 knight faces the c3 knight 'without extra support' is unsupported and misleading, because the d5 pawn already defends it and the engine's reply Bb4 adds pressure on c3."
+  },
+  "rnbqk2r/ppp1ppbp/1n1p2p1/4P3/3P4/1B3N2/PPP2PPP/RNBQK2R w KQkq - a2a4": {
+   "category": "vague",
+   "review": "full",
+   "detail": "accuracy 3; The claim that the knight 'must' retreat to d7 is not supported, since the packet only shows N6d7 as the engine choice; '[[Bxf7+]] works' also overstates a line that ends at only +0.70."
+  },
+  "rnbqk2r/ppp1ppbp/3p1np1/8/2PPP3/2N2P2/PP4PP/R1BQKBNR b KQkq - e8g8": {
+   "category": "beyond the packet",
+   "review": "full",
+   "detail": "accuracy 3; not grounded; The claim that castling lets ...c5 avoid the queen trade. The packet's own a6 line shows dxc5 dxc5 Qxd8 after Black has castled, so the trade is still available."
+  },
+  "rnbqk2r/ppp2ppp/3bpn2/3p4/3P1B2/4PN2/PPP2PPP/RN1QKB1R w KQkq - f4g3": {
+   "category": "false on the board",
+   "review": "full",
+   "detail": "accuracy 1; not grounded; useful 2; The claim that Bg3 avoids doubled pawns has no support in the packet, and it is false: after ...Bxg3 hxg3 White's pawns are doubled on the g-file. 'Bxd6 by Black' is also an impossible move."
+  },
+  "rnbqk2r/ppp2ppp/4pn2/3p4/2PP4/P1P2P2/4P1PP/R1BQKBNR b KQkq - c7c5": {
+   "category": "beyond the packet",
+   "review": "full",
+   "detail": "accuracy 3; not grounded; The plan to 'fix White's weak c-pawn chain' and the idea of White 'untangling with e3' are not in the packet; the engine line has White playing cxd5 at once, which undoubles the pawns."
+  },
+  "rnbqk2r/ppp3pp/3bpn2/3p1p2/3P4/5NP1/PPP1PPBP/RNBQ1RK1 w kq - c2c4": {
+   "category": "vague",
+   "review": "full",
+   "detail": "accuracy 3; Hitting d5 with c4 is correct and visible on the board, but calling d5 the 'base' of the centre is wrong (e6 supports it), and saying c4 'frees the c-file' overstates things, since the c-file stays closed by White's c4 and Black's c7 pawns."
+  },
+  "rnbqkb1r/1p1p1ppp/p3pn2/8/3NP3/3B4/PPP2PPP/RNBQK2R w KQkq - e1g1": {
+   "category": "vague",
+   "review": "full",
+   "detail": "accuracy 3; The point that Bd3 holds e4 so c4 can follow matches the engine line (O-O d6 c4) and is a real plan, but castling does not connect the rooks here, because the queen, bishop and knight still sit on d1, c1 and b1."
+  },
+  "rnbqkb1r/1p2pppp/p2p1n2/6B1/3NP3/2N5/PPP2PPP/R2QKB1R b KQkq - e7e6": {
+   "category": "false on the board",
+   "review": "full",
+   "detail": "accuracy 2; The idea that e6 adds a second guard to f6 against a pin is a misreading of the position."
+  },
+  "rnbqkb1r/p2p1ppp/1p2pn2/2p5/3P1B2/2P1P3/PP3PPP/RN1QKBNR w KQkq - b1d2": {
+   "category": "false on the board",
+   "review": "full",
+   "detail": "accuracy 2; not grounded; useful 2; The claim that Nd2 adds support to d4 is false: a knight on d2 controls b1, b3, c4, e4, f1 and f3, not d4."
+  },
+  "rnbqkb1r/p2ppppp/5n2/1ppP4/2P5/8/PP2PPPP/RNBQKBNR w KQkq - c4b5": {
+   "category": "vague",
+   "review": "full",
+   "detail": "accuracy 3; Grabbing the pawn and the ...a6 follow-up both match the engine line, but the phrase 'keeps the c4 pawn from being undermined' is muddled, since the pawn leaves c4 when it captures; the real point is avoiding ...bxc4."
+  },
+  "rnbqkb1r/p3pppp/2p2n2/1p6/P1pP4/2N1PN2/1P3PPP/R1BQKB1R b KQkq - b5b4": {
+   "category": "vague",
+   "review": "full",
+   "detail": "accuracy 3; It correctly says b4 hits the c3 knight and steps out of the a4xb5 capture, but once the pawn leaves b5 it no longer guards c4, so the claim that c4 stays protected is false; in the engine line that job falls to ...Ba6 after Nb1."
+  },
+  "rnbqkb1r/pp1n1ppp/4p3/2ppP3/5P2/2N2N2/PPPP2PP/R1BQKB1R w KQkq - g2g3": {
+   "category": "vague",
+   "review": "full",
+   "detail": "accuracy 3; The g3–Bg2–O-O plan matches the engine line, but the bishop on g2 is not 'behind the e5 and f4 pawns': the long diagonal runs g2-f3-e4-d5, where the Nf3 and the d5 pawn block it. The hint also gives no concrete reason the fianchetto suits this structure."
+  },
+  "rnbqkb1r/pp1p1ppp/4pn2/2p5/2P1P3/2N5/PP1P1PPP/R1BQKBNR w KQkq - e4e5": {
+   "category": "beyond the packet",
+   "review": "full",
+   "detail": "accuracy 3; not grounded; The reasoning about the d-pawn not reaching d5 is not in the packet and does not apply; the 'more space' claim is also an unsupported interpretation."
+  },
+  "rnbqkb1r/pp1p1ppp/4pn2/2p5/2P5/2N3P1/PP1PPP1P/R1BQKBNR w KQkq - g1f3": {
+   "category": "vague",
+   "review": "full",
+   "detail": "accuracy 3; It is correct that Nf3 develops and eyes d4 and e5, and the engine line does continue Bg2 and O-O; but Nf3 does not clear the way for Bg2, since that diagonal is already open after g3 (it only clears g1 for castling), and the reasons are fairly generic."
+  },
+  "rnbqkb1r/pp1p1ppp/4pn2/2p5/3P1B2/4P3/PPP2PPP/RN1QKBNR w KQkq - c2c3": {
+   "category": "vague",
+   "review": "full",
+   "detail": "accuracy 3; Correctly says c3 shores up d4 against c5, but the claimed consequence is muddled: exd4 is available against ...cxd4 with or without c3, so c3's real gain is a supported c3–d4 chain or the option of cxd4, not the possibility of exd4."
+  },
+  "rnbqkb1r/pp1p1ppp/4pn2/2pP4/2P5/8/PP2PPPP/RNBQKBNR w KQkq - b1c3": {
+   "category": "beyond the packet",
+   "review": "full",
+   "detail": "accuracy 3; not grounded; The idea that White answers exd5 with Nxd5 to keep a piece on d5 is not in the packet, and it is dubious: Black's f6 knight simply trades it off."
+  },
+  "rnbqkb1r/pp1ppppp/1n6/4P3/3p4/1BP5/PP3PPP/RNBQK1NR b KQkq - d7d5": {
+   "category": "vague",
+   "review": "full",
+   "detail": "accuracy 3; The engine line (exd6 Qxd6, the queen guarding d4) and the freeing of the c8 bishop are correct, but d5 does not strike at e5 (a pawn on d5 attacks c4 and e4), and e5 is not part of a chain, so the main stated reason is muddled."
+  },
+  "rnbqkb1r/pp1ppppp/5n2/2p1P3/8/2P5/PP1P1PPP/RNBQKBNR b KQkq - f6d5": {
+   "category": "false on the board",
+   "review": "full",
+   "detail": "accuracy 2; not grounded; useful 2; The claim that no white pawn can chase the knight on d5 is unsupported and false: the c3 pawn can still advance to c4 and hit d5."
+  },
+  "rnbqkb1r/pp1ppppp/5n2/2pP4/8/8/PPP1PPPP/RNBQKBNR w KQkq - b1c3": {
+   "category": "vague",
+   "review": "full",
+   "detail": "accuracy 3; The claims that Nc3 prepares e4 (as in the engine line Nc3 d6 e4) and supports the d5 pawn are correct, but saying it keeps the c-pawn's options open is wrong, because the knight on c3 blocks c2-c4, the engine's top choice."
+  },
+  "rnbqkb1r/pp1ppppp/8/2p5/3PnB2/5P2/PPP1P1PP/RN1QKBNR b KQkq - d8a5": {
+   "category": "vague",
+   "review": "full",
+   "detail": "accuracy 3; The claim that c3 is 'forced'; the engine line only shows c3 as the best reply, and White can also block with Nc3, Nd2 or Qd2."
+  },
+  "rnbqkb1r/pp2pp1p/3p1np1/2pP4/5B2/2N5/PPP1PPPP/R2QKBNR w KQkq - e2e4": {
+   "category": "vague",
+   "review": "full",
+   "detail": "accuracy 3; Supporting d5 and preparing for ...e6 is correct and fits the engine lines, but the claim that e4 takes the e5 square is wrong, since the e4 pawn controls d5 and f5, not e5."
+  },
+  "rnbqkb1r/pp2pppp/3p1n2/8/3NP3/2N5/PPP2PPP/R1BQKB1R b KQkq - a7a6": {
+   "category": "beyond the packet",
+   "review": "full",
+   "detail": "accuracy 3; not grounded; The engine line runs a6 f3 e5 Nb3, so e5 comes before Nb3; the hint reverses the order, saying e5 follows Nb3."
+  },
+  "rnbqkb1r/pp2pppp/5n2/2pp4/3P1B2/4P3/PPP2PPP/RN1QKBNR w KQkq - c2c3": {
+   "category": "false on the board",
+   "review": "full",
+   "detail": "accuracy 2; not grounded; The claim that c3 gives b2 extra cover is false, and Qb6 is not a check."
+  },
+  "rnbqkb1r/pp3p1p/3p1np1/2pP4/4P3/2N5/PP3PPP/R1BQKBNR w KQkq - g1f3": {
+   "category": "false on the board",
+   "review": "full",
+   "detail": "accuracy 2; not grounded; useful 2; The claim that Nf3 develops the 'last minor piece' is false, since both white bishops are still on c1 and f1. The idea of castling 'before Black's bishop reaches g7' is unsupported: the engine line has Black play Bg7 immediately, and White cannot castle until Bf1 moves."
+  },
+  "rnbqkb1r/pp3p2/2p1pn1p/6p1/2pPP2B/2N2N2/PP3PPP/R2QKB1R w KQkq - h4g3": {
+   "category": "vague",
+   "review": "full",
+   "detail": "accuracy 3; It correctly says the h4 bishop is attacked by g5 and that Nxg5 hxg5 is a losing piece sacrifice, but e5 gxh4 exf6 wins the piece back, so calling e5 'giving up material' is misleading; the reason given is also fairly basic."
+  },
+  "rnbqkb1r/pp3ppp/2p2n2/3pp3/4P3/1B1P1N2/PPP2PPP/RNBQK2R b KQkq - f8d6": {
+   "category": "vague",
+   "review": "full",
+   "detail": "accuracy 3; The hint correctly says Bd6 protects e5 from Nf3, clears f8 for kingside castling and keeps the c6-d5-e5 center intact, but it calls the bishop a 'second defender' when e5 had no defender before Bd6, so it is the only one."
+  },
+  "rnbqkb1r/pp3ppp/3ppn2/8/3NP3/2N5/PPP2PPP/R1BQKB1R w KQkq - c1e3": {
+   "category": "beyond the packet",
+   "review": "full",
+   "detail": "not grounded; The plan of castling queenside is not in the packet; Qd2 appears in the engine lines, but O-O-O does not."
+  },
+  "rnbqkb1r/ppp1pp1p/3p1np1/8/2PP4/2N5/PP2PPPP/R1BQKBNR w KQkq - e2e4": {
+   "category": "vague",
+   "review": "full",
+   "detail": "accuracy 3; The idea that e4 claims e5 and stops ...e5 goes beyond the packet, which has Black playing ...e5 anyway."
+  },
+  "rnbqkb1r/ppp1pp1p/6p1/3n4/8/2N3P1/PP1PPP1P/R1BQKBNR w KQkq - f1g2": {
+   "category": "vague",
+   "review": "full",
+   "detail": "accuracy 3; The idea that Bg7 would 'bolster' the d5 knight or the centre is not in the packet and is chess-dubious."
+  },
+  "rnbqkb1r/ppp1pppp/3p1n2/8/2PP4/8/PP2PPPP/RNBQKBNR w KQkq - b1c3": {
+   "category": "vague",
+   "review": "full",
+   "detail": "accuracy 3; Linking Nc3 to the follow-up e4 is correct and matches the main engine line (Nc3 g6 e4), but calling it a 'second guard' on e4 is wrong: nothing else in White's position covers e4, so Nc3 is its only defender against Black's Nf6."
+  },
+  "rnbqkb1r/ppp2p1p/3p1np1/8/2PN4/2N5/PP2PPPP/R1BQKB1R w KQkq - g2g3": {
+   "category": "voice",
+   "review": "full",
+   "detail": "voice; The hint is accurate and grounded: g3 does prepare Bg2 against Black's g6 setup (Bg7 follows in the engine line), and 65.3% of master games choose it here. However, it runs to two sentences rather than one, and it doesn't mention that e4 and f3 score slightly higher with the engine."
+  },
+  "rnbqkb1r/ppp2ppp/4pn2/3P4/3P4/2N5/PP2PPPP/R1BQKBNR b KQkq - e6d5": {
+   "category": "voice",
+   "review": "full",
+   "detail": "voice; The claims are accurate: exd5 keeps a central pawn on d5, opens the c8 bishop's diagonal, and Nxd5 e4 matches the engine line, kicking the knight with tempo; however, the hint uses two sentences instead of one."
+  },
+  "rnbqkb1r/ppp2ppp/4pn2/3p4/2P1P3/2N5/PP1P1PPP/R1BQKBNR w KQkq - e4e5": {
+   "category": "false on the board",
+   "review": "full",
+   "detail": "accuracy 2; not grounded; The claim that the line leaves White with space and the initiative is not supported by the packet, which gives only +0.12. The hint also stops before Black's recapture Qxf6."
+  },
+  "rnbqkb1r/ppp2ppp/4pn2/3p4/3P4/3BPN2/PPP2PPP/RNBQK2R b KQkq - c7c5": {
+   "category": "beyond the packet",
+   "review": "full",
+   "detail": "not grounded; The claim that c5 comes 'before the Colle setup can prepare its own central push' refers to White's typical e4 plan, which the packet never mentions; the engine line instead shows White answering with b3."
+  },
+  "rnbqkb1r/ppp2ppp/4pn2/8/2pP4/4PN2/PP3PPP/RNBQKB1R w KQkq - f1c4": {
+   "category": "beyond the packet",
+   "review": "full",
+   "detail": "not grounded; 'With tempo' is unsupported: Bxc4 makes no direct threat that forces a Black reply."
+  },
+  "rnbqkb1r/ppp2ppp/5n2/3P4/5p2/5N2/PPPP2PP/RNBQKB1R w KQkq - f1b5": {
+   "category": "beyond the packet",
+   "review": "full",
+   "detail": "accuracy 3; not grounded; Calls d5 an 'extra' pawn, but the packet shows material balance 0; it is the front pawn of White's doubled d-pawns, not a pawn up."
+  },
+  "rnbqkb1r/ppp2ppp/5p2/8/8/8/PPPP1PPP/R1BQKBNR w KQkq - g1f3": {
+   "category": "vague",
+   "review": "full",
+   "detail": "accuracy 3; The point about getting castled quickly with the e-file open is sound and visible on the board, but calling the knight 'the last minor piece' is false, since both white bishops on c1 and f1 are still undeveloped."
+  },
+  "rnbqkb1r/pppn1ppp/4p3/3pP3/3P4/8/PPPN1PPP/R1BQKBNR w KQkq - f1d3": {
+   "category": "beyond the packet",
+   "review": "full",
+   "detail": "not grounded; The idea of the knight going to e2 is not in the packet; every engine line develops it with Ngf3."
+  },
+  "rnbqkb1r/pppp1ppp/4pn2/8/3P1B2/4P3/PPP2PPP/RN1QKBNR b KQkq - c7c5": {
+   "category": "vague",
+   "review": "full",
+   "detail": "accuracy 3; The idea that Black's c5 exploits a weakened queenside is a plausible board observation, since b2 is undefended once the bishop leaves c1, but no follow-up such as ...Qb6 appears in the engine lines."
+  },
+  "rnbqkb1r/pppp1ppp/5n2/4p3/2P5/2N2N2/PP1PPPPP/R1BQKB1R b KQkq - b8c6": {
+   "category": "beyond the packet",
+   "review": "full",
+   "detail": "accuracy 3; not grounded; The claim that after [[e4]] [[Ng5]] White 'wins the pawn on e4' overstates the engine line, where Black gives up e4 but regains material with ...d5 and the eval is only +0.35."
+  },
+  "rnbqkb1r/pppp1ppp/8/4P2n/5p2/5N2/PPPP2PP/RNBQKB1R w KQkq - d1e2": {
+   "category": "beyond the packet",
+   "review": "full",
+   "detail": "not grounded; The idea that Qe2 is aimed at meeting a later ...d6 challenge is not in the packet; the Qe2 engine line has Black play ...Be7, ...O-O and ...d5, not ...d6."
+  },
+  "rnbqkb1r/pppp1ppp/8/4P3/2P3n1/8/PP2PPPP/RNBQKBNR w KQkq - c1f4": {
+   "category": "vague",
+   "review": "full",
+   "detail": "accuracy 3; It rightly says Bf4 develops while guarding the extra e5 pawn that the g4 knight attacks, but calling it a 'second defender' is wrong, since nothing else defends e5 in this position."
+  },
+  "rnbqkb1r/pppppppp/8/8/3PnB2/8/PPP1PPPP/RN1QKBNR b KQkq - c7c5": {
+   "category": "vague",
+   "review": "full",
+   "detail": "accuracy 3; The idea that c5 comes 'before' White can play f3 or Nd2 is an interpretive timing claim the packet does not support; f3 remains White's main and fully playable reply after c5."
+  },
+  "rnbqkbnr/1p2pppp/p7/2pp4/4P3/2P2N2/PP1P1PPP/RNBQKB1R w KQkq - e4d5": {
+   "category": "vague",
+   "review": "full",
+   "detail": "accuracy 3; The claim that d4 gains a tempo; it does not attack the queen on d5, and the tempo comes later with c4 (Qd8) in the engine line."
+  },
+  "rnbqkbnr/pp1p1ppp/4p3/2p5/4P3/2N5/PPPP1PPP/R1BQKBNR w KQkq - f2f4": {
+   "category": "beyond the packet",
+   "review": "full",
+   "detail": "accuracy 3; not grounded; The plan of a later e5 push and the 'looser king' trade-off are not in the packet; no engine line shows e5 or any king-safety issue."
+  },
+  "rnbqkbnr/pp1ppppp/2p5/8/4P3/8/PPPP1PPP/RNBQKBNR w KQkq - d2d4": {
+   "category": "beyond the packet",
+   "review": "full",
+   "detail": "accuracy 3; not grounded; The idea that d4 lets White meet a later dxe4 by recapturing 'with support' is not in the packet; the d4 line shows 3.e5, not ...dxe4."
+  },
+  "rnbqkbnr/pp1ppppp/8/2p5/2P5/8/PP1PPPPP/RNBQKBNR w KQkq - b1c3": {
+   "category": "vague",
+   "review": "full",
+   "detail": "accuracy 3; The claim that Nc3 backs up the c4 pawn is false, because a knight on c3 does not defend c4."
+  },
+  "rnbqkbnr/pp1ppppp/8/2p5/4P3/8/PPPP1PPP/RNBQKBNR w KQkq - d2d4": {
+   "category": "beyond the packet",
+   "review": "full",
+   "detail": "accuracy 3; not grounded; The pawn-sacrifice idea (Morra-style gambit with compensation in central play and open lines) does not appear in the packet, which has no line containing d4 cxd4."
+  },
+  "rnbqkbnr/pp2pp1p/6p1/3p4/3PP3/8/PP3PPP/RNBQKBNR w KQkq - e4e5": {
+   "category": "beyond the packet",
+   "review": "full",
+   "detail": "accuracy 3; not grounded; Refers to a 'g7 bishop', but Black's dark-squared bishop is still on f8 and g7 is empty."
+  },
+  "rnbqkbnr/pp2pppp/2p5/3p4/2PP4/5N2/PP2PPPP/RNBQKB1R b KQkq - g8f6": {
+   "category": "vague",
+   "review": "full",
+   "detail": "accuracy 3; Nf6 does develop, defend d5 and leave the c8 bishop free, which is a clear and memorable reason; however, d5 is already guarded by the c6 pawn and the queen on d8, so the knight is a third defender, not a second."
+  },
+  "rnbqkbnr/pp2pppp/2p5/3p4/4P3/3P4/PPPN1PPP/R1BQKBNR b KQkq - e7e5": {
+   "category": "vague",
+   "review": "full",
+   "detail": "accuracy 3; The idea that e5 comes 'before White can play d4' is not supported, since the engine's main line has White playing d4 two moves later anyway."
+  },
+  "rnbqkbnr/pp2pppp/2p5/8/4p3/2N2N2/PPPP1PPP/R1BQKB1R w KQkq - c3e4": {
+   "category": "beyond the packet",
+   "review": "full",
+   "detail": "accuracy 3; not grounded; The claim that Ng5 leaves White a pawn down is contradicted by the engine line, where White regains the pawn with Ncxe4."
+  },
+  "rnbqkbnr/pp2pppp/8/2pp4/4P3/2P5/PP1P1PPP/RNBQKBNR w KQkq - e4d5": {
+   "category": "beyond the packet",
+   "review": "full",
+   "detail": "accuracy 3; not grounded; The suggestion that Nf3 'develops with tempo ideas' is not supported by the packet: Nf3 does not attack the queen on d5, and the engine line continues calmly with Bg4 Be2."
+  },
+  "rnbqkbnr/pp3ppp/2p1p3/3p4/3PP3/2N2P2/PPP3PP/R1BQKBNR b KQkq - f8b4": {
+   "category": "beyond the packet",
+   "review": "full",
+   "detail": "accuracy 3; not grounded; The packet does not say Bd2 is 'needed'; it only shows Bd2 as the engine's follow-up. The idea that e4 comes under real pressure ignores the f3 pawn guarding it."
+  },
+  "rnbqkbnr/pp3ppp/3p4/2pPp3/4P3/8/PPP2PPP/RNBQKBNR w KQkq - b1c3": {
+   "category": "vague",
+   "review": "full",
+   "detail": "accuracy 3; The locked-centre and b5 points are correct and fit the engine's a4 and Bb5+ ideas, but the claim of a 'second defender' to e4 is wrong because nothing else defends e4 yet, so Nc3 is its first defender."
+  },
+  "rnbqkbnr/pp3ppp/8/2pp4/3P4/8/PPPN1PPP/R1BQKBNR w KQkq - g1f3": {
+   "category": "false on the board",
+   "review": "full",
+   "detail": "accuracy 2; not grounded; The claim that Ngf3 adds pressure on c5 is unsupported and wrong: a knight on f3 does not attack c5. The framing that it 'prepares' dxc5 is also overstated, since dxc5 is already legal."
+  },
+  "rnbqkbnr/ppp1pppp/3p4/8/4P3/8/PPPP1PPP/RNBQKBNR w KQkq - d2d4": {
+   "category": "vague",
+   "review": "full",
+   "detail": "accuracy 3; Calling ...d6 'slow' and saying it leaves the centre 'uncontested' is an interpretive overstatement, not something the packet supports."
+  },
+  "rnbqkbnr/ppp2ppp/3p4/4P3/8/8/PPP1PPPP/RNBQKBNR w KQkq - e5d6": {
+   "category": "vague",
+   "review": "full",
+   "detail": "accuracy 3; The idea that Bxd6 costs Black a tempo is an unsupported interpretation; the recapture actually develops the bishop."
+  },
+  "rnbqkbnr/ppp2ppp/4p3/3p4/2PP4/5N2/PP2PPPP/RNBQKB1R b KQkq - g8f6": {
+   "category": "vague",
+   "review": "full",
+   "detail": "accuracy 3; The hint correctly gives development toward castling and extra protection of d5 against the c4 pawn as reasons, but Nf6 is the third defender of d5, not the second, because e6 and the queen on d8 already cover it."
+  },
+  "rnbqkbnr/ppp2ppp/4p3/3p4/2PP4/8/PP2PPPP/RNBQKBNR w KQkq - b1c3": {
+   "category": "vague",
+   "review": "full",
+   "detail": "accuracy 3; The 'third attacker' count is false: the d1 queen is blocked by the d4 pawn, so only the c4 pawn and Nc3 hit d5."
+  },
+  "rnbqkbnr/ppp2ppp/8/3pp3/2PP4/8/PP2PPPP/RNBQKBNR w KQkq - d4e5": {
+   "category": "vague",
+   "review": "full",
+   "detail": "accuracy 3; Correctly says dxe5 accepts the gambit and leaves White a pawn up, but calling d5 'hanging' is misleading because the queen defends it and the engine line shows cxd5 Qxd5 only trades, while 'removing the attacker of d4' is an awkward way to describe a capture that moves that pawn off d4 anyway."
+  },
+  "rnbqkbnr/ppp2ppp/8/8/2ppP3/5N2/PP3PPP/RNBQKB1R w KQkq - f1c4": {
+   "category": "beyond the packet",
+   "review": "full",
+   "detail": "accuracy 3; not grounded; Calling the d4 pawn isolated contradicts the packet (isolated: []). The claim that it can be collected later is not in the engine line, where Black keeps it with ...Nc6 and ...Be6."
+  },
+  "rnbqkbnr/pppp1ppp/8/4p3/2P5/2N5/PP1PPPPP/R1BQKBNR b KQkq - g8f6": {
+   "category": "vague",
+   "review": "full",
+   "detail": "accuracy 3; The packet does not say Bb4 pins anything; it is the hint's own reading of the line, and it is wrong."
+  },
+  "rnbqkbnr/pppp1ppp/8/4p3/3PP3/8/PPP2PPP/RNBQKBNR b KQkq - e5d4": {
+   "category": "beyond the packet",
+   "review": "full",
+   "detail": "accuracy 3; not grounded; The claim that White regains the pawn is not in the packet: the engine line ends with White still a pawn down after O-O."
+  },
+  "rnbqkbnr/pppp1ppp/8/4p3/4PP2/8/PPPP2PP/RNBQKBNR b KQkq - e5f4": {
+   "category": "vague",
+   "review": "full",
+   "detail": "accuracy 3; The claim that exf4 opens the e1-h4 diagonal is wrong: that diagonal was already open once White played f4, and the packet gives no Qh4+ idea."
+  },
+  "rnbqkbnr/pppp1ppp/8/8/2PNp3/8/PP1PPPPP/RNBQKB1R b KQkq - b8c6": {
+   "category": "vague",
+   "review": "full",
+   "detail": "accuracy 3; The idea that e5 is a 'support square' for the e4 pawn is muddled: e5 sits behind e4 and controlling it does not support that pawn."
+  }
+ },
+ "unjudged": 0,
+ "languages": {
+  "ar": {
+   "hints": 1032,
+   "model": "claude-haiku-5-5",
+   "inEnglish": 0
+  },
+  "de": {
+   "hints": 1032,
+   "model": "claude-haiku-5-5",
+   "inEnglish": 0
+  },
+  "en": {
+   "hints": 1032,
+   "model": "claude-opus-5-5"
+  },
+  "es": {
+   "hints": 1032,
+   "model": "claude-haiku-5-5",
+   "inEnglish": 0
+  },
+  "fa": {
+   "hints": 1032,
+   "model": "claude-haiku-5-5",
+   "inEnglish": 0
+  },
+  "fr": {
+   "hints": 1032,
+   "model": "claude-haiku-5-5",
+   "inEnglish": 0
+  },
+  "he": {
+   "hints": 1032,
+   "model": "claude-sonnet-5-5",
+   "inEnglish": 0
+  },
+  "hi": {
+   "hints": 1032,
+   "model": "claude-haiku-5-5",
+   "inEnglish": 0
+  },
+  "id": {
+   "hints": 1032,
+   "model": "claude-haiku-5-5",
+   "inEnglish": 0
+  },
+  "it": {
+   "hints": 1032,
+   "model": "claude-haiku-5-5",
+   "inEnglish": 0
+  },
+  "ja": {
+   "hints": 1032,
+   "model": "claude-haiku-5-5",
+   "inEnglish": 0
+  },
+  "ko": {
+   "hints": 1032,
+   "model": "claude-haiku-5-5",
+   "inEnglish": 0
+  },
+  "nl": {
+   "hints": 1032,
+   "model": "claude-haiku-5-5",
+   "inEnglish": 0
+  },
+  "pl": {
+   "hints": 1032,
+   "model": "claude-haiku-5-5",
+   "inEnglish": 0
+  },
+  "pt": {
+   "hints": 1032,
+   "model": "claude-haiku-5-5",
+   "inEnglish": 0
+  },
+  "ru": {
+   "hints": 1032,
+   "model": "claude-haiku-5-5",
+   "inEnglish": 0
+  },
+  "tr": {
+   "hints": 1032,
+   "model": "claude-haiku-5-5",
+   "inEnglish": 0
+  },
+  "uk": {
+   "hints": 1032,
+   "model": "claude-haiku-5-5",
+   "inEnglish": 0
+  },
+  "vi": {
+   "hints": 1032,
+   "model": "claude-haiku-5-5",
+   "inEnglish": 0
+  },
+  "zh": {
+   "hints": 1032,
+   "model": "claude-haiku-5-5",
+   "inEnglish": 0
+  }
+ }
+}

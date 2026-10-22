@@ -6,11 +6,12 @@ import type { Key } from 'chessground/types';
 import { CheckCircle2, Eye, Flame, RotateCcw, SkipForward, X } from 'lucide-react';
 import { useStreak } from '../ui/streak';
 import { StreakCelebration } from '../ui/streakViews';
-import { legalDests, planSession, positionFromFen, uciToSan, type TrainMode } from '@mainline/shared';
+import { isReadyMade, legalDests, planSession, positionFromFen, uciToSan, type TrainMode } from '@mainline/shared';
 import { Board } from '../board/Board';
 import { MoveInput } from '../board/MoveInput';
 import { useOpeningName } from '../board/useOpeningName';
 import { createTrainer, type TrainerState } from '../lib/trainer';
+import { usePackHint } from '../lib/hints';
 import { useLibrary } from '../lib/library';
 import { useTraining } from '../lib/training';
 import { usePrefs } from '../lib/prefs';
@@ -20,6 +21,7 @@ import { usePlan } from '../lib/plan';
 import { Button, IconButton } from '../ui/primitives';
 import { EmptyState } from '../ui/kit';
 import { CoachAnswer } from '../panels/CoachPanel';
+import { CoachText } from '../panels/CoachText';
 import type { StoreApi } from 'zustand';
 import { fmtPercent, msg, t, tn } from '../lib/i18n';
 
@@ -94,6 +96,10 @@ function Session({ store, mode, showAll, onAgain }: { store: StoreApi<TrainerSta
   const totalSteps = s.lines.reduce((n, l) => n + l.steps.filter((x) => x !== 'auto').length, 0);
   const doneSteps = s.lines.slice(0, s.lineIdx).reduce((n, l) => n + l.steps.filter((x) => x !== 'auto').length, 0) + (line ? line.steps.slice(0, s.ply).filter((x) => x !== 'auto').length : 0);
 
+  // A missed move in a ready-made line gets its one-line hint (static data, in the app language).
+  const readyMade = line ? isReadyMade(useLibrary.getState().reps.find((r) => r.id === line.repId) ?? {}) : false;
+  const packHint = usePackHint(readyMade && s.failedHere ? line?.epds[s.ply] : undefined, s.expected[0]);
+
   const [params] = useSearchParams();
   // A finished session ticks off the matching task of your plan.
   useEffect(() => {
@@ -151,7 +157,13 @@ function Session({ store, mode, showAll, onAgain }: { store: StoreApi<TrainerSta
         <div data-expected={s.expected[0] ?? ''} data-phase={s.phase}>
           <Prompt phase={s.phase} expectedSan={expectedSan} message={s.message} color={color} showAll={showAll} />
         </div>
-        {note && <p className="rounded-[var(--radius-m)] bg-surface px-4 py-3 text-base text-ink-2 shadow-card">{note}</p>}
+        {note ? (
+          <p className="rounded-[var(--radius-m)] bg-surface px-4 py-3 text-base text-ink-2 shadow-card">{note}</p>
+        ) : packHint ? (
+          <div className="rounded-[var(--radius-m)] bg-surface px-4 py-3 shadow-card" data-testid="pack-hint">
+            <CoachText text={packHint} fen={s.fen} />
+          </div>
+        ) : null}
         <div className="flex flex-wrap gap-2">
           <span className="hidden md:inline-flex">
             <MoveInput fen={s.fen} onMove={(u) => store.getState().userMove(u)} disabled={!yourTurn} />
