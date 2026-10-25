@@ -1,12 +1,19 @@
-MainLine is a chess opening trainer. No account is needed: every feature works as a guest, including the opening explorer.
+MainLine is an opening-preparation app for chess players. No account is needed: every feature below works as a guest.
 
-Signing in is optional (Settings → Account) and only syncs your data between devices. There are three options:
-• Sign in with Apple: the quickest way to test sign-in, with no chess account needed.
-• Sign in with Lichess: opens Lichess in Apple's sign-in sheet. Lichess accounts are free (lichess.org → Register), and Lichess may ask you to confirm your email before signing in.
-• Sign in with Chess.com: appears once Chess.com approves our app.
+What sets MainLine apart (each takes under a minute):
 
-About the previous review (2.1a, Sign in with Lichess on iPad): sign-in used an in-app browser that opened as a small popover on iPad and needed an extra "Open in MainLine?" prompt to return to the app. It now uses ASWebAuthenticationSession, which comes back to the app automatically. We tested the new sign-in sheet on iPad.
+1. Opponent prep. Today → Tools → Opponent prep (or the Games tab, bottom section). Keep "Lichess", type the public username thibault, tap Analyse (reading their games takes up to half a minute). MainLine reads that player's recent games and shows how they answer your first moves and the lines they repeat, each with real game counts and dates, checked against your repertoire. "Add" puts a missing move into your repertoire.
 
-Try it: pick a starter repertoire on first launch, then Today → "Learn new moves". Or Repertoire → New → Import PGN.
-Reminders use local notifications (Settings → Reminders). Daily streaks are kept on the device.
-Native features: local notifications, haptics, share-sheet PGN import ("Open in MainLine"), offline training with an on-device Stockfish engine.
+2. Your games against your prep. Games tab → Lichess username: thibault → Import games. Each game shows the exact move where it left your repertoire, and moves you forgot become due again in Today.
+
+3. Building with real-game data. Repertoire → open a repertoire → tap one of your moves. "Their move" shows how often each reply is played at your rating and how it scores, next to master games and an on-device Stockfish check. The Coach tab explains why the move is played.
+
+4. Training. Today → Learn new moves (spaced repetition, FSRS).
+
+On first launch, tap Get started and keep the suggested starting repertoires (Italian Game, Caro-Kann), so steps 1–3 have a repertoire to compare against.
+
+MainLine is our only chess app. It was designed and written for this app; it is not built from a template, an app builder or another developer's code.
+
+Sign-in is optional (Settings → Account) and only syncs data between devices: Sign in with Apple, or Sign in with Lichess (ASWebAuthenticationSession).
+
+Native features: on-device Stockfish engine, offline training, local notifications for due reviews (Settings → Reminders), haptics, share-sheet PGN import ("Open in MainLine"), Sign in with Apple.

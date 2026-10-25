@@ -178,7 +178,7 @@ platform :ios do
   end
 
   desc "Upload the App Store listing (store/ios) and screenshots (store/screenshots) — no binary, no review"
-  lane :metadata do |options|
+  lane :metadata do
     key = asc
     url = api_url
     UI.user_error!("MAINLINE_API_URL is needed for the privacy policy URL") if url.empty?
@@ -192,22 +192,19 @@ platform :ios do
     File.write(File.join(meta, "secondary_category.txt"), "GAMES")
     File.write(File.join(meta, "secondary_first_sub_category.txt"), "GAMES_BOARD")
     # App Review contact details are private to Apple but personal, so they live in secrets/.
-    # Apple rejects review notes without a contact, so both wait for that file.
+    # Without that file the contact Apple already has is left alone (`release` uploads the notes on their own).
     contact = File.join(ROOT, "secrets/app-review-contact.json")
     if File.exist?(contact)
       review = File.join(meta, "review_information")
       FileUtils.mkdir_p(review)
       FileUtils.cp(File.join(MOBILE, "store/ios/review/notes.txt"), review)
       JSON.parse(File.read(contact)).each { |k, v| File.write(File.join(review, "#{k}.txt"), v.to_s) }
-    elsif options[:submit]
-      UI.user_error!("App Review needs a contact: create secrets/app-review-contact.json (see store/RELEASING.md)")
     end
     shots = File.join(dir, "screenshots/en-US")
     FileUtils.mkdir_p(shots)
     %w[iphone ipad].each do |d|
       Dir[File.join(MOBILE, "store/screenshots/#{d}/*.png")].sort.each { |f| FileUtils.cp(f, File.join(shots, "#{d}-#{File.basename(f)}")) }
     end
-    submit = options[:submit] ? true : false
     deliver(
       api_key: key[:key],
       app_identifier: BUNDLE_ID,
@@ -217,10 +214,7 @@ platform :ios do
       app_rating_config_path: File.join(MOBILE, "store/ios/age_rating.json"),
       overwrite_screenshots: true,
       skip_binary_upload: true,
-      build_number: submit ? options[:build].to_s : nil,
-      submit_for_review: submit,
       automatic_release: true,
-      submission_information: { add_id_info_uses_idfa: false, export_compliance_uses_encryption: false },
       force: true,
       run_precheck_before_submit: false,
     )
@@ -229,9 +223,40 @@ platform :ios do
   desc "Submit a TestFlight build for App Store review with the current listing (BUILD_NUMBER, default: newest)"
   lane :release do
     key = asc
-    build = ENV["BUILD_NUMBER"] || latest_testflight_build_number(api_key: key[:key], app_identifier: BUNDLE_ID, version: version_name)
-    metadata(submit: true, build: build)
-    UI.success "#{version_name} (#{build}) is waiting for App Review. It goes live automatically once approved."
+    version_string = version_name
+    number = (ENV["BUILD_NUMBER"] || latest_testflight_build_number(api_key: key[:key], app_identifier: BUNDLE_ID, version: version_string)).to_s
+    app = Spaceship::ConnectAPI::App.find(BUNDLE_ID)
+    ios = Spaceship::ConnectAPI::Platform::IOS
+    # deliver's build lookup by number finds nothing here, so match the listed builds instead.
+    build = Spaceship::ConnectAPI::Build.all(app_id: app.id, sort: "-uploadedDate", limit: 50).find { |b| b.version == number && b.app_version == version_string }
+    UI.user_error!("Build #{version_string} (#{number}) isn't in App Store Connect") unless build
+    UI.user_error!("Build #{number} is still processing; try again once TestFlight shows it") unless build.processing_state == "VALID"
+    version = app.get_edit_app_store_version(platform: ios)
+    UI.user_error!("No editable #{version_string} in App Store Connect (it may already be in review)") unless version&.version_string == version_string
+
+    metadata
+    version.select_build(build_id: build.id)
+    # The notes go up on their own, so the contact details Apple already has stay as they are.
+    detail = version.fetch_app_store_review_detail
+    UI.user_error!("App Review has no contact yet: fill in App Review Information once in App Store Connect") if detail.nil? || detail.contact_email.to_s.empty?
+    detail.update(attributes: { notes: File.read(File.join(MOBILE, "store/ios/review/notes.txt")).strip })
+
+    rejected = app.get_review_submissions(filter: { state: "UNRESOLVED_ISSUES", platform: ios }, includes: "items").first
+    if rejected
+      # After a rejection the same submission goes back, which keeps the conversation with App Review:
+      # mark the rejected version resolved, then submit again.
+      http = Spaceship::ConnectAPI.client.tunes_client.tunes_request_client
+      rejected.items.select { |i| i.state == "REJECTED" }.each do |i|
+        http.patch("v1/reviewSubmissionItems/#{i.id}", { data: { type: "reviewSubmissionItems", id: i.id, attributes: { resolved: true } } })
+      end
+      rejected.submit_for_review
+    else
+      UI.user_error!("A review is already in progress") if app.get_in_progress_review_submission(platform: ios)
+      submission = app.get_ready_review_submission(platform: ios, includes: "items") || app.create_review_submission(platform: ios)
+      submission.add_app_store_version_to_review_items(app_store_version_id: version.id) if Array(submission.items).empty?
+      submission.submit_for_review
+    end
+    UI.success "#{version_string} (#{number}) is waiting for App Review. It goes live automatically once approved."
   end
 end
 

@@ -459,3 +459,7 @@ Visual checks: `VISUAL=1 pnpm e2e visual` (add `--update-snapshots` after an int
 - **Lines to prepare.** Enter your next opponent and see, as White and as Black, the lines they really play: the moves, how many of their games went that way, how they score and when they last played it.
 - **Your repertoire.** Each line shows where your preparation ends or which of their moves you haven't prepared, with a button to add it.
 - **Clear numbers.** Real game counts replace the old percentages, with a filter by time control.
+
+## Opponent prep from Today (2026-10-25)
+- **One tap away.** Opponent prep is now the first of the Tools on Today, and opens straight at the opponent search.
+- **While it reads.** Looking up an opponent says what it is doing: reading up to 500 of their games can take half a minute.

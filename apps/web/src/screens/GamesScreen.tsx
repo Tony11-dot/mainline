@@ -1,5 +1,5 @@
-import { Fragment, useEffect, useMemo, useState } from 'react';
-import { Link, useNavigate } from 'react-router';
+import { Fragment, useEffect, useMemo, useRef, useState } from 'react';
+import { Link, useLocation, useNavigate } from 'react-router';
 import { BarChart3, Check, Compass, Download, ExternalLink, Flag, Info, Plus, Search, Swords, Target, TriangleAlert } from 'lucide-react';
 import {
   INITIAL_FEN,
@@ -129,7 +129,7 @@ export function GamesScreen() {
         </>
       )}
 
-      <OpponentPrep />
+      <OpponentPrep scrollTo={g.loaded} />
     </div>
   );
 }
@@ -288,8 +288,14 @@ function RecentGames({ games, devs }: { games: PlayedGame[]; devs: Map<string, D
   );
 }
 
-function OpponentPrep() {
+/** `scrollTo` turns true once the games above have loaded; then "#opponent" (Today's row) lands here. */
+function OpponentPrep({ scrollTo }: { scrollTo: boolean }) {
   const lib = useLibrary();
+  const { hash } = useLocation();
+  const ref = useRef<HTMLElement>(null);
+  useEffect(() => {
+    if (scrollTo && hash === '#opponent') ref.current?.scrollIntoView({ block: 'start' });
+  }, [scrollTo, hash]);
   const [site, setSite] = useState<'lichess' | 'chesscom'>('lichess');
   const [user, setUser] = useState('');
   const [state, setState] = useState<{ loading: boolean; name?: string; games?: PlayedGame[]; error?: string }>({ loading: false });
@@ -318,7 +324,7 @@ function OpponentPrep() {
   }, [state.games, speed, lib.version]); // eslint-disable-line react-hooks/exhaustive-deps
   return (
     // Insets in px, like the kit's rows: at 2× text, rem padding on three nested boxes left the moves a few letters wide.
-    <section className="mt-[var(--section-gap)] rounded-[var(--radius-l)] bg-surface p-[20px] shadow-card">
+    <section ref={ref} id="opponent" className="mt-[var(--section-gap)] scroll-mt-4 rounded-[var(--radius-l)] bg-surface p-[20px] shadow-card">
       <h2 className="flex items-center gap-2.5 text-lg font-bold">
         <span className="flex size-9 items-center justify-center rounded-[var(--radius-s)] bg-brand-soft text-brand-ink" aria-hidden>
           <Target size={19} aria-hidden />
@@ -339,6 +345,11 @@ function OpponentPrep() {
           {t('Analyse')}
         </Button>
       </form>
+      {state.loading && (
+        <p role="status" className="mt-3 text-sm text-ink-2">
+          {t('Reading their recent games. This can take up to half a minute.')}
+        </p>
+      )}
       {state.error && <p role="alert" className="mt-3 text-sm font-medium text-bad-ink">{state.error}</p>}
       {state.games && preps && (
         <div className="mt-5 flex flex-col gap-7">

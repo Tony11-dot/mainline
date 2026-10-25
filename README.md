@@ -3,15 +3,17 @@
 A chess opening trainer for the web, iPhone, iPad, Android and desktop. You build a repertoire, learn it move by move, and spaced repetition keeps it fresh.
 
 <p>
-  <img src="apps/mobile/store/screenshots/iphone/01-build.png" width="180" alt="Building a line on the board, with the moves opponents really play beside it">
-  <img src="apps/mobile/store/screenshots/iphone/02-today.png" width="180" alt="Today: what to practise, the streak and the daily goal">
-  <img src="apps/mobile/store/screenshots/iphone/03-learn.png" width="180" alt="Learning a new move">
-  <img src="apps/mobile/store/screenshots/iphone/04-repertoires.png" width="180" alt="Repertoires as folders of lines">
-  <img src="apps/mobile/store/screenshots/iphone/05-dark.png" width="180" alt="The dark theme">
+  <img src="apps/mobile/store/screenshots/iphone/01-opponent.png" width="150" alt="Opponent prep: the lines a rival really plays, checked against your repertoire">
+  <img src="apps/mobile/store/screenshots/iphone/02-games.png" width="150" alt="Your games: where each one left your prep">
+  <img src="apps/mobile/store/screenshots/iphone/03-build.png" width="150" alt="Building a line with the moves opponents really play at your level">
+  <img src="apps/mobile/store/screenshots/iphone/04-coach.png" width="150" alt="The coach explaining why a move is played">
+  <img src="apps/mobile/store/screenshots/iphone/05-learn.png" width="150" alt="Learning a new move">
+  <img src="apps/mobile/store/screenshots/iphone/06-today.png" width="150" alt="Today: what to practise, the streak and the daily goal">
 </p>
 
 ## What it does
 
+- **Prepare for an opponent.** Type in their Lichess or Chess.com username and see the lines they really play, from their own games, checked against your repertoire.
 - **Build.** Play moves on the board or import PGN. Every position shows how often each move is played at your rating and how it scores, from Lichess and master games; Stockfish runs on your device.
 - **Remember.** Spaced repetition (FSRS) schedules each position right before you would forget it. Learn, review, drill whole lines, or quiz your weakest positions.
 - **Learn from your games.** Import your Lichess or Chess.com games and see where each one left your prep. Forgotten moves go straight back into review.
