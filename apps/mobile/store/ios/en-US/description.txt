@@ -1,28 +1,30 @@
-MainLine helps you build a chess opening repertoire and actually remember it.
+MainLine prepares you for the openings you'll actually face: the ones in your own games, the ones your next opponent plays, and the moves people really choose at your level.
 
-BUILD YOUR REPERTOIRE
-• Play moves on the board, or import PGN from anywhere.
-• See how often each move is played at your rating, and how it scores, from millions of Lichess games and master games.
-• Stockfish runs on your device to check every move.
-• Coverage shows how much of what opponents really play you've prepared, and where the gaps are.
-• Start fast with starter repertoires: Italian, London, Caro-Kann, Queen's Gambit Declined.
+PREPARE FOR YOUR NEXT OPPONENT
+• Type in any Lichess or Chess.com username. MainLine reads their recent games and shows how they answer your first moves and the lines they repeat most, with real game counts, their score and when they last played each one.
+• Every line is checked against your repertoire: covered all the way, where they leave it, or where your prep runs out. Add the missing move with one tap.
+
+SEE WHERE YOUR GAMES LEFT YOUR PREP
+• Import your own games and see, game by game, the exact move where you or your opponent left your repertoire.
+• Moves you forgot in a real game go straight back into review.
+• Weak spots shows your weakest moves, openings and lines.
+
+BUILD A REPERTOIRE THAT FITS YOUR LEVEL
+• Play moves on the board, or import PGN.
+• See how often each reply is played at your rating and how it scores, next to master games and a Stockfish check that runs on your device.
+• Guided mode points out a strong, popular move at every step.
+• Coverage shows how much of what opponents really play you've prepared.
 
 REMEMBER IT
-• Spaced repetition (FSRS) schedules each position right before you'd forget it.
+• Spaced repetition (FSRS) brings each position back just before you'd forget it.
 • Learn new moves, review what's due, drill whole lines against realistic replies, or quiz your weakest positions.
-• Short daily sessions, a streak and a daily goal keep you consistent.
-• Reminders when positions are due.
+• A study plan, a daily goal, a streak and reminders keep it to a few minutes a day.
 
-LEARN FROM YOUR GAMES
-• Import your Lichess or Chess.com games and see exactly where each one left your prep.
-• Forgotten moves go straight back into review.
-• Prepare for an opponent: see what they usually play and where it meets your repertoire.
+ASK WHY
+• The coach explains why a move is played. Its answers are grounded in the engine lines and game statistics for that position.
 
-UNDERSTAND THE IDEAS
-• Ask the coach why a move is played. Explanations are checked against the position so they stay accurate.
-
-MADE TO FEEL RIGHT
-• A smooth board with drag, tap-tap moves, sounds and haptics.
-• 20 themes, board colours, piece sets and fonts.
-• Works fully offline. No account needed. Sign in with Lichess or Apple to sync across devices.
-• No ads, no tracking. Free and open source (GPL-3.0).
+MADE FOR IPHONE AND IPAD
+• Drag or tap moves, with sounds and haptics.
+• 20 languages, 20 themes, board colours and piece sets.
+• Works offline with no account. Sign in with Apple or Lichess to sync between devices.
+• Free. No ads, no tracking, no paywall, no cap on repertoire size.

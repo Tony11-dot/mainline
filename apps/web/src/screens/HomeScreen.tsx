@@ -1,6 +1,6 @@
 import { lazy, Suspense, useEffect, useMemo, useState } from 'react';
 import { Link, Navigate } from 'react-router';
-import { BarChart3, CalendarDays, Cpu, Target, Dumbbell, Flame, GraduationCap, Play, Shuffle, Signpost, Snowflake, Sparkles, X } from 'lucide-react';
+import { BarChart3, CalendarDays, Cpu, Target, Dumbbell, Flame, GraduationCap, Play, Shuffle, Signpost, Snowflake, Sparkles, UserSearch, X } from 'lucide-react';
 import { trainingSummary } from '@mainline/shared';
 import { StreakBadge, useStreak } from '../ui/streak';
 import { useLibrary } from '../lib/library';
@@ -123,6 +123,7 @@ export function HomeScreen() {
       <GuideOffer />
       <SectionHeader title={t('Tools')} className="mt-[var(--section-gap)]" />
       <ListGroup>
+        <ListRow to="/games#opponent" icon={UserSearch} title={t('Opponent prep')} sub={t('See what your next opponent really plays')} />
         <ListRow to="/focus" icon={Target} title={t('Weak spots')} sub={t('Your weakest moves, openings and lines')} />
         <ListRow to="/plan" icon={CalendarDays} title={t('Study plan')} sub={t('A few days of sessions, built around your focus')} />
         <ListRow to="/stats" icon={BarChart3} title={t('Statistics')} sub={t('Accuracy, repertoires, openings, games')} />

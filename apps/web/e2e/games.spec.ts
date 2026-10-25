@@ -66,3 +66,13 @@ test('games vs prep: import, breaks, add reply, forgotten move becomes due, oppo
     await page.screenshot({ path: `${process.env.SHOTS}/games-phone.png`, fullPage: true });
   }
 });
+
+test('Today → Opponent prep scrolls to the opponent search', async ({ page }, info) => {
+  test.skip(info.project.name !== 'desktop');
+  await stubApi(page);
+  await page.setViewportSize({ width: 390, height: 700 });
+  await page.goto('/');
+  await page.getByRole('link', { name: /Opponent prep/ }).click();
+  await expect(page).toHaveURL(/\/games#opponent$/);
+  await expect(page.getByLabel('Opponent username')).toBeInViewport();
+});
