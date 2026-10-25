@@ -245,7 +245,7 @@ platform :ios do
     if rejected
       # After a rejection the same submission goes back, which keeps the conversation with App Review:
       # mark the rejected version resolved, then submit again.
-      http = Spaceship::ConnectAPI.client.tunes_client.tunes_request_client
+      http = Spaceship::ConnectAPI.client.tunes_request_client
       rejected.items.select { |i| i.state == "REJECTED" }.each do |i|
         http.patch("v1/reviewSubmissionItems/#{i.id}", { data: { type: "reviewSubmissionItems", id: i.id, attributes: { resolved: true } } })
       end
