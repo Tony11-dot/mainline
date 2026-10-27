@@ -100,7 +100,7 @@ Everything below is one-time setup, in order. Steps marked **(you)** need your a
    - **Next → Save and publish**.
    - Open the opt-in link on your Android phone → **Accept** → install from Play.
 6. **API access for CI:** reuse ClassMate's service account.
-   1. Open `~/Dev/classmate/apps/classmate_mobile/fastlane/play-service-account.json` and copy its `client_email`.
+   1. Open `~/Dev/ClassMate/classmate/apps/classmate_mobile/fastlane/play-service-account.json` and copy its `client_email`.
    2. Play Console → **Users and permissions**. If that email is already listed with account-wide permissions, skip to step 5. Otherwise continue.
    3. Choose **Invite new users**, and paste the email.
    4. Under **App permissions → Add app → MainLine**, tick:

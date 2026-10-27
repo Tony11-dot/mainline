@@ -8,7 +8,7 @@ cd "$(dirname "$0")/.."
 
 PASTE=secrets/paste-here.env
 REPO=Tony11-dot/mainline
-PLAY_SRC="$HOME/Dev/classmate/apps/classmate_mobile/fastlane/play-service-account.json"
+PLAY_SRC="$HOME/Dev/ClassMate/classmate/apps/classmate_mobile/fastlane/play-service-account.json"
 
 # 1. Play service account (shared with ClassMate).
 if [[ -f "$PLAY_SRC" && ! -f secrets/play-service-account.json ]]; then
