@@ -27,3 +27,4 @@ play-service-account.json
 playwright-report/
 secrets/
 test-results/
+apps/web/scripts/hints/work/

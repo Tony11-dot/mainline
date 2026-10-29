@@ -184,6 +184,9 @@ export function buildFacts(input: {
 /** Every [[move]] token in the coach's text. */
 export const moveTokens = (text: string) => [...text.matchAll(/\[\[([^\]]{1,12})\]\]/g)].map((m) => m[1]!.trim());
 
+/** True when two texts name the same moves (a translation must keep every [[move]] of its source). */
+export const sameMoveTokens = (a: string, b: string) => JSON.stringify([...moveTokens(a)].sort()) === JSON.stringify([...moveTokens(b)].sort());
+
 /**
  * Checks that every move the coach mentions is either legal from the position (as the next move) or
  * appears in the packet's engine lines / line. Returns the offending tokens (empty = valid).

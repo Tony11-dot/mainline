@@ -31,6 +31,8 @@ self.addEventListener('install', (event) => {
 registerRoute(({ url }) => url.pathname.startsWith('/pieces/'), new CacheFirst({ cacheName: 'pieces', plugins: [new ExpirationPlugin({ maxEntries: 200 })] }));
 registerRoute(({ request }) => request.destination === 'font', new CacheFirst({ cacheName: 'fonts', plugins: [new ExpirationPlugin({ maxEntries: 60 })] }));
 registerRoute(({ url }) => url.pathname === '/api/openings/at' || url.pathname === '/api/eval', new StaleWhileRevalidate({ cacheName: 'evals', plugins: [new ExpirationPlugin({ maxEntries: 2000, maxAgeSeconds: 30 * 86400 })] }));
+// Pack hints: one file per language, fetched the first time a move is missed, then kept for offline training.
+registerRoute(({ url }) => url.pathname.startsWith('/data/hints/'), new StaleWhileRevalidate({ cacheName: 'hints', plugins: [new ExpirationPlugin({ maxEntries: 4 })] }));
 
 // Share target: stash the shared PGN, then open the app on the import screen.
 self.addEventListener('fetch', (event) => {
