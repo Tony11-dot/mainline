@@ -1,1 +1,1 @@
-First release.
+Refreshed App Store page showing opponent prep from their real games, your repertoire checked against your own games, move stats, weak spots, the guide, spaced repetition and the coach. The app itself works just as before.

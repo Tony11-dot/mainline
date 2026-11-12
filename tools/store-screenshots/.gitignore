@@ -1,0 +1,7 @@
+.build/
+lane.sh
+capture.log
+__pycache__/
+raw-prev/
+.capture.log
+.retake.log

@@ -13,6 +13,9 @@ import { startSync } from './lib/sync';
 import { startReminderSync } from './lib/reminders';
 import { autoImportGames } from './lib/games';
 
+// App Store screenshots only (VITE_STORE_DEMO=1, tools/store-screenshots): a demo player, no network.
+// The flag is fixed at build time, so store builds drop this import entirely.
+if (import.meta.env.VITE_STORE_DEMO === '1') await (await import('./demo/storeDemo')).installStoreDemo();
 await initPlatform();
 bindPrefsToDocument();
 // The language catalog loads before the first render, so nothing flashes in English.
