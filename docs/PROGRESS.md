@@ -463,3 +463,8 @@ Visual checks: `VISUAL=1 pnpm e2e visual` (add `--update-snapshots` after an int
 ## Opponent prep from Today (2026-10-25)
 - **One tap away.** Opponent prep is now the first of the Tools on Today, and opens straight at the opponent search.
 - **While it reads.** Looking up an opponent says what it is doing: reading up to 500 of their games can take half a minute.
+
+## New App Store screenshots, 1.0.1 (2026-11-12)
+- **The store page.** Eight panels for iPhone and iPad, the same story on both: prep for your next opponent, your games checked against your repertoire, choosing moves that score, weak spots, the guide, remembering lines, the coach, a few minutes a day. Each shows the real iOS app inside a drawn device; one brand colour family (royal blue, ink navy, two tints).
+- **How they're made.** `tools/store-screenshots/` (run-capture.sh → render.py). The web app built with `VITE_STORE_DEMO=1` carries a demo player (`apps/web/src/demo/storeDemo.ts`): a library, a few weeks of training, their games and an opponent's, every /api/ call answered on the device. Store builds never contain it.
+- **The app itself** works exactly as in 1.0.0.
