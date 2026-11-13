@@ -7,7 +7,7 @@ import { Lru } from '../lib/lru';
 import { sha256 } from '../lib/crypto';
 
 const DAY = 86_400_000;
-export const EXPLORER_TTL = { masters: 90 * DAY, lichess: 14 * DAY, player: 1 * DAY } as const;
+const EXPLORER_TTL = { masters: 90 * DAY, lichess: 14 * DAY, player: 1 * DAY } as const;
 
 const hot = new Lru<ExplorerData>(5000, 6 * 3600_000);
 
@@ -27,14 +27,14 @@ interface LichessExplorerResponse {
   opening?: { eco: string; name: string } | null;
 }
 
-export function paramsKey(p: ExplorerParams): string {
+function paramsKey(p: ExplorerParams): string {
   if (p.source === 'masters') return 'm';
   const r = [...(p.ratings ?? [])].sort((a, b) => a - b).join(',');
   const s = [...(p.speeds ?? [])].sort().join(',');
   return sha256(`${r}|${s}`).slice(0, 16);
 }
 
-export function normalizeExplorer(source: ExplorerData['source'], epd: string, raw: LichessExplorerResponse, cached: boolean, fetchedAt: Date): ExplorerData {
+function normalizeExplorer(source: ExplorerData['source'], epd: string, raw: LichessExplorerResponse, cached: boolean, fetchedAt: Date): ExplorerData {
   const moves: ExplorerMove[] = raw.moves.map((m) => ({
     uci: normalizeCastlingUci(m.uci, m.san),
     san: m.san,

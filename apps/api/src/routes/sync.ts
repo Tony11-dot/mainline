@@ -66,7 +66,7 @@ const review = z.object({
   deleted: z.boolean().optional(),
 });
 
-export const syncBody = z.object({
+const syncBody = z.object({
   cursor: z.string().datetime().nullable().optional(),
   changes: z
     .object({

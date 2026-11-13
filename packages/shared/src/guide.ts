@@ -19,15 +19,15 @@ export interface GuideCandidate extends MoveSuggestion {
 /** Engine-based tags wait for at least this search depth, so they don't flicker while the engine warms up. */
 export const GUIDE_MIN_DEPTH = 16;
 /** Club numbers need this many games before a tag claims anything about them. */
-export const GUIDE_MIN_GAMES = 100;
+const GUIDE_MIN_GAMES = 100;
 /** Expected-score margins (0..1, from the engine's winning-chance curve; 0.01 ≈ 0.1 pawn near equality). */
 const ENGINE_TIE = 0.01;
 const GEM_MARGIN = 0.03;
 const SOUND_MARGIN = 0.05;
 const DUBIOUS_MARGIN = 0.08;
 /** Your own games: enough of them, and a clear enough score, before a tag says a move works (or doesn't) for you. */
-export const MINE_PROVEN = { games: 5, score: 0.6 };
-export const MINE_TROUBLE = { games: 3, score: 0.4 };
+const MINE_PROVEN = { games: 5, score: 0.6 };
+const MINE_TROUBLE = { games: 3, score: 0.4 };
 
 /** One-sided 95% lower bound on a score from `n` games: a club tag shouldn't rest on a lucky streak. */
 export function scoreLowerBound(p: number, n: number): number {

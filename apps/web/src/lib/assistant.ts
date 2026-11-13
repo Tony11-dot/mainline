@@ -62,7 +62,7 @@ export const useAssistant = create<AssistantState>((set, get) => ({
 }));
 
 /** A line as text: its main path, and how many other moves it prepares along the way. */
-export function describeLine(rep: Repertoire, moves: RepMove[]): string {
+function describeLine(rep: Repertoire, moves: RepMove[]): string {
   const graph = buildGraph(moves);
   const ucis = [...rep.rootMovesUci];
   let epd = rep.rootEpd;

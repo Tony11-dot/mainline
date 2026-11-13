@@ -17,7 +17,7 @@ interface NativeChromePlugin {
 const NativeChrome = registerPlugin<NativeChromePlugin>('NativeChrome');
 
 /** In-app plugins registered with registerPluginInstance() don't appear in isPluginAvailable(); we probe by calling. */
-export const hasNativeChrome = () => Capacitor.getPlatform() === 'ios';
+const hasNativeChrome = () => Capacitor.getPlatform() === 'ios';
 
 /**
  * iOS: the tab bar is native SwiftUI with Liquid Glass (see apps/mobile/ios/App/App/NativeChrome).

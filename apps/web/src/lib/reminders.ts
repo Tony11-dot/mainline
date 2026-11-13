@@ -67,7 +67,7 @@ export function plannedNotifications(plan: ReminderPlan, now = new Date()): (Day
 }
 
 let timer: ReturnType<typeof setTimeout> | undefined;
-export function refreshReminders(delay = 1500) {
+function refreshReminders(delay = 1500) {
   clearTimeout(timer);
   timer = setTimeout(() => {
     const plan = currentPlan();

@@ -39,7 +39,7 @@ export interface ExplorerData {
   cached: boolean;
 }
 
-export const RATING_BANDS = [0, 1000, 1200, 1400, 1600, 1800, 2000, 2200, 2500] as const;
+const RATING_BANDS = [0, 1000, 1200, 1400, 1600, 1800, 2000, 2200, 2500] as const;
 export const SPEEDS = ['bullet', 'blitz', 'rapid', 'classical', 'correspondence'] as const;
 export type Speed = (typeof SPEEDS)[number];
 

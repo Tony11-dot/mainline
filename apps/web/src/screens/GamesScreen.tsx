@@ -35,7 +35,7 @@ import { speedName } from '../lib/speeds';
 import { fmtPercent, intlLocale, msg, t, tn, tx } from '../lib/i18n';
 
 /** "1.e4 e5 2.Nf3" */
-export function lineText(ucis: string[], fen = INITIAL_FEN) {
+function lineText(ucis: string[], fen = INITIAL_FEN) {
   return formatLine(uciLineToSan(fen, ucis));
 }
 

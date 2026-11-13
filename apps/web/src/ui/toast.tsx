@@ -16,7 +16,7 @@ interface ToastState {
 }
 
 let seq = 0;
-export const useToasts = create<ToastState>((set, get) => ({
+const useToasts = create<ToastState>((set, get) => ({
   toasts: [],
   show: (t, ms = t.action ? 8000 : 5000) => {
     const id = ++seq;

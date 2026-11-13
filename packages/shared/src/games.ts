@@ -360,7 +360,7 @@ export function opponentPrep(theirGames: PlayedGame[], book: Book, opts: { maxPl
 }
 
 /** Where a line (from the start) leaves your repertoire. */
-export function prepBook(path: string[], book: Book): { book: PrepBook; ply: number } {
+function prepBook(path: string[], book: Book): { book: PrepBook; ply: number } {
   let pos = positionFromFen(INITIAL_FEN);
   for (let ply = 0; ply < path.length; ply++) {
     const epd = toEpd(pos);

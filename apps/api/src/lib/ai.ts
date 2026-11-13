@@ -17,7 +17,7 @@ export interface AiProvider {
   generate(req: AiRequest): Promise<{ text: string; model: string }>;
 }
 
-export class AiRateLimited extends Error {
+class AiRateLimited extends Error {
   constructor() {
     super('AI provider rate-limited');
   }
@@ -82,7 +82,7 @@ let tail: Promise<unknown> = Promise.resolve();
 let memUsage = { day: '', n: 0 };
 
 /** Gemini's free-tier quota resets at midnight Pacific. */
-export function pacificDay(d = new Date()): string {
+function pacificDay(d = new Date()): string {
   return new Intl.DateTimeFormat('en-CA', { timeZone: 'America/Los_Angeles', year: 'numeric', month: '2-digit', day: '2-digit' }).format(d);
 }
 

@@ -25,7 +25,7 @@ async function waitOutPause() {
  * position in anyone's repertoire, one Lichess request at a time, capped per night. Cached data then
  * makes coverage / radar / drills instant and costs Lichess nothing during the day.
  */
-export async function prefetchRepertoirePositions(log: FastifyBaseLogger, cap = NIGHTLY_CAP) {
+async function prefetchRepertoirePositions(log: FastifyBaseLogger, cap = NIGHTLY_CAP) {
   const db = getDb();
   if (!db || !env.LICHESS_FALLBACK_TOKEN) {
     log.info('prefetch skipped (needs DATABASE_URL and LICHESS_FALLBACK_TOKEN)');
@@ -62,7 +62,7 @@ const DEFAULT_BANDS = ratingBandsFor(1600);
 const DEFAULT_SPEEDS = ['blitz', 'rapid'];
 
 /** Every position along the opening library's lines, shallowest first (the ones guides reach first). */
-export function libraryPositions(): string[] {
+function libraryPositions(): string[] {
   const seen = new Map<string, number>();
   for (const o of allOpenings()) {
     let fen = INITIAL_FEN;
@@ -86,7 +86,7 @@ export function libraryPositions(): string[] {
  * positions, so picking an opening is instant. Cached positions cost nothing, so each night picks up
  * where the last one's Lichess budget ran out.
  */
-export async function warmGuides(log: FastifyBaseLogger, budget = 3000) {
+async function warmGuides(log: FastifyBaseLogger, budget = 3000) {
   if (!getDb() || !env.LICHESS_FALLBACK_TOKEN) return 0;
   const start = lichessStats.calls;
   let n = 0;

@@ -32,7 +32,7 @@ export function standardUci(pos: Chess, move: Move): string {
 }
 
 /** Parse UCI in either castling encoding into a legal move for `pos`, or undefined if illegal. */
-export function parseLegalUci(pos: Chess, uci: string): NormalMove | undefined {
+function parseLegalUci(pos: Chess, uci: string): NormalMove | undefined {
   const raw = parseUci(uci);
   if (!raw || !('from' in raw)) return undefined;
   const move = normalizeMove(pos, raw) as NormalMove;
@@ -124,13 +124,6 @@ export function isPromotion(pos: Chess, from: SquareName, to: SquareName): boole
 
 function parseSquareName(s: SquareName): number {
   return (s.charCodeAt(0) - 97) + 8 * (s.charCodeAt(1) - 49);
-}
-
-/** Move number label for a ply index (0-based ply from the start of the game). */
-export function moveLabel(ply: number, san: string, forceNumber = false): string {
-  const n = Math.floor(ply / 2) + 1;
-  if (ply % 2 === 0) return `${n}. ${san}`;
-  return forceNumber ? `${n}… ${san}` : san;
 }
 
 /** Full-move ply of a position from its FEN (0 = white's first move). */

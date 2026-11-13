@@ -42,7 +42,7 @@ async function localGuide(fen: string, rating: number, speeds: Speed[], evals: b
  * Explorer numbers and per-move evals for the guided builder in one request, cached on the server
  * (warmed nightly for the opening library) and kept on the device for revisits and offline use.
  */
-export function fetchGuide(fen: string, evals: boolean, signal?: AbortSignal): Promise<GuideBundle> {
+function fetchGuide(fen: string, evals: boolean, signal?: AbortSignal): Promise<GuideBundle> {
   const { rating, speeds } = usePrefs.getState();
   const key = keyOf(fen, rating, speeds, evals);
   const hit = mem.get(key) ?? (evals ? undefined : mem.get(keyOf(fen, rating, speeds, true)));

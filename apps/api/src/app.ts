@@ -1,3 +1,4 @@
+import { registerRoutes } from './routes/index';
 import Fastify, { type FastifyInstance } from 'fastify';
 import fastifyStatic from '@fastify/static';
 import fastifyCors from '@fastify/cors';
@@ -10,7 +11,7 @@ import { ZodError } from 'zod';
 import { env, MissingConfigError } from './env';
 import { getDb } from './db/client';
 
-export const NATIVE_ORIGINS = [
+const NATIVE_ORIGINS = [
   'capacitor://localhost',
   'mainline://localhost', // iOS: capacitor.config ios.scheme
   'https://localhost',
@@ -93,8 +94,6 @@ export async function buildApp(opts: { logger?: boolean } = {}): Promise<Fastify
     return { ok: true, version: process.env.npm_package_version ?? '0.1.0', db };
   });
 
-  // Registered by later phases.
-  const { registerRoutes } = await import('./routes/index');
   await registerRoutes(app);
 
   const dist = webDistDir();

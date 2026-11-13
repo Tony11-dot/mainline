@@ -42,7 +42,7 @@ export interface ThemeTokens {
   separator: string;
 }
 
-export const BRAND_BLUE = '#072EB8';
+const BRAND_BLUE = '#072EB8';
 
 /** MainLine's own look (used by "System default"). */
 export const MAINLINE_LIGHT: ThemeTokens = {
@@ -117,7 +117,7 @@ export function themeName(id: ThemeId): string {
   return t(THEME_NAMES[id]);
 }
 
-export const prefersDark = () => typeof matchMedia !== 'undefined' && matchMedia('(prefers-color-scheme: dark)').matches;
+const prefersDark = () => typeof matchMedia !== 'undefined' && matchMedia('(prefers-color-scheme: dark)').matches;
 
 export function resolveTheme(id: ThemeId, systemDark = prefersDark()): { tokens: ThemeTokens; dark: boolean } {
   if (id === 'system') return systemDark ? { tokens: MAINLINE_DARK, dark: true } : { tokens: MAINLINE_LIGHT, dark: false };

@@ -1043,4 +1043,4 @@ function ColorDot({ color, size = 'md' }: { color: 'white' | 'black'; size?: 'sm
   return <span className={`inline-block shrink-0 rounded-full ring-1 ring-line-strong ${size === 'sm' ? 'size-2.5' : 'size-3.5'} ${color === 'white' ? 'bg-chess-white' : 'bg-chess-black'}`} aria-hidden />;
 }
 
-export const slug = (s: string) => s.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '') || 'repertoire';
+const slug = (s: string) => s.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '') || 'repertoire';

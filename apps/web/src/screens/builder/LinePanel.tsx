@@ -128,7 +128,7 @@ export function LinePanel({
 }
 
 /** The moves of the line through `path`: the way there, then on along each first continuation to the end. */
-export function lineThrough(root: TreeNode, path: string): Step[] {
+function lineThrough(root: TreeNode, path: string): Step[] {
   const out: Step[] = [];
   let node = root;
   let p = '';

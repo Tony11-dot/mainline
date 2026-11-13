@@ -4,7 +4,7 @@ import { getDb, schema } from '../db/client';
 import { decryptSecret, randomToken, sha256 } from './crypto';
 import { env } from '../env';
 
-export const SESSION_COOKIE = 'ml_session';
+const SESSION_COOKIE = 'ml_session';
 export type User = typeof schema.users.$inferSelect;
 
 function tokenFrom(req: FastifyRequest): string | undefined {

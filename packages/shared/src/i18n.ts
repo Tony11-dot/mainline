@@ -15,7 +15,7 @@ export interface Translator {
 }
 
 /** BCP 47 tag for Intl formatting from an app language code. */
-export const intlTag = (lang: string) => (lang === 'zh' ? 'zh-CN' : lang === 'pt' ? 'pt-BR' : lang);
+const intlTag = (lang: string) => (lang === 'zh' ? 'zh-CN' : lang === 'pt' ? 'pt-BR' : lang);
 
 export function makeTranslator(lang: string, dict: Catalog): Translator {
   const tag = intlTag(lang);
