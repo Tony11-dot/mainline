@@ -223,8 +223,8 @@ export async function authRoutes(app: FastifyInstance) {
           method: 'DELETE',
           headers: { Authorization: `Bearer ${decryptSecret(u.lichessTokenEnc)}`, 'User-Agent': USER_AGENT },
         });
-      } catch {
-        /* best effort */
+      } catch (e) {
+        req.log.warn({ err: e }, 'lichess token revoke failed');
       }
     }
     if (u.appleRefreshEnc) {

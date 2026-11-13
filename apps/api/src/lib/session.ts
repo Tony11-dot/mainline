@@ -36,7 +36,11 @@ export async function currentUser(req: FastifyRequest): Promise<User | undefined
   r._user = user ?? null;
   if (user && (seen.get(idHash) ?? 0) < Date.now() - 3600_000) {
     seen.set(idHash, Date.now());
-    void db.update(schema.sessions).set({ lastSeenAt: new Date() }).where(eq(schema.sessions.idHash, idHash));
+    void db
+      .update(schema.sessions)
+      .set({ lastSeenAt: new Date() })
+      .where(eq(schema.sessions.idHash, idHash))
+      .catch((err) => req.log.warn({ err }, 'could not record session activity'));
   }
   return user;
 }

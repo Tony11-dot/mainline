@@ -50,6 +50,7 @@ async function prefetchRepertoirePositions(log: FastifyBaseLogger, cap = NIGHTLY
       n++;
     } catch (e) {
       if (e instanceof LichessRateLimited) await sleep(61_000);
+      else log.warn({ err: e, epd: r.epd }, 'warm-up step failed');
     }
     await sleep(1000); // gentle: ≤ 3 requests/s, cached positions return instantly anyway
   }
@@ -99,6 +100,7 @@ async function warmGuides(log: FastifyBaseLogger, budget = 3000) {
       n++;
     } catch (e) {
       if (e instanceof LichessRateLimited) await sleep(61_000);
+      else log.warn({ err: e, epd: epd }, 'warm-up step failed');
     }
     // Gentle on Lichess: pause only when we actually asked it something.
     if (lichessStats.calls > before) await sleep(1000);
