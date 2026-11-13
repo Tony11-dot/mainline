@@ -43,7 +43,6 @@ export async function startNativeChrome(router: PlatformHost['router']) {
     return; // plugin missing (e.g. an older native shell): keep the web tab bar
   }
   document.documentElement.dataset.nativeChrome = '';
-  // Tab titles follow the app language.
   useI18n.subscribe((s, p) => {
     if (s.lang !== p.lang) void NativeChrome.setTabs(tabsFor(router.state.location.pathname));
   });

@@ -51,7 +51,6 @@ export function Board(props: BoardProps) {
   const [promotion, setPromotion] = useState<{ from: Key; to: Key; color: BoardColor } | null>(null);
   const prefs = usePrefs();
 
-  // Create once.
   useLayoutEffect(() => {
     if (!el.current) return;
     cg.current = Chessground(el.current, {
@@ -155,7 +154,6 @@ export function Board(props: BoardProps) {
     setPromotion(null);
     if (!p) return;
     if (!role) {
-      // Cancelled: put the pawn back.
       cg.current?.set({ fen: propsRef.current.fen, lastMove: propsRef.current.lastMove });
       return;
     }
@@ -166,7 +164,6 @@ export function Board(props: BoardProps) {
     propsRef.current.onMove?.(p.from + p.to + promo, fromFen);
   }
 
-  // Wrong/right move feedback.
   useEffect(() => {
     if (!props.flash || !wrap.current) return;
     const node = wrap.current;

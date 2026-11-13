@@ -293,7 +293,6 @@ export function opponentPrep(theirGames: PlayedGame[], book: Book, opts: { maxPl
   };
   const ownMoves = (epd: string) => [...new Set((book.own.get(epd) ?? []).map((o) => o.uci))];
 
-  // Their first decisions.
   const fork = (gs: PlayedGame[], path: string[], pos: ReturnType<typeof positionFromFen>): PrepFork => {
     const replies = book.replies.get(toEpd(pos));
     return { path, games: gs.length, choices: byMove(gs, path.length).map(([uci, list]) => ({ uci, games: list.length, prepared: !!replies?.has(uci) })) };
@@ -307,7 +306,6 @@ export function opponentPrep(theirGames: PlayedGame[], book: Book, opts: { maxPl
     for (const [u, gs] of yours) forks.push(fork(gs, [u], playUci(start, u).pos));
   }
 
-  // Their lines.
   const leaves: { path: string[]; games: PlayedGame[]; rare?: PrepLine['rare'] }[] = [];
   const walk = (gs: PlayedGame[], path: string[], pos: ReturnType<typeof positionFromFen>) => {
     const ply = path.length;

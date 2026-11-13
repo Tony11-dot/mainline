@@ -31,7 +31,6 @@ export function NewFolderSheet({ open, initial, onClose }: { open: boolean; init
   }, [open, initial]);
 
   const folders = lib.folders.filter((f) => !f.deleted && f.color === color);
-  // Keep the parent consistent with the chosen colour.
   useEffect(() => {
     if (folderId && folders.some((f) => f.id === folderId)) return;
     setFolderId(folders.find((f) => f.parentId === null)?.id ?? null);

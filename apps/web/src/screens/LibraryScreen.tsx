@@ -84,7 +84,6 @@ export function LibraryScreen() {
   const visible = useMemo(() => (folder && folder.parentId !== null ? itemsIn(folder.id) : roots.flatMap((r) => (folder && folder.id !== r.id ? [] : itemsIn(r.id)))), [folder, roots, itemsIn]);
   const byKey = useMemo(() => new Map([...folders.map(folderItem), ...reps.map(repItem)].map((i) => [i.key, i])), [folders, reps]);
 
-  // A new place starts with nothing selected.
   useEffect(() => {
     setSelected([]);
     setSelecting(false);
@@ -184,7 +183,6 @@ export function LibraryScreen() {
     else setSelected([key]);
   };
 
-  // Finder's keys.
   useEffect(() => {
     const onKey = (e: KeyboardEvent) => {
       const el = document.activeElement as HTMLElement | null;

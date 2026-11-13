@@ -99,7 +99,6 @@ export function analyseWeakness(input: WeaknessInput): WeaknessReport {
   const folders = input.folders.filter((f) => !f.deleted);
   const live = input.moves.filter((m) => !m.deleted);
 
-  // Training answers per position.
   const train = new Map<string, { attempts: number; misses: number }>();
   for (const r of input.reviews) {
     if (r.mode === 'learn' || now - r.reviewedAt > WINDOW) continue;

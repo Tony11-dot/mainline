@@ -78,7 +78,6 @@ function refreshReminders(delay = 1500) {
 
 export function startReminderSync() {
   useTraining.subscribe((s, p) => s.version !== p.version && refreshReminders());
-  // Reminder wording follows the app language.
   useI18n.subscribe((s, p) => s.lang !== p.lang && refreshReminders(100));
   usePrefs.subscribe((s, p) => (s.remindersOn !== p.remindersOn || s.reminderTime !== p.reminderTime) && refreshReminders(100));
   document.addEventListener('visibilitychange', () => document.visibilityState === 'visible' && refreshReminders());
