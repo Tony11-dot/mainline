@@ -53,3 +53,9 @@ Baseline (main 79a4fb7, Node 22): typecheck green, **lint red (1 error, storeDem
 - [x] **untangle(10)** `LibraryScreen.tsx` (1062 lines) split along its change lines: `library/finderModel.ts` (item/sheet types, row context, folder ordering), `library/Finder.tsx` (rows, sidebar, path bar, drop targets), `library/Views.tsx` (root/colour/folder views); the screen keeps state and actions (436 lines).
 - [x] **untangle(11)** comments: every isolated `//` comment reviewed; only 12 restated code (the rest explain browsers, Lichess, Apple, accessibility or product rules and stay).
 - [x] **untangle(12)** tests: `auth.test.ts` no longer restates the implementation's env check; `guide.test.ts` `toBeDefined` now checks the value; `coach.test.ts` `<= 0` is `toBe(0)`; new tests cover the multiPv bug, `day`, `line`/first moves, explorer keys. Kept: `sync.test.ts` skips without `DATABASE_URL` (needs a real DB); `e2e/store.spec.ts` is the screenshot generator, not a test.
+
+## Final review round
+Searched for what is still copied, hidden or left over after step 12:
+- Copied: none of the F1-F6 patterns remain (grep for the UCI regex, castling map, `86_400_000`, `localStorage` outside `storage.ts`). `launch/LaunchScreen.tsx` keeps its own `sessionStorage` use on purpose: on failure it must answer "don't show" (the helper answers "unknown").
+- Hidden, left: the `useLibrary/useTraining/useGames.load()` call-before-read convention in screens; `RepertoireScreen` (608 lines) mixes board state, URL deep links and prefetch; per-process caches in api (`Lru` in explorer/evals/guide/coach) have no shared invalidation; background jobs infer "asked Lichess" by diffing a global counter. Each is a larger design change than this pass's risk budget.
+- Left over: ~100 intentional swallowed errors (best-effort IndexedDB/push/haptics), the `game_deviations` table, `/api/openings/*` routes the web app no longer calls (live-contract), the e2e fixed sleeps.
