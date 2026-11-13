@@ -1,3 +1,4 @@
+import { persistStorage } from './storage';
 import { create } from 'zustand';
 import { persist } from 'zustand/middleware';
 import { practiceHref, type Practice, type Scope } from './practice';
@@ -138,30 +139,7 @@ export const usePlan = create<PlanState>()(
     }),
     {
       name: 'mainline.plan',
-      storage: {
-        getItem: (k) => {
-          try {
-            const v = localStorage.getItem(k);
-            return v ? JSON.parse(v) : null;
-          } catch {
-            return null;
-          }
-        },
-        setItem: (k, v) => {
-          try {
-            localStorage.setItem(k, JSON.stringify(v));
-          } catch {
-            /* private mode: the plan lasts this visit */
-          }
-        },
-        removeItem: (k) => {
-          try {
-            localStorage.removeItem(k);
-          } catch {
-            /* ignore */
-          }
-        },
-      },
+      storage: persistStorage(),
     },
   ),
 );

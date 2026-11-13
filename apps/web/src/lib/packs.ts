@@ -1,3 +1,4 @@
+import { KEYS, local } from './storage';
 import { sanListToUcis, type Color, type Folder, type PlayedGame, type Repertoire } from '@mainline/shared';
 import { msg, t } from './i18n';
 import { useLibrary } from './library';
@@ -750,11 +751,7 @@ export const recordFor = (records: OpeningRecord[], color: Color, first: FirstMo
  * their name. Moves them into their system's folder and drops the prefix — only where they were left as added.
  */
 export async function tidyPackLines() {
-  try {
-    if (localStorage.getItem('ml.tidy.packs') === '1') return;
-  } catch {
-    return;
-  }
+  if (local.get(KEYS.packsTidied) === '1') return;
   const lib = useLibrary.getState();
   await lib.load();
   for (const p of PACKS) {
@@ -774,9 +771,5 @@ export async function tidyPackLines() {
     const reply = first && replySan(first, f.rootMovesUci[1]!);
     if (first && reply && f.name === oldWhiteFolderName(first, reply)) await useLibrary.getState().renameFolder(f.id, openingFolderName('white', first, reply));
   }
-  try {
-    localStorage.setItem('ml.tidy.packs', '1');
-  } catch {
-    /* tidies again next time */
-  }
+  local.set(KEYS.packsTidied, '1');
 }

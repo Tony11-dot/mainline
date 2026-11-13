@@ -1,8 +1,8 @@
+import { KEYS, local } from './storage';
 import type { ReminderPlan } from '../platform';
 import { api } from './api';
 import { useI18n } from './i18n';
 
-const ENDPOINT_KEY = 'mainline.push.endpoint';
 
 const b64ToBytes = (b64: string) => {
   const pad = '='.repeat((4 - (b64.length % 4)) % 4);
@@ -39,18 +39,13 @@ export async function clearShownReminders() {
 /** Subscribes (asking permission when needed) or updates the server with the latest due count. */
 export async function registerWebPush(plan: ReminderPlan): Promise<'scheduled' | 'denied' | 'unsupported'> {
   if (!pushSupported()) return 'unsupported';
-  let endpoint: string | null = null;
-  try {
-    endpoint = localStorage.getItem(ENDPOINT_KEY);
-  } catch {
-    /* ignore */
-  }
+  const endpoint = local.get(KEYS.webPushEndpoint);
   if (!plan.enabled) {
     if (endpoint) {
       const reg = await navigator.serviceWorker.ready;
       await (await reg.pushManager.getSubscription())?.unsubscribe();
       await api('/api/push/unsubscribe', { method: 'POST', json: { endpoint } }).catch(() => undefined);
-      localStorage.removeItem(ENDPOINT_KEY);
+      local.set(KEYS.webPushEndpoint, null);
     }
     return 'scheduled';
   }
@@ -65,6 +60,6 @@ export async function registerWebPush(plan: ReminderPlan): Promise<'scheduled' |
   const sub = (await reg.pushManager.getSubscription()) ?? (await reg.pushManager.subscribe({ userVisibleOnly: true, applicationServerKey: b64ToBytes(publicKey) }));
   const json = sub.toJSON() as { endpoint: string; keys: { p256dh: string; auth: string } };
   await api('/api/push/subscribe', { method: 'POST', json: { subscription: { endpoint: json.endpoint, keys: json.keys }, ...state(plan) } });
-  localStorage.setItem(ENDPOINT_KEY, json.endpoint);
+  local.set(KEYS.webPushEndpoint, json.endpoint);
   return 'scheduled';
 }

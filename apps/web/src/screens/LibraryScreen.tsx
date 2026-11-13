@@ -1,3 +1,4 @@
+import { session } from '../lib/storage';
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { Link, useNavigate, useSearchParams } from 'react-router';
 import {
@@ -692,8 +693,8 @@ function Sidebar({ roots, folders, current, drop }: { roots: Folder[]; folders: 
     }
     return out;
   }, [folders, current]);
-  const [expanded, setExpanded] = useState<Set<string>>(() => new Set(JSON.parse(sessionStorageGet('ml.sidebar') ?? '[]') as string[]));
-  useEffect(() => sessionStorageSet('ml.sidebar', JSON.stringify([...expanded])), [expanded]);
+  const [expanded, setExpanded] = useState<Set<string>>(() => new Set(session.getJson<string[]>('ml.sidebar') ?? []));
+  useEffect(() => session.setJson('ml.sidebar', [...expanded]), [expanded]);
   const node = (f: Folder, depth: number): React.ReactNode => {
     const kids = folders.filter((x) => x.parentId === f.id).sort(byFirstMove);
     const isOpen = depth === 0 || expanded.has(f.id) || (ancestors.has(f.id) && f.id !== current);
@@ -775,21 +776,6 @@ function Crumb({ f, drop }: { f: Folder; drop: (keys: string[], folderId: string
     </span>
   );
 }
-
-const sessionStorageGet = (k: string) => {
-  try {
-    return sessionStorage.getItem(k);
-  } catch {
-    return null;
-  }
-};
-const sessionStorageSet = (k: string, v: string) => {
-  try {
-    sessionStorage.setItem(k, v);
-  } catch {
-    /* not kept */
-  }
-};
 
 /* ---------------- Views ---------------- */
 
