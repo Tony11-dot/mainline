@@ -1,3 +1,4 @@
+import { DAY, localDay } from './day';
 import { persistStorage } from './storage';
 import { create } from 'zustand';
 import { persist } from 'zustand/middleware';
@@ -41,14 +42,12 @@ export interface PlanOptions {
   start?: Date;
 }
 
-export const localDay = (d = new Date()) => `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}-${String(d.getDate()).padStart(2, '0')}`;
-
 /** Which day of the plan today is (0-based); can be past the end. */
 export function dayIndex(plan: Pick<Plan, 'start'>, now = new Date()): number {
   const [y, m, d] = plan.start.split('-').map(Number);
   const start = new Date(y!, m! - 1, d!);
   const today = new Date(now.getFullYear(), now.getMonth(), now.getDate());
-  return Math.round((today.getTime() - start.getTime()) / 86_400_000);
+  return Math.round((today.getTime() - start.getTime()) / DAY);
 }
 
 /**

@@ -1,3 +1,4 @@
+import { DAY } from './day';
 import { INITIAL_FEN, epdToFen, isOwnTurn, playUci, positionFromFen, toEpd, type Color, type Folder, type PlayedGame, type RepMove, type Repertoire, type ReviewEntry, type TrainCard } from '@mainline/shared';
 import type { Scope } from './practice';
 
@@ -38,7 +39,7 @@ export interface WeakItem {
 
 const TRAIN_PRIOR = 0.2; // a typical miss rate
 const GAME_PRIOR = 0.5; // an even score
-const WINDOW = 90 * 86_400_000;
+const WINDOW = 90 * DAY;
 
 export function rate(ev: Evidence): { badness: number; confidence: number; missRate: number | null; score: number | null } {
   const missRate = ev.attempts ? ev.misses / ev.attempts : null;

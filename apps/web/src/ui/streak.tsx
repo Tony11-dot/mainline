@@ -1,4 +1,5 @@
-import { lazy, Suspense, useEffect, useMemo, useState } from 'react';
+import { useToday } from '../lib/day';
+import { lazy, Suspense, useMemo, useState } from 'react';
 import { Flame } from 'lucide-react';
 import { streakInfo, type StreakInfo } from '@mainline/shared';
 import { useTraining } from '../lib/training';
@@ -8,24 +9,7 @@ import { t, tn } from '../lib/i18n';
 const StreakSheet = lazy(() => import('./streakViews').then((m) => ({ default: m.StreakSheet })));
 
 const tz = () => new Date().getTimezoneOffset();
-const dayKey = () => new Date().toDateString();
 
-/** The local day, kept current: an app left open overnight (or brought back next morning) moves on with it. */
-function useToday() {
-  const [day, setDay] = useState(dayKey);
-  useEffect(() => {
-    const check = () => setDay(dayKey());
-    const id = setInterval(check, 60_000);
-    document.addEventListener('visibilitychange', check);
-    window.addEventListener('focus', check);
-    return () => {
-      clearInterval(id);
-      document.removeEventListener('visibilitychange', check);
-      window.removeEventListener('focus', check);
-    };
-  }, []);
-  return day;
-}
 
 /** The live streak, recomputed whenever reviews change and when the day turns. `before` limits it to reviews older than a time. */
 export function useStreak(before?: number): StreakInfo {
