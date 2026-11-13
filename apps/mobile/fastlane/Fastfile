@@ -211,7 +211,8 @@ platform :ios do
       app_version: version_name,
       metadata_path: meta,
       screenshots_path: File.join(dir, "screenshots"),
-      app_rating_config_path: File.join(MOBILE, "store/ios/age_rating.json"),
+      # Apple's age-rating form gained a required "socialMedia" answer this fastlane can't send yet; SKIP_AGE_RATING=1 leaves the rating already on file as it is.
+      app_rating_config_path: ENV["SKIP_AGE_RATING"].to_s.empty? ? File.join(MOBILE, "store/ios/age_rating.json") : nil,
       overwrite_screenshots: true,
       skip_binary_upload: true,
       automatic_release: true,
