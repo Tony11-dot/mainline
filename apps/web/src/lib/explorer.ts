@@ -10,7 +10,7 @@ export function explorerQuery(rating: number, speeds: Speed[]) {
   return { ratings: ratingBandsFor(rating).join(','), speeds: [...speeds].sort().join(',') };
 }
 
-function explorerKey(source: ExplorerSource, fen: string, rating: number, speeds: Speed[]) {
+export function explorerKey(source: ExplorerSource, fen: string, rating: number, speeds: Speed[]) {
   const epd = toEpd(fen);
   if (source === 'masters') return `m|${epd}`;
   const q = explorerQuery(rating, speeds);
