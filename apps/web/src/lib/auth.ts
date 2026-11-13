@@ -82,9 +82,7 @@ export function startLichessLogin(returnPath = location.pathname + location.sear
  */
 export async function startLogin(provider: 'lichess' | 'chesscom', returnPath = location.pathname + location.search) {
   const p = platform();
-  const params = new URLSearchParams({ return: returnPath });
-  if (p.kind === 'desktop') params.set('native', 'desktop');
-  else if (p.isNative) params.set('native', '1');
+  const params = new URLSearchParams({ return: returnPath, ...p.authParams });
   if (provider === 'chesscom' && p.isNative && useAuth.getState().me) {
     try {
       params.set('link', (await api<{ ticket: string }>('/api/auth/link-ticket', { method: 'POST' })).ticket);

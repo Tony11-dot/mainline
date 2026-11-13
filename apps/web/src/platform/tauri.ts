@@ -58,6 +58,11 @@ export function createTauriPlatform(): Platform {
 
   return {
     kind: 'desktop',
+    authParams: { native: 'desktop' },
+    closeAuthBrowser: async () => undefined,
+    start() {
+      /* nothing to wire up */
+    },
     isNative: true,
     apiBase: apiBaseFromEnv(true),
     haptic() {

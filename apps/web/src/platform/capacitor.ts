@@ -55,6 +55,12 @@ export function createCapacitorPlatform(kind: 'ios' | 'android'): Platform {
 
   return {
     kind,
+    authParams: { native: '1' },
+    closeAuthBrowser: closeInAppBrowser,
+    start(host) {
+      bindNotificationTaps(host.navigate);
+      if (kind === 'ios') void import('./nativeChrome').then((m) => m.startNativeChrome(host.router));
+    },
     isNative: true,
     apiBase: apiBaseFromEnv(true),
 
