@@ -710,7 +710,10 @@ export interface OpeningRecord {
   loss: number;
 }
 
-const firstOf = (u: string): FirstMove | undefined => ({ e2e4: 'e4', d2d4: 'd4', c2c4: 'c4', g1f3: 'Nf3', b1c3: 'Nc3' })[u] as FirstMove | undefined;
+/** Each first move by the UCI of White's opening move, in the order the library lists them. */
+export const FIRST_BY_UCI: Record<string, FirstMove> = { e2e4: 'e4', d2d4: 'd4', c2c4: 'c4', g1f3: 'Nf3', b1c3: 'Nc3' };
+export const FIRST_UCI_ORDER = Object.keys(FIRST_BY_UCI);
+export const firstOf = (u: string): FirstMove | undefined => FIRST_BY_UCI[u];
 
 /** Your score in each opening (your colour × 1st move × reply) across imported games. */
 export function openingRecords(games: PlayedGame[]): OpeningRecord[] {
@@ -767,7 +770,7 @@ export async function tidyPackLines() {
   }
   for (const f of useLibrary.getState().folders) {
     if (f.deleted || f.color !== 'white' || f.rootMovesUci?.length !== 2) continue;
-    const first = ({ e2e4: 'e4', d2d4: 'd4', c2c4: 'c4', g1f3: 'Nf3', b1c3: 'Nc3' } as Record<string, FirstMove>)[f.rootMovesUci[0]!];
+    const first = firstOf(f.rootMovesUci[0]!);
     const reply = first && replySan(first, f.rootMovesUci[1]!);
     if (first && reply && f.name === oldWhiteFolderName(first, reply)) await useLibrary.getState().renameFolder(f.id, openingFolderName('white', first, reply));
   }

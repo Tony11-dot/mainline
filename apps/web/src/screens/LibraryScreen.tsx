@@ -33,7 +33,7 @@ import { findConflicts, isReadyMade, type Color, type Folder, type Repertoire } 
 import { descendants, folderMoves, repMoves, repPreview, repsUnder, useLibrary } from '../lib/library';
 import { useTraining } from '../lib/training';
 import { useGames } from '../lib/games';
-import { PACKS, openingRecords, recordFor, replySan, tidyPackLines, weakSpots, type FirstMove, type OpeningRecord } from '../lib/packs';
+import { FIRST_BY_UCI, FIRST_UCI_ORDER, PACKS, openingRecords, recordFor, replySan, tidyPackLines, weakSpots, type FirstMove, type OpeningRecord } from '../lib/packs';
 import { practiceHref, type Scope } from '../lib/practice';
 import { MasteryStrip } from '../ui/MasteryStrip';
 import { MiniBoard } from '../ui/MiniBoard';
@@ -62,8 +62,6 @@ msg('Black');
 type Item = { key: string; type: 'folder'; folder: Folder; color: Color } | { key: string; type: 'rep'; rep: Repertoire; color: Color };
 type SheetState = { kind: 'new-folder'; folderId: string | null; color: Color } | { kind: 'folder-settings'; id: string } | { kind: 'import'; repId?: string; text?: string } | { kind: 'conflicts' } | { kind: 'pick'; color: Color; first?: FirstMove } | { kind: 'move'; keys: string[] } | null;
 
-const FIRSTS: Record<string, FirstMove> = { e2e4: 'e4', d2d4: 'd4', c2c4: 'c4', g1f3: 'Nf3', b1c3: 'Nc3' };
-const ORDER = ['e2e4', 'd2d4', 'c2c4', 'g1f3', 'b1c3'];
 const DRAG = 'application/x-mainline-items';
 
 const folderItem = (f: Folder): Item => ({ key: `f:${f.id}`, type: 'folder', folder: f, color: f.color });
@@ -71,14 +69,14 @@ const repItem = (r: Repertoire): Item => ({ key: `r:${r.id}`, type: 'rep', rep: 
 const itemName = (it: Item) => (it.type === 'folder' ? t(it.folder.name) : it.rep.name);
 
 function byFirstMove(a: Folder, b: Folder) {
-  const ia = ORDER.indexOf(a.rootMovesUci?.[0] ?? '');
-  const ib = ORDER.indexOf(b.rootMovesUci?.[0] ?? '');
+  const ia = FIRST_UCI_ORDER.indexOf(a.rootMovesUci?.[0] ?? '');
+  const ib = FIRST_UCI_ORDER.indexOf(b.rootMovesUci?.[0] ?? '');
   return (a.rootMovesUci?.length ?? 9) - (b.rootMovesUci?.length ?? 9) || (ia < 0 ? 9 : ia) - (ib < 0 ? 9 : ib) || a.sortIndex - b.sortIndex;
 }
 
 /** Where a folder sits in the opening tree, from the position it stands for. */
 function folderLevel(moves: string[]): { first?: FirstMove; reply?: string } {
-  const first = FIRSTS[moves[0] ?? ''];
+  const first = FIRST_BY_UCI[moves[0] ?? ''];
   if (!first) return {};
   return { first, reply: moves.length >= 2 ? replySan(first, moves[1]!) : undefined };
 }

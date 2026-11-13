@@ -1,3 +1,4 @@
+import { formatLine } from '../../lib/line';
 import { useMemo } from 'react';
 import { GitBranch, Replace, Scissors, Trash2 } from 'lucide-react';
 import { INITIAL_FEN, childPath, playLine, type TreeNode } from '@mainline/shared';
@@ -60,7 +61,7 @@ export function LinePanel({
         {start.length > 0 && (
           <li className="me-1 text-ink-3">
             <button type="button" onClick={() => onGoto('')} aria-current={atRoot ? 'step' : undefined} className={`min-h-[36px] rounded-[var(--radius-xs)] px-2 py-1 ${atRoot ? 'bg-brand text-on-brand' : 'hover:bg-surface-3'}`}>
-              {start.map((san, i) => `${i % 2 === 0 ? `${i / 2 + 1}.` : ''}${san}`).join(' ')}
+              {formatLine(start)}
             </button>
           </li>
         )}

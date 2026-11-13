@@ -1,6 +1,7 @@
+import { sanLineOf } from '../../lib/line';
 import { useEffect, useMemo, useState } from 'react';
 import { useNavigate } from 'react-router';
-import { INITIAL_FEN, playLine, toEpd, type Color } from '@mainline/shared';
+import { toEpd, type Color } from '@mainline/shared';
 import { useLibrary, folderMoves, folderPath } from '../../lib/library';
 import { useOpeningsByEpd } from '../../board/useOpeningName';
 import { Sheet, Field, inputCls } from '../../ui/Sheet';
@@ -38,11 +39,7 @@ export function NewFolderSheet({ open, initial, onClose }: { open: boolean; init
   const parent = folders.find((f) => f.id === folderId) ?? folders.find((f) => f.parentId === null);
   const before = useMemo(() => (parent ? folderMoves(lib.folders, lib.reps, parent.id) : []), [parent, lib.folders, lib.reps]);
   const beforeSan = useMemo(() => {
-    try {
-      return playLine(INITIAL_FEN, before).moves.map((m, i) => `${i % 2 === 0 ? `${i / 2 + 1}.` : ''}${m.san}`).join(' ');
-    } catch {
-      return '';
-    }
+    return sanLineOf(before);
   }, [before]);
   const parsed = useMemo(() => parseSanLine(moves, before), [moves, before]);
   const auto = (parsed.ucis.length && names?.get(toEpd(parsed.fen))?.name) || parsed.sans.join(' ') || t('New folder');
