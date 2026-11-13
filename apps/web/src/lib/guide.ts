@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
-import { guideMoves, playUci, positionFromFen, ratingBandsFor, toEpd, type EvalData, type GuideBundle, type Speed } from '@mainline/shared';
+import { guideMoves, playUci, positionFromFen, toEpd, type EvalData, type GuideBundle, type Speed } from '@mainline/shared';
 import { api } from './api';
-import { cachedExplorer, primeExplorer } from './explorer';
+import { cachedExplorer, explorerQuery, primeExplorer } from './explorer';
 import { cachedEval, primeEval } from './evals';
 import { usePrefs } from './prefs';
 
@@ -9,7 +9,10 @@ const mem = new Map<string, GuideBundle>();
 const GUIDE_TIMEOUT_MS = 12_000;
 const inflight = new Map<string, Promise<GuideBundle>>();
 
-const keyOf = (fen: string, rating: number, speeds: Speed[], evals: boolean) => `${toEpd(fen)}|${ratingBandsFor(rating).join(',')}|${[...speeds].sort().join(',')}|${evals ? 1 : 0}`;
+const keyOf = (fen: string, rating: number, speeds: Speed[], evals: boolean) => {
+  const q = explorerQuery(rating, speeds);
+  return `${toEpd(fen)}|${q.ratings}|${q.speeds}|${evals ? 1 : 0}`;
+};
 
 /** The guide's data for a position from what this device already has (no network). */
 async function localGuide(fen: string, rating: number, speeds: Speed[], evals: boolean): Promise<GuideBundle | undefined> {
@@ -46,7 +49,7 @@ export function fetchGuide(fen: string, evals: boolean, signal?: AbortSignal): P
   if (hit) return Promise.resolve(hit);
   let p = inflight.get(key);
   if (!p) {
-    const q = new URLSearchParams({ fen, ratings: ratingBandsFor(rating).join(','), speeds: speeds.join(','), evals: evals ? '1' : '0' });
+    const q = new URLSearchParams({ fen, ...explorerQuery(rating, speeds), evals: evals ? '1' : '0' });
     // Past this, the answer isn't coming soon enough to wait for: the device's engine takes over.
     p = api<GuideBundle>(`/api/guide?${q}`, { signal: AbortSignal.timeout(GUIDE_TIMEOUT_MS) })
       .then((b) => {
