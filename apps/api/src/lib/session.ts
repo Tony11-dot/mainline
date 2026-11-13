@@ -4,7 +4,7 @@ import { getDb, schema } from '../db/client';
 import { decryptSecret, randomToken, sha256 } from './crypto';
 import { env } from '../env';
 
-export const SESSION_COOKIE = 'ml_session';
+const SESSION_COOKIE = 'ml_session';
 export type User = typeof schema.users.$inferSelect;
 
 function tokenFrom(req: FastifyRequest): string | undefined {
@@ -36,7 +36,11 @@ export async function currentUser(req: FastifyRequest): Promise<User | undefined
   r._user = user ?? null;
   if (user && (seen.get(idHash) ?? 0) < Date.now() - 3600_000) {
     seen.set(idHash, Date.now());
-    void db.update(schema.sessions).set({ lastSeenAt: new Date() }).where(eq(schema.sessions.idHash, idHash));
+    void db
+      .update(schema.sessions)
+      .set({ lastSeenAt: new Date() })
+      .where(eq(schema.sessions.idHash, idHash))
+      .catch((err) => req.log.warn({ err }, 'could not record session activity'));
   }
   return user;
 }

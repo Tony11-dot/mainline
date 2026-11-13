@@ -18,7 +18,7 @@ const PAGES: LegalPage[] = [
   { path: '/accessibility', title: 'Accessibility statement', nav: 'Accessibility', description: 'How MainLine works with keyboards, screen readers, large text and reduced motion.', body: () => ACCESSIBILITY() },
 ];
 
-export const LEGAL_UPDATED = '25 September 2026';
+const LEGAL_UPDATED = '25 September 2026';
 
 const contact = () =>
   env.LEGAL_CONTACT.includes('@')

@@ -2,6 +2,7 @@ import { create } from 'zustand';
 import { persist, type PersistStorage } from 'zustand/middleware';
 import type { Speed } from '@mainline/shared';
 
+import { KEYS, local } from './storage';
 import { applyLocale, type LocaleId } from './i18n';
 import { fontDef, pieceCss, resolveTheme, themeVars, type BoardTheme, type FontId, type PieceSet, type ThemeId } from './appearance';
 
@@ -46,27 +47,11 @@ export interface Prefs {
 /** Stores the flat prefs object (index.html's boot script reads it before React loads). */
 const flatStorage: PersistStorage<Partial<Prefs>> = {
   getItem: (name) => {
-    try {
-      const raw = localStorage.getItem(name);
-      return raw ? { state: JSON.parse(raw) as Partial<Prefs>, version: 0 } : null;
-    } catch {
-      return null;
-    }
+    const state = local.getJson<Partial<Prefs>>(name);
+    return state ? { state, version: 0 } : null;
   },
-  setItem: (name, value) => {
-    try {
-      localStorage.setItem(name, JSON.stringify(value.state));
-    } catch {
-      /* storage unavailable (private mode) — prefs live for this session only */
-    }
-  },
-  removeItem: (name) => {
-    try {
-      localStorage.removeItem(name);
-    } catch {
-      /* ignore */
-    }
-  },
+  setItem: (name, value) => local.setJson(name, value.state),
+  removeItem: (name) => local.set(name, null),
 };
 
 export const usePrefs = create<Prefs>()(
@@ -130,11 +115,7 @@ export function bindPrefsToDocument() {
     if (!pieceStyle.isConnected) document.head.appendChild(pieceStyle);
     pieceStyle.textContent = pieceCss(p.pieceSet);
     document.querySelectorAll('meta[name="theme-color"]').forEach((m) => m.setAttribute('content', tokens.surface));
-    try {
-      localStorage.setItem('mainline.boot', JSON.stringify({ vars, dark, board: p.boardTheme, font: font.stack }));
-    } catch {
-      /* private mode */
-    }
+    local.setJson(KEYS.bootTheme, { vars, dark, board: p.boardTheme, font: font.stack });
   };
   apply(usePrefs.getState());
   usePrefs.subscribe(apply);

@@ -1,5 +1,5 @@
 import { and, eq } from 'drizzle-orm';
-import { epdToFen, toEpd, type ExplorerData, type ExplorerGame, type ExplorerMove } from '@mainline/shared';
+import { castlingAsKingMove, epdToFen, toEpd, type ExplorerData, type ExplorerGame, type ExplorerMove } from '@mainline/shared';
 import { getDb, schema } from '../db/client';
 import { MissingConfigError } from '../env';
 import { lichessJson } from '../lib/lichess';
@@ -7,7 +7,7 @@ import { Lru } from '../lib/lru';
 import { sha256 } from '../lib/crypto';
 
 const DAY = 86_400_000;
-export const EXPLORER_TTL = { masters: 90 * DAY, lichess: 14 * DAY, player: 1 * DAY } as const;
+const EXPLORER_TTL = { masters: 90 * DAY, lichess: 14 * DAY, player: 1 * DAY } as const;
 
 const hot = new Lru<ExplorerData>(5000, 6 * 3600_000);
 
@@ -27,14 +27,14 @@ interface LichessExplorerResponse {
   opening?: { eco: string; name: string } | null;
 }
 
-export function paramsKey(p: ExplorerParams): string {
+function paramsKey(p: ExplorerParams): string {
   if (p.source === 'masters') return 'm';
   const r = [...(p.ratings ?? [])].sort((a, b) => a - b).join(',');
   const s = [...(p.speeds ?? [])].sort().join(',');
   return sha256(`${r}|${s}`).slice(0, 16);
 }
 
-export function normalizeExplorer(source: ExplorerData['source'], epd: string, raw: LichessExplorerResponse, cached: boolean, fetchedAt: Date): ExplorerData {
+function normalizeExplorer(source: ExplorerData['source'], epd: string, raw: LichessExplorerResponse, cached: boolean, fetchedAt: Date): ExplorerData {
   const moves: ExplorerMove[] = raw.moves.map((m) => ({
     uci: normalizeCastlingUci(m.uci, m.san),
     san: m.san,
@@ -71,9 +71,8 @@ export function normalizeExplorer(source: ExplorerData['source'], epd: string, r
 
 /** Lichess explorer may encode castling king-to-rook (e1h1); we use e1g1 everywhere. */
 function normalizeCastlingUci(uci: string, san?: string): string {
-  const map: Record<string, string> = { e1h1: 'e1g1', e1a1: 'e1c1', e8h8: 'e8g8', e8a8: 'e8c8' };
   if (san && !san.startsWith('O-O')) return uci;
-  return map[uci] ?? uci;
+  return castlingAsKingMove(uci);
 }
 
 export async function getExplorer(p: ExplorerParams, token: string | undefined): Promise<ExplorerData> {

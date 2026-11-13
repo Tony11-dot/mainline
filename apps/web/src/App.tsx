@@ -56,10 +56,7 @@ export function startPlatformHooks() {
   useLaunch.setState({ active: shouldShowLaunch(platform().isNative) });
   // Deep links, OAuth returns, files and notification taps from the OS.
   platform().onIncoming((i) => void handleIncoming((to) => void router.navigate(to))(i));
-  if (platform().kind === 'ios' || platform().kind === 'android') {
-    void import('./platform/capacitor').then((m) => m.bindNotificationTaps((to) => void router.navigate(to)));
-  }
-  if (platform().kind === 'ios') void import('./platform/nativeChrome').then((m) => m.startNativeChrome(router));
+  platform().start({ navigate: (to) => void router.navigate(to), router });
 }
 
 export function App() {

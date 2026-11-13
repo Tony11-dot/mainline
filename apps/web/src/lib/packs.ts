@@ -1,3 +1,4 @@
+import { KEYS, local } from './storage';
 import { sanListToUcis, type Color, type Folder, type PlayedGame, type Repertoire } from '@mainline/shared';
 import { msg, t } from './i18n';
 import { useLibrary } from './library';
@@ -609,11 +610,11 @@ const oldWhiteFolderName = (first: FirstMove, reply: string) => t('vs {move}', {
 
 
 /** A line is named for what it answers; its folder already says which system or defence it belongs to. */
-export const lineName = (_p: Pack, l: PackLine) => l.name;
+const lineName = (_p: Pack, l: PackLine) => l.name;
 
-export const lineSource = (p: Pack, l: PackLine) => `pack:${p.id}:${l.id}`;
+const lineSource = (p: Pack, l: PackLine) => `pack:${p.id}:${l.id}`;
 
-export function packOf(source: string | null | undefined): { pack: Pack; line: PackLine } | undefined {
+function packOf(source: string | null | undefined): { pack: Pack; line: PackLine } | undefined {
   const m = /^pack:([^:]+):(.+)$/.exec(source ?? '');
   const pack = m && PACKS.find((p) => p.id === m[1]);
   const l = pack?.lines.find((x) => x.id === m![2]);
@@ -647,7 +648,7 @@ export async function ensureOpeningFolders(color: Color, first: FirstMove, reply
 }
 
 /** The moves every line of a pack shares (its system), e.g. 1.e4 e5 2.Nc3 for the Vienna. */
-export function packCommonMoves(p: Pack): string[] {
+function packCommonMoves(p: Pack): string[] {
   const all = p.lines.map((l) => sanListToUcis(mainLineText(l.pgn, 40).replace(/\d+\.\s*/g, '').split(/\s+/).filter(Boolean)));
   let common = all[0] ?? [];
   for (const u of all) {
@@ -659,7 +660,7 @@ export function packCommonMoves(p: Pack): string[] {
 }
 
 /** Where a pack's lines live: the opening folder for Black; for White a folder for the system inside the reply's folder. */
-export async function packFolder(p: Pack): Promise<Folder> {
+async function packFolder(p: Pack): Promise<Folder> {
   const opening = await ensureOpeningFolders(p.color, p.first, p.reply, p.opening);
   if (p.color === 'black') return opening;
   const name = t(p.name);
@@ -709,7 +710,10 @@ export interface OpeningRecord {
   loss: number;
 }
 
-const firstOf = (u: string): FirstMove | undefined => ({ e2e4: 'e4', d2d4: 'd4', c2c4: 'c4', g1f3: 'Nf3', b1c3: 'Nc3' })[u] as FirstMove | undefined;
+/** Each first move by the UCI of White's opening move, in the order the library lists them. */
+export const FIRST_BY_UCI: Record<string, FirstMove> = { e2e4: 'e4', d2d4: 'd4', c2c4: 'c4', g1f3: 'Nf3', b1c3: 'Nc3' };
+export const FIRST_UCI_ORDER = Object.keys(FIRST_BY_UCI);
+export const firstOf = (u: string): FirstMove | undefined => FIRST_BY_UCI[u];
 
 /** Your score in each opening (your colour × 1st move × reply) across imported games. */
 export function openingRecords(games: PlayedGame[]): OpeningRecord[] {
@@ -730,7 +734,7 @@ export function openingRecords(games: PlayedGame[]): OpeningRecord[] {
   return [...by.values()];
 }
 
-export const MIN_GAMES_FOR_WEAKNESS = 5;
+const MIN_GAMES_FOR_WEAKNESS = 5;
 
 /**
  * Openings that cost you the most points: at least a few games, under 50%, ranked by points dropped
@@ -750,11 +754,7 @@ export const recordFor = (records: OpeningRecord[], color: Color, first: FirstMo
  * their name. Moves them into their system's folder and drops the prefix — only where they were left as added.
  */
 export async function tidyPackLines() {
-  try {
-    if (localStorage.getItem('ml.tidy.packs') === '1') return;
-  } catch {
-    return;
-  }
+  if (local.get(KEYS.packsTidied) === '1') return;
   const lib = useLibrary.getState();
   await lib.load();
   for (const p of PACKS) {
@@ -770,13 +770,9 @@ export async function tidyPackLines() {
   }
   for (const f of useLibrary.getState().folders) {
     if (f.deleted || f.color !== 'white' || f.rootMovesUci?.length !== 2) continue;
-    const first = ({ e2e4: 'e4', d2d4: 'd4', c2c4: 'c4', g1f3: 'Nf3', b1c3: 'Nc3' } as Record<string, FirstMove>)[f.rootMovesUci[0]!];
+    const first = firstOf(f.rootMovesUci[0]!);
     const reply = first && replySan(first, f.rootMovesUci[1]!);
     if (first && reply && f.name === oldWhiteFolderName(first, reply)) await useLibrary.getState().renameFolder(f.id, openingFolderName('white', first, reply));
   }
-  try {
-    localStorage.setItem('ml.tidy.packs', '1');
-  } catch {
-    /* tidies again next time */
-  }
+  local.set(KEYS.packsTidied, '1');
 }

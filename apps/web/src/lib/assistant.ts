@@ -3,8 +3,9 @@
  * yourself, and what's on screen. The context is plain text built here on the device and sent with each
  * question; nothing is stored on the server.
  */
+import { sanLineOf } from './line';
 import { create } from 'zustand';
-import { buildGraph, INITIAL_FEN, playLine, type Folder, type RepMove, type Repertoire } from '@mainline/shared';
+import { buildGraph, type Folder, type RepMove, type Repertoire } from '@mainline/shared';
 import { api } from './api';
 import { repMoves, useLibrary } from './library';
 import { usePrefs } from './prefs';
@@ -60,18 +61,8 @@ export const useAssistant = create<AssistantState>((set, get) => ({
   },
 }));
 
-const sanLine = (ucis: string[]) => {
-  try {
-    return playLine(INITIAL_FEN, ucis)
-      .moves.map((m, i) => `${i % 2 === 0 ? `${i / 2 + 1}.` : ''}${m.san}`)
-      .join(' ');
-  } catch {
-    return '';
-  }
-};
-
 /** A line as text: its main path, and how many other moves it prepares along the way. */
-export function describeLine(rep: Repertoire, moves: RepMove[]): string {
+function describeLine(rep: Repertoire, moves: RepMove[]): string {
   const graph = buildGraph(moves);
   const ucis = [...rep.rootMovesUci];
   let epd = rep.rootEpd;
@@ -86,7 +77,7 @@ export function describeLine(rep: Repertoire, moves: RepMove[]): string {
     ucis.push(main.uci);
     epd = main.toEpd;
   }
-  const line = sanLine(ucis) || '(no moves yet)';
+  const line = sanLineOf(ucis) || '(no moves yet)';
   return others ? `${line} (+${others} other ${others === 1 ? 'move' : 'moves'} prepared)` : line;
 }
 
@@ -107,7 +98,7 @@ export function assistantContext(o: {
   const kids = (id: string | null) => folders.filter((f) => f.parentId === id).sort((a, b) => a.sortIndex - b.sortIndex);
   const walk = (f: Folder, depth: number) => {
     const pad = '  '.repeat(depth);
-    const at = f.rootMovesUci?.length ? ` [${sanLine(f.rootMovesUci)}]` : '';
+    const at = f.rootMovesUci?.length ? ` [${sanLineOf(f.rootMovesUci)}]` : '';
     out.push(`${pad}${f.name}${depth === 0 ? ` (playing ${f.color})` : ''}${at}`);
     for (const r of reps.filter((x) => x.folderId === f.id).sort((a, b) => a.sortIndex - b.sortIndex)) out.push(`${pad}  - line "${r.name}": ${describeLine(r, repMoves(o.moves, r.id))}`);
     for (const k of kids(f.id)) walk(k, depth + 1);
@@ -119,7 +110,7 @@ export function assistantContext(o: {
     const r = reps.find((x) => x.id === o.focus!.lineId);
     if (r) {
       const path = folders.find((f) => f.id === r.folderId);
-      out.push(`ON SCREEN: the player is editing the line "${r.name}"${path ? ` in the folder "${path.name}"` : ''}, at the position after ${sanLine(o.focus.ucis) || 'the start'}.`);
+      out.push(`ON SCREEN: the player is editing the line "${r.name}"${path ? ` in the folder "${path.name}"` : ''}, at the position after ${sanLineOf(o.focus.ucis) || 'the start'}.`);
     }
   }
   const text = out.join('\n');

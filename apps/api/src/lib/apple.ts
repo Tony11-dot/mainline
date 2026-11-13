@@ -58,7 +58,7 @@ export async function verifyAppleIdentityToken(token: string, rawNonce?: string,
 
 /* ---------------- Token revocation (account deletion) ---------------- */
 
-export const appleRevokeEnabled = () => !!(env.APPLE_SIWA_KEY_ID && env.APPLE_SIWA_PRIVATE_KEY);
+const appleRevokeEnabled = () => !!(env.APPLE_SIWA_KEY_ID && env.APPLE_SIWA_PRIVATE_KEY);
 
 /** The client secret Apple's token endpoints want: an ES256 JWT signed with the Sign in with Apple key. */
 export function appleClientSecret(now = Date.now(), keyId = env.APPLE_SIWA_KEY_ID!, pem = env.APPLE_SIWA_PRIVATE_KEY!, teamId = env.APPLE_TEAM_ID): string {

@@ -1,3 +1,4 @@
+import { local, session } from './storage';
 import { create } from 'zustand';
 import { accountName, type Me } from '@mainline/shared';
 import { api, apiUrl, sessionToken } from './api';
@@ -64,12 +65,8 @@ async function eraseDevice() {
     const req = indexedDB.deleteDatabase('mainline');
     req.onsuccess = req.onerror = req.onblocked = () => resolve();
   });
-  try {
-    localStorage.clear();
-    sessionStorage.clear();
-  } catch {
-    /* storage blocked */
-  }
+  local.clear();
+  session.clear();
   if ('caches' in self) for (const k of await caches.keys()) await caches.delete(k);
   for (const r of (await navigator.serviceWorker?.getRegistrations?.()) ?? []) await r.unregister();
 }
@@ -85,9 +82,7 @@ export function startLichessLogin(returnPath = location.pathname + location.sear
  */
 export async function startLogin(provider: 'lichess' | 'chesscom', returnPath = location.pathname + location.search) {
   const p = platform();
-  const params = new URLSearchParams({ return: returnPath });
-  if (p.kind === 'desktop') params.set('native', 'desktop');
-  else if (p.isNative) params.set('native', '1');
+  const params = new URLSearchParams({ return: returnPath, ...p.authParams });
   if (provider === 'chesscom' && p.isNative && useAuth.getState().me) {
     try {
       params.set('link', (await api<{ ticket: string }>('/api/auth/link-ticket', { method: 'POST' })).ticket);

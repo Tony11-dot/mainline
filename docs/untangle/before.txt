@@ -1,0 +1,10 @@
+source files:      169
+code lines (non-blank, non-comment):    20021
+comment lines:     1362
+largest:     1062 apps/web/src/screens/LibraryScreen.tsx
+module-level let/Map/Set/cache:       38
+catch swallowed (catch {} / .catch(()=>)):      123
+setTimeout/sleep/retry:       71
+eslint-disable/ts-ignore/@ts-expect/as any:       35
+skipped tests:        1
+tests:      159 (declared)

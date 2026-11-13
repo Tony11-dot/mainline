@@ -54,7 +54,7 @@ interface I18nState {
 export const useI18n = create<I18nState>(() => ({ lang: 'en', dict: {} }));
 
 /** The device's preferred language that MainLine speaks, else English. */
-export function systemLang(): Lang {
+function systemLang(): Lang {
   const prefs = typeof navigator !== 'undefined' ? (navigator.languages ?? [navigator.language]) : [];
   for (const tag of prefs) {
     const base = tag.toLowerCase().split('-')[0]!;
@@ -65,7 +65,7 @@ export function systemLang(): Lang {
   return 'en';
 }
 
-export function resolveLocale(pref: LocaleId): Lang {
+function resolveLocale(pref: LocaleId): Lang {
   return pref === 'auto' || !LANGS.has(pref) ? systemLang() : pref;
 }
 

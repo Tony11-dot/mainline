@@ -1,3 +1,4 @@
+import { formatLine, numbered } from '../lib/line';
 import { Fragment, useEffect, useMemo, useRef, useState } from 'react';
 import { Link, useLocation, useNavigate } from 'react-router';
 import { BarChart3, Check, Compass, Download, ExternalLink, Flag, Info, Plus, Search, Swords, Target, TriangleAlert } from 'lucide-react';
@@ -34,9 +35,8 @@ import { speedName } from '../lib/speeds';
 import { fmtPercent, intlLocale, msg, t, tn, tx } from '../lib/i18n';
 
 /** "1.e4 e5 2.Nf3" */
-export function lineText(ucis: string[], fen = INITIAL_FEN) {
-  const sans = uciLineToSan(fen, ucis);
-  return sans.map((s, i) => (i % 2 === 0 ? `${i / 2 + 1}.${s}` : s)).join(' ');
+function lineText(ucis: string[], fen = INITIAL_FEN) {
+  return formatLine(uciLineToSan(fen, ucis));
 }
 
 const KIND_LABEL: Record<Deviation['kind'], string> = {
@@ -487,7 +487,7 @@ function PrepLineRow({ line, n, color }: { line: PrepLine; n: number; color: Col
             {sans.map((s, i) => (
               <Fragment key={i}>
                 {i > 0 && ' '}
-                <span className={leaves && i >= line.ply ? (i === line.ply && line.book === 'they_leave' ? 'font-bold text-warn-ink' : 'font-medium text-ink-2') : undefined}>{i % 2 === 0 ? `${i / 2 + 1}.${s}` : s}</span>
+                <span className={leaves && i >= line.ply ? (i === line.ply && line.book === 'they_leave' ? 'font-bold text-warn-ink' : 'font-medium text-ink-2') : undefined}>{numbered(i, s)}</span>
               </Fragment>
             ))}
           </bdi>

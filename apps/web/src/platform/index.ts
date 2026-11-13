@@ -19,6 +19,12 @@ export interface ReminderPlan {
   dueByDay: number[];
 }
 
+/** What a platform needs from the app to start: a way to go to a path, and the router the native tab bar follows. */
+export interface PlatformHost {
+  navigate(to: string): void;
+  router: { navigate: (to: string) => unknown; subscribe: (cb: (s: { location: { pathname: string } }) => void) => unknown; state: { location: { pathname: string } } };
+}
+
 export interface Platform {
   kind: PlatformKind;
   isNative: boolean;
@@ -31,6 +37,12 @@ export interface Platform {
   openFile(accept: string[]): Promise<{ name: string; content: string } | null>;
   saveFile(name: string, content: string, mime?: string): Promise<void>;
   openExternal(url: string): Promise<void>;
+  /** Query parameters that tell the server where an OAuth sign-in will return to (nothing on the web: it returns to the page). */
+  authParams: Record<string, string>;
+  /** Closes the in-app browser an OAuth sign-in opened, once its return arrived. No-op where there is none. */
+  closeAuthBrowser(): Promise<void>;
+  /** Wires up what only this platform has once the router exists: notification taps, native tab bar, offline shell. */
+  start(host: PlatformHost): void;
   /** Called with URLs the OS hands us (deep links, OAuth callbacks, shared files). */
   onIncoming(cb: (incoming: { url?: string; text?: string; fileName?: string }) => void): void;
 }

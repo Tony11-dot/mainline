@@ -1,24 +1,14 @@
-import { toEpd } from '@mainline/shared';
+import { indexOpenings, searchOpenings as search, toEpd, type Opening, type OpeningRow, type OpeningTable } from '@mainline/shared';
 
-export interface OpeningInfo {
-  eco: string;
-  name: string;
-  uci: string;
-  epd: string;
-}
+export type OpeningInfo = Opening;
 
-let index: Promise<{ byEpd: Map<string, OpeningInfo>; all: OpeningInfo[] }> | undefined;
+let index: Promise<OpeningTable> | undefined;
 
 /** Loads the CC0 lichess-org/chess-openings table (bundled, works offline). */
 export function openingIndex() {
   index ??= fetch('/data/openings.json')
-    .then((r) => r.json() as Promise<[string, string, string, string][]>)
-    .then((rows) => {
-      const all = rows.map(([epd, eco, name, uci]) => ({ epd, eco, name, uci }));
-      const byEpd = new Map<string, OpeningInfo>();
-      for (const o of all) if (!byEpd.has(o.epd)) byEpd.set(o.epd, o);
-      return { byEpd, all };
-    });
+    .then((r) => r.json() as Promise<OpeningRow[]>)
+    .then(indexOpenings);
   return index;
 }
 
@@ -32,19 +22,6 @@ export async function openingForLine(fens: string[]): Promise<OpeningInfo | unde
   return undefined;
 }
 
-const norm = (s: string) => s.toLowerCase().normalize('NFD').replace(/[̀-ͯ]/g, '').replace(/[^a-z0-9 ]/g, ' ');
-
 export async function searchOpenings(q: string, limit = 60): Promise<OpeningInfo[]> {
-  const { all } = await openingIndex();
-  const terms = norm(q).split(/\s+/).filter(Boolean);
-  if (!terms.length) return [];
-  const out: OpeningInfo[] = [];
-  for (const o of all) {
-    const hay = `${norm(o.name)} ${o.eco.toLowerCase()}`;
-    if (terms.every((t) => hay.includes(t))) {
-      out.push(o);
-      if (out.length >= limit) break;
-    }
-  }
-  return out;
+  return search(await openingIndex(), q, limit);
 }

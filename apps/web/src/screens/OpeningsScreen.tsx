@@ -1,5 +1,5 @@
 import { useEffect, useMemo, useState } from 'react';
-import { REPLY_NAMES, ensureOpeningFolders, replySan, type FirstMove } from '../lib/packs';
+import { REPLY_NAMES, firstOf, ensureOpeningFolders, replySan } from '../lib/packs';
 import { Link, useNavigate } from 'react-router';
 import { epdToFen, playLine, playUci, positionFromFen, toEpd, INITIAL_FEN, type Color, type ExplorerData } from '@mainline/shared';
 import { openingIndex, searchOpenings, type OpeningInfo } from '../lib/openings';
@@ -67,7 +67,7 @@ export function OpeningsScreen() {
   const start = async (o: OpeningInfo, color: Color) => {
     // Filed where it belongs (White › 1.e4 › vs Caro-Kann) when it starts with a first move and reply we know.
     const [u1, u2] = o.uci.split(' ');
-    const first = ({ e2e4: 'e4', d2d4: 'd4', c2c4: 'c4' } as Record<string, FirstMove>)[u1 ?? ''];
+    const first = firstOf(u1 ?? '');
     const reply = first && u2 ? replySan(first, u2) : undefined;
     const root =
       first && reply && REPLY_NAMES[first][reply]

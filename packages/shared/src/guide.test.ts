@@ -32,7 +32,7 @@ describe('guideCandidates', () => {
     expect(by['e2e4']!.mine).toEqual({ games: 8, score: 0.7 });
     expect(by['d2d4']!.tags).toContain('trouble');
     // Not in any database, but you've played it twice: it still shows, without a "works for you" claim.
-    expect(by['h2h4']).toBeDefined();
+    expect(by['h2h4']!.mine).toEqual({ games: 2, score: 1 });
     expect(by['h2h4']!.tags).not.toContain('proven');
   });
 

@@ -179,7 +179,6 @@ export function createTrainer(mode: TrainMode, lines: SessionLine[], data: RepDa
           timer = setTimeout(advance, 60);
           return;
         }
-        // Wrong
         const alternates = alternateMoves(data, graphs, l.color, epd);
         const isAlt = alternates.includes(std);
         if (s.phase !== 'wrong' && s.phase !== 'learn') {

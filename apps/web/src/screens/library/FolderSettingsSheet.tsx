@@ -1,3 +1,4 @@
+import { sanLineOf } from '../../lib/line';
 import { useEffect, useMemo, useState } from 'react';
 import { Trash2 } from 'lucide-react';
 import { INITIAL_FEN, playLine } from '@mainline/shared';
@@ -7,18 +8,6 @@ import { Button } from '../../ui/primitives';
 import { MiniBoard } from '../../ui/MiniBoard';
 import { parseSanLine } from './sanLine';
 import { t, tn } from '../../lib/i18n';
-
-const sanOf = (ucis: string[], from: string[] = []) => {
-  try {
-    return playLine(INITIAL_FEN, [...from, ...ucis])
-      .moves.map((m, i) => ({ m, i }))
-      .slice(from.length)
-      .map(({ m, i }) => `${i % 2 === 0 ? `${i / 2 + 1}.` : i === from.length ? `${Math.ceil(i / 2)}…` : ''}${m.san}`)
-      .join(' ');
-  } catch {
-    return '';
-  }
-};
 
 /**
  * A folder's settings: its name, where it lives, the moves it stands for (while nothing is built on them yet),
@@ -44,7 +33,7 @@ export function FolderSettingsSheet({ folderId, onClose, onDelete }: { folderId:
     setParentId(folder.parentId);
     const p = folderMoves(lib.folders, lib.reps, folder.parentId ?? '');
     const shared = p.every((u, i) => own[i] === u);
-    setMoves(sanOf(shared ? own.slice(p.length) : own, shared ? p : []));
+    setMoves(sanLineOf([...(shared ? p : []), ...(shared ? own.slice(p.length) : own)], shared ? p.length : 0, true));
   }, [folderId]); // eslint-disable-line react-hooks/exhaustive-deps
 
   const parsed = useMemo(() => parseSanLine(moves, before), [moves, before]);
@@ -104,13 +93,13 @@ export function FolderSettingsSheet({ folderId, onClose, onDelete }: { folderId:
           <div className="min-w-0 flex-1">
             {movesFixed ? (
               <p className="tnum rounded-[var(--radius-control)] bg-surface-2 px-3.5 py-2.5 text-sm" dir="ltr">
-                {sanOf(own) || t('From the start')}
+                {sanLineOf(own) || t('From the start')}
               </p>
             ) : (
               <>
                 {before.length > 0 && (
                   <p className="tnum mb-1 truncate text-xs text-ink-3" dir="ltr">
-                    {sanOf(before)} …
+                    {sanLineOf(before)} …
                   </p>
                 )}
                 <input className={`${inputCls} ${parsed.error ? 'border-bad' : ''}`} value={moves} onChange={(e) => setMoves(e.target.value)} placeholder={before.length ? 'Nf3' : '1.e4'} autoCapitalize="off" autoCorrect="off" spellCheck={false} aria-label={t('Moves')} aria-invalid={!!parsed.error} />

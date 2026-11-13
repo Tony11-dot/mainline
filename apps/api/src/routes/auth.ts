@@ -11,8 +11,8 @@ import { Lru } from '../lib/lru';
 import { appleRefreshToken, revokeAppleToken, verifyAppleIdentityToken } from '../lib/apple';
 
 const OAUTH_COOKIE = 'ml_oauth';
-export const NATIVE_SCHEME = 'app.mainline.chess';
-export const DESKTOP_SCHEME = 'mainline';
+const NATIVE_SCHEME = 'app.mainline.chess';
+const DESKTOP_SCHEME = 'mainline';
 const nativeCodes = new Lru<string>(1000, 120_000);
 
 interface OAuthCookie {
@@ -24,7 +24,7 @@ interface OAuthCookie {
   u?: string;
 }
 
-export function toMe(u: User): Me {
+function toMe(u: User): Me {
   return {
     id: u.id,
     lichessUsername: u.lichessUsername,
@@ -41,7 +41,7 @@ type Provider = 'lichess' | 'chesscom';
 const redirectUri = (p: Provider) => `${env.PUBLIC_URL.replace(/\/$/, '')}/api/auth/${p}/callback`;
 const linkTickets = new Lru<string>(1000, 300_000);
 
-export const chesscomEnabled = () => !!env.CHESSCOM_CLIENT_ID;
+const chesscomEnabled = () => !!env.CHESSCOM_CLIENT_ID;
 
 export async function authRoutes(app: FastifyInstance) {
   /** Which sign-in buttons the apps should show. */
@@ -223,8 +223,8 @@ export async function authRoutes(app: FastifyInstance) {
           method: 'DELETE',
           headers: { Authorization: `Bearer ${decryptSecret(u.lichessTokenEnc)}`, 'User-Agent': USER_AGENT },
         });
-      } catch {
-        /* best effort */
+      } catch (e) {
+        req.log.warn({ err: e }, 'lichess token revoke failed');
       }
     }
     if (u.appleRefreshEnc) {

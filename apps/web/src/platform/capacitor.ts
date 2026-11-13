@@ -55,6 +55,12 @@ export function createCapacitorPlatform(kind: 'ios' | 'android'): Platform {
 
   return {
     kind,
+    authParams: { native: '1' },
+    closeAuthBrowser: closeInAppBrowser,
+    start(host) {
+      bindNotificationTaps(host.navigate);
+      if (kind === 'ios') void import('./nativeChrome').then((m) => m.startNativeChrome(host.router));
+    },
     isNative: true,
     apiBase: apiBaseFromEnv(true),
 
@@ -148,10 +154,10 @@ export function createCapacitorPlatform(kind: 'ios' | 'android'): Platform {
 }
 
 /** Tapping a reminder opens training. */
-export function bindNotificationTaps(navigate: (url: string) => void) {
+function bindNotificationTaps(navigate: (url: string) => void) {
   void LocalNotifications.addListener('localNotificationActionPerformed', (a) => {
     navigate((a.notification.extra as { url?: string } | undefined)?.url ?? '/train?mode=review');
   });
 }
 
-export const closeInAppBrowser = () => Browser.close().catch(() => undefined);
+const closeInAppBrowser = () => Browser.close().catch(() => undefined);

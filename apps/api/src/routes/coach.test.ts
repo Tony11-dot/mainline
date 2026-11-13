@@ -55,7 +55,7 @@ describe('coach', () => {
     expect(r.json().resting).toBe(true);
     expect(r.json().source).toBe('template');
     const status = await app.inject({ url: '/api/coach/status' });
-    expect(status.json().budgetLeft).toBeLessThanOrEqual(0);
+    expect(status.json().budgetLeft).toBe(0);
   });
 
   it('validates input', async () => {

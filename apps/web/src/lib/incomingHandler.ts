@@ -19,7 +19,7 @@ export function handleIncoming(navigate: (to: string) => void) {
     }
     // OAuth return: app.mainline.chess://auth?code=… (mobile) or mainline://auth?code=… (desktop)
     if ((url.protocol === 'app.mainline.chess:' || url.protocol === 'mainline:') && (url.host === 'auth' || url.pathname.replace(/^\/+/, '') === 'auth')) {
-      if (platform().kind !== 'desktop') void (await import('../platform/capacitor')).closeInAppBrowser();
+      await platform().closeAuthBrowser();
       await finishOAuthReturn(url);
       return;
     }

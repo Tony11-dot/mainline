@@ -24,7 +24,7 @@ type State = 'idle' | 'starting' | 'ready' | 'searching' | 'stopping' | 'failed'
 /** WebKit (Safari, every iOS browser, WKWebView) blocks the nested pthread workers even when isolated. */
 const isWebKit = () => /AppleWebKit/.test(navigator.userAgent) && !/Chrome|Chromium|Edg|OPR|Android/.test(navigator.userAgent);
 
-export const engineFlavor = (): { threaded: boolean; file: string; threads: number } => {
+const engineFlavor = (): { threaded: boolean; file: string; threads: number } => {
   const threaded = typeof SharedArrayBuffer !== 'undefined' && globalThis.crossOriginIsolated === true && !isWebKit();
   const cores = navigator.hardwareConcurrency || 2;
   return {

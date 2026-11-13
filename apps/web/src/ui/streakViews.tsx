@@ -1,3 +1,4 @@
+import { DAY } from '../lib/day';
 import { useEffect, useRef } from 'react';
 import { Link } from 'react-router';
 import { BellRing, Check, Flame, Snowflake, Trophy } from 'lucide-react';
@@ -12,9 +13,9 @@ import { intlLocale, t, tn } from '../lib/i18n';
 
 const tz = () => new Date().getTimezoneOffset();
 const weekday = () => new Intl.DateTimeFormat(intlLocale(), { weekday: 'narrow' });
-const dayDate = (day: number) => new Date(day * 86_400_000 + tz() * 60_000 + 12 * 3_600_000);
+const dayDate = (day: number) => new Date(day * DAY + tz() * 60_000 + 12 * 3_600_000);
 
-export function WeekStrip({ week, pop }: { week: StreakInfo['week']; pop?: boolean }) {
+function WeekStrip({ week, pop }: { week: StreakInfo['week']; pop?: boolean }) {
   const label: Record<DayMark, string> = { done: t('practised'), frozen: t('streak freeze used'), missed: t('missed'), pending: t('not yet') };
   return (
     <ol className="flex justify-between gap-1" aria-label={t('Last 7 days')}>

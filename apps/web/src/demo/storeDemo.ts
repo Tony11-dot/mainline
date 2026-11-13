@@ -479,7 +479,7 @@ const SCENES: Record<string, () => Promise<void>> = {
     look({ appTheme: 'midnight' });
     await openLine('Giuoco Piano', ITALIAN, 'Coach');
     await waitFor(() => all('p, span, div').find((e) => text(e).startsWith('3.Bc4 points the bishop')), 'the coach’s answer');
-    hideKids((s) => 1, (s) => s.line);
+    hideKids(() => 1, (s) => s.line);
     await sleep(500);
   },
   library: async () => {

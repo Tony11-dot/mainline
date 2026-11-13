@@ -16,7 +16,7 @@ export interface AssistantReply {
   offline?: boolean;
 }
 
-export const ASSISTANT_PROMPT = `You are MainLine's assistant, inside an app where a club player builds and practises an opening repertoire.
+const ASSISTANT_PROMPT = `You are MainLine's assistant, inside an app where a club player builds and practises an opening repertoire.
 The app's data about the player (their folders and lines, their settings, their own notes, and what they are looking at) is in the CONTEXT block.
 Rules:
 - Answer the player's question directly and specifically, using their repertoire when it's relevant ("your Spanish line 2 goes ...").

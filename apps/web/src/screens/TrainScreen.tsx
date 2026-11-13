@@ -1,3 +1,4 @@
+import { startOfDay } from '../lib/day';
 import { useEffect, useMemo, useState } from 'react';
 import { Link, useNavigate, useSearchParams } from 'react-router';
 import { useStore } from 'zustand';
@@ -77,11 +78,6 @@ export function TrainScreen() {
   return <Session key={run} store={trainer} mode={mode} showAll={showAll} onAgain={() => setRun((r) => r + 1)} />;
 }
 
-function startOfDay() {
-  const d = new Date();
-  d.setHours(0, 0, 0, 0);
-  return d.getTime();
-}
 
 function Session({ store, mode, showAll, onAgain }: { store: StoreApi<TrainerState>; mode: TrainMode; showAll?: boolean; onAgain: () => void }) {
   const s = useStore(store);

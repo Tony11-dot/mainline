@@ -1,6 +1,7 @@
 import type { FastifyInstance } from 'fastify';
 import { and, eq, gt, sql } from 'drizzle-orm';
 import { z } from 'zod';
+import { uciSchema } from '@mainline/shared/schemas';
 import { getDb, schema } from '../db/client';
 import { requireUser } from '../lib/session';
 import { MissingConfigError } from '../env';
@@ -31,7 +32,7 @@ const repertoire = z.object({
 const move = z.object({
   repertoireId: z.string().uuid(),
   fromEpd: z.string().max(100),
-  uci: z.string().regex(/^[a-h][1-8][a-h][1-8][qrbn]?$/),
+  uci: uciSchema,
   san: z.string().max(10),
   toEpd: z.string().max(100),
   isMainline: z.boolean(),
@@ -65,7 +66,7 @@ const review = z.object({
   deleted: z.boolean().optional(),
 });
 
-export const syncBody = z.object({
+const syncBody = z.object({
   cursor: z.string().datetime().nullable().optional(),
   changes: z
     .object({

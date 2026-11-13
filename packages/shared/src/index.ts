@@ -12,3 +12,4 @@ export * from './games';
 export * from './streak';
 export * from './i18n';
 export * from './guide';
+export * from './openings';

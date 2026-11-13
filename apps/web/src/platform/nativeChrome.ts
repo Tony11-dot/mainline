@@ -1,4 +1,5 @@
 import { Capacitor, registerPlugin, type PluginListenerHandle } from '@capacitor/core';
+import type { PlatformHost } from './index';
 import { NAV, isImmersive } from '../ui/nav';
 import { useLaunch } from '../launch/LaunchScreen';
 import { useOverlays } from '../ui/overlay';
@@ -16,13 +17,13 @@ interface NativeChromePlugin {
 const NativeChrome = registerPlugin<NativeChromePlugin>('NativeChrome');
 
 /** In-app plugins registered with registerPluginInstance() don't appear in isPluginAvailable(); we probe by calling. */
-export const hasNativeChrome = () => Capacitor.getPlatform() === 'ios';
+const hasNativeChrome = () => Capacitor.getPlatform() === 'ios';
 
 /**
  * iOS: the tab bar is native SwiftUI with Liquid Glass (see apps/mobile/ios/App/App/NativeChrome).
  * The web app keeps routing; this keeps the two in sync.
  */
-export async function startNativeChrome(router: { navigate: (to: string) => unknown; subscribe: (cb: (s: { location: { pathname: string } }) => void) => unknown; state: { location: { pathname: string } } }) {
+export async function startNativeChrome(router: PlatformHost['router']) {
   if (!hasNativeChrome()) return;
   // Sub-screens light up their parent tab.
   const ALIAS: [string, string][] = [['/setup', '/explore'], ['/rep/', '/library']];
@@ -42,7 +43,6 @@ export async function startNativeChrome(router: { navigate: (to: string) => unkn
     return; // plugin missing (e.g. an older native shell): keep the web tab bar
   }
   document.documentElement.dataset.nativeChrome = '';
-  // Tab titles follow the app language.
   useI18n.subscribe((s, p) => {
     if (s.lang !== p.lang) void NativeChrome.setTabs(tabsFor(router.state.location.pathname));
   });

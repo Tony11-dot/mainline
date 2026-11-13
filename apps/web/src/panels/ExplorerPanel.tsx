@@ -9,7 +9,7 @@ import { startLichessLogin } from '../lib/auth';
 import { speedName } from '../lib/speeds';
 import { fmtPercent, intlLocale, t, tn } from '../lib/i18n';
 
-export function useExplorer(source: ExplorerSource, fen: string, enabled = true) {
+function useExplorer(source: ExplorerSource, fen: string, enabled = true) {
   const { rating, speeds } = usePrefs();
   const [state, setState] = useState<{ data?: ExplorerData; error?: ApiError; loading: boolean }>({ loading: true });
   const [retryTick, setRetryTick] = useState(0);

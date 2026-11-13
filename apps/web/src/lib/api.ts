@@ -1,3 +1,4 @@
+import { KEYS, local } from './storage';
 import { platform } from '../platform';
 
 export class ApiError extends Error {
@@ -17,23 +18,9 @@ export class ApiError extends Error {
   }
 }
 
-const TOKEN_KEY = 'mainline.session';
 export const sessionToken = {
-  get: () => {
-    try {
-      return localStorage.getItem(TOKEN_KEY);
-    } catch {
-      return null;
-    }
-  },
-  set: (t: string | null) => {
-    try {
-      if (t) localStorage.setItem(TOKEN_KEY, t);
-      else localStorage.removeItem(TOKEN_KEY);
-    } catch {
-      /* ignore */
-    }
-  },
+  get: () => local.get(KEYS.session),
+  set: (t: string | null) => local.set(KEYS.session, t),
 };
 
 export function apiUrl(path: string): string {

@@ -21,6 +21,12 @@ export function createWebPlatform(): Platform {
   const incomingHandlers: ((i: { url?: string; text?: string; fileName?: string }) => void)[] = [];
   return {
     kind: 'web',
+    authParams: {},
+    closeAuthBrowser: async () => undefined,
+    start() {
+      // Offline app shell + push; native shells serve local files.
+      if ('serviceWorker' in navigator && import.meta.env.PROD) void navigator.serviceWorker.register('/sw.js').catch(() => undefined);
+    },
     isNative: false,
     apiBase: apiBaseFromEnv(),
     haptic(kind) {

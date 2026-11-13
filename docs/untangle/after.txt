@@ -1,0 +1,10 @@
+source files:      177
+code lines (non-blank, non-comment):    20026
+comment lines:     1377
+largest:      778 apps/web/src/lib/packs.ts
+module-level let/Map/Set/cache:       34
+catch swallowed (catch {} / .catch(()=>)):      101
+setTimeout/sleep/retry:       71
+eslint-disable/ts-ignore/@ts-expect/as any:       35
+skipped tests:        1
+tests:      168 (declared)

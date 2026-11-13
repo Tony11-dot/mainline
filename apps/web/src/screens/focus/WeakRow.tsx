@@ -17,7 +17,7 @@ export function evidenceText(it: WeakItem): string {
   return parts.join(' · ');
 }
 
-export function severity(it: WeakItem): { label: string; tone: Tone } {
+function severity(it: WeakItem): { label: string; tone: Tone } {
   if (it.badness >= 1.6) return { label: t('Much weaker than usual'), tone: 'bad' };
   if (it.badness >= 1.15) return { label: t('Weaker than usual'), tone: 'warn' };
   if (it.badness <= 0.8) return { label: t('A strength'), tone: 'good' };

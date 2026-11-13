@@ -1,3 +1,4 @@
+import { DAY } from '../lib/day';
 import { useEffect, useMemo, useState } from 'react';
 import { useNavigate, useSearchParams } from 'react-router';
 import { CalendarDays, Check, Eye, GraduationCap, ListChecks, Play, Shuffle, Target, Trash2, X } from 'lucide-react';
@@ -96,7 +97,7 @@ function PlanView({ plan }: { plan: Plan }) {
     const [y, m, d] = plan.start.split('-').map(Number);
     return new Date(y!, m! - 1, d!);
   }, [plan.start]);
-  const dateOf = (day: number) => new Date(startDate.getTime() + day * 86_400_000).toLocaleDateString(intlLocale(), { weekday: 'short', day: 'numeric', month: 'short' });
+  const dateOf = (day: number) => new Date(startDate.getTime() + day * DAY).toLocaleDateString(intlLocale(), { weekday: 'short', day: 'numeric', month: 'short' });
 
   return (
     <>

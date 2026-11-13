@@ -1,7 +1,7 @@
 import type { FastifyInstance } from 'fastify';
 import { z } from 'zod';
 import { positionFromFen } from '@mainline/shared';
-import { evalSubmitSchema, explorerQuerySchema } from '@mainline/shared/schemas';
+import { evalSubmitSchema, explorerQuerySchema, fenSchema, parseRatingsCsv, parseSpeedsCsv, ratingsCsvSchema, speedsCsvSchema } from '@mainline/shared/schemas';
 import { getExplorer } from '../services/explorer';
 import { getEval, submitLocalEval } from '../services/evals';
 import { getGuide } from '../services/guide';
@@ -25,8 +25,8 @@ export async function chessRoutes(app: FastifyInstance) {
       {
         source: q.source,
         fen: q.fen,
-        ratings: q.ratings ? q.ratings.split(',').filter(Boolean).map(Number) : undefined,
-        speeds: q.speeds ? q.speeds.split(',').filter(Boolean) : undefined,
+        ratings: parseRatingsCsv(q.ratings),
+        speeds: parseSpeedsCsv(q.speeds),
       },
       explorerToken(user),
     );
@@ -36,12 +36,12 @@ export async function chessRoutes(app: FastifyInstance) {
 
   app.get('/api/guide', async (req, reply) => {
     const q = z
-      .object({ fen: z.string().min(10).max(120), ratings: z.string().regex(/^[0-9,]*$/).optional(), speeds: z.string().regex(/^[a-z,]*$/).optional(), evals: z.enum(['0', '1']).default('1') })
+      .object({ fen: fenSchema, ratings: ratingsCsvSchema.optional(), speeds: speedsCsvSchema.optional(), evals: z.enum(['0', '1']).default('1') })
       .parse(req.query);
     assertFen(q.fen);
     const user = await currentUser(req);
     const data = await getGuide(
-      { fen: q.fen, ratings: q.ratings ? q.ratings.split(',').filter(Boolean).map(Number) : undefined, speeds: q.speeds ? q.speeds.split(',').filter(Boolean) : undefined, evals: q.evals === '1' },
+      { fen: q.fen, ratings: parseRatingsCsv(q.ratings), speeds: parseSpeedsCsv(q.speeds), evals: q.evals === '1' },
       explorerToken(user),
     );
     reply.header('Cache-Control', 'private, max-age=3600');
@@ -49,7 +49,7 @@ export async function chessRoutes(app: FastifyInstance) {
   });
 
   app.get('/api/eval', async (req, reply) => {
-    const q = z.object({ fen: z.string().min(10).max(120), multiPv: z.coerce.number().int().min(1).max(5).default(3) }).parse(req.query);
+    const q = z.object({ fen: fenSchema, multiPv: z.coerce.number().int().min(1).max(5).default(3) }).parse(req.query);
     assertFen(q.fen);
     const data = await getEval(q.fen, q.multiPv);
     reply.header('Cache-Control', 'private, max-age=3600');
@@ -63,7 +63,7 @@ export async function chessRoutes(app: FastifyInstance) {
   });
 
   app.get('/api/openings/at', async (req) => {
-    const q = z.object({ fen: z.string().min(10).max(120) }).parse(req.query);
+    const q = z.object({ fen: fenSchema }).parse(req.query);
     assertFen(q.fen);
     return { opening: openingAt(q.fen) ?? null };
   });

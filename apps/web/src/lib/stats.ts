@@ -2,11 +2,11 @@
  * Statistics over everything stored on the device: the review log, FSRS cards, repertoires and
  * imported games. Pure functions (no stores) so every screen can slice the same numbers.
  */
+import { DAY, startOfDay } from './day';
 import { buildGraph, isOwnTurn, playUci, positionFromFen, toEpd, INITIAL_FEN, type Deviation, type PlayedGame, type Repertoire, type RepMove, type ReviewEntry, type TrainCard } from '@mainline/shared';
 import type { OpeningInfo } from './openings';
 import { fmtPercent } from './i18n';
 
-const DAY = 86_400_000;
 
 export interface Record3 {
   games: number;
@@ -58,11 +58,6 @@ export interface TrainingStats {
 const isCorrect = (r: ReviewEntry) => r.rating > 1;
 const acc = (rs: ReviewEntry[]) => (rs.length ? rs.filter(isCorrect).length / rs.length : null);
 
-function startOfDay(t: number) {
-  const d = new Date(t);
-  d.setHours(0, 0, 0, 0);
-  return d.getTime();
-}
 
 /**
  * `positions` narrows everything to one repertoire's own-move positions (colour|epd keys); by

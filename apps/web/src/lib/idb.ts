@@ -23,7 +23,7 @@ export interface MainlineDB extends DBSchema {
 }
 
 let dbp: Promise<IDBPDatabase<MainlineDB>> | undefined;
-export const DB_VERSION = 4;
+const DB_VERSION = 4;
 
 export function db(): Promise<IDBPDatabase<MainlineDB>> {
   dbp ??= openDB<MainlineDB>('mainline', DB_VERSION, {

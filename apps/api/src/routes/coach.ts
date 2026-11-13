@@ -1,21 +1,22 @@
 import type { FastifyInstance } from 'fastify';
 import { z } from 'zod';
 import { positionFromFen } from '@mainline/shared';
+import { fenSchema, langSchema, speedSchema, uciSchema } from '@mainline/shared/schemas';
 import { explain } from '../services/coach';
 import { aiConfigured, budgetLeft } from '../lib/ai';
 import { currentUser, explorerToken } from '../lib/session';
 
-const uci = z.string().regex(/^[a-h][1-8][a-h][1-8][qrbn]?$/);
+const uci = uciSchema;
 const body = z.object({
   kind: z.enum(['move', 'line', 'mistake', 'punish', 'position']),
-  fen: z.string().min(10).max(120),
+  fen: fenSchema,
   moveUci: uci.optional(),
   playedUci: uci.optional(),
   lineUcis: z.array(uci).max(40).optional(),
   question: z.string().max(400).optional(),
   rating: z.number().int().min(400).max(3200).optional(),
-  speeds: z.array(z.enum(['bullet', 'blitz', 'rapid', 'classical', 'correspondence'])).max(5).optional(),
-  lang: z.string().regex(/^[a-z]{2}$/).optional(),
+  speeds: z.array(speedSchema).max(5).optional(),
+  lang: langSchema.optional(),
 });
 
 export async function coachRoutes(app: FastifyInstance) {

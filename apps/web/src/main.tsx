@@ -1,6 +1,6 @@
 import { StrictMode } from 'react';
 import { createRoot } from 'react-dom/client';
-import { initPlatform, platform } from './platform';
+import { initPlatform } from './platform';
 import { App, startPlatformHooks } from './App';
 import './styles.css';
 import { bindPrefsToDocument, usePrefs } from './lib/prefs';
@@ -28,11 +28,6 @@ startSync();
 startReminderSync();
 startPlatformHooks();
 setTimeout(() => void autoImportGames(), 5000);
-
-// Offline app shell + push (web / PWA only — native shells serve local files).
-if (!platform().isNative && 'serviceWorker' in navigator && import.meta.env.PROD) {
-  void navigator.serviceWorker.register('/sw.js').catch(() => undefined);
-}
 
 createRoot(document.getElementById('root')!).render(
   <StrictMode>

@@ -1,5 +1,5 @@
 import { eq } from 'drizzle-orm';
-import { buildFacts, invalidMoves, playUci, positionFromFen, templateExplanation, toEpd, FACTS_VERSION, type CoachKind, type EvalLine, type FactsPacket } from '@mainline/shared';
+import { ratingBandsFor, buildFacts, invalidMoves, playUci, positionFromFen, templateExplanation, toEpd, FACTS_VERSION, type CoachKind, type EvalLine, type FactsPacket } from '@mainline/shared';
 import { getDb, schema } from '../db/client';
 import { sha256 } from '../lib/crypto';
 import { Lru } from '../lib/lru';
@@ -31,7 +31,7 @@ export interface CoachResult {
 
 const hot = new Lru<CoachResult>(2000, 24 * 3600_000);
 
-export const SYSTEM_PROMPT = `You are MainLine's chess coach, sitting next to a club player who is learning an opening repertoire.
+const SYSTEM_PROMPT = `You are MainLine's chess coach, sitting next to a club player who is learning an opening repertoire.
 Rules (non-negotiable):
 - Explain ONLY with the facts in the JSON packet you are given (engine lines, evals, explorer statistics, pawn structure, opening name). Do not use outside knowledge of specific games, players or theory that is not in the packet.
 - Every concrete move you mention must be written as [[SAN]] (e.g. [[Nf3]], [[O-O]]) and must either be legal right now from the FEN or appear in the packet's engine lines or line.
@@ -89,7 +89,7 @@ export async function explain(input: CoachInput, explorerToken: string | undefin
       return undefined;
     }
   };
-  const bands = input.rating ? ratingBands(input.rating) : undefined;
+  const bands = input.rating ? ratingBandsFor(input.rating) : undefined;
   const [engine, afterMove, afterPlayed, lichess, masters] = await Promise.all([
     safe(getEval(input.fen, 3)),
     safe(afterFen(input.moveUci) ? getEval(afterFen(input.moveUci)!, 1) : Promise.resolve(null)),
@@ -144,11 +144,4 @@ async function askAi(facts: FactsPacket, lang = 'en'): Promise<CoachResult> {
     }
   }
   return { text: templateExplanation(facts), source: 'template', facts };
-}
-
-function ratingBands(r: number) {
-  const bands = [0, 1000, 1200, 1400, 1600, 1800, 2000, 2200, 2500];
-  let i = 0;
-  for (let k = 0; k < bands.length; k++) if (r >= bands[k]!) i = k;
-  return bands.slice(i, i + 2);
 }

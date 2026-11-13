@@ -46,7 +46,7 @@ export function createRoot(fen: string = INITIAL_FEN, ply?: number): TreeNode {
 }
 
 export const pathToUcis = (path: string): string[] => (path ? path.split(' ') : []);
-export const ucisToPath = (ucis: string[]): string => ucis.join(' ');
+const ucisToPath = (ucis: string[]): string => ucis.join(' ');
 export const parentPath = (path: string): string => ucisToPath(pathToUcis(path).slice(0, -1));
 export const childPath = (path: string, uci: string): string => (path ? `${path} ${uci}` : uci);
 
@@ -161,14 +161,4 @@ export function allLines(root: TreeNode): string[][] {
   };
   walk(root, []);
   return out;
-}
-
-export function countNodes(root: TreeNode): number {
-  let n = 0;
-  const walk = (x: TreeNode) => {
-    n++;
-    x.children.forEach(walk);
-  };
-  walk(root);
-  return n;
 }

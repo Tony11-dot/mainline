@@ -2,18 +2,13 @@
  * Keeps reminders in step with local training data: Web Push on the web (the server needs the due
  * count), local notifications scheduled on-device in the native apps (no server involved).
  */
+import { DAY, localDay } from './day';
 import { nudgesForDay, streakInfo, trainingSummary, type DayNudge } from '@mainline/shared';
 import { platform, type ReminderPlan } from '../platform';
 import { useLibrary } from './library';
 import { useTraining } from './training';
 import { usePrefs } from './prefs';
 import { t, tn, useI18n } from './i18n';
-
-const DAY = 86_400_000;
-const localDay = (t: number) => {
-  const d = new Date(t);
-  return `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}-${String(d.getDate()).padStart(2, '0')}`;
-};
 
 export function currentPlan(now = Date.now()): ReminderPlan {
   const { remindersOn, reminderTime, dailyNewLimit } = usePrefs.getState();
@@ -72,7 +67,7 @@ export function plannedNotifications(plan: ReminderPlan, now = new Date()): (Day
 }
 
 let timer: ReturnType<typeof setTimeout> | undefined;
-export function refreshReminders(delay = 1500) {
+function refreshReminders(delay = 1500) {
   clearTimeout(timer);
   timer = setTimeout(() => {
     const plan = currentPlan();
@@ -83,7 +78,6 @@ export function refreshReminders(delay = 1500) {
 
 export function startReminderSync() {
   useTraining.subscribe((s, p) => s.version !== p.version && refreshReminders());
-  // Reminder wording follows the app language.
   useI18n.subscribe((s, p) => s.lang !== p.lang && refreshReminders(100));
   usePrefs.subscribe((s, p) => (s.remindersOn !== p.remindersOn || s.reminderTime !== p.reminderTime) && refreshReminders(100));
   document.addEventListener('visibilitychange', () => document.visibilityState === 'visible' && refreshReminders());

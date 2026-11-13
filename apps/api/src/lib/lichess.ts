@@ -9,7 +9,7 @@ export class LichessRateLimited extends Error {
   }
 }
 
-export class LichessError extends Error {
+class LichessError extends Error {
   constructor(
     public status: number,
     message: string,
