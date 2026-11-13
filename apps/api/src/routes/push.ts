@@ -1,6 +1,7 @@
 import type { FastifyInstance } from 'fastify';
 import { eq } from 'drizzle-orm';
 import { z } from 'zod';
+import { langSchema } from '@mainline/shared/schemas';
 import { getDb, schema } from '../db/client';
 import { MissingConfigError, requireEnv } from '../env';
 import { currentUser } from '../lib/session';
@@ -12,7 +13,7 @@ const state = z.object({
   streak: z.number().int().min(0).max(100000).default(0),
   freezes: z.number().int().min(0).max(10).default(0),
   lastReviewDay: z.string().regex(/^\d{4}-\d\d-\d\d$/).nullable().optional(),
-  lang: z.string().regex(/^[a-z]{2}$/).default('en'),
+  lang: langSchema.default('en'),
 });
 const subscription = z.object({ endpoint: z.string().url().max(1000), keys: z.object({ p256dh: z.string().max(200), auth: z.string().max(100) }) });
 

@@ -153,6 +153,18 @@ describe('Lichess etiquette', () => {
     expect(a!.lines[0]).toEqual({ moves: ['h1h3'], cp: 500 });
     expect(spy).toHaveBeenCalledTimes(1);
   });
+
+  it('does not answer a request for five lines from a cached one-line answer', async () => {
+    const F5 = 'rnbqkbnr/pppppppp/8/8/8/5N2/PPPPPPPP/RNBQKB1R b KQkq - 1 1';
+    const spy = mockFetch((url) => {
+      const n = Number(new URL(url).searchParams.get('multiPv'));
+      const pvs = ['g8f6', 'd7d5', 'c7c5', 'e7e6', 'b8c6'].slice(0, n).map((m) => ({ moves: m, cp: 10 }));
+      return url.includes('cloud-eval') ? Response.json({ fen: F5, depth: 30, knodes: 1, pvs }) : new Response('{}', { status: 404 });
+    });
+    expect((await getEval(F5, 1))!.lines).toHaveLength(1);
+    expect((await getEval(F5, 5))!.lines).toHaveLength(5);
+    expect(spy).toHaveBeenCalledTimes(2);
+  });
 });
 
 describe('openings', () => {

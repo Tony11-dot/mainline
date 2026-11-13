@@ -1,4 +1,4 @@
-import { toEpd, type EvalData } from '@mainline/shared';
+import { EVAL_SHARE_MIN_DEPTH, toEpd, type EvalData } from '@mainline/shared';
 import { api } from './api';
 import { db } from './idb';
 
@@ -24,7 +24,7 @@ export function rememberLocalEval(fen: string, ev: EvalData) {
   const epd = toEpd(fen);
   void db().then((d) => d.put('evals', { key: epd, value: ev, at: Date.now() })).catch(() => undefined);
   // Share deep local evals with everyone (server validates the PV and keeps the deepest).
-  if (ev.depth >= 18) void api('/api/eval', { method: 'POST', json: { fen, depth: ev.depth, lines: ev.lines } }).catch(() => undefined);
+  if (ev.depth >= EVAL_SHARE_MIN_DEPTH) void api('/api/eval', { method: 'POST', json: { fen, depth: ev.depth, lines: ev.lines } }).catch(() => undefined);
 }
 
 /** Stores an eval that arrived another way (the guide bundle), as if fetched. null = not in the cloud. */

@@ -42,3 +42,5 @@ Baseline (main 79a4fb7, Node 22): typecheck green, **lint red (1 error, storeDem
 - Splitting `LibraryScreen.tsx`/`RepertoireScreen.tsx` into hooks: see the final step in the log below.
 
 ## Steps
+- [x] **untangle(1)** baseline, metrics, log, lint error fixed.
+- [x] **untangle(2)** F1 + F2: `UCI_RE`, `castlingAsKingMove`, `EVAL_*_DEPTH`, zod `fenSchema/uciSchema/langSchema/speedSchema/csv` and the opening table/search now live once in `@mainline/shared`; api routes/services and web use them. **Bug fixed (F2):** the server's eval cache answered a request for 3-5 lines with an earlier one-line answer; entries now remember how many lines they were asked for (new test). Request coalescing kept.

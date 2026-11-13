@@ -1,6 +1,6 @@
 import { useEffect, useRef, useState } from 'react';
 import { Keyboard } from 'lucide-react';
-import { playUci, positionFromFen, sanToUci } from '@mainline/shared';
+import { UCI_RE, playUci, positionFromFen, sanToUci } from '@mainline/shared';
 import { t } from '../lib/i18n';
 
 /**
@@ -27,7 +27,7 @@ export function MoveInput({ fen, onMove, disabled }: { fen: string; onMove: (uci
     if (!text) return;
     const pos = positionFromFen(fen);
     let uci = sanToUci(pos, text);
-    if (!uci && /^[a-h][1-8][a-h][1-8][qrbn]?$/.test(text)) {
+    if (!uci && UCI_RE.test(text)) {
       try {
         uci = playUci(pos, text).uci;
       } catch {

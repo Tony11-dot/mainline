@@ -1,5 +1,12 @@
 import type { EvalLine } from './api';
 
+/** A browser's local Stockfish result is uploaded for everyone only from this depth... */
+export const EVAL_SHARE_MIN_DEPTH = 18;
+/** ...and the server stores it only from this one (the gap is slack for clients that rounded). */
+export const EVAL_ACCEPT_MIN_DEPTH = 16;
+/** A local eval this deep is as good as the cloud's; a shallower one may still be replaced by a cloud hit. */
+export const EVAL_FINAL_DEPTH = 30;
+
 /** Lichess' win-probability curve: maps centipawns to winning chances in [-1, 1] (White POV). */
 export function winningChances(line: Pick<EvalLine, 'cp' | 'mate'>): number {
   if (line.mate !== undefined && line.mate !== null) return line.mate > 0 ? 1 : -1;

@@ -6,6 +6,15 @@ import type { Move, NormalMove, SquareName } from 'chessops/types';
 import { positionFromFen, toEpd, toFen } from './epd';
 
 export type Color = 'white' | 'black';
+
+/** The one definition of a UCI move string (promotion letter optional). */
+export const UCI_RE = /^[a-h][1-8][a-h][1-8][qrbn]?$/;
+
+const CASTLING_AS_KING_TO_ROOK: Record<string, string> = { e1h1: 'e1g1', e1a1: 'e1c1', e8h8: 'e8g8', e8a8: 'e8c8' };
+/** Lichess encodes castling king-to-rook (e1h1) in places; everything here uses the king's two-square form (e1g1). */
+export function castlingAsKingMove(uci: string): string {
+  return CASTLING_AS_KING_TO_ROOK[uci] ?? uci;
+}
 export type { Chess };
 
 /** Legal destinations keyed by origin square, in chessground's format (both castling encodings). */

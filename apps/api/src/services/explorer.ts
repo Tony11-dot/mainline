@@ -1,5 +1,5 @@
 import { and, eq } from 'drizzle-orm';
-import { epdToFen, toEpd, type ExplorerData, type ExplorerGame, type ExplorerMove } from '@mainline/shared';
+import { castlingAsKingMove, epdToFen, toEpd, type ExplorerData, type ExplorerGame, type ExplorerMove } from '@mainline/shared';
 import { getDb, schema } from '../db/client';
 import { MissingConfigError } from '../env';
 import { lichessJson } from '../lib/lichess';
@@ -71,9 +71,8 @@ export function normalizeExplorer(source: ExplorerData['source'], epd: string, r
 
 /** Lichess explorer may encode castling king-to-rook (e1h1); we use e1g1 everywhere. */
 function normalizeCastlingUci(uci: string, san?: string): string {
-  const map: Record<string, string> = { e1h1: 'e1g1', e1a1: 'e1c1', e8h8: 'e8g8', e8a8: 'e8c8' };
   if (san && !san.startsWith('O-O')) return uci;
-  return map[uci] ?? uci;
+  return castlingAsKingMove(uci);
 }
 
 export async function getExplorer(p: ExplorerParams, token: string | undefined): Promise<ExplorerData> {
